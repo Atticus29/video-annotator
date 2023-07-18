@@ -19,6 +19,7 @@ const EventIntakeQuestions: React.FC<{
     SingleFormField[] | undefined
   >(get(collection, ["eventIntakeQuestions"]));
   const [error, setError] = useState<string>("");
+  const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -34,6 +35,10 @@ const EventIntakeQuestions: React.FC<{
   }, []);
 
   useEffect(() => {
+    const numQuestions: number | undefined = eventIntakeQuestions?.length;
+    if (numQuestions) {
+      setIntakeQuestionHeight(numQuestions * 100);
+    }
     setCollection((prevState: any) => {
       return {
         ...prevState,
@@ -120,7 +125,7 @@ const EventIntakeQuestions: React.FC<{
       titleId="EVENT_INTAKE_QUESTIONS"
       titleDefault="Event Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      styleOverrides={{ maxHeight: 1000 }}
+      styleOverrides={{ maxHeight: intakeQuestionHeight }}
     >
       <Grid container>
         {collection?.eventIntakeQuestions && intakeQuestionElements}

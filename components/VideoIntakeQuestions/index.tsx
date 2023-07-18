@@ -20,6 +20,7 @@ const VideoIntakeQuestions: React.FC<{
     SingleFormField[] | undefined
   >(get(collection, ["videoIntakeQuestions"]));
   const [error, setError] = useState<string>("");
+  const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -38,6 +39,10 @@ const VideoIntakeQuestions: React.FC<{
 
   useEffect(() => {
     // if (videoIntakeQuestions) {
+    const numQuestions: number | undefined = videoIntakeQuestions?.length;
+    if (numQuestions) {
+      setIntakeQuestionHeight(numQuestions * 100);
+    }
     setCollection((prevState: any) => {
       // console.log("deleteMe videoIntakeQuestions are: ");
       // console.log(videoIntakeQuestions);
@@ -124,7 +129,7 @@ const VideoIntakeQuestions: React.FC<{
       titleId="VIDEO_INTAKE_QUESTIONS"
       titleDefault="Video Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      styleOverrides={{ maxHeight: 1000 }}
+      styleOverrides={{ maxHeight: intakeQuestionHeight }}
       // ref={ref}
     >
       <Grid container>
