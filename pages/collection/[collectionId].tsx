@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import CollectionDetailsEdit from "../../components/CollectionDetailsEdit";
 import CollectionDetailsView from "../../components/CollectionDetailsView";
 import VideoIntakePreview from "../../components/VideoIntakePreview";
@@ -107,6 +107,25 @@ const SingleCollection: React.FC = () => {
   const videoPreviewRef = useRef(null);
   const videoIntakeRef = useRef(null);
 
+  const handleSaveCollection = async () => {
+    console.log("deleteMe handleSaveCollection clicked. Collection is: ");
+    console.log(collection);
+    try {
+      const response = await fetch("/api/collection", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: collection }),
+      });
+      console.log("deleteMe response in collection page is: ");
+      console.log(response);
+    } catch (e: any) {
+      console.log("deleteMe error is: ");
+      console.log(e);
+    }
+  };
+
   // useEffect(() => {
   //   console.log("deleteMe videoPreviewRef is: ");
   //   console.log(videoPreviewRef);
@@ -130,71 +149,78 @@ const SingleCollection: React.FC = () => {
   // }, [videoPreviewRef, videoIntakeRef]);
 
   return (
-    <Grid container spacing={2} style={{ marginTop: "1vh" }}>
-      {collection && (
-        <>
-          <Grid item sm={12} md={12}>
-            {isCollectionDetailsInEditMode ? (
-              <CollectionDetailsEdit
-                collection={collection}
-                setIsCollectionDetailsInEditMode={
-                  setIsCollectionDetailsInEditMode
-                }
-              />
-            ) : (
-              <CollectionDetailsView
-                collection={collection}
-                setIsCollectionDetailsInEditMode={
-                  setIsCollectionDetailsInEditMode
-                }
-              />
-            )}
-          </Grid>
-          <Grid item sm={12} md={4}>
-            {collection && videoQuestionsFormFieldGroup && (
-              <VideoIntakeQuestions
-                // ref={videoIntakeRef}
-                collection={collection}
-                setCollection={setCollection}
-                formFieldGroup={videoQuestionsFormFieldGroup}
-              />
-            )}
-          </Grid>
-          <Grid item sm={12} md={8}>
-            {collection && (
-              <VideoIntakePreview
-                // ref={videoPreviewRef}
-                collection={collection}
-              />
-            )}
-          </Grid>
-          <Grid item sm={12} md={4}>
-            {collection && individualQuestionsFormFieldGroup && (
-              <IndividualIntakeQuestions
-                collection={collection}
-                setCollection={setCollection}
-                formFieldGroup={individualQuestionsFormFieldGroup}
-              />
-            )}
-          </Grid>
-          <Grid item sm={12} md={8}>
-            {collection && <IndividualIntakePreview collection={collection} />}
-          </Grid>
-          <Grid item sm={12} md={4}>
-            {collection && eventQuestionsFormFieldGroup && (
-              <EventIntakeQuestions
-                collection={collection}
-                setCollection={setCollection}
-                formFieldGroup={eventQuestionsFormFieldGroup}
-              />
-            )}
-          </Grid>
-          <Grid item sm={12} md={8}>
-            {collection && <EventIntakePreview collection={collection} />}
-          </Grid>
-        </>
-      )}
-    </Grid>
+    <>
+      <Grid container spacing={2} style={{ marginTop: "1vh" }}>
+        {collection && (
+          <>
+            <Grid item sm={12} md={12}>
+              {isCollectionDetailsInEditMode ? (
+                <CollectionDetailsEdit
+                  collection={collection}
+                  setIsCollectionDetailsInEditMode={
+                    setIsCollectionDetailsInEditMode
+                  }
+                />
+              ) : (
+                <CollectionDetailsView
+                  collection={collection}
+                  setIsCollectionDetailsInEditMode={
+                    setIsCollectionDetailsInEditMode
+                  }
+                />
+              )}
+            </Grid>
+            <Grid item sm={12} md={4}>
+              {collection && videoQuestionsFormFieldGroup && (
+                <VideoIntakeQuestions
+                  // ref={videoIntakeRef}
+                  collection={collection}
+                  setCollection={setCollection}
+                  formFieldGroup={videoQuestionsFormFieldGroup}
+                />
+              )}
+            </Grid>
+            <Grid item sm={12} md={8}>
+              {collection && (
+                <VideoIntakePreview
+                  // ref={videoPreviewRef}
+                  collection={collection}
+                />
+              )}
+            </Grid>
+            <Grid item sm={12} md={4}>
+              {collection && individualQuestionsFormFieldGroup && (
+                <IndividualIntakeQuestions
+                  collection={collection}
+                  setCollection={setCollection}
+                  formFieldGroup={individualQuestionsFormFieldGroup}
+                />
+              )}
+            </Grid>
+            <Grid item sm={12} md={8}>
+              {collection && (
+                <IndividualIntakePreview collection={collection} />
+              )}
+            </Grid>
+            <Grid item sm={12} md={4}>
+              {collection && eventQuestionsFormFieldGroup && (
+                <EventIntakeQuestions
+                  collection={collection}
+                  setCollection={setCollection}
+                  formFieldGroup={eventQuestionsFormFieldGroup}
+                />
+              )}
+            </Grid>
+            <Grid item sm={12} md={8}>
+              {collection && <EventIntakePreview collection={collection} />}
+            </Grid>
+          </>
+        )}
+      </Grid>
+      <Button variant="contained" onClick={handleSaveCollection}>
+        Save Collection
+      </Button>
+    </>
   );
 };
 
