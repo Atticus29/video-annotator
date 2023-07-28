@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Grid } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Grid,
+  Snackbar,
+} from "@mui/material";
 import CollectionDetailsEdit from "../../components/CollectionDetailsEdit";
 import CollectionDetailsView from "../../components/CollectionDetailsView";
 import VideoIntakePreview from "../../components/VideoIntakePreview";
@@ -11,6 +17,8 @@ import IndividualIntakePreview from "../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
 import EventIntakeQuestions from "../../components/EventIntakeQuestions";
 import EventIntakePreview from "../../components/EventIntakePreview";
+import { useMutation, UseMutationResult, useQuery } from "react-query";
+import axios from "axios";
 
 const SingleCollection: React.FC = () => {
   // console.log("deleteMe main collection page re-renders");
@@ -39,6 +47,9 @@ const SingleCollection: React.FC = () => {
   const [collection, setCollection] = useState<Collection>();
   const [isCollectionDetailsInEditMode, setIsCollectionDetailsInEditMode] =
     useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [saveSucess, setSaveSuccess] = useState<boolean>(false);
+  const [saveFail, setSaveFail] = useState<boolean>(false);
 
   useEffect(() => {
     const initialCollection = { ...shamCollection };
@@ -106,24 +117,58 @@ const SingleCollection: React.FC = () => {
 
   const videoPreviewRef = useRef(null);
   const videoIntakeRef = useRef(null);
+  const mutation: UseMutationResult<any> = useMutation({
+    mutationFn: async (collection) => {
+      // try {
+      const response = await axios.post("/api/collection", {
+        data: collection,
+      });
+      console.log("deleteMe response is: ");
+      console.log(response);
+      return response?.data;
+      // } catch (e: any) {
+      //   console.log("deleteMe got here a1");
+      //   console.log(e);
+      //   setSaveFail(true);
+      //   setSaveSuccess(false);
+      // }
+    },
+    onSuccess: (data) => {
+      console.log("deleteMe got here a2");
+      console.log("Mutation successful: ", data);
+      setOpen(false);
+      setSaveSuccess(true);
+      setSaveFail(false);
+      handleClose();
+    },
+    onError: (error) => {
+      console.log("deleteMe got here a3");
+      console.log("Mutation error: ", error);
+      setSaveSuccess(false);
+      setSaveFail(true);
+      handleClose();
+    },
+  });
 
   const handleSaveCollection = async () => {
-    console.log("deleteMe handleSaveCollection clicked. Collection is: ");
-    console.log(collection);
-    try {
-      const response = await fetch("/api/collection", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: collection }),
-      });
-      console.log("deleteMe response in collection page is: ");
-      console.log(response);
-    } catch (e: any) {
-      console.log("deleteMe error is: ");
-      console.log(e);
+    setOpen(true);
+    mutation.mutate(collection);
+  };
+
+  const handleSnackbarClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
     }
+
+    setSaveSuccess(false);
+    setSaveFail(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   // useEffect(() => {
@@ -220,6 +265,25 @@ const SingleCollection: React.FC = () => {
       <Button variant="contained" onClick={handleSaveCollection}>
         Save Collection
       </Button>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar
+        open={saveSucess}
+        onClose={handleSnackbarClose}
+        autoHideDuration={6000}
+        message="Collection saved successfully"
+      />
+      <Snackbar
+        open={saveFail}
+        onClose={handleSnackbarClose}
+        autoHideDuration={6000}
+        message="Collection was not saved"
+      />
     </>
   );
 };
