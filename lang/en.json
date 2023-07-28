@@ -114,5 +114,7 @@
   "INDIVIDUAL_INTAKE_PREVIEW_DETAILS": "Individuals are usually featured in videos. Contributors to your collection will see the following questions when they create or edit new individuals in the collection.",
   "EVENT_INTAKE_QUESTIONS": "Event Intake Questions",
   "EVENT_INTAKE_PREVIEW": "Event Intake Preview",
-  "EVENT_INTAKE_PREVIEW_DETAILS": "Events are the things that get annotated in videos. Contributors to your collection will see the following questions when they create or edit annotations in the videos contained in the collection."
+  "EVENT_INTAKE_PREVIEW_DETAILS": "Events are the things that get annotated in videos. Contributors to your collection will see the following questions when they create or edit annotations in the videos contained in the collection.",
+  "COLLECTION_WAS_NOT_SAVED": "Collection was not saved: ",
+  "COLLECTION_SAVED_SUCCESSFULL": "Collection was saved successfully."
 }

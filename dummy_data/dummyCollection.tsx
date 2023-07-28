@@ -236,6 +236,7 @@ const ageClassIndividualQuestion: SingleFormField = {
 };
 
 export const shamCollection: Collection = {
+  id: 1,
   name: "Brazilian Jiu Jitsu",
   nameOfVideo: "Match",
   nameOfEvent: "Move",
@@ -260,6 +261,7 @@ export const shamCollection: Collection = {
     ageClassIndividualQuestion,
   ],
   excludeFromDetailList: [
+    "id",
     "videoIntakeQuestions",
     "individualIntakeQuestions",
     "eventIntakeQuestions",

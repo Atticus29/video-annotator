@@ -15,7 +15,7 @@ const VideoIntakeQuestions: React.FC<{
   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
   // ref?: any; // @TODO find type
-}> = ({ collection, setCollection, formFieldGroup, ref }) => {
+}> = ({ collection, setCollection, formFieldGroup }) => {
   const [videoIntakeQuestions, setVideoIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["videoIntakeQuestions"]));

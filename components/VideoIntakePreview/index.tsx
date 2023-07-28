@@ -9,7 +9,7 @@ import SingleFormField from "../SingleFormField";
 const VideoIntakePreview: React.FC<{
   collection: Collection;
   // ref?: any;
-}> = ({ collection, ref }) => {
+}> = ({ collection }) => {
   // console.log("deleteMe collection in VideoIntakePreview is: ");
   // console.log(collection);
   const formFieldGroup: FormFieldGroup | undefined = get(

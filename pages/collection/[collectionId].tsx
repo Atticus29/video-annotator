@@ -4,8 +4,10 @@ import {
   Button,
   CircularProgress,
   Grid,
+  IconButton,
   Snackbar,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import CollectionDetailsEdit from "../../components/CollectionDetailsEdit";
 import CollectionDetailsView from "../../components/CollectionDetailsView";
 import VideoIntakePreview from "../../components/VideoIntakePreview";
@@ -19,9 +21,16 @@ import EventIntakeQuestions from "../../components/EventIntakeQuestions";
 import EventIntakePreview from "../../components/EventIntakePreview";
 import { useMutation, UseMutationResult, useQuery } from "react-query";
 import axios from "axios";
+import { IntlShape, useIntl } from "react-intl";
 
 const SingleCollection: React.FC = () => {
-  // console.log("deleteMe main collection page re-renders");
+  const intl: IntlShape = useIntl();
+  const collectionFailMsg: string = intl.formatMessage({
+    id: "COLLECTION_WAS_NOT_SAVED",
+  });
+  const collectionSaveMsg: string = intl.formatMessage({
+    id: "COLLECTION_SAVED_SUCCESSFULL",
+  });
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
   );
@@ -50,6 +59,7 @@ const SingleCollection: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [saveSucess, setSaveSuccess] = useState<boolean>(false);
   const [saveFail, setSaveFail] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
   useEffect(() => {
     const initialCollection = { ...shamCollection };
@@ -117,33 +127,26 @@ const SingleCollection: React.FC = () => {
 
   const videoPreviewRef = useRef(null);
   const videoIntakeRef = useRef(null);
+
   const mutation: UseMutationResult<any> = useMutation({
+    // @TODO move this into a custom hook?
     mutationFn: async (collection) => {
-      // try {
       const response = await axios.post("/api/collection", {
         data: collection,
       });
-      console.log("deleteMe response is: ");
-      console.log(response);
       return response?.data;
-      // } catch (e: any) {
-      //   console.log("deleteMe got here a1");
-      //   console.log(e);
-      //   setSaveFail(true);
-      //   setSaveSuccess(false);
-      // }
     },
     onSuccess: (data) => {
-      console.log("deleteMe got here a2");
-      console.log("Mutation successful: ", data);
+      // setSnackbarMessage(data?.message);
       setOpen(false);
       setSaveSuccess(true);
       setSaveFail(false);
       handleClose();
     },
     onError: (error) => {
-      console.log("deleteMe got here a3");
-      console.log("Mutation error: ", error);
+      setSnackbarMessage(
+        get(error, ["message"], "Collection not saved due to unknown error.")
+      );
       setSaveSuccess(false);
       setSaveFail(true);
       handleClose();
@@ -156,15 +159,20 @@ const SingleCollection: React.FC = () => {
   };
 
   const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event,
+    event: React.SyntheticEvent | Event | null,
     reason?: string
   ) => {
     if (reason === "clickaway") {
+      // in case you want this behavior to be different eventually
+      setSaveSuccess(false);
+      setSaveFail(false);
+      setSnackbarMessage("");
       return;
     }
 
     setSaveSuccess(false);
     setSaveFail(false);
+    setSnackbarMessage("");
   };
 
   const handleClose = () => {
@@ -276,13 +284,33 @@ const SingleCollection: React.FC = () => {
         open={saveSucess}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
-        message="Collection saved successfully"
+        message={collectionSaveMsg}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => handleSnackbarClose(null, "clickaway")}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
       />
       <Snackbar
         open={saveFail}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
-        message="Collection was not saved"
+        message={collectionFailMsg + snackbarMessage}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => handleSnackbarClose(null, "clickaway")}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
       />
     </>
   );

@@ -1,28 +1,24 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../middleware/mongodb";
-import { shamCollection } from "../../dummy_data/dummyCollection";
+import { Collection as CollectionData } from "../../types";
 
 const collection = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
-    const coll = db.collection("collection"); // @TODO add a type this
+    const coll: Collection<CollectionData> = db.collection("collection"); // @TODO add a type this
     if (req.method === "POST") {
-      console.log("deleteMe got here a1");
-      let { data } = req.body; // @TODO implement this
-      //   data = shamCollection;
+      let { data }: { data: CollectionData } = req.body;
       const result = await coll.insertOne(data);
-      console.log("deleteMe result is: ");
-      console.log(result);
-      res.status(200).json({ message: "TODO it worked", data });
-      //   res.json();
+      res.status(200).json({ message: "Collection saved successfully.", data });
     }
   } catch (e: any) {
     console.log(e);
-    res
-      .status(500)
-      .json({ message: "TODO something went wrong", data: e.message });
+    res.status(500).json({
+      message: "Something went wrong saving the collection.",
+      data: e.message,
+    });
   }
 };
 

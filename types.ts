@@ -1,4 +1,5 @@
 export interface Collection {
+  id: number;
   name: string;
   nameOfVideo: string;
   nameOfEvent: string;
