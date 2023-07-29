@@ -10,14 +10,18 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     const coll: Collection<CollectionData> = db.collection("collection"); // @TODO add a type this
     if (req.method === "POST") {
       let { data }: { data: CollectionData } = req.body;
+
+      const existingDocument = await coll.findOne({ id: data.id });
+      if (existingDocument) {
+        return res.status(409).json({ message: "Collection already exists" });
+      }
       const result = await coll.insertOne(data);
       res.status(200).json({ message: "Collection saved successfully.", data });
     }
   } catch (e: any) {
     console.log(e);
     res.status(500).json({
-      message: "Something went wrong saving the collection.",
-      data: e.message,
+      message: e.message,
     });
   }
 };

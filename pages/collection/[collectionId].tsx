@@ -137,7 +137,7 @@ const SingleCollection: React.FC = () => {
       return response?.data;
     },
     onSuccess: (data) => {
-      // setSnackbarMessage(data?.message);
+      setSnackbarMessage(data?.message);
       setOpen(false);
       setSaveSuccess(true);
       setSaveFail(false);
@@ -145,7 +145,11 @@ const SingleCollection: React.FC = () => {
     },
     onError: (error) => {
       setSnackbarMessage(
-        get(error, ["message"], "Collection not saved due to unknown error.")
+        get(
+          error,
+          ["response", "data", "message"],
+          "Collection not saved due to unknown error."
+        )
       );
       setSaveSuccess(false);
       setSaveFail(true);
