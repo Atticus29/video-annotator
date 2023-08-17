@@ -116,5 +116,7 @@
   "EVENT_INTAKE_PREVIEW": "Event Intake Preview",
   "EVENT_INTAKE_PREVIEW_DETAILS": "Events are the things that get annotated in videos. Contributors to your collection will see the following questions when they create or edit annotations in the videos contained in the collection.",
   "COLLECTION_WAS_NOT_SAVED": "Collection was not saved: ",
-  "COLLECTION_SAVED_SUCCESSFULL": "Collection was saved successfully."
+  "COLLECTION_SAVED_SUCCESSFULL": "Collection was saved successfully.",
+  "SAVE_COLLECTION": "Save Collection",
+  "SAVING": "Saving..."
 }

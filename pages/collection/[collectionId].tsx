@@ -21,7 +21,7 @@ import EventIntakeQuestions from "../../components/EventIntakeQuestions";
 import EventIntakePreview from "../../components/EventIntakePreview";
 import { useMutation, UseMutationResult, useQuery } from "react-query";
 import axios from "axios";
-import { IntlShape, useIntl } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 
 const SingleCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -128,7 +128,7 @@ const SingleCollection: React.FC = () => {
   const videoPreviewRef = useRef(null);
   const videoIntakeRef = useRef(null);
 
-  const mutation: UseMutationResult<any> = useMutation({
+  const collectionMutation: UseMutationResult<any> = useMutation({
     // @TODO move this into a custom hook?
     mutationFn: async (collection) => {
       const response = await axios.post("/api/collection", {
@@ -159,7 +159,7 @@ const SingleCollection: React.FC = () => {
 
   const handleSaveCollection = async () => {
     setOpen(true);
-    mutation.mutate(collection);
+    collectionMutation.mutate(collection);
   };
 
   const handleSnackbarClose = (
@@ -182,6 +182,13 @@ const SingleCollection: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const savingText: JSX.Element = (
+    <FormattedMessage id={"SAVING"}></FormattedMessage>
+  );
+  const savedText: JSX.Element = (
+    <FormattedMessage id="SAVE_COLLECTION"></FormattedMessage>
+  );
 
   // useEffect(() => {
   //   console.log("deleteMe videoPreviewRef is: ");
@@ -275,7 +282,7 @@ const SingleCollection: React.FC = () => {
         )}
       </Grid>
       <Button variant="contained" onClick={handleSaveCollection}>
-        Save Collection
+        {collectionMutation.isLoading ? savingText : savedText}
       </Button>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
