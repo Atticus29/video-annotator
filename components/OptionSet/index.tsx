@@ -231,7 +231,7 @@ const OptionSet: React.FC<{
         </div>
         <InfoIcon
           messageId="CAN_END_USER_ADD_CUSTOM_OPTIONS"
-          defaultMessage="Can the people annotating videos in this collection add their own candidates to this list? You as the collection owner will be able to approve or remove these later."
+          defaultMessage="Can the people annotating videos in this collection add their own candidates to this list? You as the collection owner will be able to approve, merge, or remove these later."
         />
       </div>
     </>
