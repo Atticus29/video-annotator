@@ -88,11 +88,6 @@ const CollectionDetailsEdit: React.FC<{
 
   const handleCollectionDetailsSubmission: () => void = async () => {
     try {
-      // TODO@ add this to the database
-      // currentIsPrivate
-      // name
-      // nameOfVideo
-      // nameOfEvent
       setCollection({
         ...collection,
         isPrivate,
