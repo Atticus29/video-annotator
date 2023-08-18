@@ -38,16 +38,16 @@ const InfoPanel: React.FC<{
     setEditButton(true);
   };
 
-  const divRef = useRef(null);
+  // const divRef = useRef(null);
 
-  useEffect(() => {
-    console.log("deleteMe divRef is: ");
-    console.log(divRef);
-    // divRef.current.style.maxHeight = "100px";
-  }, [divRef]);
+  // useEffect(() => {
+  //   // console.log("deleteMe divRef is: ");
+  //   // console.log(divRef);
+  //   // divRef.current.style.maxHeight = "100px";
+  // }, [divRef]);
 
   return (
-    <div ref={divRef}>
+    <div>
       <Paper
         elevation={8}
         style={{

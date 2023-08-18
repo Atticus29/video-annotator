@@ -14,12 +14,16 @@ import InfoPanel from "../InfoPanel";
 import { Collection } from "../../types";
 import { isValidName } from "../../utilities/validators";
 import CustomError from "../Error";
+import { get } from "lodash-es";
 
 const CollectionDetailsEdit: React.FC<{
   collection: Collection;
+  setCollection: (col: Collection) => void;
   setIsCollectionDetailsInEditMode: (val: boolean) => void;
-}> = ({ collection, setIsCollectionDetailsInEditMode }) => {
+}> = ({ collection, setCollection, setIsCollectionDetailsInEditMode }) => {
   const intl: IntlShape = useIntl();
+  console.log("deleteMe collection is: ");
+  console.log(collection);
 
   useEffect(() => {
     setName(collection?.name);
@@ -60,9 +64,13 @@ const CollectionDetailsEdit: React.FC<{
     setnameOfEventInvalid(!isValidName(currentNameOfEvent));
   };
 
-  const [isPrivate, setIsPrivate] = useState<boolean>(); // default to public
+  const [isPrivate, setIsPrivate] = useState<boolean>(
+    get(collection, ["isPrivate"], false)
+  );
   const handleIsPrivateChange: (event: any) => void = (event: any) => {
     const currentIsPrivate: any = event?.target?.checked;
+    console.log("deleteMe currentIsPrivate is: ");
+    console.log(currentIsPrivate);
     setIsPrivate(currentIsPrivate);
   };
 
@@ -85,6 +93,13 @@ const CollectionDetailsEdit: React.FC<{
       // name
       // nameOfVideo
       // nameOfEvent
+      setCollection({
+        ...collection,
+        isPrivate,
+        name,
+        nameOfVideo,
+        nameOfEvent,
+      });
       setIsCollectionDetailsInEditMode(false);
     } catch (error: any) {
       setError(error?.message);
@@ -193,14 +208,19 @@ const CollectionDetailsEdit: React.FC<{
           <div style={{ display: "flex", alignItems: "center" }}>
             <FormControlLabel
               style={{ marginRight: 10 }}
-              control={<Checkbox />}
-              value={isPrivate}
-              onChange={handleIsPrivateChange}
+              control={
+                <Checkbox
+                  checked={isPrivate}
+                  onChange={handleIsPrivateChange}
+                />
+              }
+              // value={isPrivate}
+              // onChange={handleIsPrivateChange}
               label={isPrivateCollectionLabel}
             />
             <InfoIcon
               messageId="IS_PRIVATE_DESCRIPTION"
-              defaultMessage="If selected, other users will be able to access, read, and edit the videos within the collection as their privileges permit. They will not be able to edit the questions that appear during video intake."
+              defaultMessage="If selected, other users will not be able to discover your collection, nor view and edit the videos within the collection as their privileges permit. In either case, they will not be able to edit the questions that appear during video, individual, or event intake."
             />
           </div>
         </Grid>

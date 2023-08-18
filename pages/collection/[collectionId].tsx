@@ -221,6 +221,7 @@ const SingleCollection: React.FC = () => {
               {isCollectionDetailsInEditMode ? (
                 <CollectionDetailsEdit
                   collection={collection}
+                  setCollection={setCollection}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
                   }
@@ -232,6 +233,20 @@ const SingleCollection: React.FC = () => {
                     setIsCollectionDetailsInEditMode
                   }
                 />
+              )}
+            </Grid>
+            <Grid item sm={12} md={4}>
+              {collection && individualQuestionsFormFieldGroup && (
+                <IndividualIntakeQuestions
+                  collection={collection}
+                  setCollection={setCollection}
+                  formFieldGroup={individualQuestionsFormFieldGroup}
+                />
+              )}
+            </Grid>
+            <Grid item sm={12} md={8}>
+              {collection && (
+                <IndividualIntakePreview collection={collection} />
               )}
             </Grid>
             <Grid item sm={12} md={4}>
@@ -250,20 +265,6 @@ const SingleCollection: React.FC = () => {
                   // ref={videoPreviewRef}
                   collection={collection}
                 />
-              )}
-            </Grid>
-            <Grid item sm={12} md={4}>
-              {collection && individualQuestionsFormFieldGroup && (
-                <IndividualIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={individualQuestionsFormFieldGroup}
-                />
-              )}
-            </Grid>
-            <Grid item sm={12} md={8}>
-              {collection && (
-                <IndividualIntakePreview collection={collection} />
               )}
             </Grid>
             <Grid item sm={12} md={4}>

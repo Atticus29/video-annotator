@@ -34,8 +34,8 @@ const SingleFormField: React.FC<{
   stringForAutocompleteOptions = "Option",
   parentCollection = undefined,
 }) => {
-  console.log("deleteMe got here and question is: ");
-  console.log(question);
+  // console.log("deleteMe got here and question is: ");
+  // console.log(question);
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
   const currentIsInvalid: boolean = get(
