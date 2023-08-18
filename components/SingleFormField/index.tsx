@@ -15,7 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { filter, get, reduce } from "lodash-es";
 import dayjs from "dayjs";
 
-import { FormFieldGroup, SingleFormField } from "../../types";
+import { FormFieldGroup, SingleFormField, Collection } from "../../types";
 import {
   updateFormFieldStates,
   updateOptionFormFieldGroupWithOptionList,
@@ -26,12 +26,16 @@ const SingleFormField: React.FC<{
   formFieldGroup: FormFieldGroup | undefined;
   areAutocompleteOptionsDeletable?: boolean;
   stringForAutocompleteOptions?: string;
+  parentCollection?: Collection | undefined;
 }> = ({
   question,
   formFieldGroup,
   areAutocompleteOptionsDeletable = false,
   stringForAutocompleteOptions = "Option",
+  parentCollection = undefined,
 }) => {
+  console.log("deleteMe got here and question is: ");
+  console.log(question);
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
   const currentIsInvalid: boolean = get(
