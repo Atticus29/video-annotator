@@ -60,6 +60,7 @@ const SingleCollection: React.FC = () => {
   const [saveSucess, setSaveSuccess] = useState<boolean>(false);
   const [saveFail, setSaveFail] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [infoPanelHeight, setInfoPanelHeight] = useState<number>(500);
 
   useEffect(() => {
     const initialCollection = { ...shamCollection };
@@ -190,6 +191,8 @@ const SingleCollection: React.FC = () => {
     <FormattedMessage id="SAVE_COLLECTION"></FormattedMessage>
   );
 
+  const maxHeight: number = 201;
+
   // useEffect(() => {
   //   console.log("deleteMe videoPreviewRef is: ");
   //   console.log(videoPreviewRef);
@@ -235,21 +238,25 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={4}>
+            <Grid item sm={12} md={4} style={{ height: "100%" }}>
               {collection && individualQuestionsFormFieldGroup && (
                 <IndividualIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
                   formFieldGroup={individualQuestionsFormFieldGroup}
+                  // infoPanelHeight={infoPanelHeight}
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={8}>
+            <Grid item sm={12} md={8} style={{ height: "100%" }}>
               {collection && (
-                <IndividualIntakePreview collection={collection} />
+                <IndividualIntakePreview
+                  collection={collection}
+                  // setInfoPanelHeight={setInfoPanelHeight}
+                />
               )}
             </Grid>
-            <Grid item sm={12} md={4}>
+            <Grid item sm={12} md={4} style={{ height: "100%" }}>
               {collection && videoQuestionsFormFieldGroup && (
                 <VideoIntakeQuestions
                   // ref={videoIntakeRef}
@@ -259,7 +266,7 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={8}>
+            <Grid item sm={12} md={8} style={{ height: "100%" }}>
               {collection && (
                 <VideoIntakePreview
                   // ref={videoPreviewRef}
@@ -267,7 +274,7 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={4}>
+            <Grid item sm={12} md={4} style={{ height: "100%" }}>
               {collection && eventQuestionsFormFieldGroup && (
                 <EventIntakeQuestions
                   collection={collection}
@@ -276,7 +283,7 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={8}>
+            <Grid item sm={12} md={8} style={{ height: "100%" }}>
               {collection && <EventIntakePreview collection={collection} />}
             </Grid>
           </>

@@ -14,12 +14,17 @@ const IndividualIntakeQuestions: React.FC<{
   collection: Collection;
   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
-}> = ({ collection, setCollection, formFieldGroup }) => {
+  infoPanelHeight?: number;
+}> = ({ collection, setCollection, formFieldGroup, infoPanelHeight }) => {
+  console.log(
+    "deleteMe infoPanelHeight in IndividualIntakeQuestions is: " +
+      infoPanelHeight
+  );
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
   const [error, setError] = useState<string>("");
-  const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
+  // const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -35,10 +40,10 @@ const IndividualIntakeQuestions: React.FC<{
   }, []);
 
   useEffect(() => {
-    const numQuestions: number | undefined = individualIntakeQuestions?.length;
-    if (numQuestions) {
-      setIntakeQuestionHeight(numQuestions * 83.5);
-    }
+    // const numQuestions: number | undefined = individualIntakeQuestions?.length;
+    // if (numQuestions) {
+    //   setIntakeQuestionHeight(numQuestions * 83.5);
+    // }
     setCollection((prevState: any) => {
       return {
         ...prevState,
@@ -125,7 +130,7 @@ const IndividualIntakeQuestions: React.FC<{
       titleId="INDIVIDUAL_INTAKE_QUESTIONS"
       titleDefault="Individual Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      styleOverrides={{ maxHeight: intakeQuestionHeight }}
+      // styleOverrides={{ maxHeight: infoPanelHeight }}
     >
       <Grid container>
         {collection?.individualIntakeQuestions && intakeQuestionElements}

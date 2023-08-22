@@ -21,6 +21,7 @@ const InfoPanel: React.FC<{
   includeCornerEditButton?: boolean;
   setEditButton?: (val: boolean) => void;
   ref?: any;
+  setInfoPanelHeight?: (inputHeigth: number) => void;
   children?: React.ReactNode;
 }> = ({
   titleId,
@@ -29,10 +30,11 @@ const InfoPanel: React.FC<{
   textOverrides = {},
   includeCornerEditButton = false,
   setEditButton = () => {},
-  ref,
+  setInfoPanelHeight,
   children,
 }) => {
   const isEditable: boolean = includeCornerEditButton && Boolean(setEditButton);
+  const infoPanelRef: any = useRef(null);
 
   const handleEditClick: () => void = () => {
     setEditButton(true);
@@ -40,14 +42,18 @@ const InfoPanel: React.FC<{
 
   // const divRef = useRef(null);
 
-  // useEffect(() => {
-  //   // console.log("deleteMe divRef is: ");
-  //   // console.log(divRef);
-  //   // divRef.current.style.maxHeight = "100px";
-  // }, [divRef]);
+  useEffect(() => {
+    console.log("deleteMe divRef is: ");
+    console.log(infoPanelRef);
+    const infoPanelHeight: number = infoPanelRef?.current?.clientHeight;
+    console.log("deleteMe infoPanelHeight is: ");
+    console.log(infoPanelHeight);
+    if (setInfoPanelHeight) setInfoPanelHeight(infoPanelHeight);
+    // divRef.current.style.maxHeight = "100px";
+  }, [infoPanelRef, setInfoPanelHeight]);
 
   return (
-    <div>
+    <div ref={infoPanelRef}>
       <Paper
         elevation={8}
         style={{
