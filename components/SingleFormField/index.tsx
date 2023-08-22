@@ -38,11 +38,10 @@ const SingleFormField: React.FC<{
   // console.log(question);
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
-  const currentIsInvalid: boolean = get(
-    formFieldGroup,
-    ["isInvalids", get(question, ["label"])],
-    false
-  );
+  const questionLabel: string | undefined = get(question, ["label"]);
+  const currentIsInvalid: boolean = questionLabel
+    ? get(formFieldGroup, ["isInvalids", questionLabel], false)
+    : false;
 
   useEffect(() => {
     // set default values. In the case of checkbox, this is needed for correct behavior. In the case of Date, it's a bandaid for resolving the missing value red box/required upon initial load issue
