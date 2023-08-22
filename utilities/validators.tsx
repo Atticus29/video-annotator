@@ -1,3 +1,15 @@
+export function isNonEmptyString(str: string): boolean {
+  return Boolean(str);
+}
+
+export function isNonFalsy(input: any): boolean {
+  return Boolean(input);
+}
+
+export function isNumber(input: any): boolean {
+  return typeof input === "number";
+}
+
 export function isValidEmail(email: string): boolean {
   if (email) {
     const re: RegExp =
@@ -11,7 +23,7 @@ export function isValidEmail(email: string): boolean {
     // );
     return re.test(email.toLowerCase());
   } else {
-    return false;
+    return true; // empty string should be true, because empty string will be caught by isRequired/isNonEmptyString
   }
 }
 
@@ -30,6 +42,10 @@ export function isValidUsername(username: string): boolean {
   return Boolean(username);
 }
 
+export function isValidName(name: string): boolean {
+  return isNonEmptyString(name);
+}
+
 export function isValidStepsToReproduce(stepsToReproduce: string): boolean {
   return Boolean(stepsToReproduce);
 }
@@ -38,9 +54,17 @@ export function isValidDescription(description: string): boolean {
   return Boolean(description);
 }
 
-export function isValidUrl(url: string) {
+export function isValidUrl(url: string): boolean {
+  const somethingHasBeenTyped = Boolean(url);
+  if (!somethingHasBeenTyped) return true; // isRequired is handled by a different validator
   const re: RegExp = new RegExp(
     "^(?:(?:(?:https?|ftp):)?//)(?:S+(?::S*)?@)?(?:(?!(?:10|127)(?:.d{1,3}){3})(?!(?:169.254|192.168)(?:.d{1,3}){2})(?!172.(?:1[6-9]|2d|3[0-1])(?:.d{1,3}){2})(?:[1-9]d?|1dd|2[01]d|22[0-3])(?:.(?:1?d{1,2}|2[0-4]d|25[0-5])){2}(?:.(?:[1-9]d?|1dd|2[0-4]d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:.(?:[a-z\u00a1-\uffff]{2,})))(?::d{2,5})?(?:[/?#]S*)?$"
   );
-  return url && re.test(url.toLowerCase());
+  return Boolean(somethingHasBeenTyped && re.test(url.toLowerCase()));
+}
+
+export function isValidOption(currentOpt: string, validOpts: string[]) {
+  if (!currentOpt) return false;
+  if (!validOpts) return false;
+  return validOpts.includes(currentOpt);
 }
