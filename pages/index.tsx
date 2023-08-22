@@ -17,12 +17,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Hi there. Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-        </div>
+        <div className={styles.description}></div>
 
         <div className={styles.center}>
           <Image
@@ -54,9 +49,6 @@ export default function Home() {
             <h2 className={inter.className}>
               Docs <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
           </a>
 
           <a
@@ -68,9 +60,6 @@ export default function Home() {
             <h2 className={inter.className}>
               Learn <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
           </a>
 
           <a
@@ -82,9 +71,6 @@ export default function Home() {
             <h2 className={inter.className}>
               Templates <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
           </a>
 
           <a
@@ -96,10 +82,6 @@ export default function Home() {
             <h2 className={inter.className}>
               Deploy <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
           </a>
         </div>
       </main>

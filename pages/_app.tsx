@@ -7,6 +7,8 @@ import { getAnalytics } from "firebase/analytics";
 import { Container } from "@mui/material";
 import { createTheme, ThemeProvider, Theme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import useFirebaseAuth from "../hooks/useFirebaseAuth";
 import {
   useQuery,
@@ -56,23 +58,24 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={{ auth, user, loading, setUser }}>
-        <ThemeProvider theme={theme}>
-          <IntlProvider
-            messages={messageMap[locale]}
-            locale={locale}
-            defaultLocale="en"
-          >
-            <Container>
-              <Navbar />
-              {/* <p>{user ? JSON.stringify(user) : null}</p> */}
-              <Component {...pageProps} />
-            </Container>
-          </IntlProvider>
-        </ThemeProvider>
-      </AuthContext.Provider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider value={{ auth, user, loading, setUser }}>
+          <ThemeProvider theme={theme}>
+            <IntlProvider
+              messages={messageMap[locale]}
+              locale={locale}
+              defaultLocale="en"
+            >
+              <Container>
+                <Navbar />
+                <Component {...pageProps} />
+              </Container>
+            </IntlProvider>
+          </ThemeProvider>
+        </AuthContext.Provider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </LocalizationProvider>
   );
 }
