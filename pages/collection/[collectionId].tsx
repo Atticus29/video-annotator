@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Backdrop,
   Button,
@@ -60,7 +60,6 @@ const SingleCollection: React.FC = () => {
   const [saveSucess, setSaveSuccess] = useState<boolean>(false);
   const [saveFail, setSaveFail] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [infoPanelHeight, setInfoPanelHeight] = useState<number>(500);
 
   useEffect(() => {
     const initialCollection = { ...shamCollection };
@@ -125,9 +124,6 @@ const SingleCollection: React.FC = () => {
     eventQuestionsFormFieldGroup,
     eventQuestionsFormFieldGroup?.actualValues,
   ]);
-
-  const videoPreviewRef = useRef(null);
-  const videoIntakeRef = useRef(null);
 
   const collectionMutation: UseMutationResult<any> = useMutation({
     // @TODO move this into a custom hook?
@@ -260,16 +256,12 @@ const SingleCollection: React.FC = () => {
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection && (
-                <IndividualIntakePreview
-                  collection={collection}
-                  // setInfoPanelHeight={setInfoPanelHeight}
-                />
+                <IndividualIntakePreview collection={collection} />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: "100%" }}>
               {collection && videoQuestionsFormFieldGroup && (
                 <VideoIntakeQuestions
-                  // ref={videoIntakeRef}
                   collection={collection}
                   setCollection={setCollection}
                   formFieldGroup={videoQuestionsFormFieldGroup}
@@ -277,12 +269,7 @@ const SingleCollection: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: "100%" }}>
-              {collection && (
-                <VideoIntakePreview
-                  // ref={videoPreviewRef}
-                  collection={collection}
-                />
-              )}
+              {collection && <VideoIntakePreview collection={collection} />}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: "100%" }}>
               {collection && eventQuestionsFormFieldGroup && (

@@ -1,12 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import {
-  Button,
-  Fab,
-  Grid,
-  IconButton,
-  Paper,
-  Typography,
-} from "@mui/material";
+import React from "react";
+import { Fab, Grid, Paper, Typography } from "@mui/material";
 import { Tooltip } from "@mui/material";
 // import EditIcon from "@mui/icons-material/Edit";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
@@ -22,7 +15,6 @@ const InfoPanel: React.FC<{
   includeCornerEditButton?: boolean;
   setEditButton?: (val: boolean) => void;
   ref?: any;
-  setInfoPanelHeight?: (inputHeigth: number) => void;
   children?: React.ReactNode;
 }> = ({
   titleId,
@@ -32,30 +24,15 @@ const InfoPanel: React.FC<{
   paperOverrides = {},
   includeCornerEditButton = false,
   setEditButton = () => {},
-  setInfoPanelHeight,
   children,
 }) => {
   const isEditable: boolean = includeCornerEditButton && Boolean(setEditButton);
-  const infoPanelRef: any = useRef(null);
 
   const handleEditClick: () => void = () => {
     setEditButton(true);
   };
 
-  // const divRef = useRef(null);
-
-  useEffect(() => {
-    console.log("deleteMe divRef is: ");
-    console.log(infoPanelRef);
-    const infoPanelHeight: number = infoPanelRef?.current?.clientHeight;
-    console.log("deleteMe infoPanelHeight is: ");
-    console.log(infoPanelHeight);
-    if (setInfoPanelHeight) setInfoPanelHeight(infoPanelHeight);
-    // divRef.current.style.maxHeight = "100px";
-  }, [infoPanelRef, setInfoPanelHeight]);
-
   return (
-    // <div>
     <Paper
       elevation={8}
       style={{
@@ -100,10 +77,8 @@ const InfoPanel: React.FC<{
           <FormattedMessage id={titleId} defaultMessage={titleDefault} />
         </Typography>
         <div style={{ ...styleOverrides }}>{children}</div>
-        {/* //overflow: "auto" */}
       </>
     </Paper>
-    // </div>
   );
 };
 

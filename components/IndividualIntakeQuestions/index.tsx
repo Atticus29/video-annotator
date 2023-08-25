@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { map, get } from "lodash-es";
 
@@ -16,22 +16,16 @@ const IndividualIntakeQuestions: React.FC<{
   formFieldGroup: FormFieldGroup;
   infoPanelHeight?: number;
 }> = ({ collection, setCollection, formFieldGroup, infoPanelHeight }) => {
-  const intakeQuestionRef: React.RefObject<HTMLDivElement> | null =
-    useRef(null);
   useEffect(() => {
     console.log(
       "deleteMe infoPanelHeight in IndividualIntakeQuestions is now: " +
         infoPanelHeight
     );
-    // if (intakeQuestionRef?.current) {
-    //   intakeQuestionRef.current.style.height = Number(infoPanelHeight);
-    // }
   }, [infoPanelHeight]);
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
   const [error, setError] = useState<string>("");
-  // const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -47,10 +41,6 @@ const IndividualIntakeQuestions: React.FC<{
   }, []);
 
   useEffect(() => {
-    // const numQuestions: number | undefined = individualIntakeQuestions?.length;
-    // if (numQuestions) {
-    //   setIntakeQuestionHeight(numQuestions * 83.5);
-    // }
     setCollection((prevState: any) => {
       return {
         ...prevState,
@@ -58,7 +48,7 @@ const IndividualIntakeQuestions: React.FC<{
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [individualIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates.
+  }, [individualIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates...but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setIndividualIntakeQuestions((prevState) => {
@@ -133,17 +123,15 @@ const IndividualIntakeQuestions: React.FC<{
   );
 
   return (
-    // <div>
     <InfoPanel
       titleId="INDIVIDUAL_INTAKE_QUESTIONS"
       titleDefault="Individual Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      // ref={intakeQuestionRef}
-      // paperOverrides={{ height: "95%" }}
-      // styleOverrides={{ maxHeigth: "100%" }}
     >
       <Grid container>
-        {collection?.individualIntakeQuestions && intakeQuestionElements}
+        <Grid item lg={12} sm={12}>
+          {collection?.individualIntakeQuestions && intakeQuestionElements}
+        </Grid>
         <Grid item lg={12} sm={12}>
           <Button
             style={{ marginBottom: 10 }}
@@ -160,7 +148,6 @@ const IndividualIntakeQuestions: React.FC<{
         </Grid>
       </Grid>
     </InfoPanel>
-    // </div>
   );
 };
 export default IndividualIntakeQuestions;
