@@ -238,19 +238,12 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid
-              id="deleteMe-intake-grid"
-              item
-              sm={12}
-              md={4}
-              style={{ height: 700, overflow: "auto" }}
-            >
+            <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection && individualQuestionsFormFieldGroup && (
                 <IndividualIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
                   formFieldGroup={individualQuestionsFormFieldGroup}
-                  // infoPanelHeight={infoPanelHeight}
                 />
               )}
             </Grid>

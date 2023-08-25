@@ -14,14 +14,7 @@ const IndividualIntakeQuestions: React.FC<{
   collection: Collection;
   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
-  infoPanelHeight?: number;
-}> = ({ collection, setCollection, formFieldGroup, infoPanelHeight }) => {
-  useEffect(() => {
-    console.log(
-      "deleteMe infoPanelHeight in IndividualIntakeQuestions is now: " +
-        infoPanelHeight
-    );
-  }, [infoPanelHeight]);
+}> = ({ collection, setCollection, formFieldGroup }) => {
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
