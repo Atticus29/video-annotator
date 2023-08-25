@@ -213,11 +213,7 @@ const SingleCollection: React.FC = () => {
 
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        style={{ marginTop: "1vh", alignItems: "stretch" }}
-      >
+      <Grid container spacing={2} style={{ marginTop: "1vh" }}>
         {collection && (
           <>
             <Grid item sm={12} md={12}>
