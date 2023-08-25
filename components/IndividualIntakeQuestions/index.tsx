@@ -122,9 +122,11 @@ const IndividualIntakeQuestions: React.FC<{
       textOverrides={{ textAlign: "center" }}
     >
       <Grid container>
-        <Grid item lg={12} sm={12}>
-          {collection?.individualIntakeQuestions && intakeQuestionElements}
-        </Grid>
+        {collection?.individualIntakeQuestions && (
+          <Grid item lg={12} sm={12}>
+            {intakeQuestionElements}
+          </Grid>
+        )}
         <Grid item lg={12} sm={12}>
           <Button
             style={{ marginBottom: 10 }}
