@@ -197,7 +197,7 @@ const OptionSet: React.FC<{
           paddingTop: "3vh",
           paddingLeft: "3vw",
           paddingRight: "3vw",
-          maxWidth: 190,
+          // maxWidth: 190,
         }}
       >
         <Typography style={{ marginBottom: 10 }}>{formField?.label}</Typography>

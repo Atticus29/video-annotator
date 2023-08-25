@@ -217,7 +217,11 @@ const SingleCollection: React.FC = () => {
 
   return (
     <>
-      <Grid container spacing={2} style={{ marginTop: "1vh" }}>
+      <Grid
+        container
+        spacing={2}
+        style={{ marginTop: "1vh", alignItems: "stretch" }}
+      >
         {collection && (
           <>
             <Grid item sm={12} md={12}>
@@ -238,7 +242,13 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={4} style={{ height: "100%" }}>
+            <Grid
+              id="deleteMe-intake-grid"
+              item
+              sm={12}
+              md={4}
+              style={{ height: 700, overflow: "auto" }}
+            >
               {collection && individualQuestionsFormFieldGroup && (
                 <IndividualIntakeQuestions
                   collection={collection}
@@ -248,7 +258,7 @@ const SingleCollection: React.FC = () => {
                 />
               )}
             </Grid>
-            <Grid item sm={12} md={8} style={{ height: "100%" }}>
+            <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection && (
                 <IndividualIntakePreview
                   collection={collection}

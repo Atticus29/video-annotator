@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { map, get } from "lodash-es";
 
@@ -16,10 +16,17 @@ const IndividualIntakeQuestions: React.FC<{
   formFieldGroup: FormFieldGroup;
   infoPanelHeight?: number;
 }> = ({ collection, setCollection, formFieldGroup, infoPanelHeight }) => {
-  console.log(
-    "deleteMe infoPanelHeight in IndividualIntakeQuestions is: " +
-      infoPanelHeight
-  );
+  const intakeQuestionRef: React.RefObject<HTMLDivElement> | null =
+    useRef(null);
+  useEffect(() => {
+    console.log(
+      "deleteMe infoPanelHeight in IndividualIntakeQuestions is now: " +
+        infoPanelHeight
+    );
+    // if (intakeQuestionRef?.current) {
+    //   intakeQuestionRef.current.style.height = Number(infoPanelHeight);
+    // }
+  }, [infoPanelHeight]);
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
@@ -126,11 +133,14 @@ const IndividualIntakeQuestions: React.FC<{
   );
 
   return (
+    // <div>
     <InfoPanel
       titleId="INDIVIDUAL_INTAKE_QUESTIONS"
       titleDefault="Individual Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      // styleOverrides={{ maxHeight: infoPanelHeight }}
+      // ref={intakeQuestionRef}
+      // paperOverrides={{ height: "95%" }}
+      // styleOverrides={{ maxHeigth: "100%" }}
     >
       <Grid container>
         {collection?.individualIntakeQuestions && intakeQuestionElements}
@@ -150,6 +160,7 @@ const IndividualIntakeQuestions: React.FC<{
         </Grid>
       </Grid>
     </InfoPanel>
+    // </div>
   );
 };
 export default IndividualIntakeQuestions;
