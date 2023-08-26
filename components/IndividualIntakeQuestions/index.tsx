@@ -14,17 +14,11 @@ const IndividualIntakeQuestions: React.FC<{
   collection: Collection;
   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
-  infoPanelHeight?: number;
-}> = ({ collection, setCollection, formFieldGroup, infoPanelHeight }) => {
-  console.log(
-    "deleteMe infoPanelHeight in IndividualIntakeQuestions is: " +
-      infoPanelHeight
-  );
+}> = ({ collection, setCollection, formFieldGroup }) => {
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
   const [error, setError] = useState<string>("");
-  // const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -40,10 +34,6 @@ const IndividualIntakeQuestions: React.FC<{
   }, []);
 
   useEffect(() => {
-    // const numQuestions: number | undefined = individualIntakeQuestions?.length;
-    // if (numQuestions) {
-    //   setIntakeQuestionHeight(numQuestions * 83.5);
-    // }
     setCollection((prevState: any) => {
       return {
         ...prevState,
@@ -51,7 +41,7 @@ const IndividualIntakeQuestions: React.FC<{
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [individualIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates.
+  }, [individualIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates...but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setIndividualIntakeQuestions((prevState) => {
@@ -130,10 +120,13 @@ const IndividualIntakeQuestions: React.FC<{
       titleId="INDIVIDUAL_INTAKE_QUESTIONS"
       titleDefault="Individual Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      // styleOverrides={{ maxHeight: infoPanelHeight }}
     >
       <Grid container>
-        {collection?.individualIntakeQuestions && intakeQuestionElements}
+        {collection?.individualIntakeQuestions && (
+          <Grid item lg={12} sm={12}>
+            {intakeQuestionElements}
+          </Grid>
+        )}
         <Grid item lg={12} sm={12}>
           <Button
             style={{ marginBottom: 10 }}

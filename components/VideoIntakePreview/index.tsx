@@ -8,10 +8,7 @@ import SingleFormField from "../SingleFormField";
 
 const VideoIntakePreview: React.FC<{
   collection: Collection;
-  // ref?: any;
 }> = ({ collection }) => {
-  // console.log("deleteMe collection in VideoIntakePreview is: ");
-  // console.log(collection);
   const formFieldGroup: FormFieldGroup | undefined = get(
     collection,
     "videoQuestionsFormFieldGroup"
@@ -23,7 +20,6 @@ const VideoIntakePreview: React.FC<{
       titleDefault="Video Intake Preview"
       textOverrides={{ textAlign: "center" }}
       styleOverrides={{ maxHeight: 1000 }}
-      // ref={ref}
     >
       <InfoPanelBody
         bodyId="INTAKE_PREVIEW_DETAILS"

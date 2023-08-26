@@ -8,8 +8,7 @@ import SingleFormField from "../SingleFormField";
 
 const IndividualIntakePreview: React.FC<{
   collection: Collection;
-  setInfoPanelHeight?: (inputHeight: number) => void;
-}> = ({ collection, setInfoPanelHeight }) => {
+}> = ({ collection }) => {
   const formFieldGroup: FormFieldGroup | undefined = get(
     collection,
     "individualQuestionsFormFieldGroup"
@@ -21,7 +20,6 @@ const IndividualIntakePreview: React.FC<{
       titleDefault="Individual Intake Preview"
       textOverrides={{ textAlign: "center" }}
       styleOverrides={{ maxHeight: 1000 }}
-      setInfoPanelHeight={setInfoPanelHeight}
     >
       <InfoPanelBody
         bodyId="INDIVIDUAL_INTAKE_PREVIEW_DETAILS"
