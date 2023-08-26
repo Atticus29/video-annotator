@@ -19,7 +19,6 @@ const EventIntakeQuestions: React.FC<{
     SingleFormField[] | undefined
   >(get(collection, ["eventIntakeQuestions"]));
   const [error, setError] = useState<string>("");
-  const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -35,10 +34,6 @@ const EventIntakeQuestions: React.FC<{
   }, []);
 
   useEffect(() => {
-    const numQuestions: number | undefined = eventIntakeQuestions?.length;
-    if (numQuestions) {
-      setIntakeQuestionHeight(numQuestions * 100);
-    }
     setCollection((prevState: any) => {
       return {
         ...prevState,
@@ -46,7 +41,7 @@ const EventIntakeQuestions: React.FC<{
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates.
+  }, [eventIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setEventIntakeQuestions((prevState) => {
@@ -125,10 +120,13 @@ const EventIntakeQuestions: React.FC<{
       titleId="EVENT_INTAKE_QUESTIONS"
       titleDefault="Event Intake Questions"
       textOverrides={{ textAlign: "center" }}
-      styleOverrides={{ maxHeight: intakeQuestionHeight }}
     >
       <Grid container>
-        {collection?.eventIntakeQuestions && intakeQuestionElements}
+        {collection?.eventIntakeQuestions && (
+          <Grid item lg={12} sm={12}>
+            {intakeQuestionElements}
+          </Grid>
+        )}
         <Grid item lg={12} sm={12}>
           <Button
             style={{ marginBottom: 10 }}

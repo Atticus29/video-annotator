@@ -20,7 +20,6 @@ const IndividualIntakePreview: React.FC<{
       titleDefault="Individual Intake Preview"
       textOverrides={{ textAlign: "center" }}
       styleOverrides={{ maxHeight: 1000 }}
-      paperOverrides={{ height: "94.6%" }}
     >
       <InfoPanelBody
         bodyId="INDIVIDUAL_INTAKE_PREVIEW_DETAILS"

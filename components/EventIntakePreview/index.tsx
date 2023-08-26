@@ -9,14 +9,10 @@ import SingleFormField from "../SingleFormField";
 const EventIntakePreview: React.FC<{
   collection: Collection;
 }> = ({ collection }) => {
-  // console.log("deleteMe collection is: ");
-  // console.log(collection);
   const formFieldGroup: FormFieldGroup | undefined = get(
     collection,
     "eventQuestionsFormFieldGroup"
   );
-  // console.log("deleteMe formFieldGroup in EventIntakePreview is: ");
-  // console.log(formFieldGroup);
 
   return (
     <InfoPanel
