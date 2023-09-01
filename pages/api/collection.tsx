@@ -7,7 +7,7 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
-    const coll: Collection<CollectionData> = db.collection("collection"); // @TODO add a type this
+    const coll: Collection<CollectionData> = db.collection("collection");
     if (req.method === "POST") {
       let { data }: { data: CollectionData } = req.body;
 
