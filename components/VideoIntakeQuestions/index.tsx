@@ -19,7 +19,6 @@ const VideoIntakeQuestions: React.FC<{
     SingleFormField[] | undefined
   >(get(collection, ["videoIntakeQuestions"]));
   const [error, setError] = useState<string>("");
-  // const [intakeQuestionHeight, setIntakeQuestionHeight] = useState<number>(500);
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -38,8 +37,6 @@ const VideoIntakeQuestions: React.FC<{
 
   useEffect(() => {
     setCollection((prevState: any) => {
-      // console.log("deleteMe videoIntakeQuestions are: ");
-      // console.log(videoIntakeQuestions);
       return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
     });
     // }
