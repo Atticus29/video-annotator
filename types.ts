@@ -1,6 +1,8 @@
 export interface Collection {
   id: number;
   name: string;
+  createdBy: string;
+  dateCreated: Date;
   nameOfVideo: string;
   nameOfEvent: string;
   isPrivate: boolean;

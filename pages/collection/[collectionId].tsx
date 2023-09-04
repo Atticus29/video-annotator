@@ -24,6 +24,7 @@ import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 
 const SingleCollection: React.FC = () => {
+  
   const intl: IntlShape = useIntl();
   const collectionFailMsg: string = intl.formatMessage({
     id: "COLLECTION_WAS_NOT_SAVED",
