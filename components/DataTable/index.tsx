@@ -131,11 +131,15 @@ const DataTable: React.FC<{
 
   return (
     <DataGrid
-      key={tableTitle}
+      key={tableTitle} // @TODO add title to this
       rows={rows}
       rowHeight={40}
       columns={columns}
-      style={{ minHeight: 200, marginBottom: "2vh" }}
+      style={{
+        minHeight: 200,
+        marginBottom: "2vh",
+        height: 1000,
+      }}
     />
   );
 };

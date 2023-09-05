@@ -24,7 +24,6 @@ import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 
 const SingleCollection: React.FC = () => {
-  
   const intl: IntlShape = useIntl();
   const collectionFailMsg: string = intl.formatMessage({
     id: "COLLECTION_WAS_NOT_SAVED",
@@ -157,7 +156,14 @@ const SingleCollection: React.FC = () => {
 
   const handleSaveCollection = async () => {
     setOpen(true);
-    collectionMutation.mutate(collection);
+    const fleshedOutCollection: Collection | any = {
+      // @TODO just having Collection as the type created issues that I don't have internet access to resolve
+      ...collection,
+      id: Math.random() * 10,
+      createdByEmail: "TODO@TODO.com",
+      dateCreated: new Date(),
+    };
+    collectionMutation.mutate(fleshedOutCollection);
   };
 
   const handleSnackbarClose = (

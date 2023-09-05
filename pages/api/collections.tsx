@@ -1,6 +1,7 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../middleware/mongodb";
+import { User as UserData } from "firebase/auth";
 import { Collection as CollectionData } from "../../types";
 
 const collection = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -14,9 +15,11 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
     const coll: Collection<CollectionData> = db.collection("collection");
-    let { data }: { data: CollectionData } = req.body;
+    let { data }: { data: UserData } = req.body;
     if (req.method === "GET") {
-      const targetDocuments = await coll.find({}).toArray();
+      const targetDocuments = await coll
+        .find({ createdBy: data.email })
+        .toArray(); // @TODO filter by current user or public
       res.status(200).json(targetDocuments);
     }
   } catch (e: any) {

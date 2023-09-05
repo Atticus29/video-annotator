@@ -585,5 +585,6 @@ export const shamCollection: Collection = {
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
   ],
-  // formFieldGroup: shamFormFieldGroup // gets populated elsewhere now because passing useStates through different components was silly
+  createdByEmail: "Boop@boop.com",
+  dateCreated: new Date(),
 };

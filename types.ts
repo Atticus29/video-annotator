@@ -1,7 +1,7 @@
 export interface Collection {
   id: number;
   name: string;
-  createdBy: string;
+  createdByEmail: string;
   dateCreated: Date;
   nameOfVideo: string;
   nameOfEvent: string;
