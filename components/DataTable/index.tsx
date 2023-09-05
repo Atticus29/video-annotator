@@ -8,11 +8,13 @@ const DataTable: React.FC<{
   data: {}[];
   colNamesToDisplay?: { [key: string]: any };
   actionButtonsToDisplay?: { [key: string]: any };
+  styleOverrides?: {};
 }> = ({
   tableTitle,
   data,
   colNamesToDisplay = {},
   actionButtonsToDisplay = {},
+  styleOverrides = {},
 }) => {
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -138,7 +140,7 @@ const DataTable: React.FC<{
       style={{
         minHeight: 200,
         marginBottom: "2vh",
-        height: 1000,
+        ...styleOverrides,
       }}
     />
   );

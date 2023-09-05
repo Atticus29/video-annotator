@@ -83,6 +83,8 @@ const Collections: React.FC = () => {
           tableTitle="Testing"
           data={tempData}
           colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
+          actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
+          styleOverrides={{ height: 1000 }}
         ></DataTable>
       )}
       {/* {localError && <CustomError errorMsg={localError} />}
