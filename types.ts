@@ -1,4 +1,5 @@
 export interface Collection {
+  _id: any;
   id: number;
   name: string;
   createdByEmail: string;

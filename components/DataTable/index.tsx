@@ -30,7 +30,7 @@ const DataTable: React.FC<{
   }
 
   const colNamesToDisplayKeys: string[] = useMemo(() => {
-    return Object.keys(colNamesToDisplayWithActions) || [];
+    return [...Object.keys(colNamesToDisplayWithActions), "_id"] || [];
   }, [colNamesToDisplayWithActions]);
 
   const shouldFilter: boolean = useMemo(() => {
@@ -102,6 +102,8 @@ const DataTable: React.FC<{
     }
     let tracker: number = 0;
     return map(prototypeRowWithOnlyDesiredCols, (el, elKey) => {
+      console.log("deleteMe el is: ");
+      console.log(el);
       tracker++; // tracker seems needed because I can't get both the keys and the indexes in lodash map(obj)
       const cleanHeader: string = elKey.trim().toLowerCase(); // @TODO use capitalizeEachWord utili here
 

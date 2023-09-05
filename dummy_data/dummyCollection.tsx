@@ -534,6 +534,7 @@ const comment: SingleFormField = {
 
 export const shamCollection: Collection = {
   id: 1,
+  _id: "test123",
   name: "Brazilian Jiu Jitsu",
   nameOfVideo: "Match",
   nameOfEvent: "Move",

@@ -4,9 +4,9 @@ import ViewIcon from "@mui/icons-material/Launch";
 import { useIntl, IntlShape } from "react-intl";
 import { get } from "lodash-es";
 
-const ViewActionButton: React.FC<{ props: { id: string | number } }> = (
-  props
-) => {
+const ViewCollectionActionButton: React.FC<{
+  props: { id: string | number };
+}> = (props) => {
   const intl: IntlShape = useIntl();
   // @TODO add button click handler and possibly prevent propagation
   const handleViewClick = async () => {
@@ -21,4 +21,4 @@ const ViewActionButton: React.FC<{ props: { id: string | number } }> = (
   );
 };
 
-export default ViewActionButton;
+export default ViewCollectionActionButton;
