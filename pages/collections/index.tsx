@@ -6,24 +6,32 @@ import { useQuery } from "react-query";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/Error";
 import { excludeFromCollectionTableDisplay } from "../../constants";
-import { shamCollection } from "../../dummy_data/dummyCollection";
+import {
+  shamCollection,
+  shamCollection2,
+} from "../../dummy_data/dummyCollection";
 import { Collection } from "../../types";
 import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
 const Collections: React.FC = () => {
   const [localError, setLocalError] = useState<string>("");
-  const { isLoading, isError, data, error } = useQuery("", async () => {
-    try {
-      const response = await axios.get("/api/collections", {});
-      console.log("deleteMe response is: ");
-      console.log(response);
-      return response?.data;
-    } catch (e: any) {
-      console.log("deleteMe error is: ");
-      console.log(e);
-      setLocalError(e?.message);
+  const { isLoading, isError, data, error } = useQuery(
+    "collections",
+    async () => {
+      try {
+        const response = await axios.get("/api/collections", {
+          params: { email: "TODO@TODO.com" },
+        });
+        console.log("deleteMe response is: ");
+        console.log(response);
+        return response?.data;
+      } catch (e: any) {
+        console.log("deleteMe error is: ");
+        console.log(e);
+        setLocalError(e?.message);
+      }
     }
-  });
+  );
 
   const [open, setOpen] = useState<boolean>(isLoading);
 
@@ -47,8 +55,9 @@ const Collections: React.FC = () => {
   for (let i = 0; i < 500; i++) {
     tempData.push(shamCollection);
   }
-  console.log("deleteMe tempData is: ");
-  console.log(tempData);
+  tempData.push(shamCollection2);
+  // console.log("deleteMe tempData is: ");
+  // console.log(tempData);
   // const shouldShowTable: boolean = !isError && !isLoading && Boolean(data);
   const shouldShowTable: boolean = true; // deleteMe
   const defaultDisplayCols: {} = {
@@ -74,8 +83,8 @@ const Collections: React.FC = () => {
     },
     {}
   );
-  console.log("deleteMe collectionDisplayCols is: ");
-  console.log(collectionDisplayCols);
+  // console.log("deleteMe collectionDisplayCols is: ");
+  // console.log(collectionDisplayCols);
   return (
     <>
       {shouldShowTable && (

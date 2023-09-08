@@ -118,5 +118,6 @@
   "COLLECTION_WAS_NOT_SAVED": "Collection was not saved: ",
   "COLLECTION_SAVED_SUCCESSFULL": "Collection was saved successfully.",
   "SAVE_COLLECTION": "Save Collection",
-  "SAVING": "Saving..."
+  "SAVING": "Saving...",
+  "CREATE_NEW_COLLECTION": "Create New Collection"
 }

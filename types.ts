@@ -1,6 +1,6 @@
 export interface Collection {
-  _id: any;
-  id: number;
+  _id?: any;
+  urlPath?: string;
   name: string;
   createdByEmail: string;
   dateCreated: Date;

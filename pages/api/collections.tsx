@@ -4,7 +4,7 @@ import clientPromise from "../../middleware/mongodb";
 import { User as UserData } from "firebase/auth";
 import { Collection as CollectionData } from "../../types";
 
-const collection = async (req: NextApiRequest, res: NextApiResponse) => {
+const collections = async (req: NextApiRequest, res: NextApiResponse) => {
   const allowedMethods = ["GET"];
 
   if (!allowedMethods.includes(req.method || "") || req.method === "OPTIONS") {
@@ -15,10 +15,11 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
     const coll: Collection<CollectionData> = db.collection("collection");
-    let { data }: { data: UserData } = req.body;
+    // let { data }: { data: UserData } = req.body;
+    const email: string = req.query.email as string;
     if (req.method === "GET") {
       const targetDocuments = await coll
-        .find({ createdBy: data.email })
+        .find({ createdByEmail: email })
         .toArray(); // @TODO filter by current user or public
       res.status(200).json(targetDocuments);
     }
@@ -30,4 +31,4 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default collection;
+export default collections;

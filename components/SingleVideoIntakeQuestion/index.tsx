@@ -88,17 +88,17 @@ const SingleVideoIntakeQuestion: React.FC<{
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    console.log("deleteMe currentVal is: ");
-    console.log(currentVal);
+    // console.log("deleteMe currentVal is: ");
+    // console.log(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       wholeQuestion,
       currentVal
     );
-    console.log("deleteMe wholeQuestion is: ");
-    console.log(wholeQuestion);
-    console.log("deleteMe transformedQuestion is: ");
-    console.log(transformedQuestion);
+    // console.log("deleteMe wholeQuestion is: ");
+    // console.log(wholeQuestion);
+    // console.log("deleteMe transformedQuestion is: ");
+    // console.log(transformedQuestion);
 
     updateSingleQuestionInCollection(
       collection,

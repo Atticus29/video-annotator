@@ -288,8 +288,8 @@ export function updateCheckboxGeneral(
     [formFieldGroupString, "actualValues", wholeQuestion?.label],
     ""
   );
-  console.log("deleteMe wholeQuestion?.label is: ");
-  console.log(wholeQuestion?.label);
+  // console.log("deleteMe wholeQuestion?.label is: ");
+  // console.log(wholeQuestion?.label);
 
   const isCustomOptionsUnchecked: boolean =
     intakeQuestionKey === "usersCanAddCustomOptions" && checkVal; // checkVal is true when unchecked currently. Wut. I dunno.
@@ -301,10 +301,10 @@ export function updateCheckboxGeneral(
     : true;
   let validityValue: boolean =
     intakeQuestionKey === "isRequired" ? checkVal : customOptValidityVal;
-  console.log("deleteMe validityValue is: ");
-  console.log(validityValue);
-  console.log("deleteMe intakeQuestionKey is: ");
-  console.log(intakeQuestionKey);
+  // console.log("deleteMe validityValue is: ");
+  // console.log(validityValue);
+  // console.log("deleteMe intakeQuestionKey is: ");
+  // console.log(intakeQuestionKey);
 
   const shouldReinstateValidator: boolean = checkVal === true;
   if (

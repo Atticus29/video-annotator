@@ -10,6 +10,7 @@ import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
 
 export const defaultDoNotDisplays: string[] = [
+  "_id",
   "testId",
   "doNotDisplay",
   "shouldBeCheckboxes",
@@ -533,8 +534,65 @@ const comment: SingleFormField = {
 };
 
 export const shamCollection: Collection = {
-  id: 1,
-  _id: "test123",
+  // _id: "test123",
+  name: "Brazilian Jiu Jitsu",
+  nameOfVideo: "Match",
+  nameOfEvent: "Move",
+  isPrivate: false,
+  language: "English",
+  videoIntakeQuestions: [
+    firstQuestion,
+    natureOfTheMatch,
+    secondQuestion,
+    locationName,
+    thirdQuestion,
+    allRanks,
+    weightClassIndividualQuestion,
+    fourthQuestion,
+    // fifthQuestion,
+    sixthQuestion,
+    numberReferees,
+    // seventhQuestion,
+  ],
+  individualIntakeQuestions: [
+    lastNameIndividualQuestion,
+    firstNameIndividualQuestion,
+    genderIndividualQuestion,
+    giRankIndividualQuestion,
+    noGiRankIndividualQuestion,
+    weightClassIndividualQuestion,
+    ageClassIndividualQuestion,
+  ],
+  eventIntakeQuestions: [
+    moveNameQuestion,
+    actorName,
+    startingPositionOfActor,
+    startingPositionOfSubject,
+    endingPositionOfActor,
+    endingPositionOfSubject,
+    pointsScored,
+    isSuccessful,
+    isSubmission,
+    moveRating,
+    comment,
+  ],
+  excludeFromDetailList: [
+    "_id",
+    "id",
+    "videoIntakeQuestions",
+    "individualIntakeQuestions",
+    "eventIntakeQuestions",
+    "excludeFromDetailList",
+    "videoQuestionsFormFieldGroup",
+    "individualQuestionsFormFieldGroup",
+    "eventQuestionsFormFieldGroup",
+  ],
+  createdByEmail: "mark.aaron.fisher@gmail.com",
+  dateCreated: new Date(),
+};
+
+export const shamCollection2: Collection = {
+  // _id: "test123",
   name: "Brazilian Jiu Jitsu",
   nameOfVideo: "Match",
   nameOfEvent: "Move",
@@ -586,6 +644,6 @@ export const shamCollection: Collection = {
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
   ],
-  createdByEmail: "Boop@boop.com",
+  createdByEmail: "mfishe53@asu.edu",
   dateCreated: new Date(),
 };

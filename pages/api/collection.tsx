@@ -4,6 +4,8 @@ import clientPromise from "../../middleware/mongodb";
 import { Collection as CollectionData } from "../../types";
 
 const collection = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("deleteMe got here y1 and req is: ");
+  console.log(req);
   const allowedMethods = ["GET", "POST"];
 
   if (!allowedMethods.includes(req.method || "") || req.method === "OPTIONS") {
@@ -14,19 +16,25 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
     const coll: Collection<CollectionData> = db.collection("collection");
-    let { data }: { data: CollectionData } = req.body;
     if (req.method === "POST") {
-      const existingDocument = await coll.findOne({ id: data.id });
+      let { data }: { data: CollectionData } = req.body;
+      const existingDocument = await coll.findOne({ urlPath: data.urlPath });
       if (existingDocument) {
-        return res.status(409).json({ message: "Collection already exists" });
+        return res
+          .status(409)
+          .json({ message: "Collection with that name already exists" });
       }
       const result = await coll.insertOne(data);
       res.status(200).json({ message: "Collection saved successfully.", data });
     }
 
     if (req.method === "GET") {
-      const targetDocuments = await coll.find({ id: data.id }).toArray();
-      res.status(200).json(targetDocuments);
+      const urlPath: string = req.query.urlPath as string;
+      console.log("deleteMe got here x1");
+      const targetDocument = await coll.findOne({
+        urlPath: urlPath,
+      });
+      res.status(200).json(targetDocument);
     }
   } catch (e: any) {
     console.log(e);

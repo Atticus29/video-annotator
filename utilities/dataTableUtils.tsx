@@ -5,8 +5,8 @@ export function populateWithActionButtons(
   tableTitle: string,
   params: GridRenderCellParams
 ) {
-  console.log("deleteMe params are: ");
-  console.log(params);
+  // console.log("deleteMe params are: ");
+  // console.log(params);
   const rowId: number | string = params?.id || "";
   const field: string = params?.field || "";
   const actionButtonKeys: string[] = params?.value?.split(" ") || [];

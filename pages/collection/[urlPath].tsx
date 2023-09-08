@@ -19,12 +19,50 @@ import IndividualIntakePreview from "../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
 import EventIntakeQuestions from "../../components/EventIntakeQuestions";
 import EventIntakePreview from "../../components/EventIntakePreview";
-import { useMutation, UseMutationResult, useQuery } from "react-query";
+import {
+  QueryFunctionContext,
+  useMutation,
+  UseMutationResult,
+  useQuery,
+} from "react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import { sanitizeString } from "../../utilities/textUtils";
+import { useRouter } from "next/router";
 
 const SingleCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
+  const router = useRouter();
+  const localUrlPath: string | string[] | undefined = router.query.urlPath;
+  let localUrlPathAsString: string =
+    (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
+  // useEffect(() => {
+  //   localUrlPathAsString =
+  //     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
+  // }, [localUrlPath]);
+
+  const { isLoading, isError, data, error } = useQuery(
+    ["singleCollection", localUrlPathAsString],
+    async (context: QueryFunctionContext<[string, string]>) => {
+      const [, localUrlPathAsString] = context.queryKey;
+      try {
+        const response = await axios.get("/api/collection/", {
+          params: { urlPath: localUrlPathAsString },
+        });
+        console.log("deleteMe response in getting a single collection is: ");
+        console.log(response);
+        return response?.data;
+      } catch (e: any) {
+        console.log("deleteMe error in getting a single collection is: ");
+        console.log(e);
+        // setLocalError(e?.message);
+      }
+    }
+  );
+
+  console.log("deleteMe data in get single collection is: ");
+  console.log(data);
+
   const collectionFailMsg: string = intl.formatMessage({
     id: "COLLECTION_WAS_NOT_SAVED",
   });
@@ -63,8 +101,6 @@ const SingleCollection: React.FC = () => {
 
   useEffect(() => {
     const initialCollection = { ...shamCollection };
-    // console.log("deleteMe initialCollection is: ");
-    // console.log(initialCollection);
     initialCollection.videoQuestionsFormFieldGroup =
       videoQuestionsFormFieldGroup;
     initialCollection.individualQuestionsFormFieldGroup =
@@ -107,8 +143,6 @@ const SingleCollection: React.FC = () => {
 
   useEffect(() => {
     setCollection((prevState: any) => {
-      // console.log("deleteMe prevState in the useEffect is: ");
-      // console.log(prevState);
       return {
         ...prevState,
         videoQuestionsFormFieldGroup: videoQuestionsFormFieldGroup,
@@ -134,11 +168,14 @@ const SingleCollection: React.FC = () => {
       return response?.data;
     },
     onSuccess: (data) => {
+      console.log("deleteMe data coming back from collection save is: ");
+      console.log(data);
       setSnackbarMessage(data?.message);
       setOpen(false);
       setSaveSuccess(true);
       setSaveFail(false);
       handleClose();
+      router.push("/collection/" + data?.data?.urlPath);
     },
     onError: (error) => {
       setSnackbarMessage(
@@ -156,11 +193,16 @@ const SingleCollection: React.FC = () => {
 
   const handleSaveCollection = async () => {
     setOpen(true);
+    const sanitizedCollectionName: string = sanitizeString(
+      collection?.name || String(Math.random() * 10)
+    );
     const fleshedOutCollection: Collection | any = {
       // @TODO just having Collection as the type created issues that I don't have internet access to resolve
       ...collection,
-      id: Math.random() * 10,
-      createdByEmail: "TODO@TODO.com",
+      urlPath: sanitizeString(
+        collection?.name || localUrlPathAsString || String(Math.random() * 10)
+      ),
+      createdByEmail: "TODO@TODO.com", // @TODO get email address from current user
       dateCreated: new Date(),
     };
     collectionMutation.mutate(fleshedOutCollection);

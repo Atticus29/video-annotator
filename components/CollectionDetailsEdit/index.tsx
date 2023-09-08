@@ -22,8 +22,8 @@ const CollectionDetailsEdit: React.FC<{
   setIsCollectionDetailsInEditMode: (val: boolean) => void;
 }> = ({ collection, setCollection, setIsCollectionDetailsInEditMode }) => {
   const intl: IntlShape = useIntl();
-  console.log("deleteMe collection is: ");
-  console.log(collection);
+  // console.log("deleteMe collection is: ");
+  // console.log(collection);
 
   useEffect(() => {
     setName(collection?.name);

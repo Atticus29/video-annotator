@@ -116,8 +116,8 @@ export function deleteSingleQuestionInCollection(
     [whichIntakeQuestion],
     []
   );
-  console.log("deleteMe originalQuestionSet is: ");
-  console.log(originalQuestionSet);
+  // console.log("deleteMe originalQuestionSet is: ");
+  // console.log(originalQuestionSet);
   const modifiedQuestionSet = originalQuestionSet?.splice(questionIdx, 1);
   // modifiedQuestionSet[questionIdx] = newQuestion;
   setCollection((prevState: any) => {
