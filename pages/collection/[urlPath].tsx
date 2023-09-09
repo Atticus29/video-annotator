@@ -29,6 +29,7 @@ import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../utilities/textUtils";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 const SingleCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -59,9 +60,6 @@ const SingleCollection: React.FC = () => {
       }
     }
   );
-
-  console.log("deleteMe data in get single collection is: ");
-  console.log(data);
 
   const collectionFailMsg: string = intl.formatMessage({
     id: "COLLECTION_WAS_NOT_SAVED",
@@ -107,9 +105,34 @@ const SingleCollection: React.FC = () => {
       individualQuestionsFormFieldGroup;
     initialCollection.eventQuestionsFormFieldGroup =
       eventQuestionsFormFieldGroup;
+    console.log("deleteMe initialCollection is: ");
+    console.log(initialCollection);
     setCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!isLoading && data && !isError) {
+      console.log("deleteMe got here a1 and data before is: ");
+      console.log(data);
+      setEventQuestionFormValues({});
+      setVideoQuestionFormValues({});
+      setIndividualQuestionFormValues({});
+
+      const decantedCollection: Collection = {
+        // some defaults get saved in actual values, including dates which get misformatted somehow. I can kick this problem down the road, because these actual values are not needed for this component
+        ...data,
+        videoQuestionsFormFieldGroup,
+        individualQuestionsFormFieldGroup,
+        eventQuestionsFormFieldGroup,
+      };
+      // data.dateCreated = dayjs(data.dateCreated);
+      console.log("deleteMe got here a2 and decantedCollection is: ");
+      console.log(decantedCollection);
+      setCollection(decantedCollection);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
@@ -203,7 +226,7 @@ const SingleCollection: React.FC = () => {
         collection?.name || localUrlPathAsString || String(Math.random() * 10)
       ),
       createdByEmail: "TODO@TODO.com", // @TODO get email address from current user
-      dateCreated: new Date(),
+      dateCreated: dayjs(),
     };
     collectionMutation.mutate(fleshedOutCollection);
   };
@@ -239,6 +262,13 @@ const SingleCollection: React.FC = () => {
 
   return (
     <>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
         {collection && (
           <>

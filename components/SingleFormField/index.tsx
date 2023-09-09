@@ -67,7 +67,7 @@ const SingleFormField: React.FC<{
     const currentVal: any = event?.currentTarget?.value;
     if (question) {
       setLocalVal(currentVal);
-      updateFormFieldStates(currentVal, false, formFieldGroup, question); // Note that this controlled stuff needs to be set AFTER the local useState. Otherwise, there are weird cursor placement issues. See https://dev.to/kwirke/solving-caret-jumping-in-react-inputs-36ic
+      updayjsFormFieldStates(currentVal, false, formFieldGroup, question); // Note that this controlled stuff needs to be set AFTER the local useState. Otherwise, there are weird cursor placement issues. See https://dev.to/kwirke/solving-caret-jumping-in-react-inputs-36ic
       // console.log("deleteMe formFieldGroup is now: ");
       // console.log(formFieldGroup);
       // console.log("deleteMe hi");

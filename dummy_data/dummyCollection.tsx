@@ -8,6 +8,7 @@ import {
 import moveNames from "./moveNames";
 import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
+import dayjs from "dayjs";
 
 export const defaultDoNotDisplays: string[] = [
   "_id",
@@ -588,7 +589,7 @@ export const shamCollection: Collection = {
     "eventQuestionsFormFieldGroup",
   ],
   createdByEmail: "mark.aaron.fisher@gmail.com",
-  dateCreated: new Date(),
+  dateCreated: dayjs(),
 };
 
 export const shamCollection2: Collection = {
@@ -645,5 +646,5 @@ export const shamCollection2: Collection = {
     "eventQuestionsFormFieldGroup",
   ],
   createdByEmail: "mfishe53@asu.edu",
-  dateCreated: new Date(),
+  dateCreated: dayjs(),
 };
