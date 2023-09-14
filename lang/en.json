@@ -119,5 +119,6 @@
   "COLLECTION_SAVED_SUCCESSFULL": "Collection was saved successfully.",
   "SAVE_COLLECTION": "Save Collection",
   "SAVING": "Saving...",
-  "CREATE_NEW_COLLECTION": "Create New Collection"
+  "CREATE_NEW_COLLECTION": "Create New Collection",
+  "CREATED_BY_EMAIL": "Email address of collection creator"
 }

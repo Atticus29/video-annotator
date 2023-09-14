@@ -30,10 +30,12 @@ import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../utilities/textUtils";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const SingleCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
   const router = useRouter();
+  const { user, authError } = useFirebaseAuth();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
@@ -105,11 +107,13 @@ const SingleCollection: React.FC = () => {
       individualQuestionsFormFieldGroup;
     initialCollection.eventQuestionsFormFieldGroup =
       eventQuestionsFormFieldGroup;
+    initialCollection.createdByEmail =
+      collection?.createdByEmail || user?.email || "public@example.com";
     console.log("deleteMe initialCollection is: ");
     console.log(initialCollection);
     setCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!isLoading && data && !isError) {
@@ -225,7 +229,7 @@ const SingleCollection: React.FC = () => {
       urlPath: sanitizeString(
         collection?.name || localUrlPathAsString || String(Math.random() * 10)
       ),
-      createdByEmail: "TODO@TODO.com", // @TODO get email address from current user
+      createdByEmail: user?.email || "public@example.com",
       dateCreated: dayjs(),
     };
     collectionMutation.mutate(fleshedOutCollection);

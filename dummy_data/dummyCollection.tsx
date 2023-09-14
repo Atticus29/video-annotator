@@ -588,7 +588,7 @@ export const shamCollection: Collection = {
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
   ],
-  createdByEmail: "mark.aaron.fisher@gmail.com",
+  createdByEmail: "public@example.com",
   dateCreated: dayjs(),
 };
 

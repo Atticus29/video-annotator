@@ -10,17 +10,22 @@ import {
   shamCollection,
   shamCollection2,
 } from "../../dummy_data/dummyCollection";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { Collection } from "../../types";
 import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
 const Collections: React.FC = () => {
   const [localError, setLocalError] = useState<string>("");
+  const { user, authError } = useFirebaseAuth();
   const { isLoading, isError, data, error } = useQuery(
     "collections",
     async () => {
       try {
+        const userEmail: string = user?.email || "public@example.com";
+        console.log("deleteMe userEmail is: ");
+        console.log(userEmail);
         const response = await axios.get("/api/collections", {
-          params: { email: "TODO@TODO.com" },
+          params: { email: userEmail },
         });
         console.log("deleteMe response is: ");
         console.log(response);

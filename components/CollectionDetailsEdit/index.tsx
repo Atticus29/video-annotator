@@ -12,7 +12,11 @@ import { FormattedMessage, useIntl, IntlShape } from "react-intl";
 
 import InfoPanel from "../InfoPanel";
 import { Collection } from "../../types";
-import { isValidName } from "../../utilities/validators";
+import {
+  isNonEmptyString,
+  isValidEmail,
+  isValidName,
+} from "../../utilities/validators";
 import CustomError from "../Error";
 import { get } from "lodash-es";
 
@@ -30,6 +34,7 @@ const CollectionDetailsEdit: React.FC<{
     setNameOfVideo(collection?.nameOfVideo);
     setNameOfEvent(collection?.nameOfEvent);
     setIsPrivate(collection?.isPrivate);
+    setCreatedByEmail(collection?.createdByEmail);
   }, [collection]);
 
   const [error, setError] = useState<string>("");
@@ -64,6 +69,20 @@ const CollectionDetailsEdit: React.FC<{
     setnameOfEventInvalid(!isValidName(currentNameOfEvent));
   };
 
+  const [createdByEmail, setCreatedByEmail] = useState<string>("");
+  const [createdByEmailInvalid, setCreatedByEmailInvalid] =
+    useState<boolean>(false);
+  const handleCreatedByEmailChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const currentCreatedByEmail: string = event?.currentTarget?.value;
+    setCreatedByEmail(currentCreatedByEmail);
+    setCreatedByEmailInvalid(
+      !isValidEmail(currentCreatedByEmail) ||
+        !isNonEmptyString(currentCreatedByEmail)
+    );
+  };
+
   const [isPrivate, setIsPrivate] = useState<boolean>(
     get(collection, ["isPrivate"], false)
   );
@@ -78,13 +97,15 @@ const CollectionDetailsEdit: React.FC<{
     if (
       isValidName(name) &&
       isValidName(nameOfEvent) &&
-      isValidName(nameOfVideo)
+      isValidName(nameOfVideo) &&
+      isValidEmail(createdByEmail) &&
+      isNonEmptyString(createdByEmail)
     ) {
       setAllRequiredValid(true);
     } else {
       setAllRequiredValid(false);
     }
-  }, [name, nameOfEvent, nameOfVideo]);
+  }, [name, nameOfEvent, nameOfVideo, createdByEmail]);
 
   const handleCollectionDetailsSubmission: () => void = async () => {
     try {
@@ -94,6 +115,7 @@ const CollectionDetailsEdit: React.FC<{
         name,
         nameOfVideo,
         nameOfEvent,
+        createdByEmail,
       });
       setIsCollectionDetailsInEditMode(false);
     } catch (error: any) {
@@ -218,6 +240,32 @@ const CollectionDetailsEdit: React.FC<{
               defaultMessage="If selected, other users will not be able to discover your collection, nor view and edit the videos within the collection as their privileges permit. In either case, they will not be able to edit the questions that appear during video, individual, or event intake."
             />
           </div>
+        </Grid>
+        <Grid item lg={12} sm={12}>
+          <TextField
+            fullWidth
+            error={createdByEmailInvalid}
+            variant="filled"
+            data-testid={"collection-created-by-email"}
+            label={
+              <FormattedMessage
+                id="CREATED_BY_EMAIL"
+                defaultMessage="Email address of collection creator"
+              />
+            }
+            required
+            helperText={
+              createdByEmailInvalid
+                ? intl.formatMessage({
+                    id: "MUST_BE_VALID_EMAIL",
+                    defaultMessage: "Must be a valid email address",
+                  })
+                : ""
+            }
+            style={{ marginBottom: 10, maxWidth: 400 }}
+            onChange={handleCreatedByEmailChange}
+            value={createdByEmail}
+          ></TextField>
         </Grid>
         <Grid item lg={12} sm={12}>
           <Button
