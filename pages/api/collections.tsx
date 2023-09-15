@@ -19,7 +19,13 @@ const collections = async (req: NextApiRequest, res: NextApiResponse) => {
     const email: string = req.query.email as string;
     if (req.method === "GET") {
       const targetDocuments = await coll
-        .find({ createdByEmail: email })
+        .find({
+          $or: [
+            { createdByEmail: email },
+            { createdByEmail: "public@example.com" },
+            { isPrivate: false },
+          ],
+        })
         .toArray(); // @TODO filter by current user or public
       res.status(200).json(targetDocuments);
     }

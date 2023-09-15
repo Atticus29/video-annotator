@@ -92,10 +92,10 @@ const Collections: React.FC = () => {
   // console.log(collectionDisplayCols);
   return (
     <>
-      {shouldShowTable && (
+      {!isLoading && !isError && (
         <DataTable
           tableTitle="Testing"
-          data={tempData}
+          data={data}
           colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
           actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
           styleOverrides={{ height: 1000 }}
