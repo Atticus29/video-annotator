@@ -1,4 +1,9 @@
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowsProp,
+} from "@mui/x-data-grid";
 import { reduce, map } from "lodash-es";
 import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
@@ -9,13 +14,21 @@ const DataTable: React.FC<{
   colNamesToDisplay?: { [key: string]: any };
   actionButtonsToDisplay?: { [key: string]: any };
   styleOverrides?: {};
+  targetColNameForAction?: string;
+  modificationMethodForAction?: (target: string) => string;
+  targetColIdxForUrlPath?: number;
 }> = ({
   tableTitle,
   data,
   colNamesToDisplay = {},
   actionButtonsToDisplay = {},
   styleOverrides = {},
+  targetColNameForAction,
+  modificationMethodForAction,
+  targetColIdxForUrlPath,
 }) => {
+  // console.log("deleteMe data entering DataTable component is: ");
+  // console.log(data);
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
@@ -87,6 +100,8 @@ const DataTable: React.FC<{
   const columns: GridColDef<{
     [key: string | number]: any;
   }>[] = useMemo(() => {
+    console.log("deleteMe data is: ");
+    console.log(data);
     const safePrototypeRow: { [key: string]: any } = data[0] || {}; // assumes that the first row of the data has all of the columns desired (i.e., that it's a good prototype to use)
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
       safePrototypeRow;
@@ -104,12 +119,25 @@ const DataTable: React.FC<{
     return map(prototypeRowWithOnlyDesiredCols, (el, elKey) => {
       // console.log("deleteMe el is: ");
       // console.log(el);
+      // console.log("deleteMe elKey is: ");
+      // console.log(elKey);
       tracker++; // tracker seems needed because I can't get both the keys and the indexes in lodash map(obj)
       const cleanHeader: string = elKey.trim().toLowerCase(); // @TODO use capitalizeEachWord utili here
 
       const headerName: string =
         colNamesToDisplay[elKey] ||
         cleanHeader.charAt(0).toUpperCase() + cleanHeader.slice(1);
+      // var linkId: string = "";
+      // if (
+      //   targetColNameForAction &&
+      //   modificationMethodForAction &&
+      //   targetColNameForAction === elKey
+      // ) {
+      //   linkId = modificationMethodForAction(el);
+      //   console.log("deleteMe got here b1 and linkId is now: ");
+      //   console.log(linkId);
+      // }
+
       const returnVal: GridColDef<{
         [key: string | number]: any | null;
       }> = {
@@ -117,8 +145,11 @@ const DataTable: React.FC<{
         headerName: headerName,
         renderCell:
           headerName === "Actions"
-            ? (params) => {
-                return populateWithActionButtons(tableTitle, params);
+            ? (params: GridRenderCellParams) => {
+                return populateWithActionButtons(tableTitle, params, {
+                  targetColIdxForUrlPath: targetColIdxForUrlPath,
+                  modificationMethodForAction: modificationMethodForAction,
+                });
               }
             : undefined,
         width: 200,
@@ -130,6 +161,8 @@ const DataTable: React.FC<{
     shouldFilter,
     colNamesToDisplayKeys,
     colNamesToDisplay,
+    targetColNameForAction,
+    modificationMethodForAction,
     tableTitle,
   ]);
 

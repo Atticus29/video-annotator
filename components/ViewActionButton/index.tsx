@@ -3,15 +3,23 @@ import ViewIcon from "@mui/icons-material/Launch";
 
 import { useIntl, IntlShape } from "react-intl";
 import { get } from "lodash-es";
+import { NextRouter, useRouter } from "next/router";
 
-const ViewActionButton: React.FC<{ props: { id: string | number } }> = (
-  props
-) => {
+const ViewActionButton: React.FC<{
+  props: { id: string | number; urlTarget?: string };
+}> = (props) => {
+  console.log("deleteMe props are: ");
+  console.log(props);
   const intl: IntlShape = useIntl();
+  const router: NextRouter = useRouter();
   // @TODO add button click handler and possibly prevent propagation
   const handleViewClick = async () => {
     // console.log("deleteMe view clicked");
-    // console.log("deleteMe id is: ");
+    // console.log("deleteMe urlTarget is: ");
+    // console.log(props?.urlTarget);
+    const url: string = get(props, ["urlTarget"], "");
+    router.push(url);
+
     // console.log(get(props, ["id"]));
   };
   return (

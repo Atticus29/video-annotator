@@ -10,7 +10,11 @@ export const componentMap: { [key: string]: any } = {
   ViewCollection: ViewCollectionActionButton,
 };
 
-export function generateComponent(componentName: string, id: string | number) {
+export function generateComponent(
+  componentName: string,
+  id: string | number,
+  urlTarget?: string
+) {
   const Returncomponent = componentMap[componentName] || null;
-  return createElement(Returncomponent, { id, key: id });
+  return createElement(Returncomponent, { id, key: id, urlTarget });
 }

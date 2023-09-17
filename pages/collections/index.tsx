@@ -12,7 +12,10 @@ import {
 } from "../../dummy_data/dummyCollection";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { Collection } from "../../types";
-import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
+import {
+  convertCamelCaseToCapitalCase,
+  sanitizeString,
+} from "../../utilities/textUtils";
 
 const Collections: React.FC = () => {
   const [localError, setLocalError] = useState<string>("");
@@ -22,13 +25,9 @@ const Collections: React.FC = () => {
     async () => {
       try {
         const userEmail: string = user?.email || "public@example.com";
-        console.log("deleteMe userEmail is: ");
-        console.log(userEmail);
         const response = await axios.get("/api/collections", {
           params: { email: userEmail },
         });
-        console.log("deleteMe response is: ");
-        console.log(response);
         return response?.data;
       } catch (e: any) {
         console.log("deleteMe error is: ");
@@ -54,8 +53,6 @@ const Collections: React.FC = () => {
     console.log(isError);
   }, [isError]);
 
-  console.log("deleteMe data is: ");
-  console.log(data);
   let tempData: Collection[] = [];
   for (let i = 0; i < 500; i++) {
     tempData.push(shamCollection);
@@ -71,7 +68,7 @@ const Collections: React.FC = () => {
     dateCreated: "Date Created",
   };
 
-  const collectionDisplayKeys: string[] = Object.keys(get(tempData, [0], {}));
+  const collectionDisplayKeys: string[] = Object.keys(get(data, [0], {}));
   const collectionDisplayCols: { [key: string]: any } = reduce(
     collectionDisplayKeys,
 
@@ -99,15 +96,20 @@ const Collections: React.FC = () => {
           colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
           actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
           styleOverrides={{ height: 1000 }}
+          // targetColNameForAction={"urlPath"}
+          modificationMethodForAction={sanitizeString}
+          targetColIdxForUrlPath={2}
         ></DataTable>
       )}
-      {/* {localError && <CustomError errorMsg={localError} />}
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop> */}
+      {isError && <CustomError errorMsg={localError} />}
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </>
   );
 };
