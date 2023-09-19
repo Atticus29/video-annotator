@@ -39,7 +39,7 @@ export function populateWithActionButtons(
         return generateComponent(
           actionButtonKey,
           tableTitle + field + rowId + actionButtonKey,
-          "/collection/" + processedTarget
+          "/collection/view/" + processedTarget
         );
       })}
     </>

@@ -15,6 +15,7 @@ export interface Collection {
   videoQuestionsFormFieldGroup?: FormFieldGroup;
   individualQuestionsFormFieldGroup?: FormFieldGroup;
   eventQuestionsFormFieldGroup?: FormFieldGroup;
+  videos?: {}[];
 }
 
 export interface FormFieldGroup {

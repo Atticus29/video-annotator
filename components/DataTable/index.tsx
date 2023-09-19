@@ -4,9 +4,10 @@ import {
   GridRenderCellParams,
   GridRowsProp,
 } from "@mui/x-data-grid";
-import { reduce, map } from "lodash-es";
+import { reduce, map, get } from "lodash-es";
 import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
+import InfoPanel from "../InfoPanel";
 
 const DataTable: React.FC<{
   tableTitle: string;
@@ -17,6 +18,7 @@ const DataTable: React.FC<{
   targetColNameForAction?: string;
   modificationMethodForAction?: (target: string) => string;
   targetColIdxForUrlPath?: number;
+  loading?: boolean;
 }> = ({
   tableTitle,
   data,
@@ -26,9 +28,10 @@ const DataTable: React.FC<{
   targetColNameForAction,
   modificationMethodForAction,
   targetColIdxForUrlPath,
+  loading = false,
 }) => {
-  // console.log("deleteMe data entering DataTable component is: ");
-  // console.log(data);
+  console.log("deleteMe data entering DataTable component is: ");
+  console.log(data);
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
@@ -100,9 +103,7 @@ const DataTable: React.FC<{
   const columns: GridColDef<{
     [key: string | number]: any;
   }>[] = useMemo(() => {
-    console.log("deleteMe data is: ");
-    console.log(data);
-    const safePrototypeRow: { [key: string]: any } = data[0] || {}; // assumes that the first row of the data has all of the columns desired (i.e., that it's a good prototype to use)
+    const safePrototypeRow: { [key: string]: any } = get(data, [0]) || {}; // assumes that the first row of the data has all of the columns desired (i.e., that it's a good prototype to use)
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
       safePrototypeRow;
     if (shouldFilter) {
@@ -167,17 +168,28 @@ const DataTable: React.FC<{
   ]);
 
   return (
-    <DataGrid
-      key={tableTitle} // @TODO add title to this
-      rows={rows}
-      rowHeight={40}
-      columns={columns}
-      style={{
-        minHeight: 200,
-        marginBottom: "2vh",
-        ...styleOverrides,
-      }}
-    />
+    <>
+      {data && data.length > 0 && (
+        <DataGrid
+          key={tableTitle} // @TODO add title to this
+          rows={rows}
+          rowHeight={40}
+          columns={columns}
+          style={{
+            minHeight: 200,
+            marginBottom: "2vh",
+            ...styleOverrides,
+          }}
+          loading={loading}
+        />
+      )}
+      {(!data || data.length < 1) && (
+        <InfoPanel
+          titleId={"THIS_TABLE_HAS_NO_DATA_YET"}
+          titleDefault={"This table has no data yet"}
+        ></InfoPanel>
+      )}
+    </>
   );
 };
 

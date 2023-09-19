@@ -28,13 +28,13 @@ import {
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../utilities/textUtils";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const SingleCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
-  const router = useRouter();
+  const router: NextRouter = useRouter();
   const { user, authError } = useFirebaseAuth();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
@@ -288,6 +288,7 @@ const SingleCollection: React.FC = () => {
               ) : (
                 <CollectionDetailsView
                   collection={collection}
+                  showEditButton={true}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
                   }

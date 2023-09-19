@@ -11,8 +11,9 @@ import {
 
 const CollectionDetailsView: React.FC<{
   collection: Collection;
-  setIsCollectionDetailsInEditMode: (val: boolean) => void;
-}> = ({ collection, setIsCollectionDetailsInEditMode }) => {
+  showEditButton: boolean;
+  setIsCollectionDetailsInEditMode?: (val: boolean) => void;
+}> = ({ collection, showEditButton, setIsCollectionDetailsInEditMode }) => {
   // console.log("deleteMe collection in CollectionDetailsView is currently");
   // console.log(collection);
   return (
@@ -21,7 +22,7 @@ const CollectionDetailsView: React.FC<{
       titleDefault="Collection Details"
       textOverrides={{ textAlign: "center" }}
       styleOverrides={{ maxHeight: 1000 }}
-      includeCornerEditButton={true}
+      includeCornerEditButton={showEditButton}
       setEditButton={setIsCollectionDetailsInEditMode}
     >
       <Grid container>

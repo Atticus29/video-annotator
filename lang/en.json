@@ -120,5 +120,7 @@
   "SAVE_COLLECTION": "Save Collection",
   "SAVING": "Saving...",
   "CREATE_NEW_COLLECTION": "Create New Collection",
-  "CREATED_BY_EMAIL": "Email address of collection creator"
+  "CREATED_BY_EMAIL": "Email address of collection creator",
+  "THIS_TABLE_HAS_NO_DATA_YET": "This table has no data yet",
+  "ADD_NEW_VIDEO_TO_COLLECTION": "Add New Video"
 }
