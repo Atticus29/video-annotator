@@ -1,20 +1,21 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { FormFieldGroup, SingleFormField } from "../../types";
+import { FormFieldGroup, SingleFormField, Collection } from "../../types";
 import CustomError from "../Error";
 import { map, filter, reduce } from "lodash-es";
 import { calculateAllRequiredsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
 
 const ComposedFormSubmissionButton: React.FC<{
-  questions: SingleFormField[];
-  formFieldGroup: FormFieldGroup;
-}> = ({ questions, formFieldGroup }) => {
+  questionsOfConcern: SingleFormField[];
+  formFieldGroupOfConcern: FormFieldGroup;
+  collection: Collection;
+}> = ({ questionsOfConcern, formFieldGroupOfConcern, collection }) => {
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(true);
 
   useEffect(() => {
     const totalInvalidCount: number = reduce(
-      Object.values(formFieldGroup?.isInvalids || []),
+      Object.values(formFieldGroupOfConcern?.isInvalids || []),
       (memo: any, entry: any) => {
         return Number(entry) + Number(memo);
       },
@@ -23,15 +24,18 @@ const ComposedFormSubmissionButton: React.FC<{
 
     setAllRequiredValid(
       totalInvalidCount < 1 &&
-        calculateAllRequiredsHaveValues(questions, formFieldGroup)
+        calculateAllRequiredsHaveValues(
+          questionsOfConcern,
+          formFieldGroupOfConcern
+        )
     );
-  }, [questions, formFieldGroup, allRequiredValid]);
+  }, [questionsOfConcern, formFieldGroupOfConcern, allRequiredValid]);
 
   const handleFormSubmission: () => void = () => {
     console.log("deleteMe handleFormSubmission entered");
-    console.log("deleteMe formFieldGroup?.actualValues is: ");
-    console.log(formFieldGroup?.actualValues);
-    // @TODO send this to the database
+    console.log("deleteMe formFieldGroupOfConcern?.actualValues is: ");
+    console.log(formFieldGroupOfConcern?.actualValues);
+    // @TODO send this to the database. Use the `collection` variable
   };
 
   const error: string = "";

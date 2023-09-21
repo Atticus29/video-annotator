@@ -80,7 +80,11 @@ export function updateFormFieldStates(
   const validCounter: number = reduce(
     currentValidatorMethods,
     (memo, validatorMethod) => {
-      return memo + Number(validatorMethod(currentVal, currentOpts));
+      let incrementer = 1;
+      if (validatorMethod) {
+        incrementer = Number(validatorMethod(currentVal, currentOpts));
+      }
+      return memo + incrementer;
     },
     0
   ); // || defaultValidValue; // @TODO if the map value evaluates to false, will the default give us what we expect?

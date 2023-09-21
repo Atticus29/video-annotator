@@ -1,4 +1,12 @@
-import { Backdrop, Button, CircularProgress } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import axios from "axios";
 import { map } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
@@ -7,6 +15,7 @@ import { FormattedMessage } from "react-intl";
 import { QueryFunctionContext, useQuery } from "react-query";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
 import DataTable from "../../../components/DataTable";
+import VideoIntake from "../../../components/VideoIntake";
 
 const CollectionView: React.FC = () => {
   const router: NextRouter = useRouter();
@@ -21,25 +30,29 @@ const CollectionView: React.FC = () => {
         const response = await axios.get("/api/collection/", {
           params: { urlPath: localUrlPathAsString },
         });
-        console.log("deleteMe response in getting a single collection is: ");
-        console.log(response);
         return response?.data;
       } catch (e: any) {
-        console.log("deleteMe error in getting a single collection is: ");
+        console.log("Error in getting a single collection is: ");
         console.log(e);
-        // setLocalError(e?.message);
+        // setLocalError(e?.message); // TODO decide
       }
     }
   );
 
   const [open, setOpen] = useState<boolean>(isLoading);
+  const [createMatchDialogOpen, setCreateMatchDialogOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     setOpen(isLoading);
   }, [isLoading]);
 
   const handleNewVideoClick = () => {
-    console.log("deleteMe handleNewVideoClick clicked"); // @TODO flesh out
+    setCreateMatchDialogOpen(true);
+  };
+
+  const handleCreateMatchDialogClose = () => {
+    setCreateMatchDialogOpen(false);
   };
 
   // @TODO figure out how to pluralize data.nameOfVideo below
@@ -55,6 +68,17 @@ const CollectionView: React.FC = () => {
       )}
       {!isLoading && !isError && (
         <>
+          <Dialog
+            open={createMatchDialogOpen}
+            onClose={handleCreateMatchDialogClose}
+          >
+            <DialogTitle>
+              Create New {data?.nameOfVideo} TODO en.jsonify
+            </DialogTitle>
+            <DialogContent>
+              <VideoIntake collection={data}></VideoIntake>
+            </DialogContent>
+          </Dialog>
           <CollectionDetailsView
             collection={data}
             showEditButton={false}

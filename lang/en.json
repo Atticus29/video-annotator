@@ -122,5 +122,7 @@
   "CREATE_NEW_COLLECTION": "Create New Collection",
   "CREATED_BY_EMAIL": "Email address of collection creator",
   "THIS_TABLE_HAS_NO_DATA_YET": "This table has no data yet",
-  "ADD_NEW_VIDEO_TO_COLLECTION": "Add New Video"
+  "ADD_NEW_VIDEO_TO_COLLECTION": "Add New Video",
+  "SUBMIT_NEW_VIDEO": "Submit a New Video",
+  "VIDEO_INTAKE_DETAILS": "To add a video to the collection, fill out the form below."
 }
