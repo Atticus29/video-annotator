@@ -43,8 +43,11 @@ const IndividualIntakePreview: React.FC<{
         {collection?.individualQuestionsFormFieldGroup && (
           <Grid item lg={12} sm={12}>
             <ComposedFormSubmissionButton
-              questions={collection?.individualIntakeQuestions || []}
-              formFieldGroup={collection?.individualQuestionsFormFieldGroup}
+              questionsOfConcern={collection?.individualIntakeQuestions || []}
+              formFieldGroupOfConcern={
+                collection?.individualQuestionsFormFieldGroup
+              }
+              collection={collection}
             />
           </Grid>
         )}

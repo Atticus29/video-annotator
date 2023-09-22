@@ -52,11 +52,9 @@ const SingleCollection: React.FC = () => {
         const response = await axios.get("/api/collection/", {
           params: { urlPath: localUrlPathAsString },
         });
-        console.log("deleteMe response in getting a single collection is: ");
-        console.log(response);
         return response?.data;
       } catch (e: any) {
-        console.log("deleteMe error in getting a single collection is: ");
+        console.log("Error in getting a single collection is: ");
         console.log(e);
         // setLocalError(e?.message);
       }
@@ -109,16 +107,12 @@ const SingleCollection: React.FC = () => {
       eventQuestionsFormFieldGroup;
     initialCollection.createdByEmail =
       collection?.createdByEmail || user?.email || "public@example.com";
-    console.log("deleteMe initialCollection is: ");
-    console.log(initialCollection);
     setCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
     if (!isLoading && data && !isError) {
-      console.log("deleteMe got here a1 and data before is: ");
-      console.log(data);
       setEventQuestionFormValues({});
       setVideoQuestionFormValues({});
       setIndividualQuestionFormValues({});
@@ -131,8 +125,6 @@ const SingleCollection: React.FC = () => {
         eventQuestionsFormFieldGroup,
       };
       // data.dateCreated = dayjs(data.dateCreated);
-      console.log("deleteMe got here a2 and decantedCollection is: ");
-      console.log(decantedCollection);
       setCollection(decantedCollection);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,8 +187,6 @@ const SingleCollection: React.FC = () => {
       return response?.data;
     },
     onSuccess: (data) => {
-      console.log("deleteMe data coming back from collection save is: ");
-      console.log(data);
       setSnackbarMessage(data?.message);
       setOpen(false);
       setSaveSuccess(true);

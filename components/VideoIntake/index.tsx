@@ -27,7 +27,7 @@ const VideoIntake: React.FC<{
 
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
-      title: "VideoFormFieldGroupForThelocalCollection",
+      title: "VideoFormFieldGroupForTheLocalCollection",
       setValues: setVideoQuestionFormValues,
       actualValues: videoQuestionFormValues,
       isInvalids: arevideoQuestionFormValuesInvalid,
@@ -39,8 +39,6 @@ const VideoIntake: React.FC<{
     const initialCollection = { ...collection };
     initialCollection.videoQuestionsFormFieldGroup =
       videoQuestionsFormFieldGroup;
-    console.log("deleteMe initialCollection is: ");
-    console.log(initialCollection);
     setLocalCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -77,8 +75,11 @@ const VideoIntake: React.FC<{
           localCollection?.videoIntakeQuestions && (
             <Grid item lg={12} sm={12}>
               <ComposedFormSubmissionButton
-                questions={localCollection?.videoIntakeQuestions || []}
-                formFieldGroup={localCollection?.videoQuestionsFormFieldGroup}
+                questionsOfConcern={localCollection?.videoIntakeQuestions || []}
+                formFieldGroupOfConcern={
+                  localCollection?.videoQuestionsFormFieldGroup
+                }
+                collection={localCollection}
               />
             </Grid>
           )}

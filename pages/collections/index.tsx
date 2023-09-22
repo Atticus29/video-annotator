@@ -1,17 +1,12 @@
 import { Backdrop, CircularProgress } from "@mui/material";
 import axios from "axios";
-import { get, map, reduce } from "lodash-es";
+import { get, reduce } from "lodash-es";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/Error";
 import { excludeFromCollectionTableDisplay } from "../../constants";
-import {
-  shamCollection,
-  shamCollection2,
-} from "../../dummy_data/dummyCollection";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import { Collection } from "../../types";
 import {
   convertCamelCaseToCapitalCase,
   sanitizeString,
@@ -30,7 +25,7 @@ const Collections: React.FC = () => {
         });
         return response?.data;
       } catch (e: any) {
-        console.log("deleteMe error is: ");
+        console.log("Error is: ");
         console.log(e);
         setLocalError(e?.message);
       }
@@ -44,24 +39,16 @@ const Collections: React.FC = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    console.log("deleteMe error is: ");
+    console.log("Error is: ");
     console.log(error);
   }, [error]);
 
   useEffect(() => {
-    console.log("deleteMe isError is: ");
+    console.log("deleteMe isError is: "); // @TODO do something with this?
     console.log(isError);
   }, [isError]);
 
-  let tempData: Collection[] = [];
-  for (let i = 0; i < 500; i++) {
-    tempData.push(shamCollection);
-  }
-  tempData.push(shamCollection2);
-  // console.log("deleteMe tempData is: ");
-  // console.log(tempData);
-  // const shouldShowTable: boolean = !isError && !isLoading && Boolean(data);
-  const shouldShowTable: boolean = true; // deleteMe
+  const shouldShowTable: boolean = true; // deleteMe @TODO update this
   const defaultDisplayCols: {} = {
     name: "Collection name",
     createdBy: "Created By",

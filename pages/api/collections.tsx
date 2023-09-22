@@ -14,7 +14,7 @@ const collections = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
-    const coll: Collection<CollectionData> = db.collection("collection");
+    const coll: Collection<CollectionData> = db.collection("collections");
     // let { data }: { data: UserData } = req.body;
     const email: string = req.query.email as string;
     if (req.method === "GET") {

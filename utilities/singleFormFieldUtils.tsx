@@ -2,7 +2,12 @@ import { filter, forEach, get, map, reduce } from "lodash-es";
 import { IntlShape } from "react-intl";
 import formFieldConfig from "../formFieldConfig.json";
 import { SingleFormField, Collection, FormFieldGroup } from "../types";
-import { isNonEmptyString, isValidEmail, isValidOption } from "./validators";
+import {
+  isNonEmptyString,
+  isValidEmail,
+  isValidUrl,
+  isValidOption,
+} from "./validators";
 
 export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
   const currentTypeConfig = filter(formFieldConfig, (entry) => {
@@ -65,7 +70,13 @@ export function updateFormFieldStates(
   }
 
   let currentValidatorMethods = question.validatorMethods;
-  if (question?.isRequired && question?.type !== "Checkbox") {
+  console.log("deleteMe currentValidatorMethods are: ");
+  console.log(currentValidatorMethods);
+  if (
+    question?.isRequired &&
+    question?.type !== "Checkbox" &&
+    !currentValidatorMethods.includes(isNonEmptyString)
+  ) {
     currentValidatorMethods?.push(isNonEmptyString);
   }
 
@@ -73,8 +84,26 @@ export function updateFormFieldStates(
 
   const usersCanAddCustomOptions: boolean | undefined =
     question?.usersCanAddCustomOptions;
-  if (!usersCanAddCustomOptions && question?.type === "Autocomplete") {
+  if (
+    !usersCanAddCustomOptions &&
+    question?.type === "Autocomplete" &&
+    !currentValidatorMethods.includes(isValidOption)
+  ) {
     currentValidatorMethods?.push(isValidOption);
+  }
+
+  if (
+    question?.type === "URL" &&
+    !currentValidatorMethods.includes(isValidUrl)
+  ) {
+    currentValidatorMethods?.push(isValidUrl);
+  }
+
+  if (
+    question?.type === "Email" &&
+    !currentValidatorMethods.includes(isValidEmail)
+  ) {
+    currentValidatorMethods?.push(isValidEmail);
   }
 
   const validCounter: number = reduce(
@@ -386,7 +415,7 @@ export function updateCheckboxGeneral(
     return {
       ...prevState,
       [whichIntakeQuestions]: newIntakeQuestionSet,
-      formFieldGroup: modifiedFormFieldGroup,
+      [formFieldGroupString]: modifiedFormFieldGroup,
     };
   });
 }
