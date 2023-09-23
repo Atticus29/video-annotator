@@ -18,6 +18,7 @@ import DataTable from "../../../components/DataTable";
 import VideoIntake from "../../../components/VideoIntake";
 
 const CollectionView: React.FC = () => {
+  // @TODO make sure that if this page doesn't successfully pull a collection from the db, users get directed to an error page
   const router: NextRouter = useRouter();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
@@ -100,7 +101,7 @@ const CollectionView: React.FC = () => {
           >
             <FormattedMessage
               id="ADD_NEW_VIDEO_TO_COLLECTION"
-              defaultMessage="Add New Video"
+              defaultMessage="Add New Video" // @TODO use en.json and not the word video here
             />
           </Button>
         </>

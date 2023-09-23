@@ -13,8 +13,8 @@ import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 const VideoIntake: React.FC<{
   collection: Collection;
 }> = ({ collection }) => {
-  console.log("deleteMe collection going into VideoIntake is: ");
-  console.log(collection);
+  // console.log("deleteMe collection going into VideoIntake is: ");
+  // console.log(collection);
   const { user, authError } = useFirebaseAuth();
   const [localCollection, setLocalCollection] = useState<Collection>();
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
@@ -39,6 +39,10 @@ const VideoIntake: React.FC<{
     const initialCollection = { ...collection };
     initialCollection.videoQuestionsFormFieldGroup =
       videoQuestionsFormFieldGroup;
+    // console.log(
+    //   "deleteMe initialCollection formation happens and initialCollection is: "
+    // );
+    // console.log(initialCollection);
     setLocalCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -76,9 +80,7 @@ const VideoIntake: React.FC<{
             <Grid item lg={12} sm={12}>
               <ComposedFormSubmissionButton
                 questionsOfConcern={localCollection?.videoIntakeQuestions || []}
-                formFieldGroupOfConcern={
-                  localCollection?.videoQuestionsFormFieldGroup
-                }
+                formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
                 collection={localCollection}
               />
             </Grid>

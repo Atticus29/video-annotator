@@ -30,8 +30,6 @@ const DataTable: React.FC<{
   targetColIdxForUrlPath,
   loading = false,
 }) => {
-  console.log("deleteMe data entering DataTable component is: ");
-  console.log(data);
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
