@@ -2,7 +2,12 @@ import { Button, IconButton, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 
-import { useMutation, UseMutationResult } from "react-query";
+import {
+  QueryFunctionContext,
+  useMutation,
+  UseMutationResult,
+  useQuery,
+} from "react-query";
 import { map, filter, reduce, get } from "lodash-es";
 import axios from "axios";
 
@@ -14,12 +19,14 @@ import { calculateAllRequiredsHaveValues } from "../../utilities/composedFormSub
 const ComposedFormSubmissionButton: React.FC<{
   questionsOfConcern: SingleFormField[];
   formFieldGroupOfConcern: FormFieldGroup | undefined;
-  collection: Collection;
+  collection?: Collection;
+  collectionPath?: string;
   collectionPropToUpdate?: string;
 }> = ({
   questionsOfConcern,
   formFieldGroupOfConcern,
   collection,
+  collectionPath,
   collectionPropToUpdate,
 }) => {
   // console.log(
@@ -30,6 +37,23 @@ const ComposedFormSubmissionButton: React.FC<{
   // console.log(formFieldGroupOfConcern);
   // console.log("deleteMe collection in the same is: ");
   // console.log(collection);
+  const { isLoading, isError, data } = useQuery(
+    ["TODO", collectionPath],
+    async (context: QueryFunctionContext<[string, string]>) => {
+      const [, collectionPath] = context.queryKey;
+      try {
+        const response = await axios.get("/api/collection/", {
+          params: { urlPath: collectionPath },
+        });
+        return response?.data;
+      } catch (e: any) {
+        console.log("Error in getting a single collection is: ");
+        console.log(e);
+        // setLocalError(e?.message);
+      }
+    }
+  );
+
   const intl: IntlShape = useIntl();
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(true);
 
@@ -37,8 +61,10 @@ const ComposedFormSubmissionButton: React.FC<{
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [saveSucess, setSaveSuccess] = useState<boolean>(false);
   const [saveFail, setSaveFail] = useState<boolean>(false);
-  const [localCollection, setLocalCollection] =
-    useState<Collection>(collection);
+  const [localCollection, setLocalCollection] = useState<any>();
+  useEffect(() => {
+    setLocalCollection(collection ? collection : data);
+  }, [collection, data]);
   const collectionFailMsg: string = intl.formatMessage({
     id: "COLLECTION_WAS_NOT_SAVED",
   });
@@ -68,7 +94,7 @@ const ComposedFormSubmissionButton: React.FC<{
     setOpen(false);
   };
 
-  const collectionMutation: UseMutationResult<any> = useMutation({
+  const updateCollectionMutation: UseMutationResult<any> = useMutation({
     // @TODO move this into a custom hook?
     mutationFn: async (updatedCollection) => {
       const response = await axios.patch(
@@ -83,6 +109,7 @@ const ComposedFormSubmissionButton: React.FC<{
       setSnackbarMessage(data?.message);
       setSaveSuccess(true);
       setSaveFail(false);
+      // @TODO invalidate collection
       handleClose();
       // router.push("/collection/" + data?.data?.urlPath);
     },
@@ -91,7 +118,7 @@ const ComposedFormSubmissionButton: React.FC<{
         get(
           error,
           ["response", "data", "message"],
-          "Collection not saved due to unknown error."
+          "Collection not updated due to unknown error."
         )
       );
       setSaveSuccess(false);
@@ -127,25 +154,23 @@ const ComposedFormSubmissionButton: React.FC<{
     // console.log(formFieldGroupOfConcern);
     // console.log("deleteMe and collection is: ");
     // console.log(collection);
-    if (collectionPropToUpdate === "videos") {
-      const currentVideos: {}[] = get(collection, ["videos"], []);
+    if (localCollection && collectionPropToUpdate === "videos") {
+      const currentVideos: {}[] = get(localCollection, ["videos"], []);
       console.log("deleteMe currentVideos are: ");
       console.log(currentVideos);
       const updatedVideos: {}[] = [
         ...currentVideos,
         formFieldGroupOfConcern?.actualValues,
       ];
-      const { _id, ...rest } = collection;
+      const { _id, ...rest } = localCollection;
       const updatedCollection = {
         ...rest,
         videos: updatedVideos,
       };
       console.log("deleteMe updatedCollection is: ");
       console.log(updatedCollection);
-      setLocalCollection(updatedCollection);
-      collectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
-
-      // @TODO call the collection update api LEFT OFF HERE
+      updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
+      // @TODO invalidate collection
     }
     // @TODO send this to the database. Use the `collection` variable... actually, depending on which intake this is, the db save MIGHT behave differently. I.e., is this a video save? An individual?
   };

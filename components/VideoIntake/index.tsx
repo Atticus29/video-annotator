@@ -81,7 +81,7 @@ const VideoIntake: React.FC<{
               <ComposedFormSubmissionButton
                 questionsOfConcern={localCollection?.videoIntakeQuestions || []}
                 formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                collection={localCollection}
+                collectionPath={localCollection?.urlPath}
                 collectionPropToUpdate={"videos"}
               />
             </Grid>
