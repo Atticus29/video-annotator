@@ -16,7 +16,7 @@ const Me: React.FC = () => {
   const router = useRouter();
   const handleNewCollectionClick: () => void = () => {
     const newId = uuidv4();
-    router.push("/collection/" + newId);
+    router.push("/collection/edit/" + newId);
   };
   const intl: IntlShape = useIntl();
   const shamMyAnnotationData: {

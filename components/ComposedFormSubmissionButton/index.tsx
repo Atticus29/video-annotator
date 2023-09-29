@@ -29,14 +29,6 @@ const ComposedFormSubmissionButton: React.FC<{
   collectionPath,
   collectionPropToUpdate,
 }) => {
-  // console.log(
-  //   "deleteMe questionsOfConcern in ComposedFormSubmissionButton are: "
-  // );
-  // console.log(questionsOfConcern);
-  // console.log("deleteMe formFieldGroupOfConcern in the same are: ");
-  // console.log(formFieldGroupOfConcern);
-  // console.log("deleteMe collection in the same is: ");
-  // console.log(collection);
   const { isLoading, isError, data } = useQuery(
     ["TODO", collectionPath],
     async (context: QueryFunctionContext<[string, string]>) => {
@@ -49,7 +41,6 @@ const ComposedFormSubmissionButton: React.FC<{
       } catch (e: any) {
         console.log("Error in getting a single collection is: ");
         console.log(e);
-        // setLocalError(e?.message);
       }
     }
   );
