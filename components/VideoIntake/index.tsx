@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Grid } from "@mui/material";
-import { get, map } from "lodash-es";
+import { map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
@@ -82,6 +82,7 @@ const VideoIntake: React.FC<{
                 questionsOfConcern={localCollection?.videoIntakeQuestions || []}
                 formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
                 collection={localCollection}
+                collectionPropToUpdate={"videos"}
               />
             </Grid>
           )}
