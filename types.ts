@@ -5,7 +5,9 @@ export interface Collection {
   createdByEmail: string;
   dateCreated: Date;
   nameOfVideo: string;
+  nameOfVideoPlural: string;
   nameOfEvent: string;
+  nameOfEventPlural: string;
   isPrivate: boolean;
   language: string;
   videoIntakeQuestions?: SingleFormField[];

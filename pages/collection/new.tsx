@@ -8,17 +8,17 @@ import {
   Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import CollectionDetailsEdit from "../../../components/CollectionDetailsEdit";
-import CollectionDetailsView from "../../../components/CollectionDetailsView";
-import VideoIntakePreview from "../../../components/VideoIntakePreview";
-import VideoIntakeQuestions from "../../../components/VideoIntakeQuestions";
-import { Collection, FormFieldGroup } from "../../../types";
-import { shamCollection } from "../../../dummy_data/dummyCollection";
-import IndividualIntakeQuestions from "../../../components/IndividualIntakeQuestions";
-import IndividualIntakePreview from "../../../components/IndividualIntakePreview";
+import CollectionDetailsEdit from "../../components/CollectionDetailsEdit";
+import CollectionDetailsView from "../../components/CollectionDetailsView";
+import VideoIntakePreview from "../../components/VideoIntakePreview";
+import VideoIntakeQuestions from "../../components/VideoIntakeQuestions";
+import { Collection, FormFieldGroup } from "../../types";
+import { shamCollection } from "../../dummy_data/dummyCollection";
+import IndividualIntakeQuestions from "../../components/IndividualIntakeQuestions";
+import IndividualIntakePreview from "../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
-import EventIntakeQuestions from "../../../components/EventIntakeQuestions";
-import EventIntakePreview from "../../../components/EventIntakePreview";
+import EventIntakeQuestions from "../../components/EventIntakeQuestions";
+import EventIntakePreview from "../../components/EventIntakePreview";
 import {
   QueryFunctionContext,
   useMutation,
@@ -27,12 +27,12 @@ import {
 } from "react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { sanitizeString } from "../../../utilities/textUtils";
+import { sanitizeString } from "../../utilities/textUtils";
 import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
-import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
-const CollectionEditor: React.FC = () => {
+const NewCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
   const router: NextRouter = useRouter();
   const { user, authError } = useFirebaseAuth();
@@ -40,28 +40,28 @@ const CollectionEditor: React.FC = () => {
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
 
-  const { isLoading, isError, data, error } = useQuery(
-    ["singleCollection", localUrlPathAsString],
-    async (context: QueryFunctionContext<[string, string]>) => {
-      const [, localUrlPathAsString] = context.queryKey;
-      try {
-        const response = await axios.get("/api/collection/", {
-          params: { urlPath: localUrlPathAsString },
-        });
-        return response?.data;
-      } catch (e: any) {
-        console.log("Error in getting a single collection is: ");
-        console.log(e);
-        // setLocalError(e?.message);
-      }
-    }
-  );
+  //   const { isLoading, isError, data, error } = useQuery(
+  //     ["singleCollection", localUrlPathAsString],
+  //     async (context: QueryFunctionContext<[string, string]>) => {
+  //       const [, localUrlPathAsString] = context.queryKey;
+  //       try {
+  //         const response = await axios.get("/api/collection/", {
+  //           params: { urlPath: localUrlPathAsString },
+  //         });
+  //         return response?.data;
+  //       } catch (e: any) {
+  //         console.log("Error in getting a single collection is: ");
+  //         console.log(e);
+  //         // setLocalError(e?.message);
+  //       }
+  //     }
+  //   );
 
   const collectionFailMsg: string = intl.formatMessage({
-    id: "COLLECTION_WAS_NOT_UPDATED",
+    id: "COLLECTION_WAS_NOT_SAVED",
   });
-  const collectionUpdatedMsg: string = intl.formatMessage({
-    id: "COLLECTION_UPDATED_SUCCESSFULLY",
+  const collectionSaveMsg: string = intl.formatMessage({
+    id: "COLLECTION_SAVED_SUCCESSFULL",
   });
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
@@ -93,38 +93,38 @@ const CollectionEditor: React.FC = () => {
   const [saveFail, setSaveFail] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
-  // useEffect(() => {
-  //   const initialCollection = { ...shamCollection };
-  //   initialCollection.videoQuestionsFormFieldGroup =
-  //     videoQuestionsFormFieldGroup;
-  //   initialCollection.individualQuestionsFormFieldGroup =
-  //     individualQuestionsFormFieldGroup;
-  //   initialCollection.eventQuestionsFormFieldGroup =
-  //     eventQuestionsFormFieldGroup;
-  //   initialCollection.createdByEmail =
-  //     collection?.createdByEmail || user?.email || "public@example.com";
-  //   setCollection(initialCollection);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user]);
-
   useEffect(() => {
-    if (!isLoading && data && !isError) {
-      setEventQuestionFormValues({});
-      setVideoQuestionFormValues({});
-      setIndividualQuestionFormValues({});
-
-      const decantedCollection: Collection = {
-        // some defaults get saved in actual values, including dates which get misformatted somehow. I can kick this problem down the road, because these actual values are not needed for this component
-        ...data,
-        videoQuestionsFormFieldGroup,
-        individualQuestionsFormFieldGroup,
-        eventQuestionsFormFieldGroup,
-      };
-      // data.dateCreated = dayjs(data.dateCreated);
-      setCollection(decantedCollection);
-    }
+    const initialCollection = { ...shamCollection };
+    initialCollection.videoQuestionsFormFieldGroup =
+      videoQuestionsFormFieldGroup;
+    initialCollection.individualQuestionsFormFieldGroup =
+      individualQuestionsFormFieldGroup;
+    initialCollection.eventQuestionsFormFieldGroup =
+      eventQuestionsFormFieldGroup;
+    initialCollection.createdByEmail =
+      collection?.createdByEmail || user?.email || "public@example.com";
+    setCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [user]);
+
+  //   useEffect(() => {
+  //     if (!isLoading && data && !isError) {
+  //       setEventQuestionFormValues({});
+  //       setVideoQuestionFormValues({});
+  //       setIndividualQuestionFormValues({});
+
+  //       const decantedCollection: Collection = {
+  //         // some defaults get saved in actual values, including dates which get misformatted somehow. I can kick this problem down the road, because these actual values are not needed for this component
+  //         ...data,
+  //         videoQuestionsFormFieldGroup,
+  //         individualQuestionsFormFieldGroup,
+  //         eventQuestionsFormFieldGroup,
+  //       };
+  //       // data.dateCreated = dayjs(data.dateCreated); // @TODO fix this if broken
+  //       setCollection(decantedCollection);
+  //     }
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   }, [isLoading]);
 
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
@@ -174,24 +174,12 @@ const CollectionEditor: React.FC = () => {
     eventQuestionsFormFieldGroup?.actualValues,
   ]);
 
-  const collectionMutation: UseMutationResult<
-    any,
-    unknown,
-    Collection,
-    unknown
-  > = useMutation({
+  const collectionMutation: UseMutationResult<any> = useMutation({
     // @TODO move this into a custom hook?
-    mutationFn: async (collection: Collection) => {
-      const { _id, ...rest } = collection;
-      const updatedCollection = {
-        ...rest,
-      };
-      const response = await axios.patch(
-        "/api/collection/update/" + get(updatedCollection, ["urlPath"]),
-        {
-          data: updatedCollection,
-        }
-      );
+    mutationFn: async (collection) => {
+      const response = await axios.post("/api/collection", {
+        data: collection,
+      });
       return response?.data;
     },
     onSuccess: (data) => {
@@ -200,14 +188,14 @@ const CollectionEditor: React.FC = () => {
       setSaveSuccess(true);
       setSaveFail(false);
       handleClose();
-      router.push("/collection/edit/" + data?.data?.urlPath);
+      router.push("/collection/" + data?.data?.urlPath);
     },
     onError: (error) => {
       setSnackbarMessage(
         get(
           error,
           ["response", "data", "message"],
-          "Collection not updated due to unknown error."
+          "Collection not saved due to unknown error."
         )
       );
       setSaveSuccess(false);
@@ -257,30 +245,24 @@ const CollectionEditor: React.FC = () => {
     setOpen(false);
   };
 
-  const updatingText: JSX.Element = (
-    <FormattedMessage
-      id={"UPDATING"}
-      defaultMessage="Updating..."
-    ></FormattedMessage>
+  const savingText: JSX.Element = (
+    <FormattedMessage id={"SAVING"}></FormattedMessage>
   );
-  const updatedText: JSX.Element = (
-    <FormattedMessage
-      id="UPDATE_COLLECTION"
-      defaultMessage="Update Collection"
-    ></FormattedMessage>
+  const savedText: JSX.Element = (
+    <FormattedMessage id="SAVE_COLLECTION"></FormattedMessage>
   );
 
   return (
     <>
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading && !isError}
+        open={isLoading}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
-        {collection?.name && (
+        {collection && (
           <>
             <Grid item sm={12} md={12}>
               {isCollectionDetailsInEditMode ? (
@@ -302,7 +284,7 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && individualQuestionsFormFieldGroup && (
+              {collection && individualQuestionsFormFieldGroup && (
                 <IndividualIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
@@ -311,12 +293,12 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
+              {collection && (
                 <IndividualIntakePreview collection={collection} />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && videoQuestionsFormFieldGroup && (
+              {collection && videoQuestionsFormFieldGroup && (
                 <VideoIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
@@ -325,12 +307,10 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
-                <VideoIntakePreview collection={collection} />
-              )}
+              {collection && <VideoIntakePreview collection={collection} />}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && eventQuestionsFormFieldGroup && (
+              {collection && eventQuestionsFormFieldGroup && (
                 <EventIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
@@ -339,15 +319,13 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
-                <EventIntakePreview collection={collection} />
-              )}
+              {collection && <EventIntakePreview collection={collection} />}
             </Grid>
           </>
         )}
       </Grid>
       <Button variant="contained" onClick={handleSaveCollection}>
-        {collectionMutation.isLoading ? updatingText : updatedText}
+        {collectionMutation.isLoading ? savingText : savedText}
       </Button>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -355,13 +333,12 @@ const CollectionEditor: React.FC = () => {
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
-        <FormattedMessage id="UPDATING" defaultMessage="Updating..." />
       </Backdrop>
       <Snackbar
         open={saveSucess}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
-        message={collectionUpdatedMsg}
+        message={collectionSaveMsg}
         action={
           <IconButton
             size="small"
@@ -393,4 +370,4 @@ const CollectionEditor: React.FC = () => {
   );
 };
 
-export default CollectionEditor;
+export default NewCollection;

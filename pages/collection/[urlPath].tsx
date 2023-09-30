@@ -8,14 +8,16 @@ import {
   DialogTitle,
 } from "@mui/material";
 import axios from "axios";
-import { map } from "lodash-es";
+import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { QueryFunctionContext, useQuery } from "react-query";
 import CollectionDetailsView from "../../components/CollectionDetailsView";
 import DataTable from "../../components/DataTable";
 import VideoIntake from "../../components/VideoIntake";
+import { excludeFromCollectionTableDisplay } from "../../constants";
+import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
   // @TODO make sure that if this page doesn't successfully pull a collection from the db, users get directed to an error page
@@ -41,7 +43,7 @@ const CollectionView: React.FC = () => {
   );
 
   const [open, setOpen] = useState<boolean>(isLoading);
-  const [createMatchDialogOpen, setCreateMatchDialogOpen] =
+  const [createVideoDialogOpen, setCreateVideoDialogOpen] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -49,12 +51,29 @@ const CollectionView: React.FC = () => {
   }, [isLoading]);
 
   const handleNewVideoClick = () => {
-    setCreateMatchDialogOpen(true);
+    setCreateVideoDialogOpen(true);
   };
 
-  const handleCreateMatchDialogClose = () => {
-    setCreateMatchDialogOpen(false);
+  const handleCreateVideoDialogClose = () => {
+    setCreateVideoDialogOpen(false);
   };
+
+  const colNamesToDisplay: {} = useMemo(() => {
+    if (data && data.videoIntakeQuestions) {
+      return reduce(
+        data?.videoIntakeQuestions,
+        (memo: {}, intakeQuestion: any) => {
+          return {
+            ...memo,
+            [intakeQuestion?.label]: intakeQuestion?.label,
+          };
+        },
+        {}
+      );
+    } else {
+      return {};
+    }
+  }, [data]);
 
   // @TODO figure out how to pluralize data.nameOfVideo below
   return (
@@ -70,8 +89,8 @@ const CollectionView: React.FC = () => {
       {!isLoading && !isError && (
         <>
           <Dialog
-            open={createMatchDialogOpen}
-            onClose={handleCreateMatchDialogClose}
+            open={createVideoDialogOpen}
+            onClose={handleCreateVideoDialogClose}
           >
             <DialogTitle>
               Create New {data?.nameOfVideo} TODO en.jsonify
@@ -87,12 +106,7 @@ const CollectionView: React.FC = () => {
           <DataTable
             tableTitle={data?.nameOfVideo + "s"}
             data={data?.videos}
-            colNamesToDisplay={map(
-              data?.videoIntakeQuestions,
-              (intakeQuestion) => {
-                return intakeQuestion?.label;
-              }
-            )}
+            colNamesToDisplay={colNamesToDisplay}
           ></DataTable>
           <Button
             data-testid={"new-video-add-button"}

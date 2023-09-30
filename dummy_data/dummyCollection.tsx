@@ -536,7 +536,7 @@ const comment: SingleFormField = {
 
 export const shamCollection: Collection = {
   // _id: "test123",
-  name: "Brazilian Jiu Jitsu",
+  name: "Example Collection",
   nameOfVideo: "Match",
   nameOfEvent: "Move",
   isPrivate: false,
@@ -587,6 +587,7 @@ export const shamCollection: Collection = {
     "videoQuestionsFormFieldGroup",
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
+    "videos",
   ],
   createdByEmail: "public@example.com",
   dateCreated: dayjs(),
@@ -644,6 +645,7 @@ export const shamCollection2: Collection = {
     "videoQuestionsFormFieldGroup",
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
+    "videos",
   ],
   createdByEmail: "mfishe53@asu.edu",
   dateCreated: dayjs(),

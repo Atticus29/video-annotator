@@ -30,6 +30,10 @@ const DataTable: React.FC<{
   targetColIdxForUrlPath,
   loading = false,
 }) => {
+  console.log("deleteMe data in DataTable is: ");
+  console.log(data);
+  console.log("deleteMe colNamesToDisplay are: ");
+  console.log(colNamesToDisplay);
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
