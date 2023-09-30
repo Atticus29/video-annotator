@@ -56,11 +56,13 @@ const ComposedFormSubmissionButton: React.FC<{
   useEffect(() => {
     setLocalCollection(collection ? collection : data);
   }, [collection, data]);
-  const collectionFailMsg: string = intl.formatMessage({
-    id: "COLLECTION_WAS_NOT_SAVED",
+  const collectionUpdateFailMsg: string = intl.formatMessage({
+    id: "COLLECTION_WAS_NOT_UPDATED",
+    defaultMessage: "Collection was not updated: ",
   });
-  const collectionSaveMsg: string = intl.formatMessage({
-    id: "COLLECTION_SAVED_SUCCESSFULL",
+  const collectionUpdatedMsg: string = intl.formatMessage({
+    id: "COLLECTION_UPDATED_SUCCESSFULLY",
+    defaultMessage: "Collection was updated successfully.",
   });
 
   const handleSnackbarClose = (
@@ -97,6 +99,8 @@ const ComposedFormSubmissionButton: React.FC<{
       return response?.data;
     },
     onSuccess: (data) => {
+      console.log("deleteMe got here and update was successful and data is: ");
+      console.log(data);
       setSnackbarMessage(data?.message);
       setSaveSuccess(true);
       setSaveFail(false);
@@ -146,6 +150,7 @@ const ComposedFormSubmissionButton: React.FC<{
     // console.log("deleteMe and collection is: ");
     // console.log(collection);
     if (localCollection && collectionPropToUpdate === "videos") {
+      console.log("deleteMe got here a1");
       const currentVideos: {}[] = get(localCollection, ["videos"], []);
       console.log("deleteMe currentVideos are: ");
       console.log(currentVideos);
@@ -184,7 +189,7 @@ const ComposedFormSubmissionButton: React.FC<{
         open={saveSucess}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
-        message={collectionSaveMsg}
+        message={collectionUpdatedMsg}
         action={
           <IconButton
             size="small"
@@ -200,7 +205,7 @@ const ComposedFormSubmissionButton: React.FC<{
         open={saveFail}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
-        message={collectionFailMsg + snackbarMessage}
+        message={collectionUpdateFailMsg + snackbarMessage}
         action={
           <IconButton
             size="small"
