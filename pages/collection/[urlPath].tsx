@@ -25,6 +25,7 @@ const CollectionView: React.FC = () => {
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
+  const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
   const { isLoading, isError, data, error } = useQuery(
     ["singleCollection", localUrlPathAsString],
     async (context: QueryFunctionContext<[string, string]>) => {
@@ -48,6 +49,11 @@ const CollectionView: React.FC = () => {
 
   useEffect(() => {
     setOpen(isLoading);
+    if (!isLoading && !isError && data) {
+      const numRows: number = data?.videos?.length || 1;
+      setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   const handleNewVideoClick = () => {
@@ -107,6 +113,7 @@ const CollectionView: React.FC = () => {
             tableTitle={data?.nameOfVideo + "s"}
             data={data?.videos}
             colNamesToDisplay={colNamesToDisplay}
+            styleOverrides={{ minHeight: 0, height: calculatedHeight + "rem" }}
           ></DataTable>
           <Button
             data-testid={"new-video-add-button"}
