@@ -111,7 +111,10 @@ const CollectionView: React.FC = () => {
               Create New {data?.nameOfVideo} TODO en.jsonify
             </DialogTitle>
             <DialogContent>
-              <VideoIntake collection={data}></VideoIntake>
+              <VideoIntake
+                collection={data}
+                onCloseDialog={handleCreateVideoDialogClose}
+              ></VideoIntake>
             </DialogContent>
           </Dialog>
           <CollectionDetailsView

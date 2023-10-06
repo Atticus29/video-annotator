@@ -22,12 +22,14 @@ const ComposedFormSubmissionButton: React.FC<{
   collection?: Collection;
   collectionPath?: string;
   collectionPropToUpdate?: string;
+  onCloseDialog?: () => void;
 }> = ({
   questionsOfConcern,
   formFieldGroupOfConcern,
   collection,
   collectionPath,
   collectionPropToUpdate,
+  onCloseDialog,
 }) => {
   const { isLoading, isError, data } = useQuery(
     ["TODO", collectionPath],
@@ -85,6 +87,7 @@ const ComposedFormSubmissionButton: React.FC<{
 
   const handleClose = () => {
     setOpen(false);
+    if (onCloseDialog) onCloseDialog();
   };
 
   const updateCollectionMutation: UseMutationResult<any> = useMutation({

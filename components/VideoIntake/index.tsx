@@ -12,7 +12,8 @@ import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const VideoIntake: React.FC<{
   collection: Collection;
-}> = ({ collection }) => {
+  onCloseDialog?: () => void;
+}> = ({ collection, onCloseDialog }) => {
   // console.log("deleteMe collection going into VideoIntake is: ");
   // console.log(collection);
   const { user, authError } = useFirebaseAuth();
@@ -83,6 +84,7 @@ const VideoIntake: React.FC<{
                 formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
                 collectionPath={localCollection?.urlPath}
                 collectionPropToUpdate={"videos"}
+                onCloseDialog={onCloseDialog}
               />
             </Grid>
           )}
