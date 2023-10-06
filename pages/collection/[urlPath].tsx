@@ -11,10 +11,11 @@ import axios from "axios";
 import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { QueryFunctionContext, useQuery } from "react-query";
 import CollectionDetailsView from "../../components/CollectionDetailsView";
 import DataTable from "../../components/DataTable";
+import CustomError from "../../components/Error";
 import VideoIntake from "../../components/VideoIntake";
 import { excludeFromCollectionTableDisplay } from "../../constants";
 import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
@@ -22,10 +23,12 @@ import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 const CollectionView: React.FC = () => {
   // @TODO make sure that if this page doesn't successfully pull a collection from the db, users get directed to an error page
   const router: NextRouter = useRouter();
+  const intl: IntlShape = useIntl();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
+  const [showCollection, setShowCollection] = useState<boolean>(false);
   const { isLoading, isError, data, error } = useQuery(
     ["singleCollection", localUrlPathAsString],
     async (context: QueryFunctionContext<[string, string]>) => {
@@ -53,8 +56,14 @@ const CollectionView: React.FC = () => {
       const numRows: number = data?.videos?.length || 1;
       setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
     }
+    if (!isLoading && !isError && data) {
+      setShowCollection(true);
+    }
+    if (!isLoading && !isError && !data) {
+      setShowCollection(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isLoading, data, isError]);
 
   const handleNewVideoClick = () => {
     setCreateVideoDialogOpen(true);
@@ -92,7 +101,7 @@ const CollectionView: React.FC = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {!isLoading && !isError && (
+      {showCollection && (
         <>
           <Dialog
             open={createVideoDialogOpen}
@@ -126,6 +135,14 @@ const CollectionView: React.FC = () => {
             />
           </Button>
         </>
+      )}
+      {!showCollection && (
+        <CustomError
+          errorMsg={intl.formatMessage({
+            id: "COLLECTION_NOT_FOUND",
+            defaultMessage: "Collection not found",
+          })}
+        />
       )}
     </>
   );

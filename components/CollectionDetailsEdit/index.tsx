@@ -45,8 +45,13 @@ const CollectionDetailsEdit: React.FC<{
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currentName: string = event?.currentTarget?.value;
-    setName(currentName);
-    setNameInvalid(!isValidName(currentName));
+    if (currentName.toLowerCase() !== "new") {
+      setName(currentName);
+      setNameInvalid(!isValidName(currentName));
+    } else {
+      setName("Cannot name collection new");
+      setNameInvalid(true);
+    }
   };
 
   const [nameOfVideo, setNameOfVideo] = useState<string>("");
@@ -154,7 +159,7 @@ const CollectionDetailsEdit: React.FC<{
               nameInvalid
                 ? intl.formatMessage({
                     id: "COLLECTION_NAME_CANNOT_BE_BLANK",
-                    defaultMessage: "Collection name cannot be blank",
+                    defaultMessage: "Invalid or blank collection name",
                   })
                 : ""
             }
