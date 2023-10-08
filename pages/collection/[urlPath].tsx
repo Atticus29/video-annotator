@@ -18,6 +18,7 @@ import DataTable from "../../components/DataTable";
 import CustomError from "../../components/Error";
 import VideoIntake from "../../components/VideoIntake";
 import { excludeFromCollectionTableDisplay } from "../../constants";
+import useGetCollection from "../../hooks/useGetCollection";
 import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
@@ -31,25 +32,8 @@ const CollectionView: React.FC = () => {
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
-  const { isLoading, isError, data, error } = useQuery(
-    ["singleCollection", localUrlPathAsString],
-    async (context: QueryFunctionContext<[string, string]>) => {
-      const [, localUrlPathAsString] = context.queryKey;
-      try {
-        const response = await axios.get("/api/collection/", {
-          params: { urlPath: localUrlPathAsString },
-        });
-        return response?.data;
-      } catch (e: any) {
-        console.log("Error in getting a single collection is: ");
-        console.log(e);
-        // setLocalError(e?.message); // TODO decide
-      }
-    },
-    {
-      staleTime: 0,
-    }
-  );
+  const { isLoading, isError, data, error } =
+    useGetCollection(localUrlPathAsString);
   console.log("deleteMe data in d1 is: ");
   console.log(data);
 

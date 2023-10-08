@@ -16,6 +16,7 @@ import { FormFieldGroup, SingleFormField, Collection } from "../../types";
 import CustomError from "../Error";
 import CloseIcon from "@mui/icons-material/Close";
 import { calculateAllRequiredsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
+import useGetCollection from "../../hooks/useGetCollection";
 
 const ComposedFormSubmissionButton: React.FC<{
   questionsOfConcern: SingleFormField[];
@@ -33,21 +34,7 @@ const ComposedFormSubmissionButton: React.FC<{
   onCloseDialog,
 }) => {
   const queryClient = useQueryClient();
-  const { isLoading, isError, data } = useQuery(
-    ["singleCollection", collectionPath],
-    async (context: QueryFunctionContext<[string, any], any>) => {
-      const [, collectionPath] = context.queryKey;
-      try {
-        const response = await axios.get("/api/collection/", {
-          params: { urlPath: collectionPath },
-        });
-        return response?.data;
-      } catch (e: any) {
-        console.log("Error in getting a single collection is: ");
-        console.log(e);
-      }
-    }
-  );
+  const { isLoading, isError, data } = useGetCollection(collectionPath || "");
 
   const intl: IntlShape = useIntl();
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(true);

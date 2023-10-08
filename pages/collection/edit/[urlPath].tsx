@@ -31,6 +31,7 @@ import { sanitizeString } from "../../../utilities/textUtils";
 import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
 import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
+import useGetCollection from "../../../hooks/useGetCollection";
 
 const CollectionEditor: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -40,22 +41,8 @@ const CollectionEditor: React.FC = () => {
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
 
-  const { isLoading, isError, data, error } = useQuery(
-    ["singleCollection", localUrlPathAsString],
-    async (context: QueryFunctionContext<[string, string]>) => {
-      const [, localUrlPathAsString] = context.queryKey;
-      try {
-        const response = await axios.get("/api/collection/", {
-          params: { urlPath: localUrlPathAsString },
-        });
-        return response?.data;
-      } catch (e: any) {
-        console.log("Error in getting a single collection is: ");
-        console.log(e);
-        // setLocalError(e?.message);
-      }
-    }
-  );
+  const { isLoading, isError, data, error } =
+    useGetCollection(localUrlPathAsString);
 
   const collectionFailMsg: string = intl.formatMessage({
     id: "COLLECTION_WAS_NOT_UPDATED",
