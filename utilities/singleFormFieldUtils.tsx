@@ -70,8 +70,6 @@ export function updateFormFieldStates(
   }
 
   let currentValidatorMethods = question.validatorMethods;
-  console.log("deleteMe currentValidatorMethods are: ");
-  console.log(currentValidatorMethods);
   if (
     question?.isRequired &&
     question?.type !== "Checkbox" &&

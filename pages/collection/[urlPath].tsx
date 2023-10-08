@@ -12,7 +12,7 @@ import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { QueryFunctionContext, useQuery } from "react-query";
+import { QueryFunctionContext, useQuery, useQueryClient } from "react-query";
 import CollectionDetailsView from "../../components/CollectionDetailsView";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/Error";
@@ -21,6 +21,8 @@ import { excludeFromCollectionTableDisplay } from "../../constants";
 import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
+  const queryClient = useQueryClient();
+  console.log("deleteMe CollectionView renders");
   // @TODO make sure that if this page doesn't successfully pull a collection from the db, users get directed to an error page
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
@@ -43,8 +45,13 @@ const CollectionView: React.FC = () => {
         console.log(e);
         // setLocalError(e?.message); // TODO decide
       }
+    },
+    {
+      staleTime: 0,
     }
   );
+  console.log("deleteMe data in d1 is: ");
+  console.log(data);
 
   const [open, setOpen] = useState<boolean>(isLoading);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
@@ -63,7 +70,7 @@ const CollectionView: React.FC = () => {
       setShowCollection(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, data, isError]);
+  }, [isLoading, data, isError, createVideoDialogOpen]);
 
   const handleNewVideoClick = () => {
     setCreateVideoDialogOpen(true);
@@ -71,6 +78,22 @@ const CollectionView: React.FC = () => {
 
   const handleCreateVideoDialogClose = () => {
     setCreateVideoDialogOpen(false);
+    console.log("deleteMe got here c1");
+    const queryKey = ["singleCollection", localUrlPathAsString];
+    const queryCache = queryClient.getQueryCache();
+    let queryState = queryCache.find(queryKey);
+    if (queryState) {
+      console.log(`Before Query with key ${queryKey} is in the cache.`);
+    } else {
+      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+    }
+    queryClient.invalidateQueries();
+    queryState = queryCache.find(queryKey);
+    if (queryState) {
+      console.log(`After Query with key ${queryKey} is in the cache.`);
+    } else {
+      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+    }
   };
 
   const colNamesToDisplay: {} = useMemo(() => {
@@ -139,7 +162,7 @@ const CollectionView: React.FC = () => {
           </Button>
         </>
       )}
-      {!showCollection && (
+      {!isLoading && !showCollection && (
         <CustomError
           errorMsg={intl.formatMessage({
             id: "COLLECTION_NOT_FOUND",
