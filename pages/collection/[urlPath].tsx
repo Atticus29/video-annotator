@@ -117,9 +117,6 @@ const CollectionView: React.FC = () => {
             open={createVideoDialogOpen}
             onClose={handleCreateVideoDialogClose}
           >
-            <DialogTitle>
-              Create New {data?.nameOfVideo} TODO en.jsonify
-            </DialogTitle>
             <DialogContent>
               <VideoIntake
                 collection={data}
@@ -144,7 +141,8 @@ const CollectionView: React.FC = () => {
           >
             <FormattedMessage
               id="ADD_NEW_VIDEO_TO_COLLECTION"
-              defaultMessage="Add New Video" // @TODO use en.json and not the word video here
+              defaultMessage="Add New {videoName}"
+              values={{ videoName: data?.nameOfVideo }}
             />
           </Button>
         </>

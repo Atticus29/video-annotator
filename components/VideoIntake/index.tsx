@@ -9,6 +9,8 @@ import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
+import { IntlShape } from "@formatjs/intl";
+import { useIntl } from "react-intl";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -16,6 +18,7 @@ const VideoIntake: React.FC<{
 }> = ({ collection, onCloseDialog }) => {
   // console.log("deleteMe collection going into VideoIntake is: ");
   // console.log(collection);
+  const intl: IntlShape = useIntl();
   const { user, authError } = useFirebaseAuth();
   const [localCollection, setLocalCollection] = useState<Collection>();
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
@@ -48,17 +51,28 @@ const VideoIntake: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const titleId: string = intl.formatMessage(
+    { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
+    { videoName: collection.nameOfVideo }
+  );
+
+  const bodyId: string = intl.formatMessage(
+    {
+      id: "VIDEO_INTAKE_DETAILS",
+      defaultMessage:
+        "To add a {videoName} to the collection, fill out the form below.",
+    },
+    { videoName: collection?.nameOfVideo?.toLowerCase() }
+  );
+
   return (
     <InfoPanel
-      titleId="SUBMIT_NEW_VIDEO"
-      titleDefault="Submit a New Video"
+      titleId={titleId}
+      titleDefault={titleId}
       textOverrides={{ textAlign: "center" }}
       styleOverrides={{ maxHeight: 1000 }}
     >
-      <InfoPanelBody
-        bodyId="VIDEO_INTAKE_DETAILS"
-        bodyDefault="To add a video to the collection, fill out the form below."
-      />
+      <InfoPanelBody bodyId={bodyId} bodyDefault={bodyId} />
       <Grid container>
         {map(
           localCollection?.videoIntakeQuestions,
