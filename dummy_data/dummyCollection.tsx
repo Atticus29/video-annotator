@@ -542,6 +542,7 @@ export const shamCollection: Collection = {
   isPrivate: false,
   language: "English",
   videoIntakeQuestions: [
+    // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
     firstQuestion,
     natureOfTheMatch,
     secondQuestion,
