@@ -8,4 +8,5 @@ export const excludeFromCollectionTableDisplay: string[] = [
   "videoQuestionsFormFieldGroup",
   "individualQuestionsFormFieldGroup",
   "eventQuestionsFormFieldGroup",
+  "videos",
 ];

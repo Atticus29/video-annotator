@@ -10,13 +10,7 @@ import { useState, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import useFirebaseAuth from "../hooks/useFirebaseAuth";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 import { firebaseConfig } from "../firebase";
@@ -25,6 +19,7 @@ import { AuthContext } from "../contexts/authContext";
 import Navbar from "../components/Navbar";
 
 export default function App({ Component, pageProps }: AppProps) {
+  console.log("deleteMe this happens app component rendered");
   const queryClient = new QueryClient();
   const messageMap = {
     en: englishMessages,

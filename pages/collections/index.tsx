@@ -44,7 +44,7 @@ const Collections: React.FC = () => {
   }, [error]);
 
   useEffect(() => {
-    console.log("deleteMe isError is: "); // @TODO do something with this?
+    console.log("deleteMe isError is: "); // @TODO do something with this? Or de-duplicate the error useEffect
     console.log(isError);
   }, [isError]);
 
