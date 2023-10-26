@@ -31,6 +31,7 @@ import { sanitizeString } from "../../utilities/textUtils";
 import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
+import UnsavedChangesPrompt from "../../components/UnsavedChangesPrompt";
 
 const NewCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -237,6 +238,7 @@ const NewCollection: React.FC = () => {
 
   return (
     <>
+      <UnsavedChangesPrompt />
       {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}

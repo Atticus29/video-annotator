@@ -1,7 +1,6 @@
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { Button, Grid } from "@mui/material";
 import { useIntl, IntlShape, FormattedMessage } from "react-intl";
-import { v4 as uuidv4 } from "uuid";
 
 import UserDetailPanel from "../../components/UserDetailPanel";
 import MySubScriptionPanel from "../../components/MySubscriptionPanel";
@@ -15,8 +14,7 @@ const Me: React.FC = () => {
   const { user, authError } = useFirebaseAuth();
   const router = useRouter();
   const handleNewCollectionClick: () => void = () => {
-    const newId = uuidv4();
-    router.push("/collection/edit/" + newId);
+    router.push("/collection/new/");
   };
   const intl: IntlShape = useIntl();
   const shamMyAnnotationData: {
