@@ -23,8 +23,6 @@ import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
-  console.log("deleteMe CollectionView renders");
-  // @TODO make sure that if this page doesn't successfully pull a collection from the db, users get directed to an error page
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
@@ -34,8 +32,6 @@ const CollectionView: React.FC = () => {
   const [showCollection, setShowCollection] = useState<boolean>(false);
   const { isLoading, isError, data, error } =
     useGetCollection(localUrlPathAsString);
-  console.log("deleteMe data in d1 is: ");
-  console.log(data);
 
   const [open, setOpen] = useState<boolean>(isLoading);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
@@ -99,6 +95,9 @@ const CollectionView: React.FC = () => {
       return {};
     }
   }, [data]);
+
+  console.log("deleteMe colNamesToDisplay is: ");
+  console.log(colNamesToDisplay);
 
   // @TODO figure out how to pluralize data.nameOfVideo below
   return (

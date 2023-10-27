@@ -8,6 +8,7 @@ import { reduce, map, get } from "lodash-es";
 import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
+import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 
 const DataTable: React.FC<{
   tableTitle: string;
@@ -101,12 +102,22 @@ const DataTable: React.FC<{
   const columns: GridColDef<{
     [key: string | number]: any;
   }>[] = useMemo(() => {
-    const safePrototypeRow: { [key: string]: any } = get(data, [0]) || {}; // assumes that the first row of the data has all of the columns desired (i.e., that it's a good prototype to use)
+    const uniqueKeysObject: { [key: string]: any } = data.reduce(
+      (result: any, obj: any) => {
+        for (const key in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            result[key] = true;
+          }
+        }
+        return result;
+      },
+      {}
+    );
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
-      safePrototypeRow;
+      uniqueKeysObject;
     if (shouldFilter) {
       prototypeRowWithOnlyDesiredCols = reduce(
-        safePrototypeRow,
+        uniqueKeysObject,
         (memo: {}, col: any, colKey: string) => {
           const safeToInclude: boolean = colNamesToDisplayKeys.includes(colKey);
           return safeToInclude ? { ...memo, [colKey]: col } : { ...memo };
@@ -116,10 +127,6 @@ const DataTable: React.FC<{
     }
     let tracker: number = 0;
     return map(prototypeRowWithOnlyDesiredCols, (el, elKey) => {
-      // console.log("deleteMe el is: ");
-      // console.log(el);
-      // console.log("deleteMe elKey is: ");
-      // console.log(elKey);
       tracker++; // tracker seems needed because I can't get both the keys and the indexes in lodash map(obj)
       const cleanHeader: string = elKey.trim().toLowerCase(); // @TODO use capitalizeEachWord utili here
 
@@ -160,26 +167,35 @@ const DataTable: React.FC<{
     shouldFilter,
     colNamesToDisplayKeys,
     colNamesToDisplay,
-    targetColNameForAction,
-    modificationMethodForAction,
     tableTitle,
+    targetColIdxForUrlPath,
+    modificationMethodForAction,
   ]);
+
+  console.log("deleteMe columns is: ");
+  console.log(columns);
 
   return (
     <>
       {data && data.length > 0 && (
-        <DataGrid
-          key={tableTitle} // @TODO add title to this
-          rows={rows}
-          rowHeight={40}
-          columns={columns}
-          style={{
-            minHeight: 200,
-            marginBottom: "2vh",
-            ...styleOverrides,
-          }}
-          loading={loading}
-        />
+        <>
+          <InfoPanel titleId={tableTitle} titleDefault={tableTitle}>
+            <InfoPanelBody>
+              <DataGrid
+                key={tableTitle}
+                rows={rows}
+                rowHeight={40}
+                columns={columns}
+                style={{
+                  minHeight: 200,
+                  marginBottom: "2vh",
+                  ...styleOverrides,
+                }}
+                loading={loading}
+              />
+            </InfoPanelBody>
+          </InfoPanel>
+        </>
       )}
       {(!data || data.length < 1) && (
         <InfoPanel
