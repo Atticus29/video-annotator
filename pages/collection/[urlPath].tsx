@@ -81,6 +81,8 @@ const CollectionView: React.FC = () => {
 
   const colNamesToDisplay: {} = useMemo(() => {
     if (data && data.videoIntakeQuestions) {
+      // console.log("deleteMe data?.videoIntakeQuestions is: ");
+      // console.log(data?.videoIntakeQuestions);
       return reduce(
         data?.videoIntakeQuestions,
         (memo: {}, intakeQuestion: any) => {
@@ -96,8 +98,8 @@ const CollectionView: React.FC = () => {
     }
   }, [data]);
 
-  console.log("deleteMe colNamesToDisplay is: ");
-  console.log(colNamesToDisplay);
+  // console.log("deleteMe colNamesToDisplay is: ");
+  // console.log(colNamesToDisplay);
 
   // @TODO figure out how to pluralize data.nameOfVideo below
   return (

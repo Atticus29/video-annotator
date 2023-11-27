@@ -82,7 +82,7 @@ const Collections: React.FC = () => {
           data={data}
           colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
           actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
-          styleOverrides={{ height: 1000 }}
+          styleOverrides={{ height: 1000 }} // @TODO make this look better
           // targetColNameForAction={"urlPath"}
           modificationMethodForAction={sanitizeString}
           targetColIdxForUrlPath={2}

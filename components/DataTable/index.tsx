@@ -31,6 +31,10 @@ const DataTable: React.FC<{
   targetColIdxForUrlPath,
   loading = false,
 }) => {
+  console.log(
+    "deleteMe colNamesToDisplay entering the DataTable component are: "
+  );
+  console.log(colNamesToDisplay);
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
@@ -52,53 +56,6 @@ const DataTable: React.FC<{
     return colNamesToDisplayKeys.length > 0;
   }, [colNamesToDisplayKeys]);
 
-  const rows: GridRowsProp = useMemo(() => {
-    return data?.map((dataRow, idx) => {
-      let dataRowWithOnlyDesiredCols: { [key: string]: any } = dataRow;
-      if (shouldAddActionButtons) {
-        dataRowWithOnlyDesiredCols["actions"] = null; // reset upon every run
-        actionButtonsKeys.forEach((actionButtonKey) => {
-          // just add the actionButtonKey for the componentMap to use later in columns definition
-          const alreadyHasValues: boolean =
-            dataRowWithOnlyDesiredCols["actions"] !== null;
-          dataRowWithOnlyDesiredCols["actions"] = alreadyHasValues
-            ? dataRowWithOnlyDesiredCols["actions"] +
-              " " +
-              actionButtonsToDisplay[actionButtonKey]
-            : actionButtonsToDisplay[actionButtonKey];
-        });
-      }
-      if (shouldFilter) {
-        dataRowWithOnlyDesiredCols = reduce(
-          dataRow,
-          (memo: {}, col: any, colKey: string) => {
-            const safeToInclude: boolean =
-              colNamesToDisplayKeys.includes(colKey);
-            return safeToInclude ? { ...memo, [colKey]: col } : { ...memo };
-          },
-          {}
-        );
-      }
-      const renamedDataRow: { [key: string]: any } = reduce(
-        // can't include in above reduce because this time I need the index number and lodash reduce won't track index and key of objects
-        Object.values(dataRowWithOnlyDesiredCols),
-        (memo: {}, el: any, elIdx: number) => {
-          const colNum: number = elIdx + 1;
-          return { ...memo, ["col" + colNum]: el };
-        },
-        {}
-      );
-      return { id: idx + 1, ...renamedDataRow };
-    });
-  }, [
-    actionButtonsKeys,
-    actionButtonsToDisplay,
-    colNamesToDisplayKeys,
-    data,
-    shouldAddActionButtons,
-    shouldFilter,
-  ]);
-
   const columns: GridColDef<{
     [key: string | number]: any;
   }>[] = useMemo(() => {
@@ -106,6 +63,7 @@ const DataTable: React.FC<{
       (result: any, obj: any) => {
         for (const key in obj) {
           if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            // checks whether object has the propery of whatever key is
             result[key] = true;
           }
         }
@@ -113,6 +71,8 @@ const DataTable: React.FC<{
       },
       {}
     );
+    // console.log("deleteMe uniqueKeysObject are: ");
+    // console.log(uniqueKeysObject);
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
       uniqueKeysObject;
     if (shouldFilter) {
@@ -174,6 +134,21 @@ const DataTable: React.FC<{
 
   console.log("deleteMe columns is: ");
   console.log(columns);
+
+  const rows: GridRowsProp = useMemo(() => {
+    return data?.map((dataRow, idx) => {
+      console.log("deleteMe dataRow is: ");
+      console.log(dataRow);
+      const rowData: { [key: string]: any } = {};
+      columns.forEach((column) => {
+        rowData[column.field] = dataRow[column.headerName];
+      });
+
+      // If you need to add an 'actions' field, do it here based on the column definition
+
+      return { id: idx + 1, ...rowData };
+    });
+  }, [columns, data]);
 
   return (
     <>
