@@ -4,7 +4,7 @@ import {
   GridRenderCellParams,
   GridRowsProp,
 } from "@mui/x-data-grid";
-import { reduce, map, get } from "lodash-es";
+import { reduce, map, get, camelCase } from "lodash-es";
 import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
@@ -141,7 +141,10 @@ const DataTable: React.FC<{
       console.log(dataRow);
       const rowData: { [key: string]: any } = {};
       columns.forEach((column) => {
-        rowData[column.field] = dataRow[column.headerName];
+        rowData[column.field] =
+          dataRow[column.headerName] ||
+          dataRow[column.headerName?.trim().toLowerCase()] ||
+          dataRow[camelCase(column.headerName)];
       });
 
       // If you need to add an 'actions' field, do it here based on the column definition
@@ -149,6 +152,9 @@ const DataTable: React.FC<{
       return { id: idx + 1, ...rowData };
     });
   }, [columns, data]);
+
+  console.log("deleteMe rows is: ");
+  console.log(rows);
 
   return (
     <>
