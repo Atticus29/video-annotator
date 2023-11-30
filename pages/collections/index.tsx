@@ -1,10 +1,11 @@
 import { Backdrop, CircularProgress } from "@mui/material";
 import axios from "axios";
-import { get, reduce } from "lodash-es";
-import { useEffect, useState } from "react";
+import { get, map, reduce } from "lodash-es";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/Error";
+import ViewCollectionActionButton from "../../components/ViewCollectionActionButton";
 import { excludeFromCollectionTableDisplay } from "../../constants";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import {
@@ -74,12 +75,32 @@ const Collections: React.FC = () => {
   );
   // console.log("deleteMe collectionDisplayCols is: ");
   // console.log(collectionDisplayCols);
+  // console.log("deleteMe data is:");
+  // console.log(data);
+
+  const dataWithActions = useMemo(() => {
+    const dataWithActionsAppended = map(data, (datum) => {
+      return {
+        ...datum,
+        actions: (
+          <ViewCollectionActionButton linkUrl="/collection/ExampleCollectionSmall"></ViewCollectionActionButton>
+        ),
+      };
+    });
+    // console.log("deleteMe dataWithActionsAppended is: ");
+    // console.log(dataWithActionsAppended);
+    return dataWithActionsAppended;
+  }, [data]);
+
+  console.log("deleteMe dataWithActions is: ");
+  console.log(dataWithActions);
+
   return (
     <>
       {!isLoading && !isError && (
         <DataTable
           tableTitle="Testing"
-          data={data}
+          data={dataWithActions}
           colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
           actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
           styleOverrides={{ height: 1000 }} // @TODO make this look better

@@ -7,6 +7,7 @@ import {
 import { reduce, map, get, camelCase } from "lodash-es";
 import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
+import { sanitizeString } from "../../utilities/textUtils";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 
@@ -31,13 +32,15 @@ const DataTable: React.FC<{
   targetColIdxForUrlPath,
   loading = false,
 }) => {
-  console.log(
-    "deleteMe colNamesToDisplay entering the DataTable component are: "
-  );
-  console.log(colNamesToDisplay);
+  // console.log(
+  //   "deleteMe colNamesToDisplay entering the DataTable component are: "
+  // );
+  // console.log(colNamesToDisplay);
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
+  // console.log("deleteMe actionButtonsKeys is: ");
+  // console.log(actionButtonsKeys);
 
   const shouldAddActionButtons: boolean = useMemo(() => {
     return actionButtonsKeys.length > 0;
@@ -59,7 +62,7 @@ const DataTable: React.FC<{
   const columns: GridColDef<{
     [key: string | number]: any;
   }>[] = useMemo(() => {
-    const uniqueKeysObject: { [key: string]: any } = data.reduce(
+    let uniqueKeysObject: { [key: string]: any } = data.reduce(
       (result: any, obj: any) => {
         for (const key in obj) {
           if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -71,8 +74,11 @@ const DataTable: React.FC<{
       },
       {}
     );
+    if (shouldAddActionButtons) {
+      uniqueKeysObject["actions"] = true;
+    }
     // console.log("deleteMe uniqueKeysObject are: ");
-    // console.log(uniqueKeysObject);
+    // console.log(uniqueKeysObject); // @TODO left off chasing down populateWithActionButtons
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
       uniqueKeysObject;
     if (shouldFilter) {
@@ -93,6 +99,9 @@ const DataTable: React.FC<{
       const headerName: string =
         colNamesToDisplay[elKey] ||
         cleanHeader.charAt(0).toUpperCase() + cleanHeader.slice(1);
+
+      // console.log("deleteMe headerName is: ");
+      // console.log(headerName);
       // var linkId: string = "";
       // if (
       //   targetColNameForAction &&
@@ -112,6 +121,8 @@ const DataTable: React.FC<{
         renderCell:
           headerName === "Actions"
             ? (params: GridRenderCellParams) => {
+                // console.log("deleteMe params before are:");
+                // console.log(params);
                 return populateWithActionButtons(tableTitle, params, {
                   targetColIdxForUrlPath: targetColIdxForUrlPath,
                   modificationMethodForAction: modificationMethodForAction,
@@ -132,19 +143,39 @@ const DataTable: React.FC<{
     modificationMethodForAction,
   ]);
 
-  console.log("deleteMe columns is: ");
-  console.log(columns);
+  // console.log("deleteMe columns is: ");
+  // console.log(columns);
 
   const rows: GridRowsProp = useMemo(() => {
     return data?.map((dataRow, idx) => {
-      console.log("deleteMe dataRow is: ");
-      console.log(dataRow);
+      // console.log("deleteMe dataRow is: ");
+      // console.log(dataRow);
       const rowData: { [key: string]: any } = {};
       columns.forEach((column) => {
+        // console.log("deleteMe column is: ");
+        // console.log(column);
+        const headerName: string = get(column, "headerName") || "";
+        // if (headerName === "Actions") {
+        //   rowData[column.field] = populateWithActionButtons(
+        //     tableTitle,
+        //     {
+        //       id: "test",
+        //       field: column.field,
+        //       value: "view edit",
+        //       linkId: "testLinkId",
+        //       row: idx,
+        //     },
+        //     {
+        //       targetColIdxForUrlPath: targetColIdxForUrlPath,
+        //       modificationMethodForAction: sanitizeString,
+        //     }
+        //   );
+        // } else {
         rowData[column.field] =
-          dataRow[column.headerName] ||
-          dataRow[column.headerName?.trim().toLowerCase()] ||
-          dataRow[camelCase(column.headerName)];
+          get(dataRow, headerName) ||
+          get(dataRow, headerName?.trim()?.toLowerCase()) ||
+          get(dataRow, camelCase(headerName));
+        // }
       });
 
       // If you need to add an 'actions' field, do it here based on the column definition
@@ -153,8 +184,8 @@ const DataTable: React.FC<{
     });
   }, [columns, data]);
 
-  console.log("deleteMe rows is: ");
-  console.log(rows);
+  // console.log("deleteMe rows is: ");
+  // console.log(rows);
 
   return (
     <>
