@@ -13,13 +13,13 @@ import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { QueryFunctionContext, useQuery, useQueryClient } from "react-query";
-import CollectionDetailsView from "../../components/CollectionDetailsView";
-import DataTable from "../../components/DataTable";
-import CustomError from "../../components/Error";
-import VideoIntake from "../../components/VideoIntake";
-import { excludeFromCollectionTableDisplay } from "../../constants";
-import useGetCollection from "../../hooks/useGetCollection";
-import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
+import CollectionDetailsView from "../../../components/CollectionDetailsView";
+import DataTable from "../../../components/DataTable";
+import CustomError from "../../../components/Error";
+import VideoIntake from "../../../components/VideoIntake";
+import { excludeFromCollectionTableDisplay } from "../../../constants";
+import useGetCollection from "../../../hooks/useGetCollection";
+import { convertCamelCaseToCapitalCase } from "../../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();

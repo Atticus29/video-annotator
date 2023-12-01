@@ -9,7 +9,7 @@ import {
   UseMutationResult,
   useQuery,
 } from "react-query";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { map, filter, reduce, get } from "lodash-es";
 import axios from "axios";
 
@@ -156,7 +156,7 @@ const ComposedFormSubmissionButton: React.FC<{
       // console.log(currentVideos);
       const updatedVideos: {}[] = [
         ...currentVideos,
-        {...formFieldGroupOfConcern?.actualValues, id: uuidv4()},
+        { ...formFieldGroupOfConcern?.actualValues, id: uuidv4() },
       ];
       const { _id, ...rest } = localCollection;
       const updatedCollection = {

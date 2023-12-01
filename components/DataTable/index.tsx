@@ -46,7 +46,7 @@ const DataTable: React.FC<{
   const columns: GridColDef<{
     [key: string | number]: any;
   }>[] = useMemo(() => {
-    let uniqueKeysObject: { [key: string]: any } = data.reduce(
+    let uniqueKeysObject: { [key: string]: any } = data?.reduce(
       (result: any, obj: any) => {
         for (const key in obj) {
           if (Object.prototype.hasOwnProperty.call(obj, key)) {

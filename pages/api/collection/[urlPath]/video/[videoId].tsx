@@ -2,6 +2,8 @@ import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../../middleware/mongodb";
 
+import { Collection as CollectionData } from "../../../../../types";
+
 const videoInCollection = async (req: NextApiRequest, res: NextApiResponse) => {
   const allowedMethods: string[] = ["GET"];
 
@@ -17,9 +19,16 @@ const videoInCollection = async (req: NextApiRequest, res: NextApiResponse) => {
       db.collection<Collection>("collections");
 
     if (req.method === "GET") {
-      const collection = await coll.findOne({ urlPath: urlPath });
+      const collection = await coll.findOne({
+        urlPath: urlPath,
+      });
       if (collection) {
-        const video = collection.videos.find((vid) => vid.URL === videoId); // @TOOD set an id instead
+        const video = collection.videos.find((vid) => vid.id === videoId);
+        if (video) {
+          return res.status(200).json({ video });
+        } else {
+          return res.status(404).json({ message: "Video not found." });
+        }
       }
     }
   } catch (e: any) {
