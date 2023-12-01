@@ -56,7 +56,19 @@ const Collections: React.FC = () => {
     dateCreated: "Date Created",
   };
 
-  const collectionDisplayKeys: string[] = Object.keys(get(data, [0], {}));
+  const dataWithActions = useMemo(() => {
+    const dataWithActionsAppended = map(data, (datum) => {
+      return {
+        ...datum,
+        actions: "stand in",
+      };
+    });
+    return dataWithActionsAppended;
+  }, [data]);
+
+  const collectionDisplayKeys: string[] = Object.keys(
+    get(dataWithActions, [0], {})
+  ); // @TODO revisit this; this only gets the first element's keys??
   const collectionDisplayCols: { [key: string]: any } = reduce(
     collectionDisplayKeys,
 
@@ -78,23 +90,6 @@ const Collections: React.FC = () => {
   // console.log("deleteMe data is:");
   // console.log(data);
 
-  const dataWithActions = useMemo(() => {
-    const dataWithActionsAppended = map(data, (datum) => {
-      return {
-        ...datum,
-        actions: (
-          <ViewCollectionActionButton linkUrl="/collection/ExampleCollectionSmall"></ViewCollectionActionButton>
-        ),
-      };
-    });
-    // console.log("deleteMe dataWithActionsAppended is: ");
-    // console.log(dataWithActionsAppended);
-    return dataWithActionsAppended;
-  }, [data]);
-
-  console.log("deleteMe dataWithActions is: ");
-  console.log(dataWithActions);
-
   return (
     <>
       {!isLoading && !isError && (
@@ -104,9 +99,9 @@ const Collections: React.FC = () => {
           colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
           actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
           styleOverrides={{ height: 1000 }} // @TODO make this look better
-          // targetColNameForAction={"urlPath"}
+          targetColNameForAction={"urlPath"}
           modificationMethodForAction={sanitizeString}
-          targetColIdxForUrlPath={2}
+          targetColIdxForUrlPath={2} // 2
         ></DataTable>
       )}
       {isError && <CustomError errorMsg={localError} />}

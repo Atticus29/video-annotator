@@ -8,7 +8,8 @@ import { NextRouter, useRouter } from "next/router";
 const ViewActionButton: React.FC<{
   props: { id: string | number; urlTarget?: string };
 }> = (props) => {
-  console.log("deleteMe props are: ");
+  console.log("deleteMe ViewActionButton entered");
+  console.log("deleteMe props  in ViewActionButton are: ");
   console.log(props);
   const intl: IntlShape = useIntl();
   const router: NextRouter = useRouter();

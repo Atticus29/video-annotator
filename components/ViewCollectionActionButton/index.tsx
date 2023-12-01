@@ -6,16 +6,15 @@ import { get } from "lodash-es";
 import router from "next/router";
 
 const ViewCollectionActionButton: React.FC<{
-  linkUrl: string;
-}> = ({ linkUrl }) => {
+  props: { id: string | number; urlTarget?: string };
+}> = (props) => {
   const intl: IntlShape = useIntl();
   // const router = useRouter();
   // @TODO add button click handler and possibly prevent propagation
   const handleViewClick = async () => {
     console.log("deleteMe view clicked");
-    console.log("deleteMe linkUrl is:");
-    console.log(linkUrl);
-    router.push(linkUrl);
+    const url: string = get(props, ["urlTarget"], "");
+    router.push(url);
   };
   return (
     <Tooltip title={intl.formatMessage({ id: "VIEW", defaultMessage: "View" })}>

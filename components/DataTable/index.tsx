@@ -5,7 +5,7 @@ import {
   GridRowsProp,
 } from "@mui/x-data-grid";
 import { reduce, map, get, camelCase } from "lodash-es";
-import React, { useMemo } from "react";
+import React, { createElement, useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import { sanitizeString } from "../../utilities/textUtils";
 import InfoPanel from "../InfoPanel";
@@ -14,7 +14,7 @@ import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 const DataTable: React.FC<{
   tableTitle: string;
   data: {}[];
-  colNamesToDisplay?: { [key: string]: any };
+  colNamesToDisplay: { [key: string]: any }; // @TODO make optional and have a way of deriving them from data as a fallback
   actionButtonsToDisplay?: { [key: string]: any };
   styleOverrides?: {};
   targetColNameForAction?: string;
@@ -36,28 +36,21 @@ const DataTable: React.FC<{
   //   "deleteMe colNamesToDisplay entering the DataTable component are: "
   // );
   // console.log(colNamesToDisplay);
-  const actionButtonsKeys: string[] = useMemo(() => {
-    return Object.keys(actionButtonsToDisplay) || [];
-  }, [actionButtonsToDisplay]);
-  // console.log("deleteMe actionButtonsKeys is: ");
-  // console.log(actionButtonsKeys);
-
-  const shouldAddActionButtons: boolean = useMemo(() => {
-    return actionButtonsKeys.length > 0;
-  }, [actionButtonsKeys]);
-
-  let colNamesToDisplayWithActions: { [key: string]: any } = colNamesToDisplay;
-  if (shouldAddActionButtons) {
-    colNamesToDisplayWithActions["actions"] = "Actions";
-  }
+  // console.log("deleteMe data entering: ");
+  // console.log(data);
 
   const colNamesToDisplayKeys: string[] = useMemo(() => {
-    return [...Object.keys(colNamesToDisplayWithActions), "_id"] || [];
-  }, [colNamesToDisplayWithActions]);
+    const returnVal: string[] = colNamesToDisplay
+      ? [...Object.keys(colNamesToDisplay), "_id"]
+      : [];
+    return returnVal;
+  }, [colNamesToDisplay]);
 
-  const shouldFilter: boolean = useMemo(() => {
-    return colNamesToDisplayKeys.length > 0;
-  }, [colNamesToDisplayKeys]);
+  const shouldFilter: boolean = true;
+
+  // const shouldFilter: boolean = useMemo(() => {
+  //   return colNamesToDisplayKeys.length > 0;
+  // }, [colNamesToDisplayKeys]);
 
   const columns: GridColDef<{
     [key: string | number]: any;
@@ -74,11 +67,6 @@ const DataTable: React.FC<{
       },
       {}
     );
-    if (shouldAddActionButtons) {
-      uniqueKeysObject["actions"] = true;
-    }
-    // console.log("deleteMe uniqueKeysObject are: ");
-    // console.log(uniqueKeysObject); // @TODO left off chasing down populateWithActionButtons
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
       uniqueKeysObject;
     if (shouldFilter) {
@@ -93,25 +81,18 @@ const DataTable: React.FC<{
     }
     let tracker: number = 0;
     return map(prototypeRowWithOnlyDesiredCols, (el, elKey) => {
+      // console.log("deleteMe el is: ");
+      // console.log(el);
+      // console.log("deleteMe elKey is: ");
+      // console.log(elKey);
       tracker++; // tracker seems needed because I can't get both the keys and the indexes in lodash map(obj)
       const cleanHeader: string = elKey.trim().toLowerCase(); // @TODO use capitalizeEachWord utili here
 
       const headerName: string =
         colNamesToDisplay[elKey] ||
         cleanHeader.charAt(0).toUpperCase() + cleanHeader.slice(1);
-
       // console.log("deleteMe headerName is: ");
       // console.log(headerName);
-      // var linkId: string = "";
-      // if (
-      //   targetColNameForAction &&
-      //   modificationMethodForAction &&
-      //   targetColNameForAction === elKey
-      // ) {
-      //   linkId = modificationMethodForAction(el);
-      //   console.log("deleteMe got here b1 and linkId is now: ");
-      //   console.log(linkId);
-      // }
 
       const returnVal: GridColDef<{
         [key: string | number]: any | null;
@@ -121,42 +102,67 @@ const DataTable: React.FC<{
         renderCell:
           headerName === "Actions"
             ? (params: GridRenderCellParams) => {
+                // console.log("deleteMe params are: ");
+                // console.log(params);
+                // const ComponentToRender = params.value;
+                // return <ComponentToRender />;
+                // params: GridRenderCellParams;
                 // console.log("deleteMe params before are:");
                 // console.log(params);
                 return populateWithActionButtons(tableTitle, params, {
                   targetColIdxForUrlPath: targetColIdxForUrlPath,
                   modificationMethodForAction: modificationMethodForAction,
                 });
+                // return el;
               }
             : undefined,
         width: 200,
       };
       return returnVal;
     });
-  }, [
-    data,
-    shouldFilter,
-    colNamesToDisplayKeys,
-    colNamesToDisplay,
-    tableTitle,
-    targetColIdxForUrlPath,
-    modificationMethodForAction,
-  ]);
+  }, [data, shouldFilter, colNamesToDisplayKeys, colNamesToDisplay]);
 
   // console.log("deleteMe columns is: ");
   // console.log(columns);
+  const actionButtonsKeys: string[] = useMemo(() => {
+    return Object.keys(actionButtonsToDisplay) || [];
+  }, [actionButtonsToDisplay]);
+
+  // console.log("deleteMe actionButtonsKeys a1 are: ");
+  // console.log(actionButtonsKeys);
+
+  const shouldAddActionButtons: boolean = useMemo(() => {
+    return actionButtonsKeys.length > 0;
+  }, [actionButtonsKeys]);
 
   const rows: GridRowsProp = useMemo(() => {
     return data?.map((dataRow, idx) => {
       // console.log("deleteMe dataRow is: ");
       // console.log(dataRow);
       const rowData: { [key: string]: any } = {};
+      if (shouldAddActionButtons) {
+        dataRow["actions"] = null; // reset upon every run
+        actionButtonsKeys.forEach((actionButtonKey) => {
+          // just add the actionButtonKey for the componentMap to use later in columns definition
+          const alreadyHasValues: boolean = dataRow["actions"] !== null;
+          dataRow["actions"] = alreadyHasValues
+            ? dataRow["actions"] + " " + actionButtonsToDisplay[actionButtonKey]
+            : actionButtonsToDisplay[actionButtonKey];
+        });
+      }
+
       columns.forEach((column) => {
         // console.log("deleteMe column is: ");
         // console.log(column);
         const headerName: string = get(column, "headerName") || "";
         // if (headerName === "Actions") {
-        //   rowData[column.field] = populateWithActionButtons(
+        //   // rowData[column.field] = <p>Test</p>;
+        //   // createElement(
+        //   //   get(dataRow, headerName) ||
+        //   //     get(dataRow, headerName?.trim()?.toLowerCase()) ||
+        //   //     get(dataRow, camelCase(headerName))
+        //   // );
+        //   populateWithActionButtons(
         //     tableTitle,
         //     {
         //       id: "test",
@@ -176,16 +182,41 @@ const DataTable: React.FC<{
           get(dataRow, headerName?.trim()?.toLowerCase()) ||
           get(dataRow, camelCase(headerName));
         // }
+        // if (headerName === "Actions") {
+        //   rowData[column.field] = populateWithActionButtons(
+        //     tableTitle,
+        //     {
+        //       id: "test",
+        //       field: column.field,
+        //       value: "view edit",
+        //       linkId: "testLinkId",
+        //       row: idx,
+        //     },
+        //     {
+        //       targetColIdxForUrlPath: targetColIdxForUrlPath,
+        //       modificationMethodForAction: sanitizeString,
+        //     }
+        //   );
+        // } else {
+        // }
       });
 
       // If you need to add an 'actions' field, do it here based on the column definition
 
       return { id: idx + 1, ...rowData };
     });
-  }, [columns, data]);
+  }, [
+    actionButtonsKeys,
+    actionButtonsToDisplay,
+    columns,
+    data,
+    shouldAddActionButtons,
+    tableTitle,
+    targetColIdxForUrlPath,
+  ]);
 
-  // console.log("deleteMe rows is: ");
-  // console.log(rows);
+  console.log("deleteMe rows is: ");
+  console.log(rows);
 
   return (
     <>

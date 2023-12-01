@@ -15,8 +15,8 @@ export function populateWithActionButtons(
     modificationMethodForAction?: (target: string) => string;
   }
 ) {
-  console.log("deleteMe options in populateWithActionButtons are: ");
-  console.log(options);
+  // console.log("deleteMe options in populateWithActionButtons are: ");
+  // console.log(options);
   console.log("deleteMe params in populateWithActionButtons are: ");
   console.log(params);
   const targetColIdxForUrlPath: number | undefined = get(
@@ -33,6 +33,13 @@ export function populateWithActionButtons(
   const processedTarget: string = modificationMethodForAction
     ? modificationMethodForAction(target)
     : target;
+
+  // console.log("deleteMe processedTarget is: ");
+  // console.log(processedTarget);
+  // console.log("deleteMe the other stuff is: ");
+  // console.log(tableTitle + field + rowId);
+  console.log("deleteMe actionButtonKeys are: ");
+  console.log(actionButtonKeys);
   return (
     <>
       {actionButtonKeys.map((actionButtonKey) => {
