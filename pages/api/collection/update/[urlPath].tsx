@@ -4,8 +4,6 @@ import clientPromise from "../../../../middleware/mongodb";
 import { Collection as CollectionData } from "../../../../types";
 
 const collectionUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("deleteMe got here a1 and req is: ");
-  console.log(req);
   const allowedMethods = ["PATCH"];
 
   if (!allowedMethods.includes(req.method || "") || req.method === "OPTIONS") {

@@ -43,8 +43,6 @@ export function populateWithActionButtons(
   return (
     <>
       {actionButtonKeys.map((actionButtonKey) => {
-        console.log("deleteMe actionButtonKey is: ");
-        console.log(actionButtonKey);
         return generateComponent(
           actionButtonKey,
           tableTitle + field + rowId + actionButtonKey,

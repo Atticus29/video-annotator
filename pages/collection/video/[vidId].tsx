@@ -13,25 +13,28 @@ import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { QueryFunctionContext, useQuery, useQueryClient } from "react-query";
-import CollectionDetailsView from "../../components/CollectionDetailsView";
-import DataTable from "../../components/DataTable";
-import CustomError from "../../components/Error";
-import VideoIntake from "../../components/VideoIntake";
 import { excludeFromCollectionTableDisplay } from "../../constants";
 import useGetCollection from "../../hooks/useGetCollection";
 import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
 
-const CollectionView: React.FC = () => {
+const SingleVideoView: React.FC = () => {
   const queryClient = useQueryClient();
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
+  const localVideoId: string | string[] | undefined = router.query.vidId;
+  console.log("deleteMe localVideoId is: ");
+  console.log(localVideoId);
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
-  const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
-  const [showCollection, setShowCollection] = useState<boolean>(false);
-  const { isLoading, isError, data, error } =
-    useGetCollection(localUrlPathAsString);
+  console.log("deleteMe localUrlPathAsString is: ");
+  console.log(localUrlPathAsString);
+  //   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
+  //   const [showCollection, setShowCollection] = useState<boolean>(false);
+  const { isLoading, isError, data, error } = useGetVideo(
+    localUrlPathAsString,
+    localVideoId
+  );
 
   const [open, setOpen] = useState<boolean>(isLoading);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =

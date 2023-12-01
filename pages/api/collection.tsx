@@ -4,8 +4,6 @@ import clientPromise from "../../middleware/mongodb";
 import { Collection as CollectionData } from "../../types";
 
 const collection = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("deleteMe got here y1 and req is: ");
-  console.log(req);
   const allowedMethods = ["GET", "POST"];
 
   if (!allowedMethods.includes(req.method || "") || req.method === "OPTIONS") {
