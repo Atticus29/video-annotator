@@ -9,10 +9,7 @@ const ViewCollectionActionButton: React.FC<{
   props: { id: string | number; urlTarget?: string };
 }> = (props) => {
   const intl: IntlShape = useIntl();
-  // const router = useRouter();
-  // @TODO add button click handler and possibly prevent propagation
   const handleViewClick = async () => {
-    console.log("deleteMe view clicked");
     const url: string = get(props, ["urlTarget"], "");
     router.push(url);
   };

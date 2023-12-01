@@ -15,9 +15,6 @@ export function generateComponent(
   id: string | number,
   urlTarget?: string
 ) {
-  console.log("deleteMe generateComponent entered");
   const Returncomponent = componentMap[componentName] || null;
-  console.log("deleteMe Returncomponent is: ");
-  console.log(Returncomponent);
   return createElement(Returncomponent, { id, key: id, urlTarget });
 }
