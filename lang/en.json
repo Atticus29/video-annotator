@@ -130,5 +130,6 @@
   "SUBMIT_NEW_VIDEO": "Submit a New {videoName}",
   "VIDEO_INTAKE_DETAILS": "To add a {videoName} to the collection, fill out the form below.",
   "COLLECTION_NOT_FOUND": "Collection not found",
-  "UNSAVED_CHANGES_MESSAGE": "You have unsaved changes on this page. Are you sure you want to proceed without saving?"
+  "UNSAVED_CHANGES_MESSAGE": "You have unsaved changes on this page. Are you sure you want to proceed without saving?",
+  "VIDEO_NOT_FOUND": "Video not found"
 }
