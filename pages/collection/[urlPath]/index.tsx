@@ -33,9 +33,30 @@ const CollectionView: React.FC = () => {
   const { isLoading, isError, data, error } =
     useGetCollection(localUrlPathAsString);
 
-  const [open, setOpen] = useState<boolean>(isLoading);
+  const [open, setOpen] = useState<boolean>(true);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
     useState<boolean>(false);
+
+  const dataWithActions = useMemo(() => {
+    let dataWithActionsAppended = [];
+    if (data && data?.videos) {
+      dataWithActionsAppended = map(data.videos, (datum) => {
+        return {
+          ...datum,
+          actions: "stand in",
+        };
+      });
+    }
+    return dataWithActionsAppended;
+  }, [data]);
+
+  const linkIds = useMemo(() => {
+    if (data && data?.videos) {
+      return map(data.videos, (datum) => {
+        return datum.id;
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
     setOpen(isLoading);
@@ -80,7 +101,7 @@ const CollectionView: React.FC = () => {
   };
 
   const colNamesToDisplay: {} = useMemo(() => {
-    if (data && data.videoIntakeQuestions) {
+    if (dataWithActions && data?.videoIntakeQuestions) {
       // console.log("deleteMe data?.videoIntakeQuestions is: ");
       // console.log(data?.videoIntakeQuestions);
       return reduce(
@@ -97,6 +118,13 @@ const CollectionView: React.FC = () => {
       return {};
     }
   }, [data]);
+
+  const colNamesToDisplayWithActions = {
+    ...colNamesToDisplay,
+    actions: "Actions",
+  };
+
+  // @TODO LEFT OFF HERE figuring out how to clean this up a little bit and how to get the action buttons to work correctly in collection/[urlPath]
 
   // console.log("deleteMe colNamesToDisplay is: ");
   // console.log(colNamesToDisplay);
@@ -131,11 +159,15 @@ const CollectionView: React.FC = () => {
           ></CollectionDetailsView>
           <DataTable
             tableTitle={data?.nameOfVideo + "s"}
-            data={data?.videos}
-            colNamesToDisplay={colNamesToDisplay}
-            actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
-            // actionUrls={{edit: }}
+            data={dataWithActions}
+            colNamesToDisplay={colNamesToDisplayWithActions}
+            actionButtonsToDisplay={{ view: "View" }}
+            targetColIdxForUrlPath={0}
             styleOverrides={{ minHeight: 0, height: calculatedHeight + "rem" }}
+            linkUrls={{
+              view: "/collection/" + localUrlPathAsString + "/video/",
+            }}
+            linkIds={linkIds}
           ></DataTable>
           <Button
             data-testid={"new-video-add-button"}
@@ -150,7 +182,7 @@ const CollectionView: React.FC = () => {
           </Button>
         </>
       )}
-      {!isLoading && !showCollection && (
+      {!open && !showCollection && (
         <CustomError
           errorMsg={intl.formatMessage({
             id: "COLLECTION_NOT_FOUND",
