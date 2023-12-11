@@ -576,7 +576,7 @@ export const shamCollection: Collection = {
     isSuccessful,
     isSubmission,
     moveRating,
-    comment,
+    comment, // @TODO add start time and end time to this
   ],
   excludeFromDetailList: [
     "_id",
