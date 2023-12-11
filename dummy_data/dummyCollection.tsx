@@ -8,7 +8,7 @@ import {
 import moveNames from "./moveNames";
 import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 export const defaultDoNotDisplays: string[] = [
   "_id",
@@ -538,7 +538,9 @@ export const shamCollection: Collection = {
   // _id: "test123",
   name: "Example Collection",
   nameOfVideo: "Match",
+  nameOfVideoPlural: "Matches",
   nameOfEvent: "Move",
+  nameOfEventPlural: "Moves",
   isPrivate: false,
   language: "English",
   videoIntakeQuestions: [
@@ -591,14 +593,16 @@ export const shamCollection: Collection = {
     "videos",
   ],
   createdByEmail: "public@example.com",
-  dateCreated: dayjs(),
+  dateCreated: Date(),
 };
 
 export const shamCollection2: Collection = {
   // _id: "test123",
   name: "Brazilian Jiu Jitsu",
   nameOfVideo: "Match",
+  nameOfVideoPlural: "Matches",
   nameOfEvent: "Move",
+  nameOfEventPlural: "Moves",
   isPrivate: false,
   language: "English",
   videoIntakeQuestions: [
@@ -649,5 +653,5 @@ export const shamCollection2: Collection = {
     "videos",
   ],
   createdByEmail: "mfishe53@asu.edu",
-  dateCreated: dayjs(),
+  dateCreated: Date(),
 };

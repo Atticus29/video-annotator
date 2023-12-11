@@ -8,9 +8,6 @@ export default function useGetVideo(collectionUrl: string, videoId: string) {
       try {
         const response = await axios.get(
           "/api/collection/" + collectionUrl + "/video/" + videoId
-          // {
-          //   params: { urlPath: collectionUrl, videoId: videoId },
-          // }
         );
         return response?.data;
       } catch (e: any) {

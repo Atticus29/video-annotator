@@ -1,3 +1,4 @@
+import { find, get } from "lodash-es";
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../../middleware/mongodb";
@@ -23,7 +24,8 @@ const videoInCollection = async (req: NextApiRequest, res: NextApiResponse) => {
         urlPath: urlPath,
       });
       if (collection) {
-        const video = collection.videos.find((vid) => vid.id === videoId);
+        const videos = get(collection, ["videos"]);
+        const video = find(videos, (vid) => vid.id === videoId);
         if (video) {
           return res.status(200).json({ video });
         } else {

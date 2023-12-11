@@ -18,19 +18,21 @@ const SingleVideoView: React.FC = () => {
   const queryClient = useQueryClient();
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
-  const localVideoId: string = router.query.videoId;
-  console.log("deleteMe localVideoId is: ");
-  console.log(localVideoId);
+  const localVideoId: string | string[] = router.query.videoId || "";
+  let localVideoIdAsString: string =
+    (Array.isArray(localVideoId) ? localVideoId.join() : localVideoId) || "";
+  // console.log("deleteMe localVideoId is: ");
+  // console.log(localVideoId);
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
-  console.log("deleteMe localUrlPathAsString is: ");
-  console.log(localUrlPathAsString);
+  // console.log("deleteMe localUrlPathAsString is: ");
+  // console.log(localUrlPathAsString);
   //   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const { isLoading, isError, data, error } = useGetVideo(
     localUrlPathAsString,
-    localVideoId
+    localVideoIdAsString
   );
   const [open, setOpen] = useState<boolean>(true);
 
@@ -42,8 +44,8 @@ const SingleVideoView: React.FC = () => {
       setShowVideo(true);
     }
   }, [isLoading, data]);
-  console.log("deleteMe data is: ");
-  console.log(data);
+  // console.log("deleteMe data is: ");
+  // console.log(data);
 
   return (
     <>

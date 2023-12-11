@@ -117,7 +117,7 @@ const CollectionView: React.FC = () => {
     } else {
       return {};
     }
-  }, [data]);
+  }, [data?.videoIntakeQuestions, dataWithActions]);
 
   const colNamesToDisplayWithActions = {
     ...colNamesToDisplay,

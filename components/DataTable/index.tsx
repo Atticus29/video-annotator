@@ -187,6 +187,8 @@ const DataTable: React.FC<{
     tableTitle,
     targetColIdxForUrlPath,
     modificationMethodForAction,
+    linkUrls,
+    linkIds,
   ]);
 
   const rows: GridRowsProp = useMemo(() => {

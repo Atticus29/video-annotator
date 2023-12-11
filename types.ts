@@ -3,7 +3,7 @@ export interface Collection {
   urlPath?: string;
   name: string;
   createdByEmail: string;
-  dateCreated: Date;
+  dateCreated: string;
   nameOfVideo: string;
   nameOfVideoPlural: string;
   nameOfEvent: string;

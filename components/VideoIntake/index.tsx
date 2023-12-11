@@ -9,8 +9,7 @@ import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import { IntlShape } from "@formatjs/intl";
-import { useIntl } from "react-intl";
+import { IntlShape, useIntl } from "react-intl";
 
 const VideoIntake: React.FC<{
   collection: Collection;

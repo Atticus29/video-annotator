@@ -1,9 +1,7 @@
 import ViewCollectionActionButton from "../components/ViewCollectionActionButton";
 
 const Sandbox: React.FC = () => {
-  return (
-    <ViewCollectionActionButton linkUrl="/collection/ExampleCollectionSmall"></ViewCollectionActionButton>
-  );
+  return <p>Hi</p>;
 };
 
 export default Sandbox;
