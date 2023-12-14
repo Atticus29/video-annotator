@@ -28,7 +28,6 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === "GET") {
       const urlPath: string = req.query.urlPath as string;
-      console.log("deleteMe got here x1");
       const targetDocument = await coll.findOne({
         urlPath: urlPath,
       });

@@ -594,6 +594,8 @@ export const shamCollection: Collection = {
   ],
   createdByEmail: "public@example.com",
   dateCreated: Date(),
+  nameOfIndividual: "Athlete",
+  nameOfIndividualPlural: "Athletes",
 };
 
 export const shamCollection2: Collection = {
@@ -654,4 +656,6 @@ export const shamCollection2: Collection = {
   ],
   createdByEmail: "mfishe53@asu.edu",
   dateCreated: Date(),
+  nameOfIndividual: "Athlete",
+  nameOfIndividualPlural: "Athletes",
 };

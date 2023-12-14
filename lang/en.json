@@ -132,5 +132,9 @@
   "COLLECTION_NOT_FOUND": "Collection not found",
   "UNSAVED_CHANGES_MESSAGE": "You have unsaved changes on this page. Are you sure you want to proceed without saving?",
   "VIDEO_NOT_FOUND": "Video not found",
-  "VIDEOS": "Videos"
+  "VIDEOS": "Videos",
+  "INDIVIDUALS_PLURAL": "Individuals",
+  "INDIVIDUAL": "Individual",
+  "SUBMIT_NEW_INDIVIDUAL": "Submit a New {individualName}",
+  "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below."
 }

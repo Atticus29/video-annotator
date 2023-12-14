@@ -149,6 +149,28 @@ const ComposedFormSubmissionButton: React.FC<{
       //   queryKey: ["singleCollection", collectionPath],
       // });
     }
+    if (localCollection && collectionPropToUpdate === "individuals") {
+      const currentIndividuals: {}[] = get(
+        localCollection,
+        ["individuals"],
+        []
+      );
+      const updatedIndividuals: {}[] = [
+        ...currentIndividuals,
+        { ...formFieldGroupOfConcern?.actualValues, id: uuidv4() },
+      ];
+      const { _id, ...rest } = localCollection;
+      const updatedCollection = {
+        ...rest,
+        individuals: updatedIndividuals,
+      };
+      updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
+      // @TODO invalidate collection
+      // queryClient.invalidateQueries({
+      //   queryKey: ["singleCollection", collectionPath],
+      // });
+    }
+
     // @TODO send this to the database. Use the `collection` variable... actually, depending on which intake this is, the db save MIGHT behave differently. I.e., is this a video save? An individual?
   };
 
