@@ -3,14 +3,9 @@ import { useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { useQueryClient } from "react-query";
 
-import {
-  QueryFunctionContext,
-  useMutation,
-  UseMutationResult,
-  useQuery,
-} from "react-query";
+import { useMutation, UseMutationResult } from "react-query";
 import { v4 as uuidv4 } from "uuid";
-import { map, filter, reduce, get } from "lodash-es";
+import { reduce, get } from "lodash-es";
 import axios from "axios";
 
 import { FormFieldGroup, SingleFormField, Collection } from "../../types";
@@ -77,13 +72,10 @@ const ComposedFormSubmissionButton: React.FC<{
 
   const handleClose = () => {
     setOpen(false);
-    console.log("deleteMe got here a1 and collectionPath is: ");
-    console.log(collectionPath);
     console.log("deleteMe queryClient is: ");
     console.log(queryClient);
     // queryClient.invalidateQueries(["singleCollection", collectionPath]);
     // queryClient.invalidateQueries();
-    console.log("deleteMe got here a2");
     if (onCloseDialog) onCloseDialog();
   };
 
@@ -99,8 +91,6 @@ const ComposedFormSubmissionButton: React.FC<{
       return response?.data;
     },
     onSuccess: (data) => {
-      // console.log("deleteMe got here and update was successful and data is: ");
-      // console.log(data);
       setSnackbarMessage(data?.message);
       setSaveSuccess(true);
       setSaveFail(false);
@@ -142,18 +132,8 @@ const ComposedFormSubmissionButton: React.FC<{
   }, [questionsOfConcern, formFieldGroupOfConcern, allRequiredValid]);
 
   const handleFormSubmission: () => void = () => {
-    // console.log("deleteMe handleFormSubmission entered");
-    // console.log("deleteMe formFieldGroupOfConcern?.actualValues is: ");
-    // console.log(formFieldGroupOfConcern?.actualValues);
-    // console.log("deleteMe entire formFieldGroupOfConcern is: ");
-    // console.log(formFieldGroupOfConcern);
-    // console.log("deleteMe and collection is: ");
-    // console.log(collection);
     if (localCollection && collectionPropToUpdate === "videos") {
-      // console.log("deleteMe got here a1");
       const currentVideos: {}[] = get(localCollection, ["videos"], []);
-      // console.log("deleteMe currentVideos are: ");
-      // console.log(currentVideos);
       const updatedVideos: {}[] = [
         ...currentVideos,
         { ...formFieldGroupOfConcern?.actualValues, id: uuidv4() },
@@ -163,8 +143,6 @@ const ComposedFormSubmissionButton: React.FC<{
         ...rest,
         videos: updatedVideos,
       };
-      // console.log("deleteMe updatedCollection is: ");
-      // console.log(updatedCollection);
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
       // @TODO invalidate collection
       // queryClient.invalidateQueries({
