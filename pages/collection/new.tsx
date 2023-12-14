@@ -19,12 +19,7 @@ import IndividualIntakePreview from "../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
 import EventIntakeQuestions from "../../components/EventIntakeQuestions";
 import EventIntakePreview from "../../components/EventIntakePreview";
-import {
-  QueryFunctionContext,
-  useMutation,
-  UseMutationResult,
-  useQuery,
-} from "react-query";
+import { useMutation, UseMutationResult } from "react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../utilities/textUtils";
@@ -171,9 +166,6 @@ const NewCollection: React.FC = () => {
 
   const handleSaveCollection = async () => {
     setOpen(true);
-    const sanitizedCollectionName: string = sanitizeString(
-      collection?.name || String(Math.random() * 10)
-    );
     const fleshedOutCollection: Collection | any = {
       // @TODO just having Collection as the type created issues that I don't have internet access to resolve
       ...collection,
@@ -218,13 +210,13 @@ const NewCollection: React.FC = () => {
   return (
     <>
       <UnsavedChangesPrompt />
-      {/* <Backdrop
+      <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading}
+        open={collectionMutation.isLoading}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
-      </Backdrop> */}
+      </Backdrop>
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
         {collection && (
           <>
