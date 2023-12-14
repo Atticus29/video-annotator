@@ -49,7 +49,7 @@ const CollectionDetailsEdit: React.FC<{
       setName(currentName);
       setNameInvalid(!isValidName(currentName));
     } else {
-      setName("Cannot name collection new");
+      setName("Cannot name collection new"); // the collection/new URL is the create endpoint for now
       setNameInvalid(true);
     }
   };

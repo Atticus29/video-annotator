@@ -49,7 +49,6 @@ const Collections: React.FC = () => {
     console.log(isError);
   }, [isError]);
 
-  const shouldShowTable: boolean = true; // deleteMe @TODO update this
   const defaultDisplayCols: {} = {
     name: "Collection name",
     createdBy: "Created By",

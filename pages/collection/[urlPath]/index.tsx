@@ -124,12 +124,11 @@ const CollectionView: React.FC = () => {
     actions: "Actions",
   };
 
-  // @TODO LEFT OFF HERE figuring out how to clean this up a little bit and how to get the action buttons to work correctly in collection/[urlPath]
+  const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
 
   // console.log("deleteMe colNamesToDisplay is: ");
   // console.log(colNamesToDisplay);
 
-  // @TODO figure out how to pluralize data.nameOfVideo below
   return (
     <>
       {isLoading && (
@@ -158,7 +157,7 @@ const CollectionView: React.FC = () => {
             showEditButton={false}
           ></CollectionDetailsView>
           <DataTable
-            tableTitle={data?.nameOfVideo + "s"}
+            tableTitle={data?.nameOfVideoPlural || videosFallback}
             data={dataWithActions}
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}

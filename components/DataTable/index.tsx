@@ -12,7 +12,8 @@ import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 
 const DataTable: React.FC<{
-  tableTitle: string;
+  tableTitle?: string;
+  tableTitleId?: string;
   data: {}[];
   colNamesToDisplay: { [key: string]: any }; // @TODO make optional and have a way of deriving them from data as a fallback
   actionButtonsToDisplay?: { [key: string]: any };
@@ -24,7 +25,8 @@ const DataTable: React.FC<{
   linkUrls?: {};
   linkIds?: string[];
 }> = ({
-  tableTitle,
+  tableTitle = "Untitled",
+  tableTitleId = tableTitle,
   data,
   colNamesToDisplay = {},
   actionButtonsToDisplay = {},
@@ -167,7 +169,7 @@ const DataTable: React.FC<{
         renderCell:
           headerName === "Actions"
             ? (params: GridRenderCellParams) => {
-                return populateWithActionButtons(tableTitle, params, {
+                return populateWithActionButtons(tableTitleId, params, {
                   targetColIdxForUrlPath: targetColIdxForUrlPath,
                   modificationMethodForAction: modificationMethodForAction,
                   linkUrls: linkUrls,
@@ -184,7 +186,7 @@ const DataTable: React.FC<{
     shouldFilter,
     colNamesToDisplayKeys,
     colNamesToDisplayActionsRetrofit,
-    tableTitle,
+    tableTitleId,
     targetColIdxForUrlPath,
     modificationMethodForAction,
     linkUrls,
@@ -229,10 +231,10 @@ const DataTable: React.FC<{
     <>
       {data && data.length > 0 && (
         <>
-          <InfoPanel titleId={tableTitle} titleDefault={tableTitle}>
+          <InfoPanel titleId={tableTitleId} titleDefault={tableTitle}>
             <InfoPanelBody>
               <DataGrid
-                key={tableTitle}
+                key={tableTitleId}
                 rows={rows}
                 rowHeight={40}
                 columns={columns}

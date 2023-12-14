@@ -80,20 +80,6 @@ const CollectionEditor: React.FC = () => {
   const [saveFail, setSaveFail] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
-  // useEffect(() => {
-  //   const initialCollection = { ...shamCollection };
-  //   initialCollection.videoQuestionsFormFieldGroup =
-  //     videoQuestionsFormFieldGroup;
-  //   initialCollection.individualQuestionsFormFieldGroup =
-  //     individualQuestionsFormFieldGroup;
-  //   initialCollection.eventQuestionsFormFieldGroup =
-  //     eventQuestionsFormFieldGroup;
-  //   initialCollection.createdByEmail =
-  //     collection?.createdByEmail || user?.email || "public@example.com";
-  //   setCollection(initialCollection);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user]);
-
   useEffect(() => {
     if (!isLoading && data && !isError) {
       setEventQuestionFormValues({});

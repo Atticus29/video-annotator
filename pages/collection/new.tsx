@@ -91,25 +91,6 @@ const NewCollection: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  //   useEffect(() => {
-  //     if (!isLoading && data && !isError) {
-  //       setEventQuestionFormValues({});
-  //       setVideoQuestionFormValues({});
-  //       setIndividualQuestionFormValues({});
-
-  //       const decantedCollection: Collection = {
-  //         // some defaults get saved in actual values, including dates which get misformatted somehow. I can kick this problem down the road, because these actual values are not needed for this component
-  //         ...data,
-  //         videoQuestionsFormFieldGroup,
-  //         individualQuestionsFormFieldGroup,
-  //         eventQuestionsFormFieldGroup,
-  //       };
-  //       // data.dateCreated = dayjs(data.dateCreated); // @TODO fix this if broken
-  //       setCollection(decantedCollection);
-  //     }
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [isLoading]);
-
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
       title: "VideoFormFieldGroupForTheWholeDummyCollection",
