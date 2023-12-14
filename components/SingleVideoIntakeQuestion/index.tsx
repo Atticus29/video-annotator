@@ -88,17 +88,11 @@ const SingleVideoIntakeQuestion: React.FC<{
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    // console.log("deleteMe currentVal is: ");
-    // console.log(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       wholeQuestion,
       currentVal
     );
-    // console.log("deleteMe wholeQuestion is: ");
-    // console.log(wholeQuestion);
-    // console.log("deleteMe transformedQuestion is: ");
-    // console.log(transformedQuestion);
 
     updateSingleQuestionInCollection(
       collection,
@@ -111,8 +105,6 @@ const SingleVideoIntakeQuestion: React.FC<{
   };
 
   const handleChange: (event: any) => void = (event: any) => {
-    // console.log("deleteMe intakeQuestionKey is: ");
-    // console.log(intakeQuestionKey);
     // if the change is in the TYPE field, this should
     // 1) automatically modify other parts of the SingleFormField
     // 2) change what options are visible/available in the video intake questions section

@@ -183,8 +183,6 @@ const NewCollection: React.FC = () => {
       createdByEmail: user?.email || "public@example.com",
       dateCreated: dayjs(),
     };
-    console.log("deleteMe fleshedOutCollection before being saved is: ");
-    console.log(fleshedOutCollection);
     collectionMutation.mutate(fleshedOutCollection);
   };
 

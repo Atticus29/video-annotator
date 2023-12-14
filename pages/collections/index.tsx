@@ -45,7 +45,7 @@ const Collections: React.FC = () => {
   }, [error]);
 
   useEffect(() => {
-    console.log("deleteMe isError is: "); // @TODO do something with this? Or de-duplicate the error useEffect
+    console.log("isError is: "); // @TODO do something with this? Or de-duplicate the error useEffect
     console.log(isError);
   }, [isError]);
 
@@ -84,10 +84,6 @@ const Collections: React.FC = () => {
     },
     {}
   );
-  // console.log("deleteMe collectionDisplayCols is: ");
-  // console.log(collectionDisplayCols);
-  // console.log("deleteMe data is:");
-  // console.log(data);
 
   return (
     <>

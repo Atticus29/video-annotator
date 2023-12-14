@@ -38,15 +38,6 @@ const DataTable: React.FC<{
   linkUrls = {},
   linkIds = [],
 }) => {
-  // console.log("deleteMe data in DataTable is: ");
-  // console.log(data);
-  // console.log("deleteMe linkUrls is: ");
-  // console.log(linkUrls);
-  // console.log("deleteMe colNamesToDisplay c1 are: ");
-  // console.log(colNamesToDisplay);
-  // console.log("deleteMe actionButtonsToDisplay are: ");
-  // console.log(actionButtonsToDisplay);
-
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -65,9 +56,6 @@ const DataTable: React.FC<{
     return result;
   }, [colNamesToDisplay]);
 
-  // console.log("deleteMe colNamesToDisplayDoesNotHaveActions is: ");
-  // console.log(colNamesToDisplayDoesNotHaveActions);
-
   const colNamesToDisplayActionsRetrofit: { [key: string]: any } =
     useMemo(() => {
       if (
@@ -84,9 +72,6 @@ const DataTable: React.FC<{
       colNamesToDisplayDoesNotHaveActions,
     ]);
 
-  // console.log("deleteMe colNamesToDisplayActionsRetrofit is: ");
-  // console.log(colNamesToDisplayActionsRetrofit);
-
   // end handle actioButto logic
 
   const colNamesToDisplayKeys: string[] = useMemo(() => {
@@ -94,13 +79,8 @@ const DataTable: React.FC<{
       ? [...Object.keys(colNamesToDisplayActionsRetrofit), "_id"]
       : [];
 
-    // console.log("deleteMe returnVal is: ");
-    // console.log(returnVal);
     return returnVal;
   }, [colNamesToDisplayActionsRetrofit]);
-
-  // console.log("deleteMe colNamesToDisplayKeys are: ");
-  // console.log(colNamesToDisplayKeys);
 
   const shouldFilter: boolean = useMemo(() => {
     return colNamesToDisplayKeys.length > 0;
@@ -123,16 +103,10 @@ const DataTable: React.FC<{
     );
     let prototypeRowWithOnlyDesiredCols: { [key: string]: any } =
       uniqueKeysObject;
-    // console.log("deleteMe uniqueKeysObject is: ");
-    // console.log(uniqueKeysObject);
-    // console.log("deleteMe colNamesToDisplayKeys e1 is; ");
-    // console.log(colNamesToDisplayKeys);
     if (shouldFilter) {
       prototypeRowWithOnlyDesiredCols = reduce(
         uniqueKeysObject,
         (memo: {}, col: any, colKey: string) => {
-          // console.log("deleteMe colKey is: ");
-          // console.log(colKey);
           const safeToInclude: boolean = colNamesToDisplayKeys.includes(colKey);
           return safeToInclude ? { ...memo, [colKey]: col } : { ...memo };
         },
@@ -140,26 +114,17 @@ const DataTable: React.FC<{
       );
     }
 
-    // console.log("deleteMe prototypeRowWithOnlyDesiredCols is: ");
-    // console.log(prototypeRowWithOnlyDesiredCols);
     let prototypeRowWithOnlyDesiredColsAndActions = {
       ...prototypeRowWithOnlyDesiredCols,
-      // Actions: true,
     };
-    // if()
     let tracker: number = 0;
     return map(prototypeRowWithOnlyDesiredColsAndActions, (el, elKey) => {
-      // console.log("deleteMe elKey is: ");
-      // console.log(elKey);
       tracker++; // tracker seems needed because I can't get both the keys and the indexes in lodash map(obj)
       const cleanHeader: string = elKey.trim().toLowerCase(); // @TODO use capitalizeEachWord utili here instead of the cleanHeader.slice(1) below??
 
       const headerName: string =
         colNamesToDisplayActionsRetrofit[elKey] ||
         cleanHeader.charAt(0).toUpperCase() + cleanHeader.slice(1);
-
-      // console.log("deleteMe headerName is: ");
-      // console.log(headerName);
 
       const returnVal: GridColDef<{
         [key: string | number]: any | null;
@@ -223,9 +188,6 @@ const DataTable: React.FC<{
     data,
     shouldAddActionButtons,
   ]);
-
-  // console.log("deleteMe rows is: ");
-  // console.log(rows);
 
   return (
     <>

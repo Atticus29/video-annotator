@@ -75,8 +75,6 @@ const VideoIntakeQuestions: React.FC<{
       return map(
         intakeQuestion,
         (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
-          console.log("deleteMe intakeQuestionEl is: ");
-          console.log(intakeQuestionEl);
           return (
             <>
               {intakeQuestionKey === "label" && (

@@ -47,7 +47,6 @@ export function updateCollection(
   newIntakeQuestionSet[questionIdx] = modifiedQuestion;
 
   setCollection((prevState: any) => {
-    // console.log("deleteMe");
     return { ...prevState, [whichIntakeQuestions]: newIntakeQuestionSet };
   });
 }

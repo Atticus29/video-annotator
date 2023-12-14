@@ -26,8 +26,6 @@ const CollectionDetailsEdit: React.FC<{
   setIsCollectionDetailsInEditMode: (val: boolean) => void;
 }> = ({ collection, setCollection, setIsCollectionDetailsInEditMode }) => {
   const intl: IntlShape = useIntl();
-  // console.log("deleteMe collection is: ");
-  // console.log(collection);
 
   useEffect(() => {
     setName(collection?.name);
@@ -93,8 +91,6 @@ const CollectionDetailsEdit: React.FC<{
   );
   const handleIsPrivateChange: (event: any) => void = (event: any) => {
     const currentIsPrivate: any = event?.target?.checked;
-    console.log("deleteMe currentIsPrivate is: ");
-    console.log(currentIsPrivate);
     setIsPrivate(currentIsPrivate);
   };
 

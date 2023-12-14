@@ -79,7 +79,6 @@ const CollectionView: React.FC = () => {
 
   const handleCreateVideoDialogClose = () => {
     setCreateVideoDialogOpen(false);
-    console.log("deleteMe got here c1");
     const queryKey = ["singleCollection", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find(queryKey);
@@ -102,8 +101,6 @@ const CollectionView: React.FC = () => {
 
   const colNamesToDisplay: {} = useMemo(() => {
     if (dataWithActions && data?.videoIntakeQuestions) {
-      // console.log("deleteMe data?.videoIntakeQuestions is: ");
-      // console.log(data?.videoIntakeQuestions);
       return reduce(
         data?.videoIntakeQuestions,
         (memo: {}, intakeQuestion: any) => {
@@ -125,9 +122,6 @@ const CollectionView: React.FC = () => {
   };
 
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
-
-  // console.log("deleteMe colNamesToDisplay is: ");
-  // console.log(colNamesToDisplay);
 
   return (
     <>

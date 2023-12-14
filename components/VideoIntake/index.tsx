@@ -15,8 +15,6 @@ const VideoIntake: React.FC<{
   collection: Collection;
   onCloseDialog?: () => void;
 }> = ({ collection, onCloseDialog }) => {
-  // console.log("deleteMe collection going into VideoIntake is: ");
-  // console.log(collection);
   const intl: IntlShape = useIntl();
   const { user, authError } = useFirebaseAuth();
   const [localCollection, setLocalCollection] = useState<Collection>();
@@ -42,10 +40,6 @@ const VideoIntake: React.FC<{
     const initialCollection = { ...collection };
     initialCollection.videoQuestionsFormFieldGroup =
       videoQuestionsFormFieldGroup;
-    // console.log(
-    //   "deleteMe initialCollection formation happens and initialCollection is: "
-    // );
-    // console.log(initialCollection);
     setLocalCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);

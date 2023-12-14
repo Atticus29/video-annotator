@@ -21,14 +21,9 @@ const SingleVideoView: React.FC = () => {
   const localVideoId: string | string[] = router.query.videoId || "";
   let localVideoIdAsString: string =
     (Array.isArray(localVideoId) ? localVideoId.join() : localVideoId) || "";
-  // console.log("deleteMe localVideoId is: ");
-  // console.log(localVideoId);
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
-  // console.log("deleteMe localUrlPathAsString is: ");
-  // console.log(localUrlPathAsString);
-  //   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const { isLoading, isError, data, error } = useGetVideo(
     localUrlPathAsString,
@@ -44,8 +39,6 @@ const SingleVideoView: React.FC = () => {
       setShowVideo(true);
     }
   }, [isLoading, data]);
-  // console.log("deleteMe data is: ");
-  // console.log(data);
 
   return (
     <>
