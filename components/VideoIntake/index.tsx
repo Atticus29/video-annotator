@@ -83,6 +83,7 @@ const VideoIntake: React.FC<{
             }
           }
         )}
+        {/* @TODO add invidual addition */}
         {localCollection?.videoQuestionsFormFieldGroup &&
           localCollection?.videoIntakeQuestions && (
             <Grid item lg={12} sm={12}>
