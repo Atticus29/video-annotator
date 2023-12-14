@@ -47,7 +47,10 @@ const IndividualIntake: React.FC<{
   }, [user]);
 
   const titleId: string = intl.formatMessage(
-    { id: "SUBMIT_NEW_INDIVIDUAL", defaultMessage: "Submit new {videoName}" },
+    {
+      id: "SUBMIT_NEW_INDIVIDUAL",
+      defaultMessage: "Submit a New {individualName}",
+    },
     { individualName: collection?.nameOfIndividual || defaultIndividualName }
   );
 
@@ -55,7 +58,7 @@ const IndividualIntake: React.FC<{
     {
       id: "INDIVIDUAL_INTAKE_DETAILS",
       defaultMessage:
-        "To add a {videoName} to the collection, fill out the form below.",
+        "To add a {individualName} to the {videoName}, fill out the form below.",
     },
     {
       individualName: collection?.nameOfIndividual?.toLowerCase(),
