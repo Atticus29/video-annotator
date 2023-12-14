@@ -82,19 +82,21 @@ const VideoIntakeQuestions: React.FC<{
                   <Typography style={{ marginBottom: 10 }}>
                     {"Question " + (intakeQuestionIdx + 1) + ". "}
                   </Typography>
-                  <Button
-                    style={{ marginBottom: 10 }}
-                    data-testid={"collection-details-submit-button"}
-                    variant="contained"
-                    onClick={() => {
-                      deleteIntakeQuestion(intakeQuestionIdx);
-                    }}
-                  >
-                    <FormattedMessage
-                      id="REMOVE_QUESTION"
-                      defaultMessage="Remove this question"
-                    />
-                  </Button>
+                  {wholeQuestion?.label !== "URL" && ( // URL must be required for video intake per https://github.com/users/Atticus29/projects/1/views/4?pane=issue&itemId=27661393
+                    <Button
+                      style={{ marginBottom: 10 }}
+                      data-testid={"collection-details-submit-button"}
+                      variant="contained"
+                      onClick={() => {
+                        deleteIntakeQuestion(intakeQuestionIdx);
+                      }}
+                    >
+                      <FormattedMessage
+                        id="REMOVE_QUESTION"
+                        defaultMessage="Remove this question"
+                      />
+                    </Button>
+                  )}
                 </>
               )}
               <SingleVideoIntakeQuestion

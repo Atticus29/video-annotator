@@ -18,3 +18,8 @@ export function convertCamelCaseToCapitalCase(str: string) {
     }) || [];
   return capitalizedWords.join(" ");
 }
+
+export function sanitizeString(inputString: string): string {
+  // Remove special characters and whitespace
+  return inputString.replace(/[^\w]+/gi, "")?.trim();
+}

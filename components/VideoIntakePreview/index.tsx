@@ -46,8 +46,9 @@ const VideoIntakePreview: React.FC<{
           collection?.videoIntakeQuestions && (
             <Grid item lg={12} sm={12}>
               <ComposedFormSubmissionButton
-                questions={collection?.videoIntakeQuestions || []}
-                formFieldGroup={collection?.videoQuestionsFormFieldGroup}
+                questionsOfConcern={collection?.videoIntakeQuestions || []}
+                formFieldGroupOfConcern={formFieldGroup}
+                collection={collection}
               />
             </Grid>
           )}

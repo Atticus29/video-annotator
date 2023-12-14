@@ -3,11 +3,12 @@ import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import { FormattedMessage, useIntl, IntlShape } from "react-intl";
 import { Button } from "@mui/material";
 import useMonths from "../../hooks/useMonths";
+import dayjs from "dayjs";
 
 const MySubScriptionPanel: React.FC = () => {
   const intl: IntlShape = useIntl();
   const { months } = useMonths();
-  const currentMonthDigit: number = new Date().getMonth();
+  const currentMonthDigit: number = dayjs().month();
   return (
     <InfoPanel
       titleId="MY_SUBSCRIPTION"

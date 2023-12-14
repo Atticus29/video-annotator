@@ -34,8 +34,6 @@ const SingleFormField: React.FC<{
   stringForAutocompleteOptions = "Option",
   parentCollection = undefined,
 }) => {
-  // console.log("deleteMe got here and question is: ");
-  // console.log(question);
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
   const questionLabel: string | undefined = get(question, ["label"]);
@@ -68,9 +66,6 @@ const SingleFormField: React.FC<{
     if (question) {
       setLocalVal(currentVal);
       updateFormFieldStates(currentVal, false, formFieldGroup, question); // Note that this controlled stuff needs to be set AFTER the local useState. Otherwise, there are weird cursor placement issues. See https://dev.to/kwirke/solving-caret-jumping-in-react-inputs-36ic
-      console.log("deleteMe formFieldGroup is now: ");
-      console.log(formFieldGroup);
-      console.log("deleteMe hi");
     }
   };
 
