@@ -43,8 +43,9 @@ const EventIntakePreview: React.FC<{
         {collection?.eventQuestionsFormFieldGroup && (
           <Grid item lg={12} sm={12}>
             <ComposedFormSubmissionButton
-              questions={collection?.eventIntakeQuestions || []}
-              formFieldGroup={collection?.eventQuestionsFormFieldGroup}
+              questionsOfConcern={collection?.eventIntakeQuestions || []}
+              formFieldGroupOfConcern={collection?.eventQuestionsFormFieldGroup}
+              collection={collection}
             />
           </Grid>
         )}

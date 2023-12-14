@@ -8,8 +8,10 @@ import {
 import moveNames from "./moveNames";
 import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
+// import dayjs from "dayjs";
 
 export const defaultDoNotDisplays: string[] = [
+  "_id",
   "testId",
   "doNotDisplay",
   "shouldBeCheckboxes",
@@ -533,10 +535,74 @@ const comment: SingleFormField = {
 };
 
 export const shamCollection: Collection = {
-  id: 1,
+  // _id: "test123",
+  name: "Example Collection",
+  nameOfVideo: "Match",
+  nameOfVideoPlural: "Matches",
+  nameOfEvent: "Move",
+  nameOfEventPlural: "Moves",
+  isPrivate: false,
+  language: "English",
+  videoIntakeQuestions: [
+    // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
+    firstQuestion,
+    natureOfTheMatch,
+    secondQuestion,
+    locationName,
+    thirdQuestion,
+    allRanks,
+    weightClassIndividualQuestion,
+    fourthQuestion,
+    // fifthQuestion,
+    sixthQuestion,
+    numberReferees,
+    // seventhQuestion,
+  ],
+  individualIntakeQuestions: [
+    lastNameIndividualQuestion,
+    firstNameIndividualQuestion,
+    genderIndividualQuestion,
+    giRankIndividualQuestion,
+    noGiRankIndividualQuestion,
+    weightClassIndividualQuestion,
+    ageClassIndividualQuestion,
+  ],
+  eventIntakeQuestions: [
+    moveNameQuestion,
+    actorName,
+    startingPositionOfActor,
+    startingPositionOfSubject,
+    endingPositionOfActor,
+    endingPositionOfSubject,
+    pointsScored,
+    isSuccessful,
+    isSubmission,
+    moveRating,
+    comment, // @TODO add start time and end time to this
+  ],
+  excludeFromDetailList: [
+    "_id",
+    "id",
+    "videoIntakeQuestions",
+    "individualIntakeQuestions",
+    "eventIntakeQuestions",
+    "excludeFromDetailList",
+    "videoQuestionsFormFieldGroup",
+    "individualQuestionsFormFieldGroup",
+    "eventQuestionsFormFieldGroup",
+    "videos",
+  ],
+  createdByEmail: "public@example.com",
+  dateCreated: Date(),
+};
+
+export const shamCollection2: Collection = {
+  // _id: "test123",
   name: "Brazilian Jiu Jitsu",
   nameOfVideo: "Match",
+  nameOfVideoPlural: "Matches",
   nameOfEvent: "Move",
+  nameOfEventPlural: "Moves",
   isPrivate: false,
   language: "English",
   videoIntakeQuestions: [
@@ -584,6 +650,8 @@ export const shamCollection: Collection = {
     "videoQuestionsFormFieldGroup",
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
+    "videos",
   ],
-  // formFieldGroup: shamFormFieldGroup // gets populated elsewhere now because passing useStates through different components was silly
+  createdByEmail: "mfishe53@asu.edu",
+  dateCreated: Date(),
 };

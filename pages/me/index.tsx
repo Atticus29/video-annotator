@@ -1,15 +1,21 @@
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import { Grid } from "@mui/material";
-import { useIntl, IntlShape } from "react-intl";
+import { Button, Grid } from "@mui/material";
+import { useIntl, IntlShape, FormattedMessage } from "react-intl";
+
 import UserDetailPanel from "../../components/UserDetailPanel";
 import MySubScriptionPanel from "../../components/MySubscriptionPanel";
 import MyAnnotationsPanel from "../../components/MyAnnotationsPanel";
 import MyActivityLogPanel from "../../components/MyActivityLogPanel";
 import CollectionsPanel from "../../components/CollectionsPanel";
 import FeedbackPanel from "../../components/FeedbackPanel";
+import { useRouter } from "next/router";
 
 const Me: React.FC = () => {
   const { user, authError } = useFirebaseAuth();
+  const router = useRouter();
+  const handleNewCollectionClick: () => void = () => {
+    router.push("/collection/new/");
+  };
   const intl: IntlShape = useIntl();
   const shamMyAnnotationData: {
     totalAnnotationsRecorded: number;
@@ -172,6 +178,12 @@ const Me: React.FC = () => {
           collectionData={shamMyCollectionData}
           colNamesToDisplay={{ name: "Name" }}
         />
+        <Button variant="contained" onClick={handleNewCollectionClick}>
+          <FormattedMessage
+            id="CREATE_NEW_COLLECTION"
+            defaultMessage="Create New Collection"
+          />
+        </Button>
       </Grid>
       <Grid item sm={12} md={6}>
         <CollectionsPanel

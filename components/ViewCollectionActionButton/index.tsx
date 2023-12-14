@@ -3,13 +3,12 @@ import ViewIcon from "@mui/icons-material/Launch";
 
 import { useIntl, IntlShape } from "react-intl";
 import { get } from "lodash-es";
-import { NextRouter, useRouter } from "next/router";
+import router from "next/router";
 
-const ViewActionButton: React.FC<{
+const ViewCollectionActionButton: React.FC<{
   props: { id: string | number; urlTarget?: string };
 }> = (props) => {
   const intl: IntlShape = useIntl();
-  const router: NextRouter = useRouter();
   const handleViewClick = async () => {
     const url: string = get(props, ["urlTarget"], "");
     router.push(url);
@@ -21,4 +20,4 @@ const ViewActionButton: React.FC<{
   );
 };
 
-export default ViewActionButton;
+export default ViewCollectionActionButton;

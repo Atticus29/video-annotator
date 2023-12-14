@@ -2,7 +2,12 @@ import { filter, forEach, get, map, reduce } from "lodash-es";
 import { IntlShape } from "react-intl";
 import formFieldConfig from "../formFieldConfig.json";
 import { SingleFormField, Collection, FormFieldGroup } from "../types";
-import { isNonEmptyString, isValidEmail, isValidOption } from "./validators";
+import {
+  isNonEmptyString,
+  isValidEmail,
+  isValidUrl,
+  isValidOption,
+} from "./validators";
 
 export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
   const currentTypeConfig = filter(formFieldConfig, (entry) => {
@@ -42,7 +47,6 @@ export function updateCollection(
   newIntakeQuestionSet[questionIdx] = modifiedQuestion;
 
   setCollection((prevState: any) => {
-    // console.log("deleteMe");
     return { ...prevState, [whichIntakeQuestions]: newIntakeQuestionSet };
   });
 }
@@ -65,7 +69,11 @@ export function updateFormFieldStates(
   }
 
   let currentValidatorMethods = question.validatorMethods;
-  if (question?.isRequired && question?.type !== "Checkbox") {
+  if (
+    question?.isRequired &&
+    question?.type !== "Checkbox" &&
+    !currentValidatorMethods.includes(isNonEmptyString)
+  ) {
     currentValidatorMethods?.push(isNonEmptyString);
   }
 
@@ -73,14 +81,36 @@ export function updateFormFieldStates(
 
   const usersCanAddCustomOptions: boolean | undefined =
     question?.usersCanAddCustomOptions;
-  if (!usersCanAddCustomOptions && question?.type === "Autocomplete") {
+  if (
+    !usersCanAddCustomOptions &&
+    question?.type === "Autocomplete" &&
+    !currentValidatorMethods.includes(isValidOption)
+  ) {
     currentValidatorMethods?.push(isValidOption);
+  }
+
+  if (
+    question?.type === "URL" &&
+    !currentValidatorMethods.includes(isValidUrl)
+  ) {
+    currentValidatorMethods?.push(isValidUrl);
+  }
+
+  if (
+    question?.type === "Email" &&
+    !currentValidatorMethods.includes(isValidEmail)
+  ) {
+    currentValidatorMethods?.push(isValidEmail);
   }
 
   const validCounter: number = reduce(
     currentValidatorMethods,
     (memo, validatorMethod) => {
-      return memo + Number(validatorMethod(currentVal, currentOpts));
+      let incrementer = 1;
+      if (validatorMethod) {
+        incrementer = Number(validatorMethod(currentVal, currentOpts));
+      }
+      return memo + incrementer;
     },
     0
   ); // || defaultValidValue; // @TODO if the map value evaluates to false, will the default give us what we expect?
@@ -288,8 +318,6 @@ export function updateCheckboxGeneral(
     [formFieldGroupString, "actualValues", wholeQuestion?.label],
     ""
   );
-  console.log("deleteMe wholeQuestion?.label is: ");
-  console.log(wholeQuestion?.label);
 
   const isCustomOptionsUnchecked: boolean =
     intakeQuestionKey === "usersCanAddCustomOptions" && checkVal; // checkVal is true when unchecked currently. Wut. I dunno.
@@ -301,10 +329,6 @@ export function updateCheckboxGeneral(
     : true;
   let validityValue: boolean =
     intakeQuestionKey === "isRequired" ? checkVal : customOptValidityVal;
-  console.log("deleteMe validityValue is: ");
-  console.log(validityValue);
-  console.log("deleteMe intakeQuestionKey is: ");
-  console.log(intakeQuestionKey);
 
   const shouldReinstateValidator: boolean = checkVal === true;
   if (
@@ -382,7 +406,7 @@ export function updateCheckboxGeneral(
     return {
       ...prevState,
       [whichIntakeQuestions]: newIntakeQuestionSet,
-      formFieldGroup: modifiedFormFieldGroup,
+      [formFieldGroupString]: modifiedFormFieldGroup,
     };
   });
 }
