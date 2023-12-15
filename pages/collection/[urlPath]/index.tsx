@@ -16,6 +16,7 @@ import { QueryFunctionContext, useQuery, useQueryClient } from "react-query";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
 import DataTable from "../../../components/DataTable";
 import CustomError from "../../../components/Error";
+import IndividualIntake from "../../../components/IndividualIntake";
 import VideoIntake from "../../../components/VideoIntake";
 import { excludeFromCollectionTableDisplay } from "../../../constants";
 import useGetCollection from "../../../hooks/useGetCollection";
@@ -29,12 +30,16 @@ const CollectionView: React.FC = () => {
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
+  const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
+    useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
   const { isLoading, isError, data, error } =
     useGetCollection(localUrlPathAsString);
 
   const [open, setOpen] = useState<boolean>(true);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
+    useState<boolean>(false);
+  const [createIndividualDialogOpen, setCreateIndividualDialogOpen] =
     useState<boolean>(false);
 
   const dataWithActions = useMemo(() => {
@@ -50,9 +55,30 @@ const CollectionView: React.FC = () => {
     return dataWithActionsAppended;
   }, [data]);
 
+  const individualDataWithActions = useMemo(() => {
+    let individualDataWithActionsAppended = [];
+    if (data && data?.individuals) {
+      individualDataWithActionsAppended = map(data.individuals, (datum) => {
+        return {
+          ...datum,
+          actions: "stand in",
+        };
+      });
+    }
+    return individualDataWithActionsAppended;
+  }, [data]);
+
   const linkIds = useMemo(() => {
     if (data && data?.videos) {
       return map(data.videos, (datum) => {
+        return datum.id;
+      });
+    }
+  }, [data]);
+
+  const individualLinkIds = useMemo(() => {
+    if (data && data?.individuals) {
+      return map(data.individuals, (datum) => {
         return datum.id;
       });
     }
@@ -63,6 +89,9 @@ const CollectionView: React.FC = () => {
     if (!isLoading && !isError && data) {
       const numRows: number = data?.videos?.length || 1;
       setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
+
+      const numIndividualsRows: number = data?.individuals?.length || 1;
+      setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
     }
     if (!isLoading && !isError && data) {
       setShowCollection(true);
@@ -77,8 +106,36 @@ const CollectionView: React.FC = () => {
     setCreateVideoDialogOpen(true);
   };
 
+  const handleNewIndividualClick = () => {
+    setCreateIndividualDialogOpen(true);
+  };
+
   const handleCreateVideoDialogClose = () => {
+    // @TODO can combine this with handleCreateIndividualDialogClose
     setCreateVideoDialogOpen(false);
+    const queryKey = ["singleCollection", localUrlPathAsString];
+    const queryCache = queryClient.getQueryCache();
+    let queryState = queryCache.find(queryKey);
+    if (queryState) {
+      console.log(`Before Query with key ${queryKey} is in the cache.`);
+    } else {
+      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+    }
+    // queryClient.invalidateQueries();
+    queryClient.invalidateQueries({
+      queryKey: queryKey,
+    });
+    queryState = queryCache.find(queryKey);
+    if (queryState) {
+      console.log(`After Query with key ${queryKey} is in the cache.`);
+    } else {
+      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+    }
+  };
+
+  const handleCreateIndividualDialogClose = () => {
+    // @TODO can combine this with handleCreateVideoDialogClose
+    setCreateIndividualDialogOpen(false);
     const queryKey = ["singleCollection", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find(queryKey);
@@ -121,7 +178,32 @@ const CollectionView: React.FC = () => {
     actions: "Actions",
   };
 
+  const individualColNamesToDisplay: {} = useMemo(() => {
+    if (individualDataWithActions && data?.individualIntakeQuestions) {
+      return reduce(
+        data?.individualIntakeQuestions,
+        (memo: {}, intakeQuestion: any) => {
+          return {
+            ...memo,
+            [intakeQuestion?.label]: intakeQuestion?.label,
+          };
+        },
+        {}
+      );
+    } else {
+      return {};
+    }
+  }, [data?.individualIntakeQuestions, individualDataWithActions]);
+
+  const individualColNamesToDisplayWithActions = {
+    ...individualColNamesToDisplay,
+    actions: "Actions",
+  };
+
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
+  const individualsFallback: string = intl.formatMessage({
+    id: "INDIVIDUALS_PLURAL",
+  });
 
   return (
     <>
@@ -146,6 +228,17 @@ const CollectionView: React.FC = () => {
               ></VideoIntake>
             </DialogContent>
           </Dialog>
+          <Dialog
+            open={createIndividualDialogOpen}
+            onClose={handleCreateIndividualDialogClose}
+          >
+            <DialogContent>
+              <IndividualIntake
+                collection={data}
+                onCloseDialog={handleCreateIndividualDialogClose}
+              ></IndividualIntake>
+            </DialogContent>
+          </Dialog>
           <CollectionDetailsView
             collection={data}
             showEditButton={false}
@@ -166,11 +259,39 @@ const CollectionView: React.FC = () => {
             data-testid={"new-video-add-button"}
             variant="contained"
             onClick={handleNewVideoClick}
+            style={{ marginBottom: "1rem" }}
           >
             <FormattedMessage
               id="ADD_NEW_VIDEO_TO_COLLECTION"
               defaultMessage="Add New {videoName}"
               values={{ videoName: data?.nameOfVideo }}
+            />
+          </Button>
+          <DataTable
+            tableTitle={data?.nameOfIndividualPlural || individualsFallback}
+            data={individualDataWithActions}
+            colNamesToDisplay={individualColNamesToDisplayWithActions}
+            actionButtonsToDisplay={{ view: "View" }}
+            targetColIdxForUrlPath={0}
+            styleOverrides={{
+              minHeight: 0,
+              height: calculatedIndividualTableHeight + "rem",
+              maxHeight: "50vh",
+            }}
+            linkUrls={{
+              view: "/collection/" + localUrlPathAsString + "/individual/",
+            }}
+            linkIds={individualLinkIds}
+          ></DataTable>
+          <Button
+            data-testid={"new-video-add-button"}
+            variant="contained"
+            onClick={handleNewIndividualClick}
+          >
+            <FormattedMessage
+              id="ADD_NEW_INDIVIDUAL_TO_COLLECTION"
+              defaultMessage="Add New {individualName}"
+              values={{ individualName: data?.nameOfIndividual }}
             />
           </Button>
         </>
