@@ -217,6 +217,12 @@ const CollectionView: React.FC = () => {
       )}
       {showCollection && (
         <>
+          <CollectionDetailsView
+            collection={data}
+            showEditButton={false}
+          ></CollectionDetailsView>
+
+          {/* Video creation */}
           <Dialog
             open={createVideoDialogOpen}
             onClose={handleCreateVideoDialogClose}
@@ -228,28 +234,16 @@ const CollectionView: React.FC = () => {
               ></VideoIntake>
             </DialogContent>
           </Dialog>
-          <Dialog
-            open={createIndividualDialogOpen}
-            onClose={handleCreateIndividualDialogClose}
-          >
-            <DialogContent>
-              <IndividualIntake
-                collection={data}
-                onCloseDialog={handleCreateIndividualDialogClose}
-              ></IndividualIntake>
-            </DialogContent>
-          </Dialog>
-          <CollectionDetailsView
-            collection={data}
-            showEditButton={false}
-          ></CollectionDetailsView>
           <DataTable
             tableTitle={data?.nameOfVideoPlural || videosFallback}
             data={dataWithActions}
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
             targetColIdxForUrlPath={0}
-            styleOverrides={{ minHeight: 0, height: calculatedHeight + "rem" }}
+            styleOverrides={{
+              minHeight: 0,
+              height: calculatedHeight + "rem",
+            }}
             linkUrls={{
               view: "/collection/" + localUrlPathAsString + "/video/",
             }}
@@ -267,6 +261,19 @@ const CollectionView: React.FC = () => {
               values={{ videoName: data?.nameOfVideo }}
             />
           </Button>
+
+          {/* Individual creation */}
+          <Dialog
+            open={createIndividualDialogOpen}
+            onClose={handleCreateIndividualDialogClose}
+          >
+            <DialogContent>
+              <IndividualIntake
+                collection={data}
+                onCloseDialog={handleCreateIndividualDialogClose}
+              ></IndividualIntake>
+            </DialogContent>
+          </Dialog>
           <DataTable
             tableTitle={data?.nameOfIndividualPlural || individualsFallback}
             data={individualDataWithActions}

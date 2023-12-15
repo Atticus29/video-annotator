@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Grid } from "@mui/material";
-import { map } from "lodash-es";
+import { Button, Dialog, DialogContent, Grid } from "@mui/material";
+import { get, map, reduce } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
@@ -9,7 +9,10 @@ import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import { IntlShape, useIntl } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import IndividualIntake from "../IndividualIntake";
+import { useQueryClient } from "react-query";
+import DataTable from "../DataTable";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -17,7 +20,17 @@ const VideoIntake: React.FC<{
 }> = ({ collection, onCloseDialog }) => {
   const intl: IntlShape = useIntl();
   const { user, authError } = useFirebaseAuth();
+  const queryClient = useQueryClient();
   const [localCollection, setLocalCollection] = useState<Collection>();
+
+  const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
+    useState<number>(9.4);
+  useEffect(() => {
+    const numIndividualsRows: number =
+      localCollection?.individuals?.length || 1;
+    setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
+  }, [localCollection?.individuals?.length]);
+
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
   );
@@ -58,6 +71,55 @@ const VideoIntake: React.FC<{
     { videoName: collection?.nameOfVideo?.toLowerCase() }
   );
 
+  const [showIndividualCreationDialog, setShowIndividualCreationDialog] =
+    useState<boolean>(false);
+
+  const handleNewIndividualClick = () => {
+    setShowIndividualCreationDialog(true);
+  };
+  const individualColNamesToDisplay: {} = useMemo(() => {
+    if (localCollection?.individualIntakeQuestions) {
+      return reduce(
+        localCollection?.individualIntakeQuestions,
+        (memo: {}, intakeQuestion: any) => {
+          return {
+            ...memo,
+            [intakeQuestion?.label]: intakeQuestion?.label,
+          };
+        },
+        {}
+      );
+    } else {
+      return {};
+    }
+  }, [localCollection?.individualIntakeQuestions]);
+
+  const handleCreateVideoDialogClose = () => {
+    // @TODO can combine this with handleCreateIndividualDialogClose
+    setShowIndividualCreationDialog(false);
+    const queryKey = ["singleCollection", localCollection?.urlPath];
+    const queryCache = queryClient.getQueryCache();
+    let queryState = queryCache.find(queryKey);
+    if (queryState) {
+      console.log(`Before Query with key ${queryKey} is in the cache.`);
+    } else {
+      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+    }
+    // queryClient.invalidateQueries();
+    queryClient.invalidateQueries({
+      queryKey: queryKey,
+    });
+    queryState = queryCache.find(queryKey);
+    if (queryState) {
+      console.log(`After Query with key ${queryKey} is in the cache.`);
+    } else {
+      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+    }
+  };
+  const individualsFallback: string = intl.formatMessage({
+    id: "INDIVIDUALS_PLURAL",
+  });
+
   return (
     <InfoPanel
       titleId={titleId}
@@ -84,6 +146,58 @@ const VideoIntake: React.FC<{
           }
         )}
         {/* @TODO add invidual addition */}
+        {localCollection && (
+          <>
+            {/* Show individual table if individuals.length >0 */}
+            {get(localCollection, ["individuals"], []).length > 0 && (
+              <DataTable
+                tableTitle={
+                  localCollection?.nameOfIndividualPlural || individualsFallback
+                }
+                data={localCollection?.individuals || []}
+                colNamesToDisplay={individualColNamesToDisplay}
+                targetColIdxForUrlPath={0}
+                styleOverrides={{
+                  minHeight: 0,
+                  height: calculatedIndividualTableHeight + "rem",
+                  maxHeight: "50vh",
+                }}
+                linkUrls={{
+                  view:
+                    "/collection/" + localCollection.urlPath + "/individual/",
+                }}
+                // linkIds={individualLinkIds}
+              ></DataTable>
+            )}
+            <Button
+              data-testid={"new-video-add-button"}
+              variant="contained"
+              onClick={handleNewIndividualClick}
+              style={{ marginBottom: "1rem" }}
+            >
+              <FormattedMessage
+                id="ADD_NEWADD_INDIVIDUAL_TO_VIDEO_VIDEO_TO_COLLECTION"
+                defaultMessage="Add {individualName} to {videoName}"
+                values={{
+                  individualName: localCollection?.nameOfIndividual,
+                  videoName: localCollection?.nameOfVideo,
+                }}
+              />
+            </Button>
+            <Dialog
+              open={showIndividualCreationDialog}
+              onClose={handleCreateVideoDialogClose}
+            >
+              <DialogContent>
+                <IndividualIntake
+                  collection={localCollection}
+                  onCloseDialog={handleCreateVideoDialogClose}
+                ></IndividualIntake>
+              </DialogContent>
+            </Dialog>
+          </>
+        )}
+
         {localCollection?.videoQuestionsFormFieldGroup &&
           localCollection?.videoIntakeQuestions && (
             <Grid item lg={12} sm={12}>

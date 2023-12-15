@@ -137,5 +137,6 @@
   "INDIVIDUALS_PLURAL": "Individuals",
   "INDIVIDUAL": "Individual",
   "SUBMIT_NEW_INDIVIDUAL": "Submit a New {individualName}",
-  "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below."
+  "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below.",
+  "ADD_INDIVIDUAL_TO_VIDEO": "Add {individualName} to {videoName}"
 }
