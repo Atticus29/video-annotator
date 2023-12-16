@@ -116,16 +116,29 @@ const VideoIntake: React.FC<{
       console.log(`After Query with key ${queryKey} is NOT in the cache.`);
     }
   };
+  const videoFallback: string = intl.formatMessage({ id: "VIDEO" });
+  const individualFallback: string = intl.formatMessage({
+    id: "INDIVIDUAL",
+  });
   const individualsFallback: string = intl.formatMessage({
     id: "INDIVIDUALS_PLURAL",
   });
+  const individualsTableText: string = intl.formatMessage(
+    { id: "ADD_INDIVIDUAL_TO_VIDEO" },
+    {
+      individualName: localCollection?.nameOfIndividual || individualFallback,
+      individualNamePlural:
+        localCollection?.nameOfIndividualPlural || individualsFallback,
+      videoName: localCollection?.nameOfVideo || videoFallback,
+    }
+  );
 
   return (
     <InfoPanel
       titleId={titleId}
       titleDefault={titleId}
       textOverrides={{ textAlign: "center" }}
-      styleOverrides={{ maxHeight: 1000 }}
+      // styleOverrides={{ maxHeight: 1500 }}
     >
       <InfoPanelBody bodyId={bodyId} bodyDefault={bodyId} />
       <Grid container>
@@ -150,40 +163,44 @@ const VideoIntake: React.FC<{
           <>
             {/* Show individual table if individuals.length >0 */}
             {get(localCollection, ["individuals"], []).length > 0 && (
-              <DataTable
-                tableTitle={
-                  localCollection?.nameOfIndividualPlural || individualsFallback
-                }
-                data={localCollection?.individuals || []}
-                colNamesToDisplay={individualColNamesToDisplay}
-                targetColIdxForUrlPath={0}
-                styleOverrides={{
-                  minHeight: 0,
-                  height: calculatedIndividualTableHeight + "rem",
-                  maxHeight: "50vh",
-                }}
-                linkUrls={{
-                  view:
-                    "/collection/" + localCollection.urlPath + "/individual/",
-                }}
-                // linkIds={individualLinkIds}
-              ></DataTable>
+              <Grid item lg={12} sm={12} key="individual-table">
+                <DataTable
+                  tableTitle={individualsTableText}
+                  data={localCollection?.individuals || []}
+                  colNamesToDisplay={individualColNamesToDisplay}
+                  targetColIdxForUrlPath={0}
+                  styleOverrides={{
+                    minHeight: 0,
+                    height: calculatedIndividualTableHeight + "rem",
+                    maxHeight: "50vh",
+                  }}
+                  linkUrls={{
+                    view:
+                      "/collection/" + localCollection.urlPath + "/individual/",
+                  }}
+                  dataGridOptions={{
+                    checkboxSelection: true,
+                    disableRowSelectionOnClick: true,
+                  }}
+                ></DataTable>
+              </Grid>
             )}
-            <Button
-              data-testid={"new-video-add-button"}
-              variant="contained"
-              onClick={handleNewIndividualClick}
-              style={{ marginBottom: "1rem" }}
-            >
-              <FormattedMessage
-                id="ADD_NEWADD_INDIVIDUAL_TO_VIDEO_VIDEO_TO_COLLECTION"
-                defaultMessage="Add {individualName} to {videoName}"
-                values={{
-                  individualName: localCollection?.nameOfIndividual,
-                  videoName: localCollection?.nameOfVideo,
-                }}
-              />
-            </Button>
+            <Grid item lg={12} sm={12} key="individual-creation-button">
+              <Button
+                data-testid={"new-video-add-button"}
+                variant="contained"
+                onClick={handleNewIndividualClick}
+                style={{ marginBottom: "1rem" }}
+              >
+                <FormattedMessage
+                  id="SUBMIT_NEW_INDIVIDUAL"
+                  defaultMessage="Create a New {individualName}"
+                  values={{
+                    individualName: localCollection?.nameOfIndividual,
+                  }}
+                />
+              </Button>
+            </Grid>
             <Dialog
               open={showIndividualCreationDialog}
               onClose={handleCreateVideoDialogClose}

@@ -23,6 +23,7 @@ const DataTable: React.FC<{
   loading?: boolean;
   linkUrls?: {};
   linkIds?: string[];
+  dataGridOptions?: {};
 }> = ({
   tableTitle = "Untitled",
   tableTitleId = tableTitle,
@@ -36,6 +37,7 @@ const DataTable: React.FC<{
   loading = false,
   linkUrls = {},
   linkIds = [],
+  dataGridOptions = {},
 }) => {
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
@@ -205,6 +207,10 @@ const DataTable: React.FC<{
                   ...styleOverrides,
                 }}
                 loading={loading}
+                checkboxSelection={get(dataGridOptions, ["checkboxSelection"])}
+                disableRowSelectionOnClick={get(dataGridOptions, [
+                  "disableRowSelectionOnClick",
+                ])}
               />
             </InfoPanelBody>
           </InfoPanel>
