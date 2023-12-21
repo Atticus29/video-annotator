@@ -13,6 +13,7 @@ import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import IndividualIntake from "../IndividualIntake";
 import { useQueryClient } from "react-query";
 import DataTable from "../DataTable";
+import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -133,6 +134,20 @@ const VideoIntake: React.FC<{
     }
   );
 
+  const localOnRowSelectionModelChange: (
+    rowSelectionModel: GridRowSelectionModel,
+    details: GridCallbackDetails
+  ) => string[] = (rowSelectionModel, _) => {
+    const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
+      return get(localCollection, [
+        "individuals",
+        Number(selectedRow) - 1,
+        "id",
+      ]);
+    });
+    return selectedIds;
+  };
+
   return (
     <InfoPanel
       titleId={titleId}
@@ -181,6 +196,7 @@ const VideoIntake: React.FC<{
                   dataGridOptions={{
                     checkboxSelection: true,
                     disableRowSelectionOnClick: true,
+                    onRowSelectionModelChange: localOnRowSelectionModelChange,
                   }}
                 ></DataTable>
               </Grid>

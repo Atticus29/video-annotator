@@ -211,6 +211,9 @@ const DataTable: React.FC<{
                 disableRowSelectionOnClick={get(dataGridOptions, [
                   "disableRowSelectionOnClick",
                 ])}
+                onRowSelectionModelChange={get(dataGridOptions, [
+                  "onRowSelectionModelChange",
+                ])}
               />
             </InfoPanelBody>
           </InfoPanel>
