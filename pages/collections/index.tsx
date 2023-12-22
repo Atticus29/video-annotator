@@ -87,7 +87,7 @@ const Collections: React.FC = () => {
 
   return (
     <>
-      {!isLoading && !isError && (
+      {!isLoading && !isError && !localError! && (
         <DataTable
           tableTitle="Testing"
           data={dataWithActions}
@@ -99,7 +99,7 @@ const Collections: React.FC = () => {
           targetColIdxForUrlPath={2} // 2
         ></DataTable>
       )}
-      {isError && <CustomError errorMsg={localError} />}
+      {(isError || localError) && <CustomError errorMsg={localError} />}
       {isLoading && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}

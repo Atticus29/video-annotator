@@ -33,7 +33,7 @@ const CollectionView: React.FC = () => {
   const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
     useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
-  const { isLoading, isError, data, error } =
+  const { isLoading, isError, data, errorMsg } =
     useGetCollection(localUrlPathAsString);
 
   const [open, setOpen] = useState<boolean>(true);
@@ -305,10 +305,13 @@ const CollectionView: React.FC = () => {
       )}
       {!open && !showCollection && (
         <CustomError
-          errorMsg={intl.formatMessage({
-            id: "COLLECTION_NOT_FOUND",
-            defaultMessage: "Collection not found",
-          })}
+          errorMsg={
+            errorMsg ||
+            intl.formatMessage({
+              id: "COLLECTION_NOT_FOUND",
+              defaultMessage: "Collection not found",
+            })
+          }
         />
       )}
     </>

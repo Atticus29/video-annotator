@@ -14,6 +14,7 @@ import IndividualIntake from "../IndividualIntake";
 import { useQueryClient } from "react-query";
 import DataTable from "../DataTable";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
+import { individualsQuestion } from "../../dummy_data/dummyCollection";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -40,6 +41,8 @@ const VideoIntake: React.FC<{
     setArevideoQuestionFormValuesInvalid,
   ] = useState<{}>({});
 
+  // const [localSelectedIds, setLocalSelectedIds] = useState<string[]>([]);
+
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
       title: "VideoFormFieldGroupForTheLocalCollection",
@@ -55,6 +58,8 @@ const VideoIntake: React.FC<{
     initialCollection.videoQuestionsFormFieldGroup =
       videoQuestionsFormFieldGroup;
     setLocalCollection(initialCollection);
+    console.log("deleteMe localCollection is: ");
+    console.log(localCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -137,7 +142,7 @@ const VideoIntake: React.FC<{
   const localOnRowSelectionModelChange: (
     rowSelectionModel: GridRowSelectionModel,
     details: GridCallbackDetails
-  ) => string[] = (rowSelectionModel, _) => {
+  ) => void = (rowSelectionModel, _) => {
     const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
       return get(localCollection, [
         "individuals",
@@ -145,7 +150,13 @@ const VideoIntake: React.FC<{
         "id",
       ]);
     });
-    return selectedIds;
+    setVideoQuestionFormValues({
+      ...videoQuestionFormValues,
+      // individuals: selectedIds,
+      individuals: selectedIds.join(";"), //
+    });
+    // setLocalSelectedIds(selectedIds);
+    // return selectedIds;
   };
 
   return (
@@ -235,7 +246,12 @@ const VideoIntake: React.FC<{
           localCollection?.videoIntakeQuestions && (
             <Grid item lg={12} sm={12}>
               <ComposedFormSubmissionButton
-                questionsOfConcern={localCollection?.videoIntakeQuestions || []}
+                questionsOfConcern={
+                  [
+                    ...get(localCollection, ["videoIntakeQuestions"], []),
+                    individualsQuestion,
+                  ] || []
+                }
                 formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
                 collectionPath={localCollection?.urlPath}
                 collectionPropToUpdate={"videos"}
