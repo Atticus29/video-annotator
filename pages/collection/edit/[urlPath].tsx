@@ -32,6 +32,7 @@ import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
 import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
 import useGetCollection from "../../../hooks/useGetCollection";
+import CustomError from "../../../components/Error";
 
 const CollectionEditor: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -41,7 +42,7 @@ const CollectionEditor: React.FC = () => {
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
 
-  const { isLoading, isError, data, error } =
+  const { isLoading, isError, data, errorMsg } =
     useGetCollection(localUrlPathAsString);
 
   const collectionFailMsg: string = intl.formatMessage({
@@ -243,6 +244,17 @@ const CollectionEditor: React.FC = () => {
 
   return (
     <>
+      {errorMsg && !isLoading && (
+        <CustomError
+          errorMsg={
+            errorMsg ||
+            intl.formatMessage({
+              id: "COLLECTION_NOT_FOUND",
+              defaultMessage: "Collection not found",
+            })
+          }
+        />
+      )}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading && !isError}

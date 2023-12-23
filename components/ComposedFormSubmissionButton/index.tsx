@@ -29,8 +29,6 @@ const ComposedFormSubmissionButton: React.FC<{
   collectionPropToUpdate,
   onCloseDialog,
 }) => {
-  console.log("deleteMe formFieldGroupOfConcern is: ");
-  console.log(formFieldGroupOfConcern);
   const queryClient = useQueryClient();
   const { isLoading, isError, data } = useGetCollection(collectionPath || "");
 

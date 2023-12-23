@@ -58,8 +58,6 @@ const VideoIntake: React.FC<{
     initialCollection.videoQuestionsFormFieldGroup =
       videoQuestionsFormFieldGroup;
     setLocalCollection(initialCollection);
-    console.log("deleteMe localCollection is: ");
-    console.log(localCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -152,9 +150,23 @@ const VideoIntake: React.FC<{
     });
     setVideoQuestionFormValues({
       ...videoQuestionFormValues,
-      // individuals: selectedIds,
-      individuals: selectedIds.join(";"), //
+      Individuals: selectedIds,
     });
+    if (
+      videoQuestionsFormFieldGroup &&
+      videoQuestionsFormFieldGroup.setIsInvalids
+    ) {
+      const isIndividualsRequired = individualsQuestion?.isRequired;
+      const isIndividualsInvalid = isIndividualsRequired
+        ? selectedIds.length > 0
+          ? false
+          : true
+        : false;
+      videoQuestionsFormFieldGroup.setIsInvalids({
+        ...videoQuestionsFormFieldGroup.isInvalids,
+        Individuals: isIndividualsInvalid,
+      });
+    }
     // setLocalSelectedIds(selectedIds);
     // return selectedIds;
   };

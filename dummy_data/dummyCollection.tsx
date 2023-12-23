@@ -25,10 +25,10 @@ export const individualsQuestion: SingleFormField = {
   label: "Individuals",
   type: "text",
   language: "English",
-  isRequired: true,
+  isRequired: false,
   testId: "individuals",
   doNotDisplay: defaultDoNotDisplays,
-  invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
+  invalidInputMessage: "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL",
   validatorMethods: [isNonEmptyString],
   shouldBeCheckboxes: ["isRequired"],
 };
