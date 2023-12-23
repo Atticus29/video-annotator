@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Button, Dialog, DialogContent, Grid } from "@mui/material";
+import { Alert, Button, Dialog, DialogContent, Grid } from "@mui/material";
 import { get, map, reduce } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
@@ -15,6 +15,7 @@ import { useQueryClient } from "react-query";
 import DataTable from "../DataTable";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
+import CustomError from "../Error";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -24,6 +25,8 @@ const VideoIntake: React.FC<{
   const { user, authError } = useFirebaseAuth();
   const queryClient = useQueryClient();
   const [localCollection, setLocalCollection] = useState<Collection>();
+  const [localIsIndividualsInvalid, setLocalIsIndividualsInvalid] =
+    useState<boolean>(false);
 
   const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
     useState<number>(9.4);
@@ -127,15 +130,17 @@ const VideoIntake: React.FC<{
   const individualsFallback: string = intl.formatMessage({
     id: "INDIVIDUALS_PLURAL",
   });
-  const individualsTableText: string = intl.formatMessage(
-    { id: "ADD_INDIVIDUAL_TO_VIDEO" },
-    {
-      individualName: localCollection?.nameOfIndividual || individualFallback,
-      individualNamePlural:
-        localCollection?.nameOfIndividualPlural || individualsFallback,
-      videoName: localCollection?.nameOfVideo || videoFallback,
-    }
-  );
+  const asteriskIfRequired: string = individualsQuestion?.isRequired ? "*" : "";
+  const individualsTableText: string =
+    intl.formatMessage(
+      { id: "ADD_INDIVIDUAL_TO_VIDEO" },
+      {
+        individualName: localCollection?.nameOfIndividual || individualFallback,
+        individualNamePlural:
+          localCollection?.nameOfIndividualPlural || individualsFallback,
+        videoName: localCollection?.nameOfVideo || videoFallback,
+      }
+    ) + asteriskIfRequired;
 
   const localOnRowSelectionModelChange: (
     rowSelectionModel: GridRowSelectionModel,
@@ -162,6 +167,7 @@ const VideoIntake: React.FC<{
           ? false
           : true
         : false;
+      setLocalIsIndividualsInvalid(isIndividualsInvalid);
       videoQuestionsFormFieldGroup.setIsInvalids({
         ...videoQuestionsFormFieldGroup.isInvalids,
         Individuals: isIndividualsInvalid,
@@ -222,6 +228,17 @@ const VideoIntake: React.FC<{
                     onRowSelectionModelChange: localOnRowSelectionModelChange,
                   }}
                 ></DataTable>
+                {localIsIndividualsInvalid && (
+                  <Alert
+                    style={{ textAlign: "center", marginBottom: "1rem" }}
+                    severity="error"
+                  >
+                    <FormattedMessage
+                      id="MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL"
+                      defaultMessage="You must select at least one individual"
+                    ></FormattedMessage>
+                  </Alert>
+                )}
               </Grid>
             )}
             <Grid item lg={12} sm={12} key="individual-creation-button">
