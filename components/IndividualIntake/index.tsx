@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
@@ -9,7 +9,7 @@ import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import { IntlShape, useIntl } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 
 const IndividualIntake: React.FC<{
   collection: Collection;
@@ -94,17 +94,24 @@ const IndividualIntake: React.FC<{
         {/* @TODO add invidual addition */}
         {localCollection?.individualQuestionsFormFieldGroup &&
           localCollection?.individualIntakeQuestions && (
-            <Grid item lg={12} sm={12}>
-              <ComposedFormSubmissionButton
-                questionsOfConcern={
-                  localCollection?.individualIntakeQuestions || []
-                }
-                formFieldGroupOfConcern={individualQuestionsFormFieldGroup}
-                collectionPath={localCollection?.urlPath}
-                collectionPropToUpdate={"individuals"}
-                onCloseDialog={onCloseDialog}
-              />
-            </Grid>
+            <>
+              <Grid item lg={12} sm={12}>
+                <ComposedFormSubmissionButton
+                  questionsOfConcern={
+                    localCollection?.individualIntakeQuestions || []
+                  }
+                  formFieldGroupOfConcern={individualQuestionsFormFieldGroup}
+                  collectionPath={localCollection?.urlPath}
+                  collectionPropToUpdate={"individuals"}
+                  onCloseDialog={onCloseDialog}
+                />
+              </Grid>
+              <Grid item lg={12} sm={12}>
+                <Button variant="contained" onClick={onCloseDialog}>
+                  <FormattedMessage id="CLOSE" defaultMessage="Close" />
+                </Button>
+              </Grid>
+            </>
           )}
       </Grid>
     </InfoPanel>

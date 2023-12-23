@@ -273,20 +273,27 @@ const VideoIntake: React.FC<{
 
         {localCollection?.videoQuestionsFormFieldGroup &&
           localCollection?.videoIntakeQuestions && (
-            <Grid item lg={12} sm={12}>
-              <ComposedFormSubmissionButton
-                questionsOfConcern={
-                  [
-                    ...get(localCollection, ["videoIntakeQuestions"], []),
-                    individualsQuestion,
-                  ] || []
-                }
-                formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                collectionPath={localCollection?.urlPath}
-                collectionPropToUpdate={"videos"}
-                onCloseDialog={onCloseDialog}
-              />
-            </Grid>
+            <>
+              <Grid item lg={12} sm={12}>
+                <ComposedFormSubmissionButton
+                  questionsOfConcern={
+                    [
+                      ...get(localCollection, ["videoIntakeQuestions"], []),
+                      individualsQuestion,
+                    ] || []
+                  }
+                  formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
+                  collectionPath={localCollection?.urlPath}
+                  collectionPropToUpdate={"videos"}
+                  onCloseDialog={onCloseDialog}
+                />
+              </Grid>
+              <Grid item lg={12} sm={12}>
+                <Button variant="contained" onClick={onCloseDialog}>
+                  <FormattedMessage id="CLOSE" defaultMessage="Close" />
+                </Button>
+              </Grid>
+            </>
           )}
       </Grid>
     </InfoPanel>
