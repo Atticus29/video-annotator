@@ -28,10 +28,10 @@ const Sandbox: React.FC = () => {
     } else {
       console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
     }
-    // queryClient.invalidateQueries();
-    queryClient.invalidateQueries({
-      queryKey: queryKey,
-    });
+    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries({
+    //   queryKey: queryKey,
+    // });
     queryState = queryCache.find(queryKey);
     if (queryState) {
       console.log(`After Query with key ${queryKey} is in the cache.`);

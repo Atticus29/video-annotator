@@ -21,6 +21,7 @@ const ComposedFormSubmissionButton: React.FC<{
   collectionPath?: string;
   collectionPropToUpdate?: string;
   onCloseDialog?: () => void;
+  setCollection?: (collection: any) => void;
 }> = ({
   questionsOfConcern,
   formFieldGroupOfConcern,
@@ -28,6 +29,7 @@ const ComposedFormSubmissionButton: React.FC<{
   collectionPath,
   collectionPropToUpdate,
   onCloseDialog,
+  setCollection,
 }) => {
   const queryClient = useQueryClient();
   const { isLoading, isError, data } = useGetCollection(collectionPath || "");
@@ -95,6 +97,7 @@ const ComposedFormSubmissionButton: React.FC<{
       setSaveSuccess(true);
       setSaveFail(false);
       // @TODO invalidate collection
+      queryClient.invalidateQueries();
       handleClose();
       // router.push("/collection/" + data?.data?.urlPath);
     },
@@ -144,6 +147,11 @@ const ComposedFormSubmissionButton: React.FC<{
         videos: updatedVideos,
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
+      if (setCollection) {
+        console.log("deleteMe updatedCollection will be:");
+        console.log(updatedCollection);
+        setCollection(updatedCollection);
+      }
       // @TODO invalidate collection
       // queryClient.invalidateQueries({
       //   queryKey: ["singleCollection", collectionPath],
@@ -165,6 +173,11 @@ const ComposedFormSubmissionButton: React.FC<{
         individuals: updatedIndividuals,
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
+      if (setCollection) {
+        console.log("deleteMe updatedCollection will be:");
+        console.log(updatedCollection);
+        setCollection(updatedCollection);
+      }
       // @TODO invalidate collection
       // queryClient.invalidateQueries({
       //   queryKey: ["singleCollection", collectionPath],

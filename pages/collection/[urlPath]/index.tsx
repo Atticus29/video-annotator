@@ -20,6 +20,7 @@ import IndividualIntake from "../../../components/IndividualIntake";
 import VideoIntake from "../../../components/VideoIntake";
 import { excludeFromCollectionTableDisplay } from "../../../constants";
 import useGetCollection from "../../../hooks/useGetCollection";
+import useGetIndividuals from "../../../hooks/useGetIndividuals";
 import { convertCamelCaseToCapitalCase } from "../../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
@@ -33,8 +34,24 @@ const CollectionView: React.FC = () => {
   const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
     useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
-  const { isLoading, isError, data, errorMsg } =
-    useGetCollection(localUrlPathAsString);
+  const {
+    isLoading: isLoadingIndividuals, // @TODO implement
+    isError: isErrorIndividuals,
+    data: individualsData,
+    errorMsg: errorMsgIndividuals,
+  } = useGetIndividuals(localUrlPathAsString);
+
+  const {
+    isLoading: isLoadingCollection,
+    isError: isErrorCollection,
+    data: collectionData,
+    errorMsg: collectionErrorMsg,
+  } = useGetCollection(localUrlPathAsString);
+
+  // console.log("deleteMe individualsData is: ");
+  // console.log(individualsData);
+  // console.log("deleteMe collectionData is: ");
+  // console.log(collectionData);
 
   const [open, setOpen] = useState<boolean>(true);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
@@ -44,8 +61,8 @@ const CollectionView: React.FC = () => {
 
   const dataWithActions = useMemo(() => {
     let dataWithActionsAppended = [];
-    if (data && data?.videos) {
-      dataWithActionsAppended = map(data.videos, (datum) => {
+    if (collectionData && collectionData?.videos) {
+      dataWithActionsAppended = map(collectionData.videos, (datum) => {
         return {
           ...datum,
           actions: "stand in",
@@ -53,12 +70,14 @@ const CollectionView: React.FC = () => {
       });
     }
     return dataWithActionsAppended;
-  }, [data]);
+  }, [collectionData]);
 
   const individualDataWithActions = useMemo(() => {
-    let individualDataWithActionsAppended = [];
-    if (data && data?.individuals) {
-      individualDataWithActionsAppended = map(data.individuals, (datum) => {
+    let individualDataWithActionsAppended: any[] = [];
+    console.log("deleteMe individualsData in useMemo is: ");
+    console.log(individualsData);
+    if (individualsData) {
+      individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
         return {
           ...datum,
           actions: "stand in",
@@ -66,41 +85,49 @@ const CollectionView: React.FC = () => {
       });
     }
     return individualDataWithActionsAppended;
-  }, [data]);
+  }, [individualsData]);
+  console.log("deleteMe individualDataWithActions is: ");
+  console.log(individualDataWithActions);
 
   const linkIds = useMemo(() => {
-    if (data && data?.videos) {
-      return map(data.videos, (datum) => {
+    if (collectionData && collectionData?.videos) {
+      return map(collectionData.videos, (datum) => {
         return datum.id;
       });
     }
-  }, [data]);
+  }, [collectionData]);
 
   const individualLinkIds = useMemo(() => {
-    if (data && data?.individuals) {
-      return map(data.individuals, (datum) => {
-        return datum.id;
+    if (individualsData) {
+      return map(individualsData, (datum) => {
+        return get(datum, ["id"]);
       });
     }
-  }, [data]);
+  }, [individualsData]);
 
   useEffect(() => {
-    setOpen(isLoading);
-    if (!isLoading && !isError && data) {
-      const numRows: number = data?.videos?.length || 1;
+    setOpen(isLoadingCollection);
+    if (!isLoadingCollection && !isErrorCollection && collectionData) {
+      const numRows: number = collectionData?.videos?.length || 1;
       setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
 
-      const numIndividualsRows: number = data?.individuals?.length || 1;
+      const numIndividualsRows: number =
+        collectionData?.individuals?.length || 1;
       setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
     }
-    if (!isLoading && !isError && data) {
+    if (!isLoadingCollection && !isErrorCollection && collectionData) {
       setShowCollection(true);
     }
-    if (!isLoading && !isError && !data) {
+    if (!isLoadingCollection && !isErrorCollection && !collectionData) {
       setShowCollection(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, data, isError, createVideoDialogOpen]);
+  }, [
+    isLoadingCollection,
+    collectionData,
+    isErrorCollection,
+    createVideoDialogOpen,
+  ]);
 
   const handleNewVideoClick = () => {
     setCreateVideoDialogOpen(true);
@@ -121,10 +148,10 @@ const CollectionView: React.FC = () => {
     } else {
       console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
     }
-    // queryClient.invalidateQueries();
-    queryClient.invalidateQueries({
-      queryKey: queryKey,
-    });
+    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries({
+    //   queryKey: queryKey,
+    // });
     queryState = queryCache.find(queryKey);
     if (queryState) {
       console.log(`After Query with key ${queryKey} is in the cache.`);
@@ -144,10 +171,10 @@ const CollectionView: React.FC = () => {
     } else {
       console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
     }
-    // queryClient.invalidateQueries();
-    queryClient.invalidateQueries({
-      queryKey: queryKey,
-    });
+    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries({
+    //   queryKey: queryKey,
+    // });
     queryState = queryCache.find(queryKey);
     if (queryState) {
       console.log(`After Query with key ${queryKey} is in the cache.`);
@@ -157,9 +184,9 @@ const CollectionView: React.FC = () => {
   };
 
   const colNamesToDisplay: {} = useMemo(() => {
-    if (dataWithActions && data?.videoIntakeQuestions) {
+    if (dataWithActions && collectionData?.videoIntakeQuestions) {
       return reduce(
-        data?.videoIntakeQuestions,
+        collectionData?.videoIntakeQuestions,
         (memo: {}, intakeQuestion: any) => {
           return {
             ...memo,
@@ -171,7 +198,7 @@ const CollectionView: React.FC = () => {
     } else {
       return {};
     }
-  }, [data?.videoIntakeQuestions, dataWithActions]);
+  }, [collectionData?.videoIntakeQuestions, dataWithActions]);
 
   const colNamesToDisplayWithActions = {
     ...colNamesToDisplay,
@@ -179,9 +206,12 @@ const CollectionView: React.FC = () => {
   };
 
   const individualColNamesToDisplay: {} = useMemo(() => {
-    if (individualDataWithActions && data?.individualIntakeQuestions) {
+    if (
+      individualDataWithActions &&
+      collectionData?.individualIntakeQuestions
+    ) {
       return reduce(
-        data?.individualIntakeQuestions,
+        collectionData?.individualIntakeQuestions,
         (memo: {}, intakeQuestion: any) => {
           return {
             ...memo,
@@ -193,12 +223,15 @@ const CollectionView: React.FC = () => {
     } else {
       return {};
     }
-  }, [data?.individualIntakeQuestions, individualDataWithActions]);
+  }, [collectionData?.individualIntakeQuestions, individualDataWithActions]);
 
   const individualColNamesToDisplayWithActions = {
     ...individualColNamesToDisplay,
     actions: "Actions",
   };
+
+  // console.log("deleteMe individualColNamesToDisplayWithActions is: ");
+  // console.log(individualColNamesToDisplayWithActions);
 
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
   const individualsFallback: string = intl.formatMessage({
@@ -207,7 +240,7 @@ const CollectionView: React.FC = () => {
 
   return (
     <>
-      {isLoading && (
+      {isLoadingCollection && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
@@ -218,7 +251,7 @@ const CollectionView: React.FC = () => {
       {showCollection && (
         <>
           <CollectionDetailsView
-            collection={data}
+            collection={collectionData}
             showEditButton={false}
           ></CollectionDetailsView>
 
@@ -229,13 +262,13 @@ const CollectionView: React.FC = () => {
           >
             <DialogContent>
               <VideoIntake
-                collection={data}
+                collection={collectionData}
                 onCloseDialog={handleCreateVideoDialogClose}
               ></VideoIntake>
             </DialogContent>
           </Dialog>
           <DataTable
-            tableTitle={data?.nameOfVideoPlural || videosFallback}
+            tableTitle={collectionData?.nameOfVideoPlural || videosFallback}
             data={dataWithActions}
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
@@ -258,7 +291,7 @@ const CollectionView: React.FC = () => {
             <FormattedMessage
               id="ADD_NEW_VIDEO_TO_COLLECTION"
               defaultMessage="Add New {videoName}"
-              values={{ videoName: data?.nameOfVideo }}
+              values={{ videoName: collectionData?.nameOfVideo }}
             />
           </Button>
 
@@ -269,13 +302,15 @@ const CollectionView: React.FC = () => {
           >
             <DialogContent>
               <IndividualIntake
-                collection={data}
+                collection={collectionData}
                 onCloseDialog={handleCreateIndividualDialogClose}
               ></IndividualIntake>
             </DialogContent>
           </Dialog>
           <DataTable
-            tableTitle={data?.nameOfIndividualPlural || individualsFallback}
+            tableTitle={
+              collectionData?.nameOfIndividualPlural || individualsFallback
+            }
             data={individualDataWithActions}
             colNamesToDisplay={individualColNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
@@ -298,7 +333,7 @@ const CollectionView: React.FC = () => {
             <FormattedMessage
               id="ADD_NEW_INDIVIDUAL_TO_COLLECTION"
               defaultMessage="Add New {individualName}"
-              values={{ individualName: data?.nameOfIndividual }}
+              values={{ individualName: collectionData?.nameOfIndividual }}
             />
           </Button>
         </>
@@ -306,7 +341,7 @@ const CollectionView: React.FC = () => {
       {!open && !showCollection && (
         <CustomError
           errorMsg={
-            errorMsg ||
+            collectionErrorMsg ||
             intl.formatMessage({
               id: "COLLECTION_NOT_FOUND",
               defaultMessage: "Collection not found",
