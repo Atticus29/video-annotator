@@ -12,25 +12,13 @@ import {
   convertCamelCaseToCapitalCase,
   sanitizeString,
 } from "../../utilities/textUtils";
+import useGetCollections from "../../hooks/useGetCollections";
 
 const Collections: React.FC = () => {
   const [localError, setLocalError] = useState<string>("");
   const { user, authError } = useFirebaseAuth();
-  const { isLoading, isError, data, error } = useQuery(
-    "collections",
-    async () => {
-      try {
-        const userEmail: string = user?.email || "public@example.com";
-        const response = await axios.get("/api/collections", {
-          params: { email: userEmail },
-        });
-        return response?.data;
-      } catch (e: any) {
-        console.log("Error is: ");
-        console.log(e);
-        setLocalError(e?.message);
-      }
-    }
+  const { isLoading, isError, data, errorMsg } = useGetCollections(
+    user?.email || "public@example.com"
   );
 
   const [open, setOpen] = useState<boolean>(isLoading);
@@ -41,8 +29,8 @@ const Collections: React.FC = () => {
 
   useEffect(() => {
     console.log("Error is: ");
-    console.log(error);
-  }, [error]);
+    console.log(errorMsg);
+  }, [errorMsg]);
 
   useEffect(() => {
     console.log("isError is: "); // @TODO do something with this? Or de-duplicate the error useEffect

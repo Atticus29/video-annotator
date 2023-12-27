@@ -4,10 +4,15 @@ import { useIntl, IntlShape } from "react-intl";
 import { QueryFunctionContext, useQuery } from "react-query";
 
 export default function useGetIndividuals(collectionUrl: string) {
+  console.log("deleteMe got here a1");
+  console.log("deleteMe collectionUrl is: ");
+  console.log(collectionUrl);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const queryKey: [string, string] = ["individualsFor", collectionUrl];
   const { isLoading, isError, data } = useQuery(
-    ["individualsFor", collectionUrl],
+    queryKey,
     async (context: QueryFunctionContext<[string, string]>) => {
+      console.log("deleteMe got here a2");
       const [, collectionUrl] = context.queryKey;
       try {
         const response = await axios.get(
@@ -15,6 +20,7 @@ export default function useGetIndividuals(collectionUrl: string) {
         );
 
         const returnVal: [] = response?.data?.individuals || [];
+        console.log("deleteMe got here a3");
         return returnVal;
       } catch (e: any) {
         console.log("Error in getting a single collection is: ");

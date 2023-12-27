@@ -74,8 +74,8 @@ const ComposedFormSubmissionButton: React.FC<{
 
   const handleClose = () => {
     setOpen(false);
-    console.log("deleteMe queryClient is: ");
-    console.log(queryClient);
+    // console.log("deleteMe queryClient is: ");
+    // console.log(queryClient);
     // queryClient.invalidateQueries(["singleCollection", collectionPath]);
     // queryClient.invalidateQueries();
     if (onCloseDialog) onCloseDialog();
@@ -179,9 +179,7 @@ const ComposedFormSubmissionButton: React.FC<{
         setCollection(updatedCollection);
       }
       // @TODO invalidate collection
-      // queryClient.invalidateQueries({
-      //   queryKey: ["singleCollection", collectionPath],
-      // });
+      queryClient.invalidateQueries(["individualsFor", collectionPath]);
     }
 
     // @TODO send this to the database. Use the `collection` variable... actually, depending on which intake this is, the db save MIGHT behave differently. I.e., is this a video save? An individual?

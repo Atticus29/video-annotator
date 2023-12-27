@@ -25,6 +25,8 @@ import { convertCamelCaseToCapitalCase } from "../../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
+  console.log("deleteMe queryClient is: ");
+  console.log(queryClient);
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
@@ -35,7 +37,7 @@ const CollectionView: React.FC = () => {
     useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
   const {
-    isLoading: isLoadingIndividuals, // @TODO implement
+    isLoading: isLoadingIndividuals, // @TODO implement the loading and error stuff
     isError: isErrorIndividuals,
     data: individualsData,
     errorMsg: errorMsgIndividuals,
@@ -74,8 +76,6 @@ const CollectionView: React.FC = () => {
 
   const individualDataWithActions = useMemo(() => {
     let individualDataWithActionsAppended: any[] = [];
-    console.log("deleteMe individualsData in useMemo is: ");
-    console.log(individualsData);
     if (individualsData) {
       individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
         return {
@@ -86,8 +86,6 @@ const CollectionView: React.FC = () => {
     }
     return individualDataWithActionsAppended;
   }, [individualsData]);
-  console.log("deleteMe individualDataWithActions is: ");
-  console.log(individualDataWithActions);
 
   const linkIds = useMemo(() => {
     if (collectionData && collectionData?.videos) {
@@ -144,42 +142,56 @@ const CollectionView: React.FC = () => {
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find(queryKey);
     if (queryState) {
-      console.log(`Before Query with key ${queryKey} is in the cache.`);
+      console.log(
+        `CollectionView handleCreateVideoDialogClose Before Query with key ${queryKey} is in the cache.`
+      );
     } else {
-      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `CollectionView handleCreateVideoDialogClose Before Query with key ${queryKey} is NOT in the cache.`
+      );
     }
-    queryClient.invalidateQueries();
-    // queryClient.invalidateQueries({
-    //   queryKey: queryKey,
-    // });
+    // queryClient.invalidateQueries();
+    queryClient.invalidateQueries(queryKey);
     queryState = queryCache.find(queryKey);
     if (queryState) {
-      console.log(`After Query with key ${queryKey} is in the cache.`);
+      console.log(
+        `CollectionView handleCreateVideoDialogClose After Query with key ${queryKey} is in the cache.`
+      );
     } else {
-      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `CollectionView handleCreateVideoDialogClose After Query with key ${queryKey} is NOT in the cache.`
+      );
     }
   };
 
   const handleCreateIndividualDialogClose = () => {
     // @TODO can combine this with handleCreateVideoDialogClose
     setCreateIndividualDialogOpen(false);
-    const queryKey = ["singleCollection", localUrlPathAsString];
+    const queryKey = ["individualsFor", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
+    console.log("deleteMe queryCache is: ");
+    console.log(queryCache);
     let queryState = queryCache.find(queryKey);
     if (queryState) {
-      console.log(`Before Query with key ${queryKey} is in the cache.`);
+      console.log(
+        `CollectionView handleCreateIndividualDialogClose Before Query with key ${queryKey} is in the cache.`
+      );
     } else {
-      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `CollectionView handleCreateIndividualDialogClose Before Query with key ${queryKey} is NOT in the cache.`
+      );
     }
-    queryClient.invalidateQueries();
-    // queryClient.invalidateQueries({
-    //   queryKey: queryKey,
-    // });
+    // queryClient.invalidateQueries();
+    queryClient.invalidateQueries(queryKey);
     queryState = queryCache.find(queryKey);
     if (queryState) {
-      console.log(`After Query with key ${queryKey} is in the cache.`);
+      console.log(
+        `CollectionView handleCreateIndividualDialogClose After Query with key ${queryKey} is in the cache.`
+      );
     } else {
-      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `CollectionView handleCreateIndividualDialogClose After Query with key ${queryKey} is NOT in the cache.`
+      );
     }
   };
 

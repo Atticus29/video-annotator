@@ -108,19 +108,25 @@ const VideoIntake: React.FC<{
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find(queryKey);
     if (queryState) {
-      console.log(`Before Query with key ${queryKey} is in the cache.`);
+      console.log(
+        `VideoIntake Before Query with key ${queryKey} is in the cache.`
+      );
     } else {
-      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `VideoIntake Before Query with key ${queryKey} is NOT in the cache.`
+      );
     }
-    queryClient.invalidateQueries();
-    // queryClient.invalidateQueries({
-    //   queryKey: queryKey,
-    // });
+    // queryClient.invalidateQueries();
+    queryClient.invalidateQueries(queryKey);
     queryState = queryCache.find(queryKey);
     if (queryState) {
-      console.log(`After Query with key ${queryKey} is in the cache.`);
+      console.log(
+        `VideoIntake After Query with key ${queryKey} is in the cache.`
+      );
     } else {
-      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `VideoIntake After Query with key ${queryKey} is NOT in the cache.`
+      );
     }
   };
   const videoFallback: string = intl.formatMessage({ id: "VIDEO" });
