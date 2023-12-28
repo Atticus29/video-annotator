@@ -5,7 +5,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import IndividualIntake from "../components/IndividualIntake";
 import useGetCollection from "../hooks/useGetCollection";
 
@@ -22,7 +22,7 @@ const Sandbox: React.FC = () => {
     setCreateIndividualDialogOpen(false);
     const queryKey = ["singleCollection", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
-    let queryState = queryCache.find(queryKey);
+    let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(`Sandbox Before Query with key ${queryKey} is in the cache.`);
     } else {
@@ -34,7 +34,7 @@ const Sandbox: React.FC = () => {
     // queryClient.invalidateQueries({
     //   queryKey: queryKey,
     // });
-    queryState = queryCache.find(queryKey);
+    queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(`Sandbox After Query with key ${queryKey} is in the cache.`);
     } else {

@@ -1,9 +1,9 @@
 import { Button, IconButton, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { useMutation, UseMutationResult } from "react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { reduce, get } from "lodash-es";
 import axios from "axios";
@@ -179,7 +179,9 @@ const ComposedFormSubmissionButton: React.FC<{
         setCollection(updatedCollection);
       }
       // @TODO invalidate collection
-      queryClient.invalidateQueries(["individualsFor", collectionPath]);
+      queryClient.invalidateQueries({
+        queryKey: ["individualsFor", collectionPath],
+      });
     }
 
     // @TODO send this to the database. Use the `collection` variable... actually, depending on which intake this is, the db save MIGHT behave differently. I.e., is this a video save? An individual?

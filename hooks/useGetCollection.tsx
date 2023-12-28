@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
 import { useIntl, IntlShape } from "react-intl";
-import { QueryFunctionContext, useQuery } from "react-query";
+import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 
 export default function useGetCollection(collectionUrl: string) {
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const { isLoading, isError, data } = useQuery(
-    ["singleCollection", collectionUrl],
-    async (context: QueryFunctionContext<[string, string]>) => {
+  const { isLoading, isError, data } = useQuery({
+    queryKey: ["singleCollection", collectionUrl],
+    queryFn: async (context: QueryFunctionContext<[string, string]>) => {
       const [, localUrlPathAsString] = context.queryKey;
       try {
         const response = await axios.get("/api/collection/", {
@@ -20,10 +20,7 @@ export default function useGetCollection(collectionUrl: string) {
         setErrorMsg(e.message);
       }
     },
-    {
-      staleTime: 0,
-    }
-  );
+  });
 
   return { isLoading, isError, data, errorMsg };
 }

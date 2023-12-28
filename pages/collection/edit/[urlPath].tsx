@@ -24,7 +24,7 @@ import {
   useMutation,
   UseMutationResult,
   useQuery,
-} from "react-query";
+} from "@tanstack/react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../../utilities/textUtils";
@@ -330,7 +330,7 @@ const CollectionEditor: React.FC = () => {
         )}
       </Grid>
       <Button variant="contained" onClick={handleSaveCollection}>
-        {collectionMutation.isLoading ? updatingText : updatedText}
+        {collectionMutation.isPending ? updatingText : updatedText}
       </Button>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}

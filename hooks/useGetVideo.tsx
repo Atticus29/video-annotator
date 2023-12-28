@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export default function useGetVideo(collectionUrl: string, videoId: string) {
-  const { isLoading, isError, data, error } = useQuery(
-    ["singleVideo", collectionUrl, videoId],
-    async () => {
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["singleVideo", collectionUrl, videoId],
+    queryFn: async () => {
       try {
         const response = await axios.get(
           "/api/collection/" + collectionUrl + "/video/" + videoId
@@ -15,8 +15,8 @@ export default function useGetVideo(collectionUrl: string, videoId: string) {
         console.log(e);
         throw new Error(e);
       }
-    }
-  );
+    },
+  });
 
   return { isLoading, isError, data, error };
 }

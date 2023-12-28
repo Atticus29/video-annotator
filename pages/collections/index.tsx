@@ -2,7 +2,7 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { get, map, reduce } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/Error";
 import ViewCollectionActionButton from "../../components/ViewCollectionActionButton";

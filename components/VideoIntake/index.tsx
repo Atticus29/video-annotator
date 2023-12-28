@@ -11,7 +11,7 @@ import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import IndividualIntake from "../IndividualIntake";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import DataTable from "../DataTable";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
@@ -106,7 +106,7 @@ const VideoIntake: React.FC<{
     setShowIndividualCreationDialog(false);
     const queryKey = ["singleCollection", localCollection?.urlPath];
     const queryCache = queryClient.getQueryCache();
-    let queryState = queryCache.find(queryKey);
+    let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
         `VideoIntake Before Query with key ${queryKey} is in the cache.`
@@ -117,8 +117,8 @@ const VideoIntake: React.FC<{
       );
     }
     // queryClient.invalidateQueries();
-    queryClient.invalidateQueries(queryKey);
-    queryState = queryCache.find(queryKey);
+    queryClient.invalidateQueries({ queryKey: queryKey });
+    queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
         `VideoIntake After Query with key ${queryKey} is in the cache.`

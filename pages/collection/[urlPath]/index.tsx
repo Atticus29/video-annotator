@@ -12,7 +12,11 @@ import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { QueryFunctionContext, useQuery, useQueryClient } from "react-query";
+import {
+  QueryFunctionContext,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
 import DataTable from "../../../components/DataTable";
 import CustomError from "../../../components/Error";
@@ -140,7 +144,7 @@ const CollectionView: React.FC = () => {
     setCreateVideoDialogOpen(false);
     const queryKey = ["singleCollection", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
-    let queryState = queryCache.find(queryKey);
+    let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
         `CollectionView handleCreateVideoDialogClose Before Query with key ${queryKey} is in the cache.`
@@ -151,8 +155,8 @@ const CollectionView: React.FC = () => {
       );
     }
     // queryClient.invalidateQueries();
-    queryClient.invalidateQueries(queryKey);
-    queryState = queryCache.find(queryKey);
+    queryClient.invalidateQueries({ queryKey: queryKey });
+    queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
         `CollectionView handleCreateVideoDialogClose After Query with key ${queryKey} is in the cache.`
@@ -171,7 +175,7 @@ const CollectionView: React.FC = () => {
     const queryCache = queryClient.getQueryCache();
     console.log("deleteMe queryCache is: ");
     console.log(queryCache);
-    let queryState = queryCache.find(queryKey);
+    let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
         `CollectionView handleCreateIndividualDialogClose Before Query with key ${queryKey} is in the cache.`
@@ -182,8 +186,8 @@ const CollectionView: React.FC = () => {
       );
     }
     // queryClient.invalidateQueries();
-    queryClient.invalidateQueries(queryKey);
-    queryState = queryCache.find(queryKey);
+    queryClient.invalidateQueries({ queryKey: queryKey });
+    queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
         `CollectionView handleCreateIndividualDialogClose After Query with key ${queryKey} is in the cache.`
@@ -196,7 +200,7 @@ const CollectionView: React.FC = () => {
   };
 
   const colNamesToDisplay: {} = useMemo(() => {
-    if (dataWithActions && collectionData?.videoIntakeQuestions) {
+    if (dataWithActions && get(collectionData, ["videoIntakeQuestions"])) {
       return reduce(
         collectionData?.videoIntakeQuestions,
         (memo: {}, intakeQuestion: any) => {
@@ -210,7 +214,7 @@ const CollectionView: React.FC = () => {
     } else {
       return {};
     }
-  }, [collectionData?.videoIntakeQuestions, dataWithActions]);
+  }, [collectionData, dataWithActions]);
 
   const colNamesToDisplayWithActions = {
     ...colNamesToDisplay,
