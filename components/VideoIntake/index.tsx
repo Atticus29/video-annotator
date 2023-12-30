@@ -44,8 +44,6 @@ const VideoIntake: React.FC<{
     setArevideoQuestionFormValuesInvalid,
   ] = useState<{}>({});
 
-  // const [localSelectedIds, setLocalSelectedIds] = useState<string[]>([]);
-
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
       title: "VideoFormFieldGroupForTheLocalCollection",
@@ -179,8 +177,6 @@ const VideoIntake: React.FC<{
         Individuals: isIndividualsInvalid,
       });
     }
-    // setLocalSelectedIds(selectedIds);
-    // return selectedIds;
   };
 
   return (
@@ -188,7 +184,6 @@ const VideoIntake: React.FC<{
       titleId={titleId}
       titleDefault={titleId}
       textOverrides={{ textAlign: "center" }}
-      // styleOverrides={{ maxHeight: 1500 }}
     >
       <InfoPanelBody bodyId={bodyId} bodyDefault={bodyId} />
       <Grid container>
@@ -208,10 +203,8 @@ const VideoIntake: React.FC<{
             }
           }
         )}
-        {/* @TODO add invidual addition */}
         {localCollection && (
           <>
-            {/* Show individual table if individuals.length >0 */}
             {get(localCollection, ["individuals"], []).length > 0 && (
               <Grid item lg={12} sm={12} key="individual-table">
                 <DataTable
@@ -271,7 +264,6 @@ const VideoIntake: React.FC<{
                 <IndividualIntake
                   collection={localCollection}
                   onCloseDialog={handleCreateVideoDialogClose}
-                  setCollection={setLocalCollection}
                 ></IndividualIntake>
               </DialogContent>
             </Dialog>

@@ -14,8 +14,7 @@ import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 const IndividualIntake: React.FC<{
   collection: Collection;
   onCloseDialog?: () => void;
-  setCollection?: (collection: any) => void;
-}> = ({ collection, onCloseDialog, setCollection }) => {
+}> = ({ collection, onCloseDialog }) => {
   const intl: IntlShape = useIntl();
   const defaultIndividualName: string = intl.formatMessage({
     id: "INDIVIDUAL",
@@ -105,7 +104,7 @@ const IndividualIntake: React.FC<{
                   collectionPath={localCollection?.urlPath}
                   collectionPropToUpdate={"individuals"}
                   onCloseDialog={onCloseDialog}
-                  setCollection={setCollection}
+                  // setCollection={setCollection}
                 />
               </Grid>
               <Grid item lg={12} sm={12}>
