@@ -29,8 +29,6 @@ import { convertCamelCaseToCapitalCase } from "../../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
-  console.log("deleteMe queryClient is: ");
-  console.log(queryClient);
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
@@ -53,11 +51,6 @@ const CollectionView: React.FC = () => {
     data: collectionData,
     errorMsg: collectionErrorMsg,
   } = useGetCollection(localUrlPathAsString);
-
-  // console.log("deleteMe individualsData is: ");
-  // console.log(individualsData);
-  // console.log("deleteMe collectionData is: ");
-  // console.log(collectionData);
 
   const [open, setOpen] = useState<boolean>(true);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
@@ -175,8 +168,6 @@ const CollectionView: React.FC = () => {
     setCreateIndividualDialogOpen(false);
     const queryKey = ["individualsFor", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
-    console.log("deleteMe queryCache is: ");
-    console.log(queryCache);
     let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
       console.log(
@@ -247,9 +238,6 @@ const CollectionView: React.FC = () => {
     ...individualColNamesToDisplay,
     actions: "Actions",
   };
-
-  // console.log("deleteMe individualColNamesToDisplayWithActions is: ");
-  // console.log(individualColNamesToDisplayWithActions);
 
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
   const individualsFallback: string = intl.formatMessage({

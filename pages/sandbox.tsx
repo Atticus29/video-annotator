@@ -12,8 +12,6 @@ import useGetCollection from "../hooks/useGetCollection";
 const Sandbox: React.FC = () => {
   const localUrlPathAsString: string = "ExampleCollection"; // @TODO undo hardcode
   const { data, isLoading, isError } = useGetCollection(localUrlPathAsString);
-  console.log("deleteMe isLoading is: ");
-  console.log(isLoading);
 
   const queryClient = useQueryClient();
   const [createIndividualDialogOpen, setCreateIndividualDialogOpen] =

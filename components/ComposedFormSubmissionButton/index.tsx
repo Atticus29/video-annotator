@@ -74,10 +74,6 @@ const ComposedFormSubmissionButton: React.FC<{
 
   const handleClose = () => {
     setOpen(false);
-    // console.log("deleteMe queryClient is: ");
-    // console.log(queryClient);
-    // queryClient.invalidateQueries(["singleCollection", collectionPath]);
-    // queryClient.invalidateQueries();
     if (onCloseDialog) onCloseDialog();
   };
 
@@ -149,8 +145,6 @@ const ComposedFormSubmissionButton: React.FC<{
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
       if (setCollection) {
-        console.log("deleteMe updatedCollection will be:");
-        console.log(updatedCollection);
         setCollection(updatedCollection);
       }
       // @TODO invalidate collection
@@ -175,8 +169,6 @@ const ComposedFormSubmissionButton: React.FC<{
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
       if (setCollection) {
-        console.log("deleteMe updatedCollection will be:");
-        console.log(updatedCollection);
         setCollection(updatedCollection);
       }
       // @TODO invalidate collection
