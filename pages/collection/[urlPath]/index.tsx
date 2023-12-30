@@ -313,24 +313,38 @@ const CollectionView: React.FC = () => {
               ></IndividualIntake>
             </DialogContent>
           </Dialog>
-          <DataTable
-            tableTitle={
-              collectionData?.nameOfIndividualPlural || individualsFallback
-            }
-            data={individualDataWithActions}
-            colNamesToDisplay={individualColNamesToDisplayWithActions}
-            actionButtonsToDisplay={{ view: "View" }}
-            targetColIdxForUrlPath={0}
-            styleOverrides={{
-              minHeight: 0,
-              height: calculatedIndividualTableHeight + "rem",
-              maxHeight: "50vh",
-            }}
-            linkUrls={{
-              view: "/collection/" + localUrlPathAsString + "/individual/",
-            }}
-            linkIds={individualLinkIds}
-          ></DataTable>
+          {!isLoadingIndividuals && (
+            <DataTable
+              tableTitle={
+                collectionData?.nameOfIndividualPlural || individualsFallback
+              }
+              data={individualDataWithActions}
+              colNamesToDisplay={individualColNamesToDisplayWithActions}
+              actionButtonsToDisplay={{ view: "View" }}
+              targetColIdxForUrlPath={0}
+              styleOverrides={{
+                minHeight: 0,
+                height: calculatedIndividualTableHeight + "rem",
+                maxHeight: "50vh",
+              }}
+              linkUrls={{
+                view: "/collection/" + localUrlPathAsString + "/individual/",
+              }}
+              linkIds={individualLinkIds}
+            ></DataTable>
+          )}
+          {isLoadingIndividuals && <CircularProgress color="inherit" />}
+          {!isLoadingIndividuals && isErrorIndividuals && (
+            <CustomError
+              errorMsg={
+                errorMsgIndividuals ||
+                intl.formatMessage({
+                  id: "INDIVIDUALS_NOT_FOUND",
+                  defaultMessage: "Individuals not found",
+                })
+              }
+            />
+          )}
           <Button
             data-testid={"new-video-add-button"}
             variant="contained"

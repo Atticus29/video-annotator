@@ -141,5 +141,6 @@
   "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below.",
   "ADD_INDIVIDUAL_TO_VIDEO": "Click rows to attach {individualName} or {individualNamePlural} to {videoName}",
   "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL": "You must select at least one individual",
-  "CLOSE": "Close"
+  "CLOSE": "Close",
+  "INDIVIDUALS_NOT_FOUND": "Individuals not found"
 }
