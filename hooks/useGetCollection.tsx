@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { useIntl, IntlShape } from "react-intl";
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 
 export default function useGetCollection(collectionUrl: string) {

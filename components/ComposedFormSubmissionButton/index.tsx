@@ -92,12 +92,13 @@ const ComposedFormSubmissionButton: React.FC<{
       );
       return response?.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setSnackbarMessage(data?.message);
       setSaveSuccess(true);
       setSaveFail(false);
       // @TODO invalidate collection
-      queryClient.invalidateQueries();
+      await queryClient.invalidateQueries();
+      // await queryClient.refetchQueries();
       handleClose();
       // router.push("/collection/" + data?.data?.urlPath);
     },
@@ -134,7 +135,7 @@ const ComposedFormSubmissionButton: React.FC<{
     }
   }, [questionsOfConcern, formFieldGroupOfConcern, allRequiredValid]);
 
-  const handleFormSubmission: () => void = () => {
+  const handleFormSubmission: () => void = async () => {
     if (localCollection && collectionPropToUpdate === "videos") {
       const currentVideos: {}[] = get(localCollection, ["videos"], []);
       const updatedVideos: {}[] = [
@@ -179,9 +180,15 @@ const ComposedFormSubmissionButton: React.FC<{
         setCollection(updatedCollection);
       }
       // @TODO invalidate collection
+      // await queryClient.refetchQueries({
+      //   queryKey: ["individualsFor", collectionPath],
+      // });
+
       queryClient.invalidateQueries({
         queryKey: ["individualsFor", collectionPath],
       });
+
+      // await queryClient.refetchQueries();
     }
 
     // @TODO send this to the database. Use the `collection` variable... actually, depending on which intake this is, the db save MIGHT behave differently. I.e., is this a video save? An individual?

@@ -1,18 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
-import { useIntl, IntlShape } from "react-intl";
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 
 export default function useGetIndividuals(collectionUrl: string) {
-  console.log("deleteMe got here a1");
-  console.log("deleteMe collectionUrl is: ");
-  console.log(collectionUrl);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const queryKey: [string, string] = ["individualsFor", collectionUrl];
   const { isLoading, isError, data } = useQuery({
     queryKey: queryKey,
     queryFn: async (context: QueryFunctionContext<[string, string]>) => {
-      console.log("deleteMe got here a2");
       const [, collectionUrl] = context.queryKey;
       try {
         const response = await axios.get(
@@ -20,7 +15,6 @@ export default function useGetIndividuals(collectionUrl: string) {
         );
 
         const returnVal: [] = response?.data?.individuals || [];
-        console.log("deleteMe got here a3");
         return returnVal;
       } catch (e: any) {
         console.log("Error in getting a single collection is: ");
@@ -28,6 +22,8 @@ export default function useGetIndividuals(collectionUrl: string) {
         setErrorMsg(e.message);
       }
     },
+    staleTime: Infinity,
+    enabled: true,
   });
 
   return { isLoading, isError, data, errorMsg };

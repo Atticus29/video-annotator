@@ -136,6 +136,8 @@ const CollectionView: React.FC = () => {
   };
 
   const handleNewIndividualClick = () => {
+    const queryKey = ["individualsFor", localUrlPathAsString];
+    queryClient.invalidateQueries({ queryKey: queryKey });
     setCreateIndividualDialogOpen(true);
   };
 
