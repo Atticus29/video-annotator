@@ -26,6 +26,7 @@ import { excludeFromCollectionTableDisplay } from "../../../constants";
 import useGetCollection from "../../../hooks/useGetCollection";
 import useGetIndividuals from "../../../hooks/useGetIndividuals";
 import { convertCamelCaseToCapitalCase } from "../../../utilities/textUtils";
+import IndividualsTableView from "../../../components/IndividualsTableView";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
@@ -35,15 +36,15 @@ const CollectionView: React.FC = () => {
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
-  const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
-    useState<number>(9.4);
+  // const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
+  //   useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
-  const {
-    isLoading: isLoadingIndividuals,
-    isError: isErrorIndividuals,
-    data: individualsData,
-    errorMsg: errorMsgIndividuals,
-  } = useGetIndividuals(localUrlPathAsString);
+  // const {
+  //   isLoading: isLoadingIndividuals,
+  //   isError: isErrorIndividuals,
+  //   data: individualsData,
+  //   errorMsg: errorMsgIndividuals,
+  // } = useGetIndividuals(localUrlPathAsString);
 
   const {
     isLoading: isLoadingCollection,
@@ -71,18 +72,18 @@ const CollectionView: React.FC = () => {
     return dataWithActionsAppended;
   }, [collectionData]);
 
-  const individualDataWithActions = useMemo(() => {
-    let individualDataWithActionsAppended: any[] = [];
-    if (individualsData) {
-      individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
-        return {
-          ...datum,
-          actions: "stand in",
-        };
-      });
-    }
-    return individualDataWithActionsAppended;
-  }, [individualsData]);
+  // const individualDataWithActions = useMemo(() => {
+  //   let individualDataWithActionsAppended: any[] = [];
+  //   if (individualsData) {
+  //     individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
+  //       return {
+  //         ...datum,
+  //         actions: "stand in",
+  //       };
+  //     });
+  //   }
+  //   return individualDataWithActionsAppended;
+  // }, [individualsData]);
 
   const linkIds = useMemo(() => {
     if (collectionData && collectionData?.videos) {
@@ -92,13 +93,13 @@ const CollectionView: React.FC = () => {
     }
   }, [collectionData]);
 
-  const individualLinkIds = useMemo(() => {
-    if (individualsData) {
-      return map(individualsData, (datum) => {
-        return get(datum, ["id"]);
-      });
-    }
-  }, [individualsData]);
+  // const individualLinkIds = useMemo(() => {
+  //   if (individualsData) {
+  //     return map(individualsData, (datum) => {
+  //       return get(datum, ["id"]);
+  //     });
+  //   }
+  // }, [individualsData]);
 
   useEffect(() => {
     setOpen(isLoadingCollection);
@@ -106,9 +107,9 @@ const CollectionView: React.FC = () => {
       const numRows: number = collectionData?.videos?.length || 1;
       setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
 
-      const numIndividualsRows: number =
-        collectionData?.individuals?.length || 1;
-      setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
+      // const numIndividualsRows: number =
+      //   collectionData?.individuals?.length || 1;
+      // setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
     }
     if (!isLoadingCollection && !isErrorCollection && collectionData) {
       setShowCollection(true);
@@ -214,35 +215,35 @@ const CollectionView: React.FC = () => {
     actions: "Actions",
   };
 
-  const individualColNamesToDisplay: {} = useMemo(() => {
-    if (
-      individualDataWithActions &&
-      collectionData?.individualIntakeQuestions
-    ) {
-      return reduce(
-        collectionData?.individualIntakeQuestions,
-        (memo: {}, intakeQuestion: any) => {
-          return {
-            ...memo,
-            [intakeQuestion?.label]: intakeQuestion?.label,
-          };
-        },
-        {}
-      );
-    } else {
-      return {};
-    }
-  }, [collectionData?.individualIntakeQuestions, individualDataWithActions]);
+  // const individualColNamesToDisplay: {} = useMemo(() => {
+  //   if (
+  //     individualDataWithActions &&
+  //     collectionData?.individualIntakeQuestions
+  //   ) {
+  //     return reduce(
+  //       collectionData?.individualIntakeQuestions,
+  //       (memo: {}, intakeQuestion: any) => {
+  //         return {
+  //           ...memo,
+  //           [intakeQuestion?.label]: intakeQuestion?.label,
+  //         };
+  //       },
+  //       {}
+  //     );
+  //   } else {
+  //     return {};
+  //   }
+  // }, [collectionData?.individualIntakeQuestions, individualDataWithActions]);
 
-  const individualColNamesToDisplayWithActions = {
-    ...individualColNamesToDisplay,
-    actions: "Actions",
-  };
+  // const individualColNamesToDisplayWithActions = {
+  //   ...individualColNamesToDisplay,
+  //   actions: "Actions",
+  // };
 
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
-  const individualsFallback: string = intl.formatMessage({
-    id: "INDIVIDUALS_PLURAL",
-  });
+  // const individualsFallback: string = intl.formatMessage({
+  //   id: "INDIVIDUALS_PLURAL",
+  // });
 
   return (
     <>
@@ -313,46 +314,17 @@ const CollectionView: React.FC = () => {
               ></IndividualIntake>
             </DialogContent>
           </Dialog>
-          {!isLoadingIndividuals && (
-            <DataTable
-              tableTitle={
-                collectionData?.nameOfIndividualPlural || individualsFallback
-              }
-              data={individualDataWithActions}
-              colNamesToDisplay={individualColNamesToDisplayWithActions}
-              actionButtonsToDisplay={{ view: "View" }}
-              targetColIdxForUrlPath={0}
-              styleOverrides={{
-                minHeight: 0,
-                height: calculatedIndividualTableHeight + "rem",
-                maxHeight: "50vh",
-              }}
-              linkUrls={{
-                view: "/collection/" + localUrlPathAsString + "/individual/",
-              }}
-              linkIds={individualLinkIds}
-            ></DataTable>
-          )}
-          {isLoadingIndividuals && (
-            <>
-              <br />
-              <CircularProgress color="inherit" />
-            </>
-          )}
-          {!isLoadingIndividuals && isErrorIndividuals && (
-            <>
-              <br />
-              <CustomError
-                errorMsg={
-                  errorMsgIndividuals ||
-                  intl.formatMessage({
-                    id: "INDIVIDUALS_NOT_FOUND",
-                    defaultMessage: "Individuals not found",
-                  })
-                }
-              />
-            </>
-          )}
+          <IndividualsTableView
+            collectionUrl={get(collectionData, "urlPath")}
+            nameOfIndividualPlural={get(
+              collectionData,
+              "nameOfIndividualPlural"
+            )}
+            individualIntakeQuestions={get(
+              collectionData,
+              "individualIntakeQuestions"
+            )}
+          />
           <Button
             data-testid={"new-video-add-button"}
             variant="contained"

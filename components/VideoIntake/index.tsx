@@ -24,6 +24,7 @@ import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
 import CustomError from "../Error";
 import useGetIndividuals from "../../hooks/useGetIndividuals";
+import IndividualsTableView from "../IndividualsTableView";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -206,6 +207,8 @@ const VideoIntake: React.FC<{
     const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
       return get(collection, ["individuals", Number(selectedRow) - 1, "id"]);
     });
+    console.log("deleteMe got here and selectedIds is: ");
+    console.log(selectedIds);
     setVideoQuestionFormValues({
       ...videoQuestionFormValues,
       Individuals: selectedIds,
@@ -264,7 +267,25 @@ const VideoIntake: React.FC<{
               individualsData?.length > 0 &&
               !isLoadingIndividuals && (
                 <Grid item lg={12} sm={12} key="individual-table">
-                  <DataTable
+                  <IndividualsTableView
+                    collectionUrl={get(collection, "urlPath", "")}
+                    nameOfIndividualPlural={get(
+                      collection,
+                      "nameOfIndividualPlural",
+                      ""
+                    )}
+                    individualIntakeQuestions={get(
+                      collection,
+                      "individualIntakeQuestions",
+                      []
+                    )}
+                    dataGridOptions={{
+                      checkboxSelection: true,
+                      disableRowSelectionOnClick: true,
+                      onRowSelectionModelChange: localOnRowSelectionModelChange,
+                    }}
+                  />
+                  {/* <DataTable
                     tableTitle={individualsTableText}
                     data={individualDataWithActions || []}
                     colNamesToDisplay={individualColNamesToDisplayWithActions}
@@ -299,7 +320,7 @@ const VideoIntake: React.FC<{
                         }
                       />
                     </>
-                  )}
+                  )} */}
                   {localIsIndividualsInvalid && (
                     <Alert
                       style={{ textAlign: "center", marginBottom: "1rem" }}

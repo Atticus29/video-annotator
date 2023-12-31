@@ -25,7 +25,7 @@ export const individualsQuestion: SingleFormField = {
   label: "Individuals",
   type: "text",
   language: "English",
-  isRequired: true,
+  isRequired: false,
   testId: "individuals",
   doNotDisplay: defaultDoNotDisplays,
   invalidInputMessage: "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL",
