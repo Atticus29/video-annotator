@@ -5,22 +5,15 @@ import DataTable from "../DataTable";
 import { IntlShape, useIntl } from "react-intl";
 import { CircularProgress } from "@mui/material";
 import CustomError from "../Error";
-// import { individualsQuestion } from "../../dummy_data/dummyCollection";
 
 const IndividualsTableView: React.FC<{
   collectionUrl: string;
   tableTitle: string;
-  //   nameOfIndividual: string;
-  //   nameOfIndividualPlural: string;
-  //   nameOfVideo: string;
   individualIntakeQuestions: any[];
   dataGridOptions?: {};
 }> = ({
   collectionUrl,
   tableTitle,
-  //   nameOfIndividual,
-  //   nameOfIndividualPlural,
-  //   nameOfVideo,
   individualIntakeQuestions,
   dataGridOptions,
 }) => {
@@ -54,9 +47,6 @@ const IndividualsTableView: React.FC<{
     }
     return individualDataWithActionsAppended;
   }, [individualsData]);
-  const individualsFallback: string = intl.formatMessage({
-    id: "INDIVIDUALS_PLURAL",
-  });
 
   const individualColNamesToDisplay: {} = useMemo(() => {
     if (individualDataWithActions && individualIntakeQuestions) {
@@ -86,22 +76,6 @@ const IndividualsTableView: React.FC<{
       setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
     }
   }, [individualsData, isErrorIndividuals, isLoadingIndividuals]);
-
-  const individualFallback: string = intl.formatMessage({
-    id: "INDIVIDUAL",
-  });
-
-  //   const asteriskIfRequired: string = individualsQuestion?.isRequired ? "*" : "";
-  //   const videoFallback: string = intl.formatMessage({ id: "VIDEO" });
-  //   const individualsTableText: string =
-  //     intl.formatMessage(
-  //       { id: "ADD_INDIVIDUAL_TO_VIDEO" },
-  //       {
-  //         individualName: nameOfIndividual || individualFallback,
-  //         individualNamePlural: nameOfIndividualPlural || individualsFallback,
-  //         videoName: nameOfVideo || videoFallback,
-  //       }
-  //     ) + asteriskIfRequired;
 
   return (
     <>

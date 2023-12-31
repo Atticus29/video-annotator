@@ -8,7 +8,7 @@ import {
   DialogContent,
   Grid,
 } from "@mui/material";
-import { get, map, reduce } from "lodash-es";
+import { get, map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
@@ -19,10 +19,8 @@ import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import IndividualIntake from "../IndividualIntake";
 import { useQueryClient } from "@tanstack/react-query";
-import DataTable from "../DataTable";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
-import CustomError from "../Error";
 import useGetIndividuals from "../../hooks/useGetIndividuals";
 import IndividualsTableView from "../IndividualsTableView";
 
@@ -32,12 +30,6 @@ const VideoIntake: React.FC<{
 }> = ({ collection, onCloseDialog }) => {
   const intl: IntlShape = useIntl();
   const { user, authError } = useFirebaseAuth();
-  const {
-    isLoading: isLoadingIndividuals,
-    isError: isErrorIndividuals,
-    data: individualsData,
-    errorMsg: errorMsgIndividuals,
-  } = useGetIndividuals(get(collection, ["urlPath"], ""));
 
   const queryClient = useQueryClient();
   const [localIsIndividualsInvalid, setLocalIsIndividualsInvalid] =
@@ -136,8 +128,6 @@ const VideoIntake: React.FC<{
     const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
       return get(collection, ["individuals", Number(selectedRow) - 1, "id"]);
     });
-    console.log("deleteMe got here and selectedIds is: ");
-    console.log(selectedIds);
     setVideoQuestionFormValues({
       ...videoQuestionFormValues,
       Individuals: selectedIds,
@@ -186,24 +176,10 @@ const VideoIntake: React.FC<{
         )}
         {collection && (
           <>
-            {isLoadingIndividuals && (
-              <>
-                <br />
-                <CircularProgress color="inherit" />
-              </>
-            )}
-            {/* {individualsData &&
-              individualsData?.length > 0 &&
-              !isLoadingIndividuals && ( */}
             <Grid item lg={12} sm={12} key="individual-table">
               <IndividualsTableView
                 collectionUrl={get(collection, "urlPath", "")}
                 tableTitle={individualsTableText}
-                // nameOfIndividualPlural={get(
-                //   collection,
-                //   "nameOfIndividualPlural",
-                //   ""
-                // )}
                 individualIntakeQuestions={get(
                   collection,
                   "individualIntakeQuestions",

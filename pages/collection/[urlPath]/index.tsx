@@ -4,28 +4,18 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from "@mui/material";
-import axios from "axios";
 import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import {
-  QueryFunctionContext,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
 import DataTable from "../../../components/DataTable";
 import CustomError from "../../../components/Error";
 import IndividualIntake from "../../../components/IndividualIntake";
 import VideoIntake from "../../../components/VideoIntake";
-import { excludeFromCollectionTableDisplay } from "../../../constants";
 import useGetCollection from "../../../hooks/useGetCollection";
-import useGetIndividuals from "../../../hooks/useGetIndividuals";
-import { convertCamelCaseToCapitalCase } from "../../../utilities/textUtils";
 import IndividualsTableView from "../../../components/IndividualsTableView";
 
 const CollectionView: React.FC = () => {
@@ -36,15 +26,7 @@ const CollectionView: React.FC = () => {
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
   const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
-  // const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
-  //   useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
-  // const {
-  //   isLoading: isLoadingIndividuals,
-  //   isError: isErrorIndividuals,
-  //   data: individualsData,
-  //   errorMsg: errorMsgIndividuals,
-  // } = useGetIndividuals(localUrlPathAsString);
 
   const {
     isLoading: isLoadingCollection,
@@ -72,19 +54,6 @@ const CollectionView: React.FC = () => {
     return dataWithActionsAppended;
   }, [collectionData]);
 
-  // const individualDataWithActions = useMemo(() => {
-  //   let individualDataWithActionsAppended: any[] = [];
-  //   if (individualsData) {
-  //     individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
-  //       return {
-  //         ...datum,
-  //         actions: "stand in",
-  //       };
-  //     });
-  //   }
-  //   return individualDataWithActionsAppended;
-  // }, [individualsData]);
-
   const linkIds = useMemo(() => {
     if (collectionData && collectionData?.videos) {
       return map(collectionData.videos, (datum) => {
@@ -93,23 +62,11 @@ const CollectionView: React.FC = () => {
     }
   }, [collectionData]);
 
-  // const individualLinkIds = useMemo(() => {
-  //   if (individualsData) {
-  //     return map(individualsData, (datum) => {
-  //       return get(datum, ["id"]);
-  //     });
-  //   }
-  // }, [individualsData]);
-
   useEffect(() => {
     setOpen(isLoadingCollection);
     if (!isLoadingCollection && !isErrorCollection && collectionData) {
       const numRows: number = collectionData?.videos?.length || 1;
       setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
-
-      // const numIndividualsRows: number =
-      //   collectionData?.individuals?.length || 1;
-      // setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
     }
     if (!isLoadingCollection && !isErrorCollection && collectionData) {
       setShowCollection(true);
@@ -215,31 +172,6 @@ const CollectionView: React.FC = () => {
     actions: "Actions",
   };
 
-  // const individualColNamesToDisplay: {} = useMemo(() => {
-  //   if (
-  //     individualDataWithActions &&
-  //     collectionData?.individualIntakeQuestions
-  //   ) {
-  //     return reduce(
-  //       collectionData?.individualIntakeQuestions,
-  //       (memo: {}, intakeQuestion: any) => {
-  //         return {
-  //           ...memo,
-  //           [intakeQuestion?.label]: intakeQuestion?.label,
-  //         };
-  //       },
-  //       {}
-  //     );
-  //   } else {
-  //     return {};
-  //   }
-  // }, [collectionData?.individualIntakeQuestions, individualDataWithActions]);
-
-  // const individualColNamesToDisplayWithActions = {
-  //   ...individualColNamesToDisplay,
-  //   actions: "Actions",
-  // };
-
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
   const individualsFallback: string = intl.formatMessage({
     id: "INDIVIDUALS_PLURAL",
@@ -307,7 +239,6 @@ const CollectionView: React.FC = () => {
             />
           </Button>
 
-          {/* Individual creation */}
           <Dialog
             open={createIndividualDialogOpen}
             onClose={handleCreateIndividualDialogClose}
@@ -322,10 +253,6 @@ const CollectionView: React.FC = () => {
           <IndividualsTableView
             collectionUrl={get(collectionData, "urlPath")}
             tableTitle={nameOfIndividualPlural}
-            // nameOfIndividualPlural={get(
-            //   collectionData,
-            //   "nameOfIndividualPlural"
-            // )}
             individualIntakeQuestions={get(
               collectionData,
               "individualIntakeQuestions"
