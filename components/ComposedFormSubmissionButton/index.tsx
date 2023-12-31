@@ -1,9 +1,9 @@
 import { Button, IconButton, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { useMutation, UseMutationResult } from "react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { reduce, get } from "lodash-es";
 import axios from "axios";
@@ -72,10 +72,6 @@ const ComposedFormSubmissionButton: React.FC<{
 
   const handleClose = () => {
     setOpen(false);
-    console.log("deleteMe queryClient is: ");
-    console.log(queryClient);
-    // queryClient.invalidateQueries(["singleCollection", collectionPath]);
-    // queryClient.invalidateQueries();
     if (onCloseDialog) onCloseDialog();
   };
 
@@ -90,11 +86,13 @@ const ComposedFormSubmissionButton: React.FC<{
       );
       return response?.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setSnackbarMessage(data?.message);
       setSaveSuccess(true);
       setSaveFail(false);
       // @TODO invalidate collection
+      await queryClient.invalidateQueries();
+      // await queryClient.refetchQueries();
       handleClose();
       // router.push("/collection/" + data?.data?.urlPath);
     },
@@ -131,7 +129,7 @@ const ComposedFormSubmissionButton: React.FC<{
     }
   }, [questionsOfConcern, formFieldGroupOfConcern, allRequiredValid]);
 
-  const handleFormSubmission: () => void = () => {
+  const handleFormSubmission: () => void = async () => {
     if (localCollection && collectionPropToUpdate === "videos") {
       const currentVideos: {}[] = get(localCollection, ["videos"], []);
       const updatedVideos: {}[] = [
@@ -144,10 +142,6 @@ const ComposedFormSubmissionButton: React.FC<{
         videos: updatedVideos,
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
-      // @TODO invalidate collection
-      // queryClient.invalidateQueries({
-      //   queryKey: ["singleCollection", collectionPath],
-      // });
     }
     if (localCollection && collectionPropToUpdate === "individuals") {
       const currentIndividuals: {}[] = get(
@@ -165,10 +159,12 @@ const ComposedFormSubmissionButton: React.FC<{
         individuals: updatedIndividuals,
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
-      // @TODO invalidate collection
-      // queryClient.invalidateQueries({
-      //   queryKey: ["singleCollection", collectionPath],
-      // });
+
+      queryClient.invalidateQueries({
+        queryKey: ["individualsFor", collectionPath],
+      });
+
+      // await queryClient.refetchQueries();
     }
 
     // @TODO send this to the database. Use the `collection` variable... actually, depending on which intake this is, the db save MIGHT behave differently. I.e., is this a video save? An individual?

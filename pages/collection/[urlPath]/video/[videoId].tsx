@@ -10,7 +10,11 @@ import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { QueryFunctionContext, useQuery, useQueryClient } from "react-query";
+import {
+  QueryFunctionContext,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import CustomError from "../../../../components/Error";
 import useGetVideo from "../../../../hooks/useGetVideo";
 

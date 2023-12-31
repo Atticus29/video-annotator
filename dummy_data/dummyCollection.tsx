@@ -21,6 +21,18 @@ export const defaultDoNotDisplays: string[] = [
   "shouldBeCheckboxes",
 ];
 
+export const individualsQuestion: SingleFormField = {
+  label: "Individuals",
+  type: "text",
+  language: "English",
+  isRequired: true,
+  testId: "individuals",
+  doNotDisplay: defaultDoNotDisplays,
+  invalidInputMessage: "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL",
+  validatorMethods: [isNonEmptyString],
+  shouldBeCheckboxes: ["isRequired"],
+};
+
 const firstQuestion: SingleFormField = {
   label: "URL",
   type: "URL",

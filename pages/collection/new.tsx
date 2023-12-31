@@ -19,7 +19,7 @@ import IndividualIntakePreview from "../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
 import EventIntakeQuestions from "../../components/EventIntakeQuestions";
 import EventIntakePreview from "../../components/EventIntakePreview";
-import { useMutation, UseMutationResult } from "react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../utilities/textUtils";
@@ -212,7 +212,7 @@ const NewCollection: React.FC = () => {
       <UnsavedChangesPrompt />
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={collectionMutation.isLoading}
+        open={collectionMutation.isPending}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
@@ -281,7 +281,7 @@ const NewCollection: React.FC = () => {
         )}
       </Grid>
       <Button variant="contained" onClick={handleSaveCollection}>
-        {collectionMutation.isLoading ? savingText : savedText}
+        {collectionMutation.isPending ? savingText : savedText}
       </Button>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}

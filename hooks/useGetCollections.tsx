@@ -1,16 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
+import { useIntl, IntlShape } from "react-intl";
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 
-export default function useGetCollection(collectionUrl: string) {
+export default function useGetCollections(userEmail: string) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const { isLoading, isError, data } = useQuery({
-    queryKey: ["singleCollection", collectionUrl],
-    queryFn: async (context: QueryFunctionContext<[string, string]>) => {
-      const [, localUrlPathAsString] = context.queryKey;
+    queryKey: ["allCollections", userEmail],
+    queryFn: async () => {
       try {
-        const response = await axios.get("/api/collection/", {
-          params: { urlPath: localUrlPathAsString },
+        const response = await axios.get("/api/collections/", {
+          params: { email: userEmail },
         });
         return response?.data;
       } catch (e: any) {

@@ -2,9 +2,10 @@ import React from "react";
 import { Paper, Alert } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 
-const CustomError: React.FC<{ errorMsg?: string | undefined | null }> = (
-  props
-) => {
+const CustomError: React.FC<{
+  errorMsg?: string | undefined | null;
+  ignoreHeader?: boolean | undefined;
+}> = (props) => {
   return (
     <Paper
       elevation={8}
@@ -19,12 +20,14 @@ const CustomError: React.FC<{ errorMsg?: string | undefined | null }> = (
       }}
     >
       <React.Fragment>
-        <h1>
-          <FormattedMessage
-            id="404_ERROR"
-            defaultMessage="Whoops. Something didn't work."
-          ></FormattedMessage>
-        </h1>
+        {!props?.ignoreHeader && (
+          <h1>
+            <FormattedMessage
+              id="404_ERROR"
+              defaultMessage="Whoops. Something didn't work."
+            ></FormattedMessage>
+          </h1>
+        )}
         {props?.errorMsg && (
           <Alert severity="error" style={{ textAlign: "center" }}>
             {props.errorMsg}

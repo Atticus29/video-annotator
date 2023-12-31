@@ -134,8 +134,13 @@
   "UNSAVED_CHANGES_MESSAGE": "You have unsaved changes on this page. Are you sure you want to proceed without saving?",
   "VIDEO_NOT_FOUND": "Video not found",
   "VIDEOS": "Videos",
+  "VIDEO": "Video",
   "INDIVIDUALS_PLURAL": "Individuals",
   "INDIVIDUAL": "Individual",
-  "SUBMIT_NEW_INDIVIDUAL": "Submit a New {individualName}",
-  "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below."
+  "SUBMIT_NEW_INDIVIDUAL": "Create a New {individualName}",
+  "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below.",
+  "ADD_INDIVIDUAL_TO_VIDEO": "Click rows to attach {individualName} or {individualNamePlural} to {videoName}",
+  "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL": "You must select at least one individual",
+  "CLOSE": "Close",
+  "INDIVIDUALS_NOT_FOUND": "Individuals not found"
 }

@@ -5,15 +5,13 @@ import {
   DialogContent,
 } from "@mui/material";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import IndividualIntake from "../components/IndividualIntake";
 import useGetCollection from "../hooks/useGetCollection";
 
 const Sandbox: React.FC = () => {
   const localUrlPathAsString: string = "ExampleCollection"; // @TODO undo hardcode
   const { data, isLoading, isError } = useGetCollection(localUrlPathAsString);
-  console.log("deleteMe isLoading is: ");
-  console.log(isLoading);
 
   const queryClient = useQueryClient();
   const [createIndividualDialogOpen, setCreateIndividualDialogOpen] =
@@ -22,21 +20,25 @@ const Sandbox: React.FC = () => {
     setCreateIndividualDialogOpen(false);
     const queryKey = ["singleCollection", localUrlPathAsString];
     const queryCache = queryClient.getQueryCache();
-    let queryState = queryCache.find(queryKey);
+    let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
-      console.log(`Before Query with key ${queryKey} is in the cache.`);
+      console.log(`Sandbox Before Query with key ${queryKey} is in the cache.`);
     } else {
-      console.log(`Before Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `Sandbox Before Query with key ${queryKey} is NOT in the cache.`
+      );
     }
-    // queryClient.invalidateQueries();
-    queryClient.invalidateQueries({
-      queryKey: queryKey,
-    });
-    queryState = queryCache.find(queryKey);
+    queryClient.invalidateQueries();
+    // queryClient.invalidateQueries({
+    //   queryKey: queryKey,
+    // });
+    queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
-      console.log(`After Query with key ${queryKey} is in the cache.`);
+      console.log(`Sandbox After Query with key ${queryKey} is in the cache.`);
     } else {
-      console.log(`After Query with key ${queryKey} is NOT in the cache.`);
+      console.log(
+        `Sandbox After Query with key ${queryKey} is NOT in the cache.`
+      );
     }
   };
 
