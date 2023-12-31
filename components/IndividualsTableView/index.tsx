@@ -49,6 +49,7 @@ const IndividualsTableView: React.FC<{
   }, [individualsData]);
 
   const individualColNamesToDisplay: {} = useMemo(() => {
+    // @TODO maybe this should be in a utility file somewhere since this kind of logic pops up in a few places as I wrangle column headers.
     if (individualDataWithActions && individualIntakeQuestions) {
       return reduce(
         individualIntakeQuestions,

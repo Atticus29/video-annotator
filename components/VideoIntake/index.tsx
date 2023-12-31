@@ -1,13 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  Grid,
-} from "@mui/material";
+import { Alert, Button, Dialog, DialogContent, Grid } from "@mui/material";
 import { get, map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
@@ -21,7 +14,6 @@ import IndividualIntake from "../IndividualIntake";
 import { useQueryClient } from "@tanstack/react-query";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
-import useGetIndividuals from "../../hooks/useGetIndividuals";
 import IndividualsTableView from "../IndividualsTableView";
 
 const VideoIntake: React.FC<{

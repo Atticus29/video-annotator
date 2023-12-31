@@ -104,7 +104,6 @@ const IndividualIntake: React.FC<{
                   collectionPath={localCollection?.urlPath}
                   collectionPropToUpdate={"individuals"}
                   onCloseDialog={onCloseDialog}
-                  // setCollection={setCollection}
                 />
               </Grid>
               <Grid item lg={12} sm={12}>

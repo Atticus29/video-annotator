@@ -142,9 +142,6 @@ const ComposedFormSubmissionButton: React.FC<{
         videos: updatedVideos,
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
-      // if (setCollection) {
-      //   setCollection(updatedCollection);
-      // }
     }
     if (localCollection && collectionPropToUpdate === "individuals") {
       const currentIndividuals: {}[] = get(
@@ -162,9 +159,6 @@ const ComposedFormSubmissionButton: React.FC<{
         individuals: updatedIndividuals,
       };
       updateCollectionMutation.mutate(updatedCollection); // @TODO there should be a simpler video update mutation that should happen here to avoid race conditions?
-      // if (setCollection) {
-      //   setCollection(updatedCollection);
-      // }
 
       queryClient.invalidateQueries({
         queryKey: ["individualsFor", collectionPath],
