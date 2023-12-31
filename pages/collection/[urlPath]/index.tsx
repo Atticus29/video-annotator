@@ -39,7 +39,7 @@ const CollectionView: React.FC = () => {
     useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
   const {
-    isLoading: isLoadingIndividuals, // @TODO implement the loading and error stuff
+    isLoading: isLoadingIndividuals,
     isError: isErrorIndividuals,
     data: individualsData,
     errorMsg: errorMsgIndividuals,
@@ -333,17 +333,25 @@ const CollectionView: React.FC = () => {
               linkIds={individualLinkIds}
             ></DataTable>
           )}
-          {isLoadingIndividuals && <CircularProgress color="inherit" />}
+          {isLoadingIndividuals && (
+            <>
+              <br />
+              <CircularProgress color="inherit" />
+            </>
+          )}
           {!isLoadingIndividuals && isErrorIndividuals && (
-            <CustomError
-              errorMsg={
-                errorMsgIndividuals ||
-                intl.formatMessage({
-                  id: "INDIVIDUALS_NOT_FOUND",
-                  defaultMessage: "Individuals not found",
-                })
-              }
-            />
+            <>
+              <br />
+              <CustomError
+                errorMsg={
+                  errorMsgIndividuals ||
+                  intl.formatMessage({
+                    id: "INDIVIDUALS_NOT_FOUND",
+                    defaultMessage: "Individuals not found",
+                  })
+                }
+              />
+            </>
           )}
           <Button
             data-testid={"new-video-add-button"}

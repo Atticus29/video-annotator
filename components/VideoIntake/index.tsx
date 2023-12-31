@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Alert, Button, Dialog, DialogContent, Grid } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  Grid,
+} from "@mui/material";
 import { get, map, reduce } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
@@ -16,6 +23,7 @@ import DataTable from "../DataTable";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
 import CustomError from "../Error";
+import useGetIndividuals from "../../hooks/useGetIndividuals";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -23,18 +31,63 @@ const VideoIntake: React.FC<{
 }> = ({ collection, onCloseDialog }) => {
   const intl: IntlShape = useIntl();
   const { user, authError } = useFirebaseAuth();
+  const {
+    isLoading: isLoadingIndividuals,
+    isError: isErrorIndividuals,
+    data: individualsData,
+    errorMsg: errorMsgIndividuals,
+  } = useGetIndividuals(get(collection, ["urlPath"], ""));
+  const individualDataWithActions = useMemo(() => {
+    let individualDataWithActionsAppended: any[] = [];
+    if (individualsData) {
+      individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
+        return {
+          ...datum,
+          actions: "stand in",
+        };
+      });
+    }
+    return individualDataWithActionsAppended;
+  }, [individualsData]);
+  const individualLinkIds = useMemo(() => {
+    if (individualsData) {
+      return map(individualsData, (datum) => {
+        return get(datum, ["id"]);
+      });
+    }
+  }, [individualsData]);
+
+  const individualColNamesToDisplay: {} = useMemo(() => {
+    if (individualDataWithActions && collection?.individualIntakeQuestions) {
+      return reduce(
+        collection?.individualIntakeQuestions,
+        (memo: {}, intakeQuestion: any) => {
+          return {
+            ...memo,
+            [intakeQuestion?.label]: intakeQuestion?.label,
+          };
+        },
+        {}
+      );
+    } else {
+      return {};
+    }
+  }, [collection?.individualIntakeQuestions, individualDataWithActions]);
+  const individualColNamesToDisplayWithActions = {
+    ...individualColNamesToDisplay,
+    actions: "Actions",
+  };
+
   const queryClient = useQueryClient();
-  const [localCollection, setLocalCollection] = useState<Collection>();
   const [localIsIndividualsInvalid, setLocalIsIndividualsInvalid] =
     useState<boolean>(false);
 
   const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
     useState<number>(9.4);
   useEffect(() => {
-    const numIndividualsRows: number =
-      localCollection?.individuals?.length || 1;
+    const numIndividualsRows: number = individualsData?.length || 1;
     setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
-  }, [localCollection?.individuals?.length]);
+  }, [individualsData?.length]);
 
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
@@ -54,13 +107,13 @@ const VideoIntake: React.FC<{
     };
   }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
 
-  useEffect(() => {
-    const initialCollection = { ...collection };
-    initialCollection.videoQuestionsFormFieldGroup =
-      videoQuestionsFormFieldGroup;
-    setLocalCollection(initialCollection);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  // useEffect(() => {
+  //   const initialCollection = { ...collection };
+  //   initialCollection.videoQuestionsFormFieldGroup =
+  //     videoQuestionsFormFieldGroup;
+  //   setLocalCollection(initialCollection);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user]);
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
@@ -82,27 +135,27 @@ const VideoIntake: React.FC<{
   const handleNewIndividualClick = () => {
     setShowIndividualCreationDialog(true);
   };
-  const individualColNamesToDisplay: {} = useMemo(() => {
-    if (localCollection?.individualIntakeQuestions) {
-      return reduce(
-        localCollection?.individualIntakeQuestions,
-        (memo: {}, intakeQuestion: any) => {
-          return {
-            ...memo,
-            [intakeQuestion?.label]: intakeQuestion?.label,
-          };
-        },
-        {}
-      );
-    } else {
-      return {};
-    }
-  }, [localCollection?.individualIntakeQuestions]);
+  // const individualColNamesToDisplay: {} = useMemo(() => {
+  //   if (localCollection?.individualIntakeQuestions) {
+  //     return reduce(
+  //       localCollection?.individualIntakeQuestions,
+  //       (memo: {}, intakeQuestion: any) => {
+  //         return {
+  //           ...memo,
+  //           [intakeQuestion?.label]: intakeQuestion?.label,
+  //         };
+  //       },
+  //       {}
+  //     );
+  //   } else {
+  //     return {};
+  //   }
+  // }, [localCollection?.individualIntakeQuestions]);
 
   const handleCreateVideoDialogClose = () => {
     // @TODO can combine this with handleCreateIndividualDialogClose
     setShowIndividualCreationDialog(false);
-    const queryKey = ["singleCollection", localCollection?.urlPath];
+    const queryKey = ["singleCollection", collection?.urlPath];
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
@@ -139,10 +192,10 @@ const VideoIntake: React.FC<{
     intl.formatMessage(
       { id: "ADD_INDIVIDUAL_TO_VIDEO" },
       {
-        individualName: localCollection?.nameOfIndividual || individualFallback,
+        individualName: collection?.nameOfIndividual || individualFallback,
         individualNamePlural:
-          localCollection?.nameOfIndividualPlural || individualsFallback,
-        videoName: localCollection?.nameOfVideo || videoFallback,
+          collection?.nameOfIndividualPlural || individualsFallback,
+        videoName: collection?.nameOfVideo || videoFallback,
       }
     ) + asteriskIfRequired;
 
@@ -151,11 +204,7 @@ const VideoIntake: React.FC<{
     details: GridCallbackDetails
   ) => void = (rowSelectionModel, _) => {
     const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
-      return get(localCollection, [
-        "individuals",
-        Number(selectedRow) - 1,
-        "id",
-      ]);
+      return get(collection, ["individuals", Number(selectedRow) - 1, "id"]);
     });
     setVideoQuestionFormValues({
       ...videoQuestionFormValues,
@@ -188,7 +237,7 @@ const VideoIntake: React.FC<{
       <InfoPanelBody bodyId={bodyId} bodyDefault={bodyId} />
       <Grid container>
         {map(
-          localCollection?.videoIntakeQuestions,
+          collection?.videoIntakeQuestions,
           (intakeQuestion, intakeQuestionIdx) => {
             if (intakeQuestion) {
               return (
@@ -203,43 +252,67 @@ const VideoIntake: React.FC<{
             }
           }
         )}
-        {localCollection && (
+        {collection && (
           <>
-            {get(localCollection, ["individuals"], []).length > 0 && (
-              <Grid item lg={12} sm={12} key="individual-table">
-                <DataTable
-                  tableTitle={individualsTableText}
-                  data={localCollection?.individuals || []}
-                  colNamesToDisplay={individualColNamesToDisplay}
-                  targetColIdxForUrlPath={0}
-                  styleOverrides={{
-                    minHeight: 0,
-                    height: calculatedIndividualTableHeight + "rem",
-                    maxHeight: "50vh",
-                  }}
-                  linkUrls={{
-                    view:
-                      "/collection/" + localCollection.urlPath + "/individual/",
-                  }}
-                  dataGridOptions={{
-                    checkboxSelection: true,
-                    disableRowSelectionOnClick: true,
-                    onRowSelectionModelChange: localOnRowSelectionModelChange,
-                  }}
-                ></DataTable>
-                {localIsIndividualsInvalid && (
-                  <Alert
-                    style={{ textAlign: "center", marginBottom: "1rem" }}
-                    severity="error"
-                  >
-                    <FormattedMessage
-                      id="MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL"
-                      defaultMessage="You must select at least one individual"
-                    ></FormattedMessage>
-                  </Alert>
-                )}
-              </Grid>
+            {isLoadingIndividuals && (
+              <>
+                <br />
+                <CircularProgress color="inherit" />
+              </>
             )}
+            {individualsData &&
+              individualsData?.length > 0 &&
+              !isLoadingIndividuals && (
+                <Grid item lg={12} sm={12} key="individual-table">
+                  <DataTable
+                    tableTitle={individualsTableText}
+                    data={individualDataWithActions || []}
+                    colNamesToDisplay={individualColNamesToDisplayWithActions}
+                    targetColIdxForUrlPath={0}
+                    actionButtonsToDisplay={{ view: "View" }}
+                    styleOverrides={{
+                      minHeight: 0,
+                      height: calculatedIndividualTableHeight + "rem",
+                      maxHeight: "50vh",
+                    }}
+                    linkUrls={{
+                      view:
+                        "/collection/" + collection.urlPath + "/individual/",
+                    }}
+                    linkIds={individualLinkIds}
+                    dataGridOptions={{
+                      checkboxSelection: true,
+                      disableRowSelectionOnClick: true,
+                      onRowSelectionModelChange: localOnRowSelectionModelChange,
+                    }}
+                  ></DataTable>
+                  {!isLoadingIndividuals && isErrorIndividuals && (
+                    <>
+                      <br />
+                      <CustomError
+                        errorMsg={
+                          errorMsgIndividuals ||
+                          intl.formatMessage({
+                            id: "INDIVIDUALS_NOT_FOUND",
+                            defaultMessage: "Individuals not found",
+                          })
+                        }
+                      />
+                    </>
+                  )}
+                  {localIsIndividualsInvalid && (
+                    <Alert
+                      style={{ textAlign: "center", marginBottom: "1rem" }}
+                      severity="error"
+                    >
+                      <FormattedMessage
+                        id="MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL"
+                        defaultMessage="You must select at least one individual"
+                      ></FormattedMessage>
+                    </Alert>
+                  )}
+                </Grid>
+              )}
             <Grid item lg={12} sm={12} key="individual-creation-button">
               <Button
                 data-testid={"new-video-add-button"}
@@ -251,7 +324,7 @@ const VideoIntake: React.FC<{
                   id="SUBMIT_NEW_INDIVIDUAL"
                   defaultMessage="Create a New {individualName}"
                   values={{
-                    individualName: localCollection?.nameOfIndividual,
+                    individualName: collection?.nameOfIndividual,
                   }}
                 />
               </Button>
@@ -262,7 +335,7 @@ const VideoIntake: React.FC<{
             >
               <DialogContent>
                 <IndividualIntake
-                  collection={localCollection}
+                  collection={collection}
                   onCloseDialog={handleCreateVideoDialogClose}
                 ></IndividualIntake>
               </DialogContent>
@@ -270,19 +343,19 @@ const VideoIntake: React.FC<{
           </>
         )}
 
-        {localCollection?.videoQuestionsFormFieldGroup &&
-          localCollection?.videoIntakeQuestions && (
+        {collection?.videoQuestionsFormFieldGroup &&
+          collection?.videoIntakeQuestions && (
             <>
               <Grid item lg={12} sm={12}>
                 <ComposedFormSubmissionButton
                   questionsOfConcern={
                     [
-                      ...get(localCollection, ["videoIntakeQuestions"], []),
+                      ...get(collection, ["videoIntakeQuestions"], []),
                       individualsQuestion,
                     ] || []
                   }
                   formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                  collectionPath={localCollection?.urlPath}
+                  collectionPath={collection?.urlPath}
                   collectionPropToUpdate={"videos"}
                   onCloseDialog={onCloseDialog}
                 />
