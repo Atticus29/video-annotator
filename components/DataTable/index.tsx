@@ -9,6 +9,8 @@ import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
+import { Typography } from "@mui/material";
+import { FormattedMessage } from "react-intl";
 
 const DataTable: React.FC<{
   tableTitle?: string;
@@ -23,6 +25,7 @@ const DataTable: React.FC<{
   loading?: boolean;
   linkUrls?: {};
   linkIds?: string[];
+  dataGridOptions?: {};
 }> = ({
   tableTitle = "Untitled",
   tableTitleId = tableTitle,
@@ -36,6 +39,7 @@ const DataTable: React.FC<{
   loading = false,
   linkUrls = {},
   linkIds = [],
+  dataGridOptions = {},
 }) => {
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
@@ -205,16 +209,27 @@ const DataTable: React.FC<{
                   ...styleOverrides,
                 }}
                 loading={loading}
+                checkboxSelection={get(dataGridOptions, ["checkboxSelection"])}
+                disableRowSelectionOnClick={get(dataGridOptions, [
+                  "disableRowSelectionOnClick",
+                ])}
+                onRowSelectionModelChange={get(dataGridOptions, [
+                  "onRowSelectionModelChange",
+                ])}
               />
             </InfoPanelBody>
           </InfoPanel>
         </>
       )}
       {(!data || data.length < 1) && (
-        <InfoPanel
-          titleId={"THIS_TABLE_HAS_NO_DATA_YET"}
-          titleDefault={"This table has no data yet"}
-        ></InfoPanel>
+        <InfoPanel titleId={tableTitleId || ""} titleDefault={tableTitle || ""}>
+          <Typography variant="body1">
+            <FormattedMessage
+              id={"THIS_TABLE_HAS_NO_DATA_YET"}
+              defaultMessage={"This table has no data yet"}
+            />
+          </Typography>
+        </InfoPanel>
       )}
     </>
   );

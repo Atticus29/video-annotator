@@ -8,6 +8,8 @@ export interface Collection {
   nameOfVideoPlural: string;
   nameOfEvent: string;
   nameOfEventPlural: string;
+  nameOfIndividual: string;
+  nameOfIndividualPlural: string;
   isPrivate: boolean;
   language: string;
   videoIntakeQuestions?: SingleFormField[];
@@ -18,6 +20,7 @@ export interface Collection {
   individualQuestionsFormFieldGroup?: FormFieldGroup;
   eventQuestionsFormFieldGroup?: FormFieldGroup;
   videos?: {}[];
+  individuals?: {}[];
 }
 
 export interface FormFieldGroup {

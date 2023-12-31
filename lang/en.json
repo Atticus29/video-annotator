@@ -127,10 +127,20 @@
   "CREATED_BY_EMAIL": "Email address of collection creator",
   "THIS_TABLE_HAS_NO_DATA_YET": "This table has no data yet",
   "ADD_NEW_VIDEO_TO_COLLECTION": "Add New {videoName}",
+  "ADD_NEW_INDIVIDUAL_TO_COLLECTION": "Add New {individualName}",
   "SUBMIT_NEW_VIDEO": "Submit a New {videoName}",
   "VIDEO_INTAKE_DETAILS": "To add a {videoName} to the collection, fill out the form below.",
   "COLLECTION_NOT_FOUND": "Collection not found",
   "UNSAVED_CHANGES_MESSAGE": "You have unsaved changes on this page. Are you sure you want to proceed without saving?",
   "VIDEO_NOT_FOUND": "Video not found",
-  "VIDEOS": "Videos"
+  "VIDEOS": "Videos",
+  "VIDEO": "Video",
+  "INDIVIDUALS_PLURAL": "Individuals",
+  "INDIVIDUAL": "Individual",
+  "SUBMIT_NEW_INDIVIDUAL": "Create a New {individualName}",
+  "INDIVIDUAL_INTAKE_DETAILS": "To add a {individualName} to the {videoName}, fill out the form below.",
+  "ADD_INDIVIDUAL_TO_VIDEO": "Click rows to attach {individualName} or {individualNamePlural} to {videoName}",
+  "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL": "You must select at least one individual",
+  "CLOSE": "Close",
+  "INDIVIDUALS_NOT_FOUND": "Individuals not found"
 }

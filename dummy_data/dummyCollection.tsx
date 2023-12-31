@@ -21,6 +21,18 @@ export const defaultDoNotDisplays: string[] = [
   "shouldBeCheckboxes",
 ];
 
+export const individualsQuestion: SingleFormField = {
+  label: "Individuals",
+  type: "text",
+  language: "English",
+  isRequired: true,
+  testId: "individuals",
+  doNotDisplay: defaultDoNotDisplays,
+  invalidInputMessage: "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL",
+  validatorMethods: [isNonEmptyString],
+  shouldBeCheckboxes: ["isRequired"],
+};
+
 const firstQuestion: SingleFormField = {
   label: "URL",
   type: "URL",
@@ -591,9 +603,12 @@ export const shamCollection: Collection = {
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
     "videos",
+    "individuals",
   ],
   createdByEmail: "public@example.com",
   dateCreated: Date(),
+  nameOfIndividual: "Athlete",
+  nameOfIndividualPlural: "Athletes",
 };
 
 export const shamCollection2: Collection = {
@@ -651,7 +666,10 @@ export const shamCollection2: Collection = {
     "individualQuestionsFormFieldGroup",
     "eventQuestionsFormFieldGroup",
     "videos",
+    "individuals",
   ],
   createdByEmail: "mfishe53@asu.edu",
   dateCreated: Date(),
+  nameOfIndividual: "Athlete",
+  nameOfIndividualPlural: "Athletes",
 };
