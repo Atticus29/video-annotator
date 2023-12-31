@@ -38,57 +38,10 @@ const VideoIntake: React.FC<{
     data: individualsData,
     errorMsg: errorMsgIndividuals,
   } = useGetIndividuals(get(collection, ["urlPath"], ""));
-  const individualDataWithActions = useMemo(() => {
-    let individualDataWithActionsAppended: any[] = [];
-    if (individualsData) {
-      individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
-        return {
-          ...datum,
-          actions: "stand in",
-        };
-      });
-    }
-    return individualDataWithActionsAppended;
-  }, [individualsData]);
-  const individualLinkIds = useMemo(() => {
-    if (individualsData) {
-      return map(individualsData, (datum) => {
-        return get(datum, ["id"]);
-      });
-    }
-  }, [individualsData]);
-
-  const individualColNamesToDisplay: {} = useMemo(() => {
-    if (individualDataWithActions && collection?.individualIntakeQuestions) {
-      return reduce(
-        collection?.individualIntakeQuestions,
-        (memo: {}, intakeQuestion: any) => {
-          return {
-            ...memo,
-            [intakeQuestion?.label]: intakeQuestion?.label,
-          };
-        },
-        {}
-      );
-    } else {
-      return {};
-    }
-  }, [collection?.individualIntakeQuestions, individualDataWithActions]);
-  const individualColNamesToDisplayWithActions = {
-    ...individualColNamesToDisplay,
-    actions: "Actions",
-  };
 
   const queryClient = useQueryClient();
   const [localIsIndividualsInvalid, setLocalIsIndividualsInvalid] =
     useState<boolean>(false);
-
-  const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
-    useState<number>(9.4);
-  useEffect(() => {
-    const numIndividualsRows: number = individualsData?.length || 1;
-    setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
-  }, [individualsData?.length]);
 
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
@@ -107,14 +60,6 @@ const VideoIntake: React.FC<{
       setIsInvalids: setArevideoQuestionFormValuesInvalid,
     };
   }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
-
-  // useEffect(() => {
-  //   const initialCollection = { ...collection };
-  //   initialCollection.videoQuestionsFormFieldGroup =
-  //     videoQuestionsFormFieldGroup;
-  //   setLocalCollection(initialCollection);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user]);
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
@@ -136,22 +81,6 @@ const VideoIntake: React.FC<{
   const handleNewIndividualClick = () => {
     setShowIndividualCreationDialog(true);
   };
-  // const individualColNamesToDisplay: {} = useMemo(() => {
-  //   if (localCollection?.individualIntakeQuestions) {
-  //     return reduce(
-  //       localCollection?.individualIntakeQuestions,
-  //       (memo: {}, intakeQuestion: any) => {
-  //         return {
-  //           ...memo,
-  //           [intakeQuestion?.label]: intakeQuestion?.label,
-  //         };
-  //       },
-  //       {}
-  //     );
-  //   } else {
-  //     return {};
-  //   }
-  // }, [localCollection?.individualIntakeQuestions]);
 
   const handleCreateVideoDialogClose = () => {
     // @TODO can combine this with handleCreateIndividualDialogClose
@@ -263,77 +192,42 @@ const VideoIntake: React.FC<{
                 <CircularProgress color="inherit" />
               </>
             )}
-            {individualsData &&
+            {/* {individualsData &&
               individualsData?.length > 0 &&
-              !isLoadingIndividuals && (
-                <Grid item lg={12} sm={12} key="individual-table">
-                  <IndividualsTableView
-                    collectionUrl={get(collection, "urlPath", "")}
-                    nameOfIndividualPlural={get(
-                      collection,
-                      "nameOfIndividualPlural",
-                      ""
-                    )}
-                    individualIntakeQuestions={get(
-                      collection,
-                      "individualIntakeQuestions",
-                      []
-                    )}
-                    dataGridOptions={{
-                      checkboxSelection: true,
-                      disableRowSelectionOnClick: true,
-                      onRowSelectionModelChange: localOnRowSelectionModelChange,
-                    }}
-                  />
-                  {/* <DataTable
-                    tableTitle={individualsTableText}
-                    data={individualDataWithActions || []}
-                    colNamesToDisplay={individualColNamesToDisplayWithActions}
-                    targetColIdxForUrlPath={0}
-                    actionButtonsToDisplay={{ view: "View" }}
-                    styleOverrides={{
-                      minHeight: 0,
-                      height: calculatedIndividualTableHeight + "rem",
-                      maxHeight: "50vh",
-                    }}
-                    linkUrls={{
-                      view:
-                        "/collection/" + collection.urlPath + "/individual/",
-                    }}
-                    linkIds={individualLinkIds}
-                    dataGridOptions={{
-                      checkboxSelection: true,
-                      disableRowSelectionOnClick: true,
-                      onRowSelectionModelChange: localOnRowSelectionModelChange,
-                    }}
-                  ></DataTable>
-                  {!isLoadingIndividuals && isErrorIndividuals && (
-                    <>
-                      <br />
-                      <CustomError
-                        errorMsg={
-                          errorMsgIndividuals ||
-                          intl.formatMessage({
-                            id: "INDIVIDUALS_NOT_FOUND",
-                            defaultMessage: "Individuals not found",
-                          })
-                        }
-                      />
-                    </>
-                  )} */}
-                  {localIsIndividualsInvalid && (
-                    <Alert
-                      style={{ textAlign: "center", marginBottom: "1rem" }}
-                      severity="error"
-                    >
-                      <FormattedMessage
-                        id="MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL"
-                        defaultMessage="You must select at least one individual"
-                      ></FormattedMessage>
-                    </Alert>
-                  )}
-                </Grid>
+              !isLoadingIndividuals && ( */}
+            <Grid item lg={12} sm={12} key="individual-table">
+              <IndividualsTableView
+                collectionUrl={get(collection, "urlPath", "")}
+                tableTitle={individualsTableText}
+                // nameOfIndividualPlural={get(
+                //   collection,
+                //   "nameOfIndividualPlural",
+                //   ""
+                // )}
+                individualIntakeQuestions={get(
+                  collection,
+                  "individualIntakeQuestions",
+                  []
+                )}
+                dataGridOptions={{
+                  checkboxSelection: true,
+                  disableRowSelectionOnClick: true,
+                  onRowSelectionModelChange: localOnRowSelectionModelChange,
+                }}
+              />
+              {localIsIndividualsInvalid && (
+                <Alert
+                  style={{ textAlign: "center", marginBottom: "1rem" }}
+                  severity="error"
+                >
+                  <FormattedMessage
+                    id="MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL"
+                    defaultMessage="You must select at least one individual"
+                  ></FormattedMessage>
+                </Alert>
               )}
+            </Grid>
+            {/* )} */}
             <Grid item lg={12} sm={12} key="individual-creation-button">
               <Button
                 data-testid={"new-video-add-button"}

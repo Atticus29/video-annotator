@@ -241,9 +241,14 @@ const CollectionView: React.FC = () => {
   // };
 
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });
-  // const individualsFallback: string = intl.formatMessage({
-  //   id: "INDIVIDUALS_PLURAL",
-  // });
+  const individualsFallback: string = intl.formatMessage({
+    id: "INDIVIDUALS_PLURAL",
+  });
+  const nameOfIndividualPlural: string = get(
+    collectionData,
+    "nameOfIndividualPlural",
+    individualsFallback
+  );
 
   return (
     <>
@@ -316,10 +321,11 @@ const CollectionView: React.FC = () => {
           </Dialog>
           <IndividualsTableView
             collectionUrl={get(collectionData, "urlPath")}
-            nameOfIndividualPlural={get(
-              collectionData,
-              "nameOfIndividualPlural"
-            )}
+            tableTitle={nameOfIndividualPlural}
+            // nameOfIndividualPlural={get(
+            //   collectionData,
+            //   "nameOfIndividualPlural"
+            // )}
             individualIntakeQuestions={get(
               collectionData,
               "individualIntakeQuestions"
