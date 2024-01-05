@@ -1,4 +1,4 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { get, map, reduce } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
@@ -13,6 +13,8 @@ import {
   sanitizeString,
 } from "../../utilities/textUtils";
 import useGetCollections from "../../hooks/useGetCollections";
+import { FormattedMessage } from "react-intl";
+import router from "next/router";
 
 const Collections: React.FC = () => {
   const [localError, setLocalError] = useState<string>("");
@@ -73,19 +75,35 @@ const Collections: React.FC = () => {
     {}
   );
 
+  const handleNewCollectionClick: () => void = () => {
+    router.push("/collection/new");
+  };
+
   return (
     <>
       {!isLoading && !isError && !localError! && (
-        <DataTable
-          tableTitle="Testing"
-          data={dataWithActions}
-          colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
-          actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
-          styleOverrides={{ height: 1000 }} // @TODO make this look better
-          targetColNameForAction={"urlPath"}
-          modificationMethodForAction={sanitizeString}
-          targetColIdxForUrlPath={2} // 2
-        ></DataTable>
+        <>
+          <DataTable
+            tableTitle="Testing"
+            data={dataWithActions}
+            colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
+            actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
+            targetColNameForAction={"urlPath"}
+            modificationMethodForAction={sanitizeString}
+            targetColIdxForUrlPath={2} // 2 @TODO this is probably no longer needed?
+          ></DataTable>
+          <Button
+            data-testid={"new-collection-add-button"}
+            variant="contained"
+            onClick={handleNewCollectionClick}
+            style={{ marginBottom: "1rem" }}
+          >
+            <FormattedMessage
+              id="CREATE_NEW_COLLECTION"
+              defaultMessage="Create New Collection"
+            />
+          </Button>
+        </>
       )}
       {(isError || localError) && <CustomError errorMsg={localError} />}
       {isLoading && (

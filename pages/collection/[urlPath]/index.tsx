@@ -25,7 +25,6 @@ const CollectionView: React.FC = () => {
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
-  const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
 
   const {
@@ -35,7 +34,6 @@ const CollectionView: React.FC = () => {
     errorMsg: collectionErrorMsg,
   } = useGetCollection(localUrlPathAsString);
 
-  const [open, setOpen] = useState<boolean>(true);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
     useState<boolean>(false);
   const [createIndividualDialogOpen, setCreateIndividualDialogOpen] =
@@ -63,24 +61,13 @@ const CollectionView: React.FC = () => {
   }, [collectionData]);
 
   useEffect(() => {
-    setOpen(isLoadingCollection);
-    if (!isLoadingCollection && !isErrorCollection && collectionData) {
-      const numRows: number = collectionData?.videos?.length || 1;
-      setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
-    }
     if (!isLoadingCollection && !isErrorCollection && collectionData) {
       setShowCollection(true);
     }
     if (!isLoadingCollection && !isErrorCollection && !collectionData) {
       setShowCollection(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isLoadingCollection,
-    collectionData,
-    isErrorCollection,
-    createVideoDialogOpen,
-  ]);
+  }, [isLoadingCollection, collectionData, isErrorCollection]);
 
   const handleNewVideoClick = () => {
     setCreateVideoDialogOpen(true);
@@ -187,7 +174,7 @@ const CollectionView: React.FC = () => {
       {isLoadingCollection && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
+          open={isLoadingCollection}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -217,10 +204,6 @@ const CollectionView: React.FC = () => {
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
             targetColIdxForUrlPath={0}
-            styleOverrides={{
-              minHeight: 0,
-              height: calculatedHeight + "rem",
-            }}
             linkUrls={{
               view: "/collection/" + localUrlPathAsString + "/video/",
             }}
@@ -271,7 +254,7 @@ const CollectionView: React.FC = () => {
           </Button>
         </>
       )}
-      {!open && !showCollection && (
+      {!isLoadingCollection && !showCollection && (
         <CustomError
           errorMsg={
             collectionErrorMsg ||
