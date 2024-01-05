@@ -5,7 +5,7 @@ import {
   GridRowsProp,
 } from "@mui/x-data-grid";
 import { reduce, map, get, camelCase } from "lodash-es";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
