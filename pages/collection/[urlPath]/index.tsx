@@ -34,7 +34,6 @@ const CollectionView: React.FC = () => {
     errorMsg: collectionErrorMsg,
   } = useGetCollection(localUrlPathAsString);
 
-  const [open, setOpen] = useState<boolean>(true);
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
     useState<boolean>(false);
   const [createIndividualDialogOpen, setCreateIndividualDialogOpen] =
@@ -62,21 +61,13 @@ const CollectionView: React.FC = () => {
   }, [collectionData]);
 
   useEffect(() => {
-    setOpen(isLoadingCollection);
     if (!isLoadingCollection && !isErrorCollection && collectionData) {
       setShowCollection(true);
     }
     if (!isLoadingCollection && !isErrorCollection && !collectionData) {
       setShowCollection(false);
     }
-    // @TODO check whether you can re-enable exhaustive-deps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isLoadingCollection,
-    collectionData,
-    isErrorCollection,
-    createVideoDialogOpen,
-  ]);
+  }, [isLoadingCollection, collectionData, isErrorCollection]);
 
   const handleNewVideoClick = () => {
     setCreateVideoDialogOpen(true);
@@ -183,7 +174,7 @@ const CollectionView: React.FC = () => {
       {isLoadingCollection && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
+          open={isLoadingCollection}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -263,7 +254,7 @@ const CollectionView: React.FC = () => {
           </Button>
         </>
       )}
-      {!open && !showCollection && (
+      {!isLoadingCollection && !showCollection && (
         <CustomError
           errorMsg={
             collectionErrorMsg ||
