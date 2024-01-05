@@ -203,8 +203,12 @@ const DataTable: React.FC<{
                 rows={rows}
                 rowHeight={40}
                 columns={columns}
+                autoHeight={true}
+                initialState={{
+                  pagination: { paginationModel: { pageSize: 5 } },
+                }}
+                pageSizeOptions={[5, 10, 25]}
                 style={{
-                  minHeight: 200,
                   marginBottom: "2vh",
                   ...styleOverrides,
                 }}
