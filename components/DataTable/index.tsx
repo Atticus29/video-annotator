@@ -5,7 +5,7 @@ import {
   GridRowsProp,
 } from "@mui/x-data-grid";
 import { reduce, map, get, camelCase } from "lodash-es";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
@@ -41,6 +41,9 @@ const DataTable: React.FC<{
   linkIds = [],
   dataGridOptions = {},
 }) => {
+  // const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
+  const calculatedHeight: number = 9.4 + 2.51 * (data.length - 1);
+
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -203,9 +206,15 @@ const DataTable: React.FC<{
                 rows={rows}
                 rowHeight={40}
                 columns={columns}
+                autoHeight={true}
+                initialState={{
+                  pagination: { paginationModel: { pageSize: 5 } },
+                }}
+                pageSizeOptions={[5, 10, 25]}
                 style={{
-                  minHeight: 200,
+                  // minHeight: 200,
                   marginBottom: "2vh",
+                  // height: calculatedHeight + "rem",
                   ...styleOverrides,
                 }}
                 loading={loading}
