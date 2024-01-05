@@ -41,9 +41,6 @@ const DataTable: React.FC<{
   linkIds = [],
   dataGridOptions = {},
 }) => {
-  // const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
-  const calculatedHeight: number = 9.4 + 2.51 * (data.length - 1);
-
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -212,9 +209,7 @@ const DataTable: React.FC<{
                 }}
                 pageSizeOptions={[5, 10, 25]}
                 style={{
-                  // minHeight: 200,
                   marginBottom: "2vh",
-                  // height: calculatedHeight + "rem",
                   ...styleOverrides,
                 }}
                 loading={loading}

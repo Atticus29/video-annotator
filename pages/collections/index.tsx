@@ -88,10 +88,9 @@ const Collections: React.FC = () => {
             data={dataWithActions}
             colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
             actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
-            // styleOverrides={{ height: 1000 }} // @TODO make this look better
             targetColNameForAction={"urlPath"}
             modificationMethodForAction={sanitizeString}
-            targetColIdxForUrlPath={2} // 2
+            targetColIdxForUrlPath={2} // 2 @TODO this is probably no longer needed?
           ></DataTable>
           <Button
             data-testid={"new-collection-add-button"}

@@ -25,7 +25,6 @@ const CollectionView: React.FC = () => {
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
-  const [calculatedHeight, setCalculatedHeight] = useState<number>(9.4);
   const [showCollection, setShowCollection] = useState<boolean>(false);
 
   const {
@@ -65,15 +64,12 @@ const CollectionView: React.FC = () => {
   useEffect(() => {
     setOpen(isLoadingCollection);
     if (!isLoadingCollection && !isErrorCollection && collectionData) {
-      const numRows: number = collectionData?.videos?.length || 1;
-      setCalculatedHeight(9.4 + 2.51 * (numRows - 1));
-    }
-    if (!isLoadingCollection && !isErrorCollection && collectionData) {
       setShowCollection(true);
     }
     if (!isLoadingCollection && !isErrorCollection && !collectionData) {
       setShowCollection(false);
     }
+    // @TODO check whether you can re-enable exhaustive-deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isLoadingCollection,
@@ -217,10 +213,6 @@ const CollectionView: React.FC = () => {
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
             targetColIdxForUrlPath={0}
-            // styleOverrides={{
-            //   minHeight: 0,
-            //   height: calculatedHeight + "rem",
-            // }}
             linkUrls={{
               view: "/collection/" + localUrlPathAsString + "/video/",
             }}
