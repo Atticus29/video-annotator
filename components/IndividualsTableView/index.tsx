@@ -87,11 +87,11 @@ const IndividualsTableView: React.FC<{
           colNamesToDisplay={individualColNamesToDisplayWithActions}
           actionButtonsToDisplay={{ view: "View" }}
           targetColIdxForUrlPath={0}
-          styleOverrides={{
-            minHeight: 0,
-            height: calculatedIndividualTableHeight + "rem",
-            maxHeight: "50vh",
-          }}
+          // styleOverrides={{
+          //   minHeight: 0,
+          //   height: calculatedIndividualTableHeight + "rem",
+          //   maxHeight: "50vh",
+          // }}
           linkUrls={{
             view: "/collection/" + collectionUrl + "/individual/",
           }}

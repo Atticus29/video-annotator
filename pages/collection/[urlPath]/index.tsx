@@ -217,10 +217,10 @@ const CollectionView: React.FC = () => {
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
             targetColIdxForUrlPath={0}
-            styleOverrides={{
-              minHeight: 0,
-              height: calculatedHeight + "rem",
-            }}
+            // styleOverrides={{
+            //   minHeight: 0,
+            //   height: calculatedHeight + "rem",
+            // }}
             linkUrls={{
               view: "/collection/" + localUrlPathAsString + "/video/",
             }}
