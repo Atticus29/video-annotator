@@ -82,32 +82,38 @@ const EventIntakeQuestions: React.FC<{
                   <Typography style={{ marginBottom: 10 }}>
                     {"Question " + (intakeQuestionIdx + 1) + ". "}
                   </Typography>
-                  <Button
-                    style={{ marginBottom: 10 }}
-                    data-testid={"collection-details-submit-button"}
-                    variant="contained"
-                    onClick={() => {
-                      deleteIntakeQuestion(intakeQuestionIdx);
-                    }}
-                  >
-                    <FormattedMessage
-                      id="REMOVE_QUESTION"
-                      defaultMessage="Remove this question"
-                    />
-                  </Button>
+                  {!wholeQuestion?.isACoreQuestion && (
+                    <Button
+                      style={{ marginBottom: 10 }}
+                      data-testid={"collection-details-submit-button"}
+                      variant="contained"
+                      onClick={() => {
+                        deleteIntakeQuestion(intakeQuestionIdx);
+                      }}
+                    >
+                      <FormattedMessage
+                        id="REMOVE_QUESTION"
+                        defaultMessage="Remove this question"
+                      />
+                    </Button>
+                  )}
                 </>
               )}
-              <SingleEventIntakeQuestion
-                key={intakeQuestionKey}
-                intakeQuestionEl={intakeQuestionEl}
-                intakeQuestionKey={intakeQuestionKey}
-                wholeQuestion={wholeQuestion}
-                intakeQuestionsInvalid={intakeQuesionsInvalid}
-                intakeQuestionIdx={intakeQuestionIdx}
-                collection={collection}
-                setCollection={setCollection}
-                formFieldGroup={formFieldGroup}
-              />
+              {(!wholeQuestion?.isACoreQuestion ||
+                (intakeQuestionKey === "label" &&
+                  wholeQuestion?.isACoreQuestion)) && (
+                <SingleEventIntakeQuestion
+                  key={intakeQuestionKey}
+                  intakeQuestionEl={intakeQuestionEl}
+                  intakeQuestionKey={intakeQuestionKey}
+                  wholeQuestion={wholeQuestion}
+                  intakeQuestionsInvalid={intakeQuesionsInvalid}
+                  intakeQuestionIdx={intakeQuestionIdx}
+                  collection={collection}
+                  setCollection={setCollection}
+                  formFieldGroup={formFieldGroup}
+                />
+              )}
             </>
           );
         }

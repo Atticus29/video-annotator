@@ -77,39 +77,46 @@ const VideoIntakeQuestions: React.FC<{
         (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
           return (
             <>
-              {intakeQuestionKey === "label" && (
-                <>
-                  <Typography style={{ marginBottom: 10 }}>
-                    {"Question " + (intakeQuestionIdx + 1) + ". "}
-                  </Typography>
-                  {wholeQuestion?.label !== "URL" && ( // URL must be required for video intake per https://github.com/users/Atticus29/projects/1/views/4?pane=issue&itemId=27661393
-                    <Button
-                      style={{ marginBottom: 10 }}
-                      data-testid={"collection-details-submit-button"}
-                      variant="contained"
-                      onClick={() => {
-                        deleteIntakeQuestion(intakeQuestionIdx);
-                      }}
-                    >
-                      <FormattedMessage
-                        id="REMOVE_QUESTION"
-                        defaultMessage="Remove this question"
-                      />
-                    </Button>
-                  )}
-                </>
+              <>
+                {intakeQuestionKey === "label" && (
+                  <>
+                    <Typography style={{ marginBottom: 10 }}>
+                      {"Question " + (intakeQuestionIdx + 1) + ". "}
+                    </Typography>
+
+                    {!wholeQuestion?.isACoreQuestion && (
+                      <Button
+                        style={{ marginBottom: 10 }}
+                        data-testid={"collection-details-submit-button"}
+                        variant="contained"
+                        onClick={() => {
+                          deleteIntakeQuestion(intakeQuestionIdx);
+                        }}
+                      >
+                        <FormattedMessage
+                          id="REMOVE_QUESTION"
+                          defaultMessage="Remove this question"
+                        />
+                      </Button>
+                    )}
+                  </>
+                )}
+              </>
+              {(!wholeQuestion?.isACoreQuestion ||
+                (intakeQuestionKey === "label" &&
+                  wholeQuestion?.isACoreQuestion)) && (
+                <SingleVideoIntakeQuestion
+                  key={intakeQuestionKey}
+                  intakeQuestionEl={intakeQuestionEl}
+                  intakeQuestionKey={intakeQuestionKey}
+                  wholeQuestion={wholeQuestion}
+                  intakeQuestionsInvalid={intakeQuesionsInvalid}
+                  intakeQuestionIdx={intakeQuestionIdx}
+                  collection={collection}
+                  setCollection={setCollection}
+                  formFieldGroup={formFieldGroup}
+                />
               )}
-              <SingleVideoIntakeQuestion
-                key={intakeQuestionKey}
-                intakeQuestionEl={intakeQuestionEl}
-                intakeQuestionKey={intakeQuestionKey}
-                wholeQuestion={wholeQuestion}
-                intakeQuestionsInvalid={intakeQuesionsInvalid}
-                intakeQuestionIdx={intakeQuestionIdx}
-                collection={collection}
-                setCollection={setCollection}
-                formFieldGroup={formFieldGroup}
-              />
             </>
           );
         }

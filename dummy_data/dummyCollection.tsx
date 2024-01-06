@@ -43,6 +43,7 @@ const firstQuestion: SingleFormField = {
   invalidInputMessage: "MUST_BE_VALID_URL",
   validatorMethods: [isValidUrl],
   shouldBeCheckboxes: ["isRequired"],
+  isACoreQuestion: true,
 };
 
 const secondQuestion: SingleFormField = {
@@ -324,7 +325,7 @@ const ageClassIndividualQuestion: SingleFormField = {
 };
 
 const moveNameQuestion: SingleFormField = {
-  label: "Move Name",
+  label: "Name of event",
   type: "Autocomplete",
   language: "English",
   isRequired: true,
@@ -335,6 +336,7 @@ const moveNameQuestion: SingleFormField = {
   invalidInputMessage: "INPUT_INVALID",
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
+  isACoreQuestion: true,
 };
 
 const startingPositionOfActor: SingleFormField = {
