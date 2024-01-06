@@ -13,10 +13,11 @@ import {
   sanitizeString,
 } from "../../utilities/textUtils";
 import useGetCollections from "../../hooks/useGetCollections";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import router from "next/router";
 
 const Collections: React.FC = () => {
+  const intl: IntlShape = useIntl();
   const [localError, setLocalError] = useState<string>("");
   const { user, authError } = useFirebaseAuth();
   const { isLoading, isError, data, errorMsg } = useGetCollections(
@@ -78,13 +79,17 @@ const Collections: React.FC = () => {
   const handleNewCollectionClick: () => void = () => {
     router.push("/collection/new");
   };
+  const tableTitle: string = intl.formatMessage({
+    id: "COLLECTIONS",
+    defaultMessage: "Collections",
+  });
 
   return (
     <>
       {!isLoading && !isError && !localError! && (
         <>
           <DataTable
-            tableTitle="Testing"
+            tableTitle={tableTitle}
             data={dataWithActions}
             colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
             actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
