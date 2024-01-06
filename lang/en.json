@@ -67,7 +67,7 @@
   "TOTAL_NET_POINTS_EARNED_THIS_MONTH": "Total net points earned this month",
   "TOTAL_NET_CUMULATIVE_POINTS_EARNED": "Total net cumulative points earned",
   "SUBMIT": "Submit",
-  "COLLECTIONS": "My Collections",
+  "MY_COLLECTIONS": "My Collections",
   "VIEW": "View",
   "EDIT": "Edit",
   "PUBLIC_COLLECTIONS": "Public Collections",
@@ -142,5 +142,6 @@
   "ADD_INDIVIDUAL_TO_VIDEO": "Click rows to attach {individualName} or {individualNamePlural} to {videoName}",
   "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL": "You must select at least one individual",
   "CLOSE": "Close",
-  "INDIVIDUALS_NOT_FOUND": "Individuals not found"
+  "INDIVIDUALS_NOT_FOUND": "Individuals not found",
+  "COLLECTIONS": "Collections"
 }

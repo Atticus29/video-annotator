@@ -45,6 +45,7 @@ export interface SingleFormField {
   autocompleteOptions?: string[];
   usersCanAddCustomOptions?: boolean;
   autocompleteExtras?: {};
+  isACoreQuestion?: boolean;
 }
 
 // export interface QuestionValidity {
