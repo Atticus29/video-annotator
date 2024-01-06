@@ -325,7 +325,7 @@ const ageClassIndividualQuestion: SingleFormField = {
 };
 
 const moveNameQuestion: SingleFormField = {
-  label: "Name of event",
+  label: "Name of move",
   type: "Autocomplete",
   language: "English",
   isRequired: true,
