@@ -14,8 +14,10 @@ export default function useGetIndividuals(collectionUrl: string) {
           "/api/collection/" + collectionUrl + "/individuals"
         );
 
-        const returnVal: [] = response?.data?.individuals || [];
-        return returnVal;
+        const individuals: [] = response?.data?.individuals || [];
+        const noIndividuals: string = response?.data?.message;
+        if (noIndividuals) setErrorMsg(noIndividuals);
+        return individuals;
       } catch (e: any) {
         console.log("Error in getting a single collection is: ");
         console.log(e);

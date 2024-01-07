@@ -18,8 +18,6 @@ const IndividualsTableView: React.FC<{
   dataGridOptions,
 }) => {
   const intl: IntlShape = useIntl();
-  const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
-    useState<number>(9.4);
 
   const {
     isLoading: isLoadingIndividuals,
@@ -70,13 +68,6 @@ const IndividualsTableView: React.FC<{
     ...individualColNamesToDisplay,
     actions: "Actions",
   };
-
-  useEffect(() => {
-    if (!isLoadingIndividuals && !isErrorIndividuals && individualsData) {
-      const numIndividualsRows: number = individualsData.length || 1;
-      setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
-    }
-  }, [individualsData, isErrorIndividuals, isLoadingIndividuals]);
 
   return (
     <>
