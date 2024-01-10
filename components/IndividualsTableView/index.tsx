@@ -18,14 +18,13 @@ const IndividualsTableView: React.FC<{
   dataGridOptions,
 }) => {
   const intl: IntlShape = useIntl();
-  const [calculatedIndividualTableHeight, setCalculatedIndividualTableHeight] =
-    useState<number>(9.4);
 
   const {
     isLoading: isLoadingIndividuals,
     isError: isErrorIndividuals,
     data: individualsData,
     errorMsg: errorMsgIndividuals,
+    statusMsg,
   } = useGetIndividuals(collectionUrl);
   const individualLinkIds = useMemo(() => {
     if (individualsData) {
@@ -71,13 +70,6 @@ const IndividualsTableView: React.FC<{
     actions: "Actions",
   };
 
-  useEffect(() => {
-    if (!isLoadingIndividuals && !isErrorIndividuals && individualsData) {
-      const numIndividualsRows: number = individualsData.length || 1;
-      setCalculatedIndividualTableHeight(9.4 + 2.51 * (numIndividualsRows - 1));
-    }
-  }, [individualsData, isErrorIndividuals, isLoadingIndividuals]);
-
   return (
     <>
       {!isLoadingIndividuals && (
@@ -92,18 +84,21 @@ const IndividualsTableView: React.FC<{
           }}
           linkIds={individualLinkIds}
           dataGridOptions={dataGridOptions}
+          errorMsg={errorMsgIndividuals}
         ></DataTable>
       )}
       {isLoadingIndividuals && (
         <>
           <br />
           <CircularProgress color="inherit" />
+          <br />
         </>
       )}
       {!isLoadingIndividuals && isErrorIndividuals && (
         <>
           <br />
           <CustomError
+            statusMsg={statusMsg}
             errorMsg={
               errorMsgIndividuals ||
               intl.formatMessage({
