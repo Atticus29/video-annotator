@@ -7,8 +7,6 @@ const CustomError: React.FC<{
   errorMsg?: string | undefined | null;
   ignoreHeader?: boolean | undefined;
 }> = (props) => {
-  console.log("deleteMe statusMsg in CustomError is: ");
-  console.log(props.statusMsg);
   return (
     <>
       {!(props.statusMsg == 404) && ( // we let these get handled elsewhere because they shouldn't always show up as errors that an end user needs to be worried about

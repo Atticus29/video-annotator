@@ -10,7 +10,7 @@ import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import { Typography } from "@mui/material";
-import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 
 const DataTable: React.FC<{
   tableTitle?: string;
@@ -43,8 +43,6 @@ const DataTable: React.FC<{
   dataGridOptions = {},
   errorMsg,
 }) => {
-  const intl: IntlShape = useIntl();
-
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
