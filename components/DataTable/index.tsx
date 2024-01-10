@@ -10,7 +10,7 @@ import { populateWithActionButtons } from "../../utilities/dataTableUtils";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import { Typography } from "@mui/material";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 
 const DataTable: React.FC<{
   tableTitle?: string;
@@ -26,6 +26,7 @@ const DataTable: React.FC<{
   linkUrls?: {};
   linkIds?: string[];
   dataGridOptions?: {};
+  errorMsg?: string;
 }> = ({
   tableTitle = "Untitled",
   tableTitleId = tableTitle,
@@ -40,7 +41,10 @@ const DataTable: React.FC<{
   linkUrls = {},
   linkIds = [],
   dataGridOptions = {},
+  errorMsg,
 }) => {
+  const intl: IntlShape = useIntl();
+
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -228,10 +232,13 @@ const DataTable: React.FC<{
       {(!data || data.length < 1) && (
         <InfoPanel titleId={tableTitleId || ""} titleDefault={tableTitle || ""}>
           <Typography variant="body1">
-            <FormattedMessage
-              id={"THIS_TABLE_HAS_NO_DATA_YET"}
-              defaultMessage={"This table has no data yet"}
-            />
+            {errorMsg && <Typography> {errorMsg}</Typography>}
+            {!errorMsg && (
+              <FormattedMessage
+                id={"THIS_TABLE_HAS_NO_DATA_YET"}
+                defaultMessage={"This table has no data yet"}
+              />
+            )}
           </Typography>
         </InfoPanel>
       )}

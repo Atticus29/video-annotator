@@ -24,6 +24,7 @@ const IndividualsTableView: React.FC<{
     isError: isErrorIndividuals,
     data: individualsData,
     errorMsg: errorMsgIndividuals,
+    statusMsg,
   } = useGetIndividuals(collectionUrl);
   const individualLinkIds = useMemo(() => {
     if (individualsData) {
@@ -83,18 +84,21 @@ const IndividualsTableView: React.FC<{
           }}
           linkIds={individualLinkIds}
           dataGridOptions={dataGridOptions}
+          errorMsg={errorMsgIndividuals}
         ></DataTable>
       )}
       {isLoadingIndividuals && (
         <>
           <br />
           <CircularProgress color="inherit" />
+          <br />
         </>
       )}
       {!isLoadingIndividuals && isErrorIndividuals && (
         <>
           <br />
           <CustomError
+            statusMsg={statusMsg}
             errorMsg={
               errorMsgIndividuals ||
               intl.formatMessage({

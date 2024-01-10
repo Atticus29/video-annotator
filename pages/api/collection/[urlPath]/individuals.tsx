@@ -29,7 +29,7 @@ const IndividualsInCollection = async (
         if (individuals?.length > 0) {
           return res.status(200).json({ individuals });
         } else {
-          return res.status(200).json({ message: "No individuals found." });
+          return res.status(404).json({ message: "No individuals found." });
         }
       }
     }
