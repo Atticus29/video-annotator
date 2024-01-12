@@ -47,7 +47,7 @@ const VideoIntake: React.FC<{
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
-    { videoName: collection.nameOfVideo }
+    { videoName: collection.metadata.nameOfVideo }
   );
 
   const bodyId: string = intl.formatMessage(
@@ -56,7 +56,7 @@ const VideoIntake: React.FC<{
       defaultMessage:
         "To add a {videoName} to the collection, fill out the form below.",
     },
-    { videoName: collection?.nameOfVideo?.toLowerCase() }
+    { videoName: collection.metadata.nameOfVideo?.toLowerCase() }
   );
 
   const [showIndividualCreationDialog, setShowIndividualCreationDialog] =
@@ -69,7 +69,7 @@ const VideoIntake: React.FC<{
   const handleCreateVideoDialogClose = () => {
     // @TODO can combine this with handleCreateIndividualDialogClose
     setShowIndividualCreationDialog(false);
-    const queryKey = ["singleCollection", collection?.urlPath];
+    const queryKey = ["singleCollection", collection.metadata.urlPath];
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
@@ -106,10 +106,11 @@ const VideoIntake: React.FC<{
     intl.formatMessage(
       { id: "ADD_INDIVIDUAL_TO_VIDEO" },
       {
-        individualName: collection?.nameOfIndividual || individualFallback,
+        individualName:
+          collection.metadata.nameOfIndividual || individualFallback,
         individualNamePlural:
-          collection?.nameOfIndividualPlural || individualsFallback,
-        videoName: collection?.nameOfVideo || videoFallback,
+          collection.metadata.nameOfIndividualPlural || individualsFallback,
+        videoName: collection.metadata.nameOfVideo || videoFallback,
       }
     ) + asteriskIfRequired;
 
@@ -170,7 +171,7 @@ const VideoIntake: React.FC<{
           <>
             <Grid item lg={12} sm={12} key="individual-table">
               <IndividualsTableView
-                collectionUrl={get(collection, "urlPath", "")}
+                collectionUrl={get(collection, ["metadata", "urlPath"], "")}
                 tableTitle={individualsTableText}
                 individualIntakeQuestions={get(
                   collection,
@@ -207,7 +208,7 @@ const VideoIntake: React.FC<{
                   id="SUBMIT_NEW_INDIVIDUAL"
                   defaultMessage="Create a New {individualName}"
                   values={{
-                    individualName: collection?.nameOfIndividual,
+                    individualName: collection.metadata.nameOfIndividual,
                   }}
                 />
               </Button>
@@ -238,7 +239,7 @@ const VideoIntake: React.FC<{
                     ] || []
                   }
                   formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                  collectionPath={collection?.urlPath}
+                  collectionPath={collection.metadata.urlPath}
                   collectionPropToUpdate={"videos"}
                   onCloseDialog={onCloseDialog}
                 />

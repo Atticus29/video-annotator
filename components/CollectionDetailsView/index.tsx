@@ -14,6 +14,7 @@ const CollectionDetailsView: React.FC<{
   showEditButton: boolean;
   setIsCollectionDetailsInEditMode?: (val: boolean) => void;
 }> = ({ collection, showEditButton, setIsCollectionDetailsInEditMode }) => {
+  const excludeFromDetailsList: string[] = collection.excludeFromDetailList;
   return (
     <InfoPanel
       titleId="COLLECTION_DETAILS"
@@ -24,9 +25,10 @@ const CollectionDetailsView: React.FC<{
       setEditButton={setIsCollectionDetailsInEditMode}
     >
       <Grid container>
-        {map(collection, (collectionEl, elKey, wholeCollection) => {
-          const showInView: boolean =
-            !wholeCollection.excludeFromDetailList.includes(elKey.toString());
+        {map(collection.metadata, (collectionEl, elKey) => {
+          const showInView: boolean = !excludeFromDetailsList.includes(
+            elKey.toString()
+          );
           return (
             <Grid key={elKey} item lg={12} sm={12}>
               {showInView && (

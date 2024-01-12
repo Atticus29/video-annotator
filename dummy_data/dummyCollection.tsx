@@ -550,13 +550,19 @@ const comment: SingleFormField = {
 
 export const shamCollection: Collection = {
   // _id: "test123",
-  name: "Example Collection",
-  nameOfVideo: "Match",
-  nameOfVideoPlural: "Matches",
-  nameOfEvent: "Move",
-  nameOfEventPlural: "Moves",
-  isPrivate: false,
-  language: "English",
+  metadata: {
+    name: "Example Collection",
+    createdByEmail: "public@example.com",
+    dateCreated: Date(),
+    nameOfVideo: "Match",
+    nameOfVideoPlural: "Matches",
+    nameOfEvent: "Move",
+    nameOfEventPlural: "Moves",
+    nameOfIndividual: "Athlete",
+    nameOfIndividualPlural: "Athletes",
+    isPrivate: false,
+    language: "English",
+  },
   videoIntakeQuestions: [
     // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
     firstQuestion,
@@ -607,21 +613,23 @@ export const shamCollection: Collection = {
     "videos",
     "individuals",
   ],
-  createdByEmail: "public@example.com",
-  dateCreated: Date(),
-  nameOfIndividual: "Athlete",
-  nameOfIndividualPlural: "Athletes",
 };
 
 export const shamCollection2: Collection = {
   // _id: "test123",
-  name: "Brazilian Jiu Jitsu",
-  nameOfVideo: "Match",
-  nameOfVideoPlural: "Matches",
-  nameOfEvent: "Move",
-  nameOfEventPlural: "Moves",
-  isPrivate: false,
-  language: "English",
+  metadata: {
+    name: "Brazilian Jiu Jitsu",
+    createdByEmail: "public@example.com",
+    dateCreated: Date(),
+    nameOfVideo: "Match",
+    nameOfVideoPlural: "Matches",
+    nameOfEvent: "Move",
+    nameOfEventPlural: "Moves",
+    nameOfIndividual: "Athlete",
+    nameOfIndividualPlural: "Athletes",
+    isPrivate: false,
+    language: "English",
+  },
   videoIntakeQuestions: [
     firstQuestion,
     natureOfTheMatch,
@@ -670,8 +678,4 @@ export const shamCollection2: Collection = {
     "videos",
     "individuals",
   ],
-  createdByEmail: "mfishe53@asu.edu",
-  dateCreated: Date(),
-  nameOfIndividual: "Athlete",
-  nameOfIndividualPlural: "Athletes",
 };

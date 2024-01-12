@@ -1,17 +1,6 @@
 export interface Collection {
   _id?: any;
-  urlPath?: string;
-  name: string;
-  createdByEmail: string;
-  dateCreated: string;
-  nameOfVideo: string;
-  nameOfVideoPlural: string;
-  nameOfEvent: string;
-  nameOfEventPlural: string;
-  nameOfIndividual: string;
-  nameOfIndividualPlural: string;
-  isPrivate: boolean;
-  language: string;
+  metadata: CollectionMetadata;
   videoIntakeQuestions?: SingleFormField[];
   individualIntakeQuestions?: SingleFormField[];
   eventIntakeQuestions?: SingleFormField[];
@@ -21,6 +10,22 @@ export interface Collection {
   eventQuestionsFormFieldGroup?: FormFieldGroup;
   videos?: {}[];
   individuals?: {}[];
+}
+
+export interface CollectionMetadata {
+  urlPath?: string;
+  name: string;
+  createdByEmail: string;
+  dateCreated: string;
+  dateLastUpdated?: string;
+  nameOfVideo: string;
+  nameOfVideoPlural: string;
+  nameOfEvent: string;
+  nameOfEventPlural: string;
+  nameOfIndividual: string;
+  nameOfIndividualPlural: string;
+  isPrivate: boolean;
+  language: string;
 }
 
 export interface FormFieldGroup {

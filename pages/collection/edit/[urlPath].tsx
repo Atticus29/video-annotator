@@ -193,13 +193,15 @@ const CollectionEditor: React.FC = () => {
   const handleSaveCollection = async () => {
     setOpen(true);
     const sanitizedCollectionName: string = sanitizeString(
-      collection?.name || String(Math.random() * 10)
+      collection?.metadata.name || String(Math.random() * 10)
     );
     const fleshedOutCollection: Collection | any = {
       // @TODO just having Collection as the type created issues that I don't have internet access to resolve
       ...collection,
       urlPath: sanitizeString(
-        collection?.name || localUrlPathAsString || String(Math.random() * 10)
+        collection?.metadata.name ||
+          localUrlPathAsString ||
+          String(Math.random() * 10)
       ),
       createdByEmail: user?.email || "public@example.com",
       dateCreated: dayjs(),
@@ -263,7 +265,7 @@ const CollectionEditor: React.FC = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
-        {collection?.name && (
+        {collection?.metadata.name && (
           <>
             <Grid item sm={12} md={12}>
               {isCollectionDetailsInEditMode ? (
@@ -285,21 +287,22 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && individualQuestionsFormFieldGroup && (
-                <IndividualIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={individualQuestionsFormFieldGroup}
-                />
-              )}
+              {collection.metadata.name &&
+                individualQuestionsFormFieldGroup && (
+                  <IndividualIntakeQuestions
+                    collection={collection}
+                    setCollection={setCollection}
+                    formFieldGroup={individualQuestionsFormFieldGroup}
+                  />
+                )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
+              {collection.metadata.name && (
                 <IndividualIntakePreview collection={collection} />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && videoQuestionsFormFieldGroup && (
+              {collection.metadata.name && videoQuestionsFormFieldGroup && (
                 <VideoIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
@@ -308,12 +311,12 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
+              {collection.metadata.name && (
                 <VideoIntakePreview collection={collection} />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && eventQuestionsFormFieldGroup && (
+              {collection.metadata.name && eventQuestionsFormFieldGroup && (
                 <EventIntakeQuestions
                   collection={collection}
                   setCollection={setCollection}
@@ -322,7 +325,7 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
+              {collection.metadata.name && (
                 <EventIntakePreview collection={collection} />
               )}
             </Grid>

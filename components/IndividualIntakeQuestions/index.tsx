@@ -64,7 +64,7 @@ const IndividualIntakeQuestions: React.FC<{
   const handleSaveIndividualIntakeQuestionsAndPreview = async () => {
     await mutate(
       {
-        collectionUrl: collection.urlPath || "",
+        collectionUrl: collection.metadata.urlPath || "",
         updatedIndividualIntakeQuestions:
           collection.individualIntakeQuestions || [],
       },

@@ -80,8 +80,10 @@ const NewCollection: React.FC = () => {
       individualQuestionsFormFieldGroup;
     initialCollection.eventQuestionsFormFieldGroup =
       eventQuestionsFormFieldGroup;
-    initialCollection.createdByEmail =
-      collection?.createdByEmail || user?.email || "public@example.com";
+    initialCollection.metadata.createdByEmail =
+      collection?.metadata.createdByEmail ||
+      user?.email ||
+      "public@example.com";
     setCollection(initialCollection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -148,7 +150,7 @@ const NewCollection: React.FC = () => {
       setSaveSuccess(true);
       setSaveFail(false);
       handleClose();
-      router.push("/collection/" + data?.data?.urlPath);
+      router.push("/collection/" + data?.data?.metadata?.urlPath);
     },
     onError: (error) => {
       setSnackbarMessage(
@@ -169,11 +171,17 @@ const NewCollection: React.FC = () => {
     const fleshedOutCollection: Collection | any = {
       // @TODO just having Collection as the type created issues that I don't have internet access to resolve
       ...collection,
-      urlPath: sanitizeString(
-        collection?.name || localUrlPathAsString || String(Math.random() * 10)
-      ),
-      createdByEmail: user?.email || "public@example.com",
-      dateCreated: dayjs(),
+      metadata: {
+        ...collection?.metadata,
+        urlPath: sanitizeString(
+          collection?.metadata.name ||
+            localUrlPathAsString ||
+            String(Math.random() * 10)
+        ),
+        createdByEmail: user?.email || "public@example.com",
+        // dateCreated: dayjs(), // @TODO decide whether this needs to be done
+        dateLastUpdated: Date(),
+      },
     };
     collectionMutation.mutate(fleshedOutCollection);
   };

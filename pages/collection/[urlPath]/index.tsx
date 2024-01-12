@@ -234,7 +234,7 @@ const CollectionView: React.FC = () => {
             </DialogContent>
           </Dialog>
           <IndividualsTableView
-            collectionUrl={get(collectionData, "urlPath")}
+            collectionUrl={get(collectionData, ["metadata", "urlPath"])}
             tableTitle={nameOfIndividualPlural}
             individualIntakeQuestions={get(
               collectionData,

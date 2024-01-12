@@ -16,20 +16,25 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "POST") {
       let { data }: { data: CollectionData } = req.body;
-      const existingDocument = await coll.findOne({ urlPath: data.urlPath });
+      const existingDocument = await coll.findOne({
+        "metadata.urlPath": data.metadata.urlPath,
+      });
       if (existingDocument) {
         return res
           .status(409)
           .json({ message: "Collection with that name already exists" });
+      } else {
+        const result = await coll.insertOne(data);
+        res
+          .status(200)
+          .json({ message: "Collection saved successfully.", data });
       }
-      const result = await coll.insertOne(data);
-      res.status(200).json({ message: "Collection saved successfully.", data });
     }
 
     if (req.method === "GET") {
       const urlPath: string = req.query.urlPath as string;
       const targetDocument = await coll.findOne({
-        urlPath: urlPath,
+        "metadata.urlPath": urlPath,
       });
       res.status(200).json(targetDocument);
     }

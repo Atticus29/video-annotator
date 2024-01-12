@@ -28,11 +28,11 @@ const CollectionDetailsEdit: React.FC<{
   const intl: IntlShape = useIntl();
 
   useEffect(() => {
-    setName(collection?.name);
-    setNameOfVideo(collection?.nameOfVideo);
-    setNameOfEvent(collection?.nameOfEvent);
-    setIsPrivate(collection?.isPrivate);
-    setCreatedByEmail(collection?.createdByEmail);
+    setName(collection.metadata.name);
+    setNameOfVideo(collection.metadata.nameOfVideo);
+    setNameOfEvent(collection.metadata.nameOfEvent);
+    setIsPrivate(collection.metadata.isPrivate);
+    setCreatedByEmail(collection.metadata.createdByEmail);
   }, [collection]);
 
   const [error, setError] = useState<string>("");
@@ -44,6 +44,8 @@ const CollectionDetailsEdit: React.FC<{
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currentName: string = event?.currentTarget?.value;
     if (currentName.toLowerCase() !== "new") {
+      console.log("deleteMe setting current name to: ");
+      console.log(currentName);
       setName(currentName);
       setNameInvalid(!isValidName(currentName));
     } else {
@@ -87,7 +89,7 @@ const CollectionDetailsEdit: React.FC<{
   };
 
   const [isPrivate, setIsPrivate] = useState<boolean>(
-    get(collection, ["isPrivate"], false)
+    get(collection, ["metadata", "isPrivate"], false)
   );
   const handleIsPrivateChange: (event: any) => void = (event: any) => {
     const currentIsPrivate: any = event?.target?.checked;
@@ -110,13 +112,39 @@ const CollectionDetailsEdit: React.FC<{
 
   const handleCollectionDetailsSubmission: () => void = async () => {
     try {
+      const dateCreated = get(collection, ["metadata", "dateCreated"]);
+      const nameOfVideoPlural = get(collection, [
+        "metadata",
+        "nameOfVideoPlural",
+      ]);
+      const nameOfEventPlural = get(collection, [
+        "metadata",
+        "nameOfEventPlural",
+      ]);
+      const nameOfIndividual = get(collection, [
+        "metadata",
+        "nameOfIndividual",
+      ]);
+      const nameOfIndividualPlural = get(collection, [
+        "metadata",
+        "nameOfIndividualPlural",
+      ]); // @TODO maybe make these editable?
+      const language = get(collection, ["metadata", "language"]);
       setCollection({
         ...collection,
-        isPrivate,
-        name,
-        nameOfVideo,
-        nameOfEvent,
-        createdByEmail,
+        metadata: {
+          name,
+          dateCreated,
+          nameOfVideo,
+          nameOfVideoPlural,
+          nameOfEvent,
+          nameOfEventPlural,
+          nameOfIndividual,
+          nameOfIndividualPlural,
+          language,
+          isPrivate,
+          createdByEmail,
+        },
       });
       setIsCollectionDetailsInEditMode(false);
     } catch (error: any) {
