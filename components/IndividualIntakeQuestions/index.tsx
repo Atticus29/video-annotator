@@ -9,6 +9,8 @@ import CustomError from "../Error";
 import InfoPanel from "../InfoPanel";
 import SingleIndividualIntakeQuestion from "../SingleIndividualIntakeQuestion";
 import { defaultDoNotDisplays } from "../../dummy_data/dummyCollection";
+import { sanitizeString } from "../../utilities/textUtils";
+import useMutateIndividualIntakeQuestions from "../../hooks/useMutateIndividualIntakeQuestions";
 
 const IndividualIntakeQuestions: React.FC<{
   collection: Collection;
@@ -19,6 +21,12 @@ const IndividualIntakeQuestions: React.FC<{
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
   const [error, setError] = useState<string>("");
+  const {
+    mutate,
+    isPending,
+    error: individualIntakeError,
+    isError,
+  } = useMutateIndividualIntakeQuestions();
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -51,6 +59,25 @@ const IndividualIntakeQuestions: React.FC<{
         }) || [];
       return newIndividualIntakeQuestions;
     });
+  };
+
+  const handleSaveIndividualIntakeQuestionsAndPreview = async () => {
+    await mutate(
+      {
+        collectionUrl: collection.urlPath || "",
+        updatedIndividualIntakeQuestions:
+          collection.individualIntakeQuestions || [],
+      },
+      {
+        onSuccess: (responseData) => {
+          console.log("Mutation successful", responseData);
+        },
+        onError: (error) => {
+          // Handle error
+          console.error("Mutation error", error);
+        },
+      }
+    );
   };
 
   const createNewIntakeQuestion: () => void = () => {
@@ -137,6 +164,20 @@ const IndividualIntakeQuestions: React.FC<{
             <FormattedMessage
               id="ADD_ANOTHER_QUESTION"
               defaultMessage="Add another question"
+            />
+          </Button>
+          {error && <CustomError errorMsg={error} />}
+        </Grid>
+        <Grid item lg={12} sm={12}>
+          <Button
+            style={{ marginBottom: 10 }}
+            data-testid={"collection-details-submit-button"}
+            variant="contained"
+            onClick={handleSaveIndividualIntakeQuestionsAndPreview}
+          >
+            <FormattedMessage
+              id="SAVE_INDIVIDUAL_INTAKE_QUESTIONS_AND_PREVIEW"
+              defaultMessage="Save and Preview"
             />
           </Button>
           {error && <CustomError errorMsg={error} />}

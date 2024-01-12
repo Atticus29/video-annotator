@@ -2,6 +2,7 @@ import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../middleware/mongodb";
 import { Collection as CollectionData } from "../../../../types";
+import { get } from "lodash-es";
 
 const collectionUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
   const allowedMethods = ["PATCH"];
@@ -16,10 +17,12 @@ const collectionUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
     const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "PATCH") {
       let { data }: { data: CollectionData } = req.body;
-      const existingDocument = await coll.findOne({ urlPath: data.urlPath });
+      const existingDocument = await coll.findOne({
+        urlPath: get(data, ["urlPath"]),
+      });
       if (existingDocument) {
         const result = await coll.replaceOne(
-          { urlPath: data.urlPath },
+          { urlPath: get(data, ["urlPath"]) },
           { ...data }
         );
         res

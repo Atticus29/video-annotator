@@ -143,5 +143,6 @@
   "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL": "You must select at least one individual",
   "CLOSE": "Close",
   "INDIVIDUALS_NOT_FOUND": "Individuals not found",
-  "COLLECTIONS": "Collections"
+  "COLLECTIONS": "Collections",
+  "SAVE_INDIVIDUAL_INTAKE_QUESTIONS_AND_PREVIEW": "Save and Preview"
 }
