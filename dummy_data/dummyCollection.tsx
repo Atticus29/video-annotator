@@ -574,7 +574,8 @@ export const shamCollection: Collection = {
     weightClassIndividualQuestion,
     fourthQuestion,
     // fifthQuestion,
-    sixthQuestion,
+    // sixthQuestion,
+    ageClassIndividualQuestion,
     numberReferees,
     // seventhQuestion,
   ],
@@ -589,7 +590,7 @@ export const shamCollection: Collection = {
   ],
   eventIntakeQuestions: [
     moveNameQuestion,
-    actorName,
+    // actorName,
     startingPositionOfActor,
     startingPositionOfSubject,
     endingPositionOfActor,
