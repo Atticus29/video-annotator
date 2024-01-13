@@ -24,7 +24,6 @@ import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../utilities/textUtils";
 import { NextRouter, useRouter } from "next/router";
-import dayjs from "dayjs";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import UnsavedChangesPrompt from "../../components/UnsavedChangesPrompt";
 
