@@ -11,7 +11,7 @@ import {
 import { FormattedMessage, useIntl, IntlShape } from "react-intl";
 
 import InfoPanel from "../InfoPanel";
-import { Collection } from "../../types";
+import { Collection, CollectionMetadata } from "../../types";
 import {
   isNonEmptyString,
   isValidEmail,
@@ -19,6 +19,8 @@ import {
 } from "../../utilities/validators";
 import CustomError from "../Error";
 import { get } from "lodash-es";
+import useMutateCollectionMetadata from "../../hooks/useMutateCollectionMetadata";
+import { sanitizeString } from "../../utilities/textUtils";
 
 const CollectionDetailsEdit: React.FC<{
   collection: Collection;
@@ -26,6 +28,12 @@ const CollectionDetailsEdit: React.FC<{
   setIsCollectionDetailsInEditMode: (val: boolean) => void;
 }> = ({ collection, setCollection, setIsCollectionDetailsInEditMode }) => {
   const intl: IntlShape = useIntl();
+  const {
+    mutate,
+    isPending,
+    error: collectionMetadataUpdateError,
+    isError,
+  } = useMutateCollectionMetadata();
 
   useEffect(() => {
     setName(collection.metadata.name);
@@ -109,6 +117,57 @@ const CollectionDetailsEdit: React.FC<{
       setAllRequiredValid(false);
     }
   }, [name, nameOfEvent, nameOfVideo, createdByEmail]);
+
+  const handleCollectionDetailsSave: () => void = async () => {
+    const dateCreated = get(collection, ["metadata", "dateCreated"]);
+    const nameOfVideoPlural = get(collection, [
+      "metadata",
+      "nameOfVideoPlural",
+    ]);
+    const nameOfEventPlural = get(collection, [
+      "metadata",
+      "nameOfEventPlural",
+    ]);
+    const nameOfIndividual = get(collection, ["metadata", "nameOfIndividual"]);
+    const nameOfIndividualPlural = get(collection, [
+      "metadata",
+      "nameOfIndividualPlural",
+    ]); // @TODO maybe make these editable?
+    const language = get(collection, ["metadata", "language"]);
+    // const urlPath = sanitizeString(
+    //   collection?.metadata?.name || String(Math.random() * 10)
+    // );
+    const metadata: CollectionMetadata = {
+      urlPath: sanitizeString(name),
+      name,
+      dateCreated,
+      nameOfVideo,
+      nameOfVideoPlural,
+      nameOfEvent,
+      nameOfEventPlural,
+      nameOfIndividual,
+      nameOfIndividualPlural,
+      language,
+      isPrivate,
+      createdByEmail,
+    };
+
+    mutate(
+      {
+        collectionUrl: metadata.urlPath || "",
+        updatedCollectionMetadata: metadata,
+      },
+      {
+        onSuccess: (responseData) => {
+          console.log("Mutation successful", responseData);
+        },
+        onError: (error) => {
+          // Handle error
+          console.error("Mutation error", error);
+        },
+      }
+    );
+  };
 
   const handleCollectionDetailsSubmission: () => void = async () => {
     try {
@@ -305,6 +364,18 @@ const CollectionDetailsEdit: React.FC<{
             onClick={handleCollectionDetailsSubmission}
           >
             <FormattedMessage id="DONE" defaultMessage="Done" />
+          </Button>
+          {error && <CustomError errorMsg={error} />}
+        </Grid>
+        <Grid item lg={12} sm={12}>
+          <Button
+            style={{ marginBottom: 10 }}
+            data-testid={"collection-details-submit-button"}
+            variant="contained"
+            disabled={!allRequiredValid}
+            onClick={handleCollectionDetailsSave}
+          >
+            <FormattedMessage id="SAVE" defaultMessage="Save" />
           </Button>
           {error && <CustomError errorMsg={error} />}
         </Grid>

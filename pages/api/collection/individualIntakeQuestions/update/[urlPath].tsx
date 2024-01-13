@@ -22,7 +22,7 @@ const individualIntakeQuestionCollectionUpdate = async (
     const db: Db = client.db("videoAnnotator1");
     const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "PATCH") {
-      let { data }: { data: SingleFormField[] } = req.body;
+      let { data }: { data: SingleFormField[] } = req.body; // @TODO it's not gonna be able to get urlPath
       const existingDocument = await coll.findOne({
         urlPath: get(data, ["urlPath"]),
       });

@@ -13,10 +13,8 @@ export default function useMutateCollectionMetadata() {
         const response = await axios.patch(
           "/api/collection/" + variables?.collectionUrl + "/metadata/update",
           {
-            data: {
-              metadata: variables?.updatedCollectionMetadata,
-              urlPath: variables?.collectionUrl, // @TODO see if this makes things weird
-            },
+            metadata: variables?.updatedCollectionMetadata,
+            urlPath: variables?.collectionUrl,
           }
         );
         if (response.status === 200) {

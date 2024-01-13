@@ -5,7 +5,6 @@ import {
   CollectionMetadata,
   Collection as CollectionData,
 } from "../../../../../../types";
-import { get, rest } from "lodash-es";
 
 const collectionMetadataUpdate = async (
   req: NextApiRequest,
@@ -24,15 +23,48 @@ const collectionMetadataUpdate = async (
       let {
         metadata,
         urlPath,
-      }: { metadata: CollectionMetadata; urlPath: string } = req.body; // @TODO do I need a reference to data here?
+      }: {
+        metadata: CollectionMetadata;
+        urlPath: string;
+      } = req.body; // @TODO do I need a reference to data here?
+      console.log("deleteMe metadata is: ");
+      console.log(metadata);
+      console.log("deleteMe req.body is: ");
+      console.log(req.body);
       const result = await coll.updateOne(
-        { urlPath: urlPath },
-        { metadata: metadata }
+        { "metadata.urlPath": urlPath },
+        { $set: { metadata: metadata } }
       );
-      res.status(200).json({
-        message: "Collection metadata updated successfully",
-        data: result, // @TODO maybe change this?
-      });
+      if (result.modifiedCount < 1) {
+        const minimalCollection: CollectionData = {
+          excludeFromDetailList: [
+            "_id",
+            "id",
+            "videoIntakeQuestions",
+            "individualIntakeQuestions",
+            "eventIntakeQuestions",
+            "excludeFromDetailList",
+            "videoQuestionsFormFieldGroup",
+            "individualQuestionsFormFieldGroup",
+            "eventQuestionsFormFieldGroup",
+            "videos",
+            "individuals",
+          ],
+          metadata: metadata,
+        };
+        const creationResult = await coll.insertOne(minimalCollection);
+        res.status(200).json({
+          message: "Collection with metadata created successfully",
+          data: minimalCollection, // @TODO maybe change this?
+          result: creationResult,
+        });
+      } else {
+        res.status(200).json({
+          message: "Collection metadata updated successfully",
+          data: metadata, // @TODO maybe change this?
+          result: result,
+        });
+      }
     }
   } catch (error: any) {
     console.log(error);
