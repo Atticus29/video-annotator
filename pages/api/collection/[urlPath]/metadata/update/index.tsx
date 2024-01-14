@@ -26,11 +26,7 @@ const collectionMetadataUpdate = async (
       }: {
         metadata: CollectionMetadata;
         urlPath: string;
-      } = req.body; // @TODO do I need a reference to data here?
-      console.log("deleteMe metadata is: ");
-      console.log(metadata);
-      console.log("deleteMe req.body is: ");
-      console.log(req.body);
+      } = req.body;
       const result = await coll.updateOne(
         { "metadata.urlPath": urlPath },
         { $set: { metadata: metadata } }
@@ -55,14 +51,14 @@ const collectionMetadataUpdate = async (
         const creationResult = await coll.insertOne(minimalCollection);
         res.status(200).json({
           message: "Collection with metadata created successfully",
-          data: minimalCollection, // @TODO maybe change this?
+          data: minimalCollection,
           result: creationResult,
         });
       } else {
         res.status(200).json({
           message: "Collection metadata updated successfully",
-          data: metadata, // @TODO maybe change this?
-          result: result,
+          data: metadata,
+          // result: result,
         });
       }
     }

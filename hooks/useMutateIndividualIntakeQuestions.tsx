@@ -15,15 +15,14 @@ export default function useMutateIndividualIntakeQuestions() {
     }) => {
       try {
         const response = await axios.patch(
-          "/api/collection/individualIntakeQuestions/update/" +
-            variables?.collectionUrl,
-          {
-            data: {
+          "/api/collection/" +
+            variables?.collectionUrl +
+            "individualIntakeQuestions/update/" +
+            {
               individualIntakeQuestions:
                 variables?.updatedIndividualIntakeQuestions,
               urlPath: variables?.collectionUrl,
-            },
-          }
+            }
         );
         if (response.status === 200) {
           return response?.data;
@@ -38,11 +37,6 @@ export default function useMutateIndividualIntakeQuestions() {
         );
       }
     },
-    // onSuccess: async (data) => {
-    //   await queryClient.invalidateQueries(); // @TODO whatever the get individualIntakeQuestions fetch queryKey looks like
-    // },
-    // onError: (error) => {
-    // },
   });
   return {
     mutate: mutation.mutate,

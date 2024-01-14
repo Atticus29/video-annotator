@@ -1,11 +1,11 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "../../../../../middleware/mongodb";
+import { get } from "lodash-es";
+import clientPromise from "../../../../../../middleware/mongodb";
 import {
   SingleFormField,
   Collection as CollectionData,
-} from "../../../../../types";
-import { get } from "lodash-es";
+} from "../../../../../../types";
 
 const individualIntakeQuestionCollectionUpdate = async (
   req: NextApiRequest,
@@ -22,20 +22,23 @@ const individualIntakeQuestionCollectionUpdate = async (
     const db: Db = client.db("videoAnnotator1");
     const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "PATCH") {
-      let { data }: { data: SingleFormField[] } = req.body; // @TODO it's not gonna be able to get urlPath
-      const existingDocument = await coll.findOne({
-        urlPath: get(data, ["urlPath"]),
-      });
-      // if (existingDocument) {
+      let {
+        individualIntakeQuestions,
+        urlPath,
+      }: { individualIntakeQuestions: SingleFormField[]; urlPath: string } =
+        req.body;
       const result = await coll.updateOne(
-        { urlPath: get(data, ["urlPath"]) },
-        { individualIntakeQuestions: [...data] }
+        { "metadata.urlPath": urlPath },
+        { $set: { individualIntakeQuestions: individualIntakeQuestions } }
       );
-      res.status(200).json({
-        message: "Individual intake questions updated successfully",
-        data: result, // @TODO maybe change this?
-      });
-      // }
+      if (result.modifiedCount < 1) {
+        res.status(404).json({ message: "Collection could not be found" });
+      } else {
+        res.status(200).json({
+          message: "Individual intake questions updated successfully",
+          data: individualIntakeQuestions,
+        });
+      }
     }
   } catch (error: any) {
     console.log(error);
