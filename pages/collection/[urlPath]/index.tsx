@@ -17,6 +17,7 @@ import IndividualIntake from "../../../components/IndividualIntake";
 import VideoIntake from "../../../components/VideoIntake";
 import useGetCollection from "../../../hooks/useGetCollection";
 import IndividualsTableView from "../../../components/IndividualsTableView";
+import { sanitizeString } from "../../../utilities/textUtils";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
@@ -24,7 +25,9 @@ const CollectionView: React.FC = () => {
   const intl: IntlShape = useIntl();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
-    (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
+    (Array.isArray(localUrlPath)
+      ? sanitizeString(localUrlPath.join())
+      : sanitizeString(localUrlPath)) || "";
   const [showCollection, setShowCollection] = useState<boolean>(false);
 
   const {
@@ -32,7 +35,7 @@ const CollectionView: React.FC = () => {
     isError: isErrorCollection,
     data: collectionData,
     errorMsg: collectionErrorMsg,
-  } = useGetCollection(localUrlPathAsString);
+  } = useGetCollection(localUrlPathAsString.toLowerCase());
 
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
     useState<boolean>(false);

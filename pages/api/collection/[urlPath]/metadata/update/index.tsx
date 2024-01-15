@@ -28,8 +28,12 @@ const collectionMetadataUpdate = async (
         urlPath: string;
       } = req.body;
       const result = await coll.updateOne(
-        { "metadata.urlPath": urlPath },
-        { $set: { metadata: metadata } }
+        { "metadata.urlPath": urlPath.toLowerCase() },
+        {
+          $set: {
+            metadata: { ...metadata, urlPath: metadata.urlPath?.toLowerCase() },
+          },
+        }
       );
       if (result.modifiedCount < 1) {
         const minimalCollection: CollectionData = {
@@ -46,7 +50,7 @@ const collectionMetadataUpdate = async (
             "videos",
             "individuals",
           ],
-          metadata: metadata,
+          metadata: { ...metadata, urlPath: metadata.urlPath?.toLowerCase() },
         };
         const creationResult = await coll.insertOne(minimalCollection);
         res.status(200).json({
@@ -59,6 +63,42 @@ const collectionMetadataUpdate = async (
           message: "Collection metadata updated successfully",
           data: metadata,
           // result: result,
+        });
+      }
+    }
+    if (req.method === "POST") {
+      let {
+        metadata,
+        urlPath,
+      }: {
+        metadata: CollectionMetadata;
+        urlPath: string;
+      } = req.body;
+      const existingDocument = await coll.findOne({
+        "metadata.urlPath": urlPath,
+      });
+      if (!existingDocument) {
+        const minimalCollection: CollectionData = {
+          excludeFromDetailList: [
+            "_id",
+            "id",
+            "videoIntakeQuestions",
+            "individualIntakeQuestions",
+            "eventIntakeQuestions",
+            "excludeFromDetailList",
+            "videoQuestionsFormFieldGroup",
+            "individualQuestionsFormFieldGroup",
+            "eventQuestionsFormFieldGroup",
+            "videos",
+            "individuals",
+          ],
+          metadata: { ...metadata, urlPath: metadata.urlPath?.toLowerCase() },
+        };
+        const creationResult = await coll.insertOne(minimalCollection);
+        res.status(200).json({
+          message: "Collection with metadata created successfully",
+          data: minimalCollection,
+          result: creationResult,
         });
       }
     }

@@ -145,5 +145,7 @@
   "INDIVIDUALS_NOT_FOUND": "Individuals not found",
   "COLLECTIONS": "Collections",
   "SAVE_INDIVIDUAL_INTAKE_QUESTIONS_AND_PREVIEW": "Save and Preview",
-  "SAVE": "Save"
+  "SAVE": "Save",
+  "CREATE_COLLECTION": "Create Collection",
+  "CREATE": "Create"
 }

@@ -19,7 +19,11 @@ export function convertCamelCaseToCapitalCase(str: string) {
   return capitalizedWords.join(" ");
 }
 
-export function sanitizeString(inputString: string): string {
+export function sanitizeString(inputString: string | undefined): string {
   // Remove special characters and whitespace
-  return inputString.replace(/[^\w]+/gi, "")?.trim();
+  if (inputString) {
+    return inputString.replace(/[^\w]+/gi, "")?.trim();
+  } else {
+    return "";
+  }
 }

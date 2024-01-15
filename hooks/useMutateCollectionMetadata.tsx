@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CollectionMetadata } from "../types";
+import { CollectionMetadata, Collection as CollectionData } from "../types";
 import axios from "axios";
 
 export default function useMutateCollectionMetadata() {

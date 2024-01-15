@@ -66,7 +66,7 @@ const NewCollection: React.FC = () => {
   const [collection, setCollection] = useState<Collection>();
   const [isCollectionDetailsInEditMode, setIsCollectionDetailsInEditMode] =
     useState<boolean>(false);
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
   const [saveSucess, setSaveSuccess] = useState<boolean>(false);
   const [saveFail, setSaveFail] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
@@ -135,108 +135,110 @@ const NewCollection: React.FC = () => {
     eventQuestionsFormFieldGroup?.actualValues,
   ]);
 
-  const collectionMutation: UseMutationResult<any> = useMutation({
-    // @TODO move this into a custom hook?
-    mutationFn: async (collection) => {
-      const response = await axios.post("/api/collection", {
-        data: collection,
-      });
-      return response?.data;
-    },
-    onSuccess: (data) => {
-      setSnackbarMessage(data?.message);
-      setOpen(false);
-      setSaveSuccess(true);
-      setSaveFail(false);
-      handleClose();
-      router.push("/collection/" + data?.data?.metadata?.urlPath);
-    },
-    onError: (error) => {
-      setSnackbarMessage(
-        get(
-          error,
-          ["response", "data", "message"],
-          "Collection not saved due to unknown error."
-        )
-      );
-      setSaveSuccess(false);
-      setSaveFail(true);
-      handleClose();
-    },
-  });
+  // const collectionMutation: UseMutationResult<any> = useMutation({
+  //   // @TODO move this into a custom hook?
+  //   mutationFn: async (collection) => {
+  //     const response = await axios.post("/api/collection", {
+  //       data: collection,
+  //     });
+  //     return response?.data;
+  //   },
+  //   onSuccess: (data) => {
+  //     setSnackbarMessage(data?.message);
+  //     // setOpen(false);
+  //     setSaveSuccess(true);
+  //     setSaveFail(false);
+  //     // handleClose();
+  //     router.push("/collection/" + data?.data?.metadata?.urlPath);
+  //   },
+  //   onError: (error) => {
+  //     setSnackbarMessage(
+  //       get(
+  //         error,
+  //         ["response", "data", "message"],
+  //         "Collection not saved due to unknown error."
+  //       )
+  //     );
+  //     setSaveSuccess(false);
+  //     setSaveFail(true);
+  //     // handleClose();
+  //   },
+  // });
 
-  const handleSaveCollection = async () => {
-    setOpen(true);
-    const fleshedOutCollection: Collection | any = {
-      // @TODO just having Collection as the type created issues that I don't have internet access to resolve
-      ...collection,
-      metadata: {
-        ...collection?.metadata,
-        urlPath: sanitizeString(
-          collection?.metadata.name ||
-            localUrlPathAsString ||
-            String(Math.random() * 10)
-        ),
-        createdByEmail: user?.email || "public@example.com",
-        // dateCreated: dayjs(), // @TODO decide whether this needs to be done
-        dateLastUpdated: Date(),
-      },
-    };
-    collectionMutation.mutate(fleshedOutCollection);
-  };
+  // const handleSaveCollection = async () => {
+  //   setOpen(true);
+  //   const fleshedOutCollection: Collection | any = {
+  //     // @TODO just having Collection as the type created issues that I don't have internet access to resolve
+  //     ...collection,
+  //     metadata: {
+  //       ...collection?.metadata,
+  //       urlPath: sanitizeString(
+  //         collection?.metadata.name ||
+  //           localUrlPathAsString ||
+  //           String(Math.random() * 10)
+  //       ),
+  //       createdByEmail: user?.email || "public@example.com",
+  //       // dateCreated: dayjs(), // @TODO decide whether this needs to be done
+  //       dateLastUpdated: Date(),
+  //     },
+  //   };
+  //   collectionMutation.mutate(fleshedOutCollection);
+  // };
 
-  const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event | null,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      // in case you want this behavior to be different eventually
-      setSaveSuccess(false);
-      setSaveFail(false);
-      setSnackbarMessage("");
-      return;
-    }
+  // const handleSnackbarClose = (
+  //   event: React.SyntheticEvent | Event | null,
+  //   reason?: string
+  // ) => {
+  //   if (reason === "clickaway") {
+  //     // in case you want this behavior to be different eventually
+  //     setSaveSuccess(false);
+  //     setSaveFail(false);
+  //     setSnackbarMessage("");
+  //     return;
+  //   }
 
-    // the "finally" of it all
-    setSaveSuccess(false);
-    setSaveFail(false);
-    setSnackbarMessage("");
-  };
+  //   // the "finally" of it all
+  //   setSaveSuccess(false);
+  //   setSaveFail(false);
+  //   setSnackbarMessage("");
+  // };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
-  const savingText: JSX.Element = (
-    <FormattedMessage id={"SAVING"}></FormattedMessage>
-  );
-  const savedText: JSX.Element = (
-    <FormattedMessage id="SAVE_COLLECTION"></FormattedMessage>
-  );
+  // const savingText: JSX.Element = (
+  //   <FormattedMessage id={"SAVING"}></FormattedMessage>
+  // );
+  // const savedText: JSX.Element = (
+  //   <FormattedMessage id="SAVE_COLLECTION"></FormattedMessage>
+  // );
 
   return (
     <>
       <UnsavedChangesPrompt />
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={collectionMutation.isPending}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
         {collection && (
           <>
             <Grid item sm={12} md={12}>
-              {isCollectionDetailsInEditMode ? (
-                <CollectionDetailsEdit
-                  collection={collection}
-                  setCollection={setCollection}
-                  setIsCollectionDetailsInEditMode={
-                    setIsCollectionDetailsInEditMode
-                  }
-                />
-              ) : (
+              {/* {isCollectionDetailsInEditMode ? ( */}
+              <CollectionDetailsEdit
+                titleId="CREATE_COLLECTION"
+                collection={collection}
+                setCollection={setCollection}
+                // setIsCollectionDetailsInEditMode={
+                //   setIsCollectionDetailsInEditMode
+                // }
+                mode="create"
+              />
+              {/* ) : (
                 <CollectionDetailsView
                   collection={collection}
                   showEditButton={true}
@@ -244,9 +246,9 @@ const NewCollection: React.FC = () => {
                     setIsCollectionDetailsInEditMode
                   }
                 />
-              )}
+              )} */}
             </Grid>
-            <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
+            {/* <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection && individualQuestionsFormFieldGroup && (
                 <IndividualIntakeQuestions
                   collection={collection}
@@ -283,21 +285,21 @@ const NewCollection: React.FC = () => {
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection && <EventIntakePreview collection={collection} />}
-            </Grid>
+            </Grid> */}
           </>
         )}
       </Grid>
-      <Button variant="contained" onClick={handleSaveCollection}>
+      {/* <Button variant="contained" onClick={handleSaveCollection}>
         {collectionMutation.isPending ? savingText : savedText}
-      </Button>
-      <Backdrop
+      </Button> */}
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
-      <Snackbar
+      </Backdrop> */}
+      {/* <Snackbar
         open={saveSucess}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
@@ -328,7 +330,7 @@ const NewCollection: React.FC = () => {
             <CloseIcon fontSize="small" />
           </IconButton>
         }
-      />
+      /> */}
     </>
   );
 };

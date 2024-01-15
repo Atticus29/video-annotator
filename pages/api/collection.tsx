@@ -17,14 +17,20 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "POST") {
       let { data }: { data: CollectionData } = req.body;
       const existingDocument = await coll.findOne({
-        "metadata.urlPath": data.metadata.urlPath,
+        "metadata.urlPath": data.metadata.urlPath?.toLowerCase(),
       });
       if (existingDocument) {
         return res
           .status(409)
           .json({ message: "Collection with that name already exists" });
       } else {
-        const result = await coll.insertOne(data);
+        const result = await coll.insertOne({
+          ...data,
+          metadata: {
+            ...data.metadata,
+            urlPath: data.metadata.urlPath?.toLowerCase(),
+          },
+        });
         res
           .status(200)
           .json({ message: "Collection saved successfully.", data });
@@ -34,7 +40,7 @@ const collection = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
       const urlPath: string = req.query.urlPath as string;
       const targetDocument = await coll.findOne({
-        "metadata.urlPath": urlPath,
+        "metadata.urlPath": urlPath.toLowerCase(),
       });
       res.status(200).json(targetDocument);
     }

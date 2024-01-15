@@ -28,7 +28,7 @@ const individualIntakeQuestionCollectionUpdate = async (
       }: { individualIntakeQuestions: SingleFormField[]; urlPath: string } =
         req.body;
       const result = await coll.updateOne(
-        { "metadata.urlPath": urlPath },
+        { "metadata.urlPath": urlPath.toLowerCase() },
         { $set: { individualIntakeQuestions: individualIntakeQuestions } }
       );
       if (result.modifiedCount < 1) {
