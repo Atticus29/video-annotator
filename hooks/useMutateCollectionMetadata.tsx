@@ -33,6 +33,6 @@ export default function useMutateCollectionMetadata() {
     mutate: mutation.mutate,
     isPending: mutation.isPending,
     error: mutation.error,
-    isError: mutation.error,
+    isError: mutation.isError,
   };
 }

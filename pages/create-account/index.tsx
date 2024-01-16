@@ -18,6 +18,8 @@ import {
   isValidPassword,
   isValidUsername,
 } from "../../utilities/validators";
+import useMutateUserRoles from "../../hooks/useMutateUserRoles";
+import { UserRoles } from "../../types";
 
 const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
   //User is an optional prop only because it makes testing easier... it's optional because I can't feed props to Next.js route components.
@@ -43,6 +45,13 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
     useState<string>("password");
   const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
     useState<string>("password");
+
+  const {
+    mutate,
+    isPending,
+    error: mutateRolesError,
+    isError,
+  } = useMutateUserRoles();
 
   useOnEnter(() => {
     if (allRequiredValid) {
@@ -125,6 +134,31 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
         const userToken: string | null =
           (await userInfo?.user?.getIdToken()) || null;
         if (userToken) {
+          const uid: string = userInfo?.user?.uid;
+          console.log("deleteMe got here a1 and uid is: ");
+          console.log(uid);
+
+          mutate(
+            // { uid: uid, roles: { isAdmin: true } },
+            {
+              uid: uid,
+              roles: {
+                hasPaid: false,
+                hasAnnotatedEnough: false,
+                isModerator: false,
+              },
+            },
+            {
+              onSuccess: (responseData) => {
+                console.log("deleteMe got here and responseData is: ");
+                console.log(responseData);
+              },
+              onError: (error) => {
+                console.log("Mutation error: ", error);
+              },
+            }
+          ); // @TODO deleteMe
+          // mutate(auth.uid, {  });
           // @TODO handle the fact that the user gets redirected to the scenario wherein they can't be in account creation without being logged out
           // await sendEmailVerification(user);
           // router.push("email-verification"); // @TODO comment back in

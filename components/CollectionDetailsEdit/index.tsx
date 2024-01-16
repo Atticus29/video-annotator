@@ -50,10 +50,10 @@ const CollectionDetailsEdit: React.FC<{
   } = useMutateCollectionMetadata();
 
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenSnackbar(false);
   };
 
   useEffect(() => {
@@ -276,8 +276,8 @@ const CollectionDetailsEdit: React.FC<{
           console.log(responseData);
           console.log("Mutation successful", responseData.message);
           setSnackbarMessage(responseData.message);
-          // router.push("/collection/" + responseData?.data?.metadata?.urlPath); // @TODO comment back in
-          // @TODO display the success snackbar
+          setOpenSnackbar(true);
+          router.push("/collection/" + responseData?.data?.metadata.urlPath); // @TODO comment back in
         },
         onError: (error) => {
           // Handle error
@@ -287,48 +287,6 @@ const CollectionDetailsEdit: React.FC<{
       }
     );
   };
-
-  // const handleCollectionDetailsSubmission: () => void = async () => {
-  //   try {
-  //     const dateCreated = get(collection, ["metadata", "dateCreated"]);
-  //     const nameOfVideoPlural = get(collection, [
-  //       "metadata",
-  //       "nameOfVideoPlural",
-  //     ]);
-  //     const nameOfEventPlural = get(collection, [
-  //       "metadata",
-  //       "nameOfEventPlural",
-  //     ]);
-  //     const nameOfIndividual = get(collection, [
-  //       "metadata",
-  //       "nameOfIndividual",
-  //     ]);
-  //     const nameOfIndividualPlural = get(collection, [
-  //       "metadata",
-  //       "nameOfIndividualPlural",
-  //     ]); // @TODO maybe make these editable?
-  //     const language = get(collection, ["metadata", "language"]);
-  //     setCollection({
-  //       ...collection,
-  //       metadata: {
-  //         name,
-  //         dateCreated,
-  //         nameOfVideo,
-  //         nameOfVideoPlural,
-  //         nameOfEvent,
-  //         nameOfEventPlural,
-  //         nameOfIndividual,
-  //         nameOfIndividualPlural,
-  //         language,
-  //         isPrivate,
-  //         createdByEmail,
-  //       },
-  //     });
-  //     // setIsCollectionDetailsInEditMode(false);
-  //   } catch (error: any) {
-  //     setError(error?.message);
-  //   }
-  // };
 
   const isPrivateCollectionLabel: string = intl.formatMessage({
     id: "IS_COLLECTION_PRIVATE",
@@ -648,16 +606,16 @@ const CollectionDetailsEdit: React.FC<{
       </InfoPanel>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
+        open={isPending}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
       <Snackbar
-        open={Boolean(isError) || false}
+        open={openSnackbar}
         onClose={handleSnackbarClose}
         autoHideDuration={6000}
-        message={isError ? error : "@TODO it worked"}
+        message={snackbarMessage}
         action={
           <IconButton
             size="small"

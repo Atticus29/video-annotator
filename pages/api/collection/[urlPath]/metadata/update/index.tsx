@@ -10,7 +10,7 @@ const collectionMetadataUpdate = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const allowedMethods: string[] = ["PATCH"];
+  const allowedMethods: string[] = ["PATCH", "POST"];
   if (!allowedMethods.includes(req?.method || "") || req.method === "OPTIONS") {
     return res.status(405).json({ message: "Method not allowed." });
   }
@@ -36,6 +36,7 @@ const collectionMetadataUpdate = async (
         }
       );
       if (result.modifiedCount < 1) {
+        // @TODO update with upsert
         const minimalCollection: CollectionData = {
           excludeFromDetailList: [
             "_id",

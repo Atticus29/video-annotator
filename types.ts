@@ -1,3 +1,17 @@
+import { Interface } from "readline/promises";
+
+export interface UserWithRoles {
+  uid: string;
+  roles: UserRoles;
+}
+
+export interface UserRoles {
+  isAdmin?: boolean;
+  hasPaid: boolean;
+  hasAnnotatedEnough: boolean;
+  isModerator: boolean;
+}
+
 export interface Collection {
   _id?: any;
   metadata: CollectionMetadata;

@@ -18,9 +18,13 @@ import VideoIntake from "../../../components/VideoIntake";
 import useGetCollection from "../../../hooks/useGetCollection";
 import IndividualsTableView from "../../../components/IndividualsTableView";
 import { sanitizeString } from "../../../utilities/textUtils";
+import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
+  const { user } = useFirebaseAuth();
+  console.log("deleteMe user is: ");
+  console.log(user);
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
   const localUrlPath: string | string[] | undefined = router.query.urlPath;

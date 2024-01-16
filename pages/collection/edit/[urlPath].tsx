@@ -272,9 +272,6 @@ const CollectionEditor: React.FC = () => {
                 <CollectionDetailsEdit
                   collection={collection}
                   setCollection={setCollection}
-                  setIsCollectionDetailsInEditMode={
-                    setIsCollectionDetailsInEditMode
-                  }
                 />
               ) : (
                 <CollectionDetailsView
