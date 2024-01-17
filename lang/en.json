@@ -147,5 +147,6 @@
   "SAVE_INDIVIDUAL_INTAKE_QUESTIONS_AND_PREVIEW": "Save and Preview",
   "SAVE": "Save",
   "CREATE_COLLECTION": "Create Collection",
-  "CREATE": "Create"
+  "CREATE": "Create",
+  "UPDATE": "Update"
 }

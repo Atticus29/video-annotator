@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { UserRoles, UserWithRoles } from "../types";
+import { UserRoles, User } from "../types";
 
 export default function useMutateUserRoles() {
   const queryClient = useQueryClient();
@@ -11,7 +11,7 @@ export default function useMutateUserRoles() {
       roles: UserRoles;
     }) => {
       try {
-        // const user: UserWithRoles = {
+        // const user: User = {
         //   uid: variables?.uid,
         //   roles: variables?.userRoles,
         // };

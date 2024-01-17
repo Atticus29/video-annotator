@@ -27,21 +27,23 @@ import { get } from "lodash-es";
 import useMutateCollectionMetadata from "../../hooks/useMutateCollectionMetadata";
 import { sanitizeString } from "../../utilities/textUtils";
 import router from "next/router";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const CollectionDetailsEdit: React.FC<{
   collection: Collection;
-  setCollection: (col: Collection) => void;
+  // setCollection: (col: Collection) => void;
   // setIsCollectionDetailsInEditMode: (val: boolean) => void;
   titleId?: string;
   mode?: string;
 }> = ({
   collection,
-  setCollection,
+  // setCollection,
   // setIsCollectionDetailsInEditMode,
   titleId,
   mode = "edit",
 }) => {
   const intl: IntlShape = useIntl();
+  const { user } = useFirebaseAuth();
   const {
     mutate,
     isPending,
@@ -236,6 +238,7 @@ const CollectionDetailsEdit: React.FC<{
       // setSaveSuccess(false);
       // setSaveFail(false);
       setSnackbarMessage("");
+      setOpenSnackbar(false);
       return;
     }
 
@@ -243,12 +246,17 @@ const CollectionDetailsEdit: React.FC<{
     // setSaveSuccess(false);
     // setSaveFail(false);
     setSnackbarMessage("");
+    setOpenSnackbar(false);
   };
 
   const handleCollectionDetailsCreate: () => void = async () => {
     const metadata: CollectionMetadata = {
-      urlPath: sanitizeString(name).toLowerCase(),
+      urlPath:
+        mode === "create"
+          ? sanitizeString(name).toLowerCase()
+          : collection.metadata.urlPath,
       name,
+      ownerId: mode === "create" ? user.uid : collection.metadata.ownerId,
       dateCreated: mode === "create" ? Date() : collection.metadata.dateCreated,
       dateLastUpdated: Date(),
       nameOfVideo,
@@ -277,7 +285,9 @@ const CollectionDetailsEdit: React.FC<{
           console.log("Mutation successful", responseData.message);
           setSnackbarMessage(responseData.message);
           setOpenSnackbar(true);
-          router.push("/collection/" + responseData?.data?.metadata.urlPath); // @TODO comment back in
+          if (mode === "create") {
+            router.push("/collection/" + responseData?.data?.urlPath);
+          }
         },
         onError: (error) => {
           // Handle error
@@ -598,7 +608,10 @@ const CollectionDetailsEdit: React.FC<{
               disabled={!allRequiredValid}
               onClick={handleCollectionDetailsCreate}
             >
-              <FormattedMessage id="CREATE" defaultMessage="Create" />
+              <FormattedMessage
+                id={mode === "create" ? "CREATE" : "UPDATE"}
+                defaultMessage={mode === "create" ? "Create" : "Update"}
+              />
             </Button>
             {error && <CustomError errorMsg={error} />}
           </Grid>

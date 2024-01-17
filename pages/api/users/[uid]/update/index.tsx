@@ -1,7 +1,7 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../../middleware/mongodb";
-import { UserRoles, UserWithRoles } from "../../../../../types";
+import { UserRoles, User } from "../../../../../types";
 
 const userRolesUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
   const allowedMethods: string[] = ["PATCH"];
@@ -12,12 +12,12 @@ const userRolesUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
-    const coll: Collection<UserWithRoles> = db.collection("users");
+    const coll: Collection<User> = db.collection("users");
     console.log("deleteMe got here b1");
     if (req.method === "PATCH") {
       console.log("deleteMe got here b2");
       let { uid, roles }: { uid: string; roles: UserRoles } = req.body;
-      const newUser: UserWithRoles = { uid: uid, roles: roles };
+      const newUser: User = { uid: uid, roles: roles };
       console.log("deleteMe newUser is: ");
       console.log(newUser);
       const result = await coll.updateOne(

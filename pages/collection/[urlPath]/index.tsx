@@ -19,14 +19,18 @@ import useGetCollection from "../../../hooks/useGetCollection";
 import IndividualsTableView from "../../../components/IndividualsTableView";
 import { sanitizeString } from "../../../utilities/textUtils";
 import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
+import useGetUserRolesAsync from "../../../hooks/useGetUserRolesAsync";
+import useGetUserRoles from "../../../hooks/useGetUserRoles";
+import CollectionDetailsEdit from "../../../components/CollectionDetailsEdit";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
   const { user } = useFirebaseAuth();
-  console.log("deleteMe user is: ");
-  console.log(user);
+
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
+  const [isCollectionDetailsInEditMode, setIsCollectionDetailsInEditMode] =
+    useState<boolean>(false);
   const localUrlPath: string | string[] | undefined = router.query.urlPath;
   let localUrlPathAsString: string =
     (Array.isArray(localUrlPath)
@@ -40,6 +44,18 @@ const CollectionView: React.FC = () => {
     data: collectionData,
     errorMsg: collectionErrorMsg,
   } = useGetCollection(localUrlPathAsString.toLowerCase());
+
+  const { isLoading, isError, data, error } = useGetUserRolesAsync(user?.uid);
+  const isAdmin: boolean = true; // @TODO change
+  const isOwner: boolean = useMemo(() => {
+    if (user?.uid && collectionData.metadata.ownerId) {
+      return user?.uid === collectionData.metadata.ownerId;
+    }
+    return false;
+  }, [user, collectionData]);
+  const canEdit: boolean = useMemo(() => {
+    return isAdmin || isOwner;
+  }, [isAdmin, isOwner]);
 
   const [createVideoDialogOpen, setCreateVideoDialogOpen] =
     useState<boolean>(false);
@@ -188,10 +204,17 @@ const CollectionView: React.FC = () => {
       )}
       {showCollection && (
         <>
-          <CollectionDetailsView
-            collection={collectionData}
-            showEditButton={false}
-          ></CollectionDetailsView>
+          {isCollectionDetailsInEditMode ? (
+            <CollectionDetailsEdit collection={collectionData} />
+          ) : (
+            <CollectionDetailsView
+              collection={collectionData}
+              showEditButton={canEdit}
+              setIsCollectionDetailsInEditMode={
+                setIsCollectionDetailsInEditMode
+              }
+            ></CollectionDetailsView>
+          )}
 
           {/* Video creation */}
           <Dialog

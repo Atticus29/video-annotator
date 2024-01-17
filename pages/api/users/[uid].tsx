@@ -1,9 +1,12 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../middleware/mongodb";
-import { UserWithRoles } from "../../../types";
+import { User } from "../../../types";
 
 const UserRoles = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("deleteMe got here d1 and req is: ");
+  console.log(req);
+
   const allowedMethods: string[] = ["GET"];
 
   if (!allowedMethods.includes(req.method || "") || req.method === "OPTIONS") {
@@ -14,12 +17,13 @@ const UserRoles = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const client: MongoClient = await clientPromise;
       const db: Db = client.db("videoAnnotator1");
-      const coll: Collection<UserWithRoles> =
-        db.collection<UserWithRoles>("users");
+      const coll: Collection<User> = db.collection<User>("users");
       const { uid } = req.query;
-      const userWithRoles = await coll.findOne({ uid: uid });
-      if (userWithRoles) {
-        return res.status(200).json({ userWithRoles });
+      console.log("deleteMe got here c1 and uid is: ");
+      console.log(uid);
+      const user = await coll.findOne({ uid: uid });
+      if (user) {
+        return res.status(200).json({ user });
       } else {
         return res.status(404).json({ messsage: "No user found" });
       }
@@ -29,3 +33,5 @@ const UserRoles = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 };
+
+export default UserRoles;
