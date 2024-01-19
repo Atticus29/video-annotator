@@ -44,7 +44,7 @@ const collectionMetadataPost = async (
         });
       } else {
         res
-          .status(405)
+          .status(200)
           .json({ message: "Collection with that name already exists" });
       }
     }

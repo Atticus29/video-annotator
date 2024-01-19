@@ -305,7 +305,11 @@ const CollectionDetailsEdit: React.FC<{
               updateSuccessCondition(responseData);
               const urlPathForRouter: string =
                 responseData?.data?.metadata?.urlPath || "";
-              router.push("/collection/" + urlPathForRouter);
+              console.log("deleteMe responseData is: ");
+              console.log(responseData);
+              if (urlPathForRouter) {
+                router.push("/collection/" + urlPathForRouter);
+              }
             },
             onError: (error) => {
               // Handle error
