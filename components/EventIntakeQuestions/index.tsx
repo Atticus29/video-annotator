@@ -5,7 +5,7 @@ import { map, get } from "lodash-es";
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
 import { Button, Grid, Typography } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
-import CustomError from "../Error";
+import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
 import SingleEventIntakeQuestion from "../SingleEventIntakeQuestion";
 import { defaultDoNotDisplays } from "../../dummy_data/dummyCollection";

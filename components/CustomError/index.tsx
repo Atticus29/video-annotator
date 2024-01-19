@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 
 const CustomError: React.FC<{
   statusMsg?: any;
-  errorMsg?: string | undefined | null;
+  errorMsg?: any;
   ignoreHeader?: boolean | undefined;
 }> = (props) => {
   return (
@@ -33,7 +33,7 @@ const CustomError: React.FC<{
             )}
             {props?.errorMsg && (
               <Alert severity="error" style={{ textAlign: "center" }}>
-                {props.errorMsg}
+                {props.errorMsg || props.errorMsg.message}
               </Alert>
             )}
             {!props?.errorMsg && (

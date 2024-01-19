@@ -232,10 +232,10 @@ const NewCollection: React.FC = () => {
               <CollectionDetailsEdit
                 titleId="CREATE_COLLECTION"
                 collection={collection}
-                setCollection={setCollection}
-                // setIsCollectionDetailsInEditMode={
-                //   setIsCollectionDetailsInEditMode
-                // }
+                // setCollection={setCollection}
+                setIsCollectionDetailsInEditMode={
+                  setIsCollectionDetailsInEditMode
+                }
                 mode="create"
               />
               {/* ) : (

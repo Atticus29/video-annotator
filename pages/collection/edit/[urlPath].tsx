@@ -32,7 +32,7 @@ import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
 import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
 import useGetCollection from "../../../hooks/useGetCollection";
-import CustomError from "../../../components/Error";
+import CustomError from "../../../components/CustomError";
 
 const CollectionEditor: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -271,11 +271,14 @@ const CollectionEditor: React.FC = () => {
               {isCollectionDetailsInEditMode ? (
                 <CollectionDetailsEdit
                   collection={collection}
-                  setCollection={setCollection}
+                  setIsCollectionDetailsInEditMode={
+                    setIsCollectionDetailsInEditMode
+                  }
+                  // setCollection={setCollection}
                 />
               ) : (
                 <CollectionDetailsView
-                  collection={collection}
+                  collectionUrl={collection.metadata.urlPath || ""}
                   showEditButton={true}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode

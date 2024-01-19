@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import InfoIcon from "../InfoIcon";
 
 import {
@@ -22,34 +22,50 @@ import {
   isValidEmail,
   isValidName,
 } from "../../utilities/validators";
-import CustomError from "../Error";
+import CustomError from "../CustomError";
 import { get } from "lodash-es";
-import useMutateCollectionMetadata from "../../hooks/useMutateCollectionMetadata";
+import useUpdateCollectionMetadata from "../../hooks/useUpdateCollectionMetadata";
 import { sanitizeString } from "../../utilities/textUtils";
 import router from "next/router";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
+import usePostCollectionMetadata from "../../hooks/usePostCollectionMetadata";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CollectionDetailsEdit: React.FC<{
   collection: Collection;
   // setCollection: (col: Collection) => void;
-  // setIsCollectionDetailsInEditMode: (val: boolean) => void;
+  setIsCollectionDetailsInEditMode: (val: boolean) => void;
   titleId?: string;
   mode?: string;
 }> = ({
   collection,
   // setCollection,
-  // setIsCollectionDetailsInEditMode,
+  setIsCollectionDetailsInEditMode,
   titleId,
   mode = "edit",
 }) => {
   const intl: IntlShape = useIntl();
+  const queryClient = useQueryClient();
   const { user } = useFirebaseAuth();
+  const uid: string = useMemo(() => {
+    console.log("deleteMe user updated and is: ");
+    console.log(user);
+    return user?.uid;
+  }, [user]);
+
   const {
-    mutate,
-    isPending,
-    error: collectionMetadataUpdateError,
-    isError,
-  } = useMutateCollectionMetadata();
+    mutate: updateCollection,
+    isPending: updatePending,
+    error: updateError,
+    isError: isUpdateError,
+  } = useUpdateCollectionMetadata();
+
+  const {
+    mutate: createCollection,
+    isPending: createPending,
+    error: createError,
+    isError: isCreateError,
+  } = usePostCollectionMetadata();
 
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -59,6 +75,7 @@ const CollectionDetailsEdit: React.FC<{
   };
 
   useEffect(() => {
+    // initialize the form with template
     setName(collection.metadata.name);
     setNameOfVideo(collection.metadata.nameOfVideo);
     setNameOfVideoPlural(collection.metadata.nameOfVideoPlural);
@@ -71,7 +88,7 @@ const CollectionDetailsEdit: React.FC<{
     setCreatedByEmail(collection.metadata.createdByEmail);
   }, [collection]);
 
-  const [error, setError] = useState<string>("");
+  // const [error, setError] = useState<string>("");
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(false);
 
   // Collection name
@@ -249,53 +266,85 @@ const CollectionDetailsEdit: React.FC<{
     setOpenSnackbar(false);
   };
 
-  const handleCollectionDetailsCreate: () => void = async () => {
-    const metadata: CollectionMetadata = {
-      urlPath:
-        mode === "create"
-          ? sanitizeString(name).toLowerCase()
-          : collection.metadata.urlPath,
-      name,
-      ownerId: mode === "create" ? user.uid : collection.metadata.ownerId,
-      dateCreated: mode === "create" ? Date() : collection.metadata.dateCreated,
-      dateLastUpdated: Date(),
-      nameOfVideo,
-      nameOfVideoPlural,
-      nameOfEvent,
-      nameOfEventPlural,
-      nameOfIndividual,
-      nameOfIndividualPlural,
-      language,
-      isPrivate,
-      createdByEmail,
-    };
+  const handleSaveOrUpdate: () => void = async () => {
+    console.log("deleteMe name is: ");
+    console.log(name);
+    if (uid) {
+      const metadata: CollectionMetadata = {
+        name,
+        urlPath:
+          mode === "create"
+            ? sanitizeString(name).toLowerCase()
+            : collection.metadata.urlPath,
+        ownerId: mode === "create" ? uid : collection.metadata.ownerId,
+        dateCreated:
+          mode === "create" ? Date() : collection.metadata.dateCreated,
+        dateLastUpdated: Date(),
+        nameOfVideo,
+        nameOfVideoPlural,
+        nameOfEvent,
+        nameOfEventPlural,
+        nameOfIndividual,
+        nameOfIndividualPlural,
+        language,
+        isPrivate,
+        createdByEmail,
+      };
 
-    console.log("deleteMe metadata before mutation is: ");
-    console.log(metadata);
+      console.log("deleteMe metadata before mutation is: ");
+      console.log(metadata);
 
-    mutate(
-      {
-        collectionUrl: metadata.urlPath || "",
-        updatedCollectionMetadata: metadata,
-      },
-      {
-        onSuccess: (responseData) => {
-          console.log("deleteMe responseData is: ");
-          console.log(responseData);
-          console.log("Mutation successful", responseData.message);
-          setSnackbarMessage(responseData.message);
-          setOpenSnackbar(true);
-          if (mode === "create") {
-            router.push("/collection/" + responseData?.data?.urlPath);
+      if (mode === "create") {
+        createCollection(
+          {
+            collectionUrl: metadata.urlPath || "",
+            updatedCollectionMetadata: metadata,
+          },
+          {
+            onSuccess: (responseData: any) => {
+              updateSuccessCondition(responseData);
+              const urlPathForRouter: string =
+                responseData?.data?.metadata?.urlPath || "";
+              router.push("/collection/" + urlPathForRouter);
+            },
+            onError: (error) => {
+              // Handle error
+              setSnackbarMessage(error.message);
+              console.error("Mutation error", error);
+            },
           }
-        },
-        onError: (error) => {
-          // Handle error
-          setSnackbarMessage(error.message);
-          console.error("Mutation error", error);
-        },
+        );
+      } else {
+        updateCollection(
+          {
+            collectionUrl: metadata.urlPath || "",
+            updatedCollectionMetadata: metadata,
+          },
+          {
+            onSuccess: (responseData: any) => {
+              updateSuccessCondition(responseData);
+            },
+            onError: (error) => {
+              // Handle error
+              setSnackbarMessage(error.message);
+              console.error("Mutation error", error);
+            },
+          }
+        );
       }
-    );
+    }
+  };
+
+  const updateSuccessCondition = (responseData: any) => {
+    queryClient.invalidateQueries({
+      queryKey: ["singleCollection", responseData?.data?.metadata?.urlPath],
+    });
+    console.log("Mutation successful", responseData.message);
+    setSnackbarMessage(responseData.message);
+    setOpenSnackbar(true);
+    if (setIsCollectionDetailsInEditMode) {
+      setIsCollectionDetailsInEditMode(false);
+    }
   };
 
   const isPrivateCollectionLabel: string = intl.formatMessage({
@@ -605,21 +654,23 @@ const CollectionDetailsEdit: React.FC<{
               style={{ marginBottom: 10 }}
               data-testid={"collection-details-submit-button"}
               variant="contained"
-              disabled={!allRequiredValid}
-              onClick={handleCollectionDetailsCreate}
+              disabled={!allRequiredValid || !uid}
+              onClick={handleSaveOrUpdate}
             >
               <FormattedMessage
                 id={mode === "create" ? "CREATE" : "UPDATE"}
                 defaultMessage={mode === "create" ? "Create" : "Update"}
               />
             </Button>
-            {error && <CustomError errorMsg={error} />}
+            {(isUpdateError || isCreateError) && (
+              <CustomError errorMsg={createError ? createError : updateError} />
+            )}
           </Grid>
         </Grid>
       </InfoPanel>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isPending}
+        open={updatePending || createPending}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />

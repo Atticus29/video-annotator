@@ -8,6 +8,7 @@ import {
 import moveNames from "./moveNames";
 import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
+import { excludeFromCollectionTableDisplay } from "../constants";
 // import dayjs from "dayjs";
 
 export const defaultDoNotDisplays: string[] = [
@@ -601,19 +602,7 @@ export const shamCollection: Collection = {
     moveRating,
     comment, // @TODO add start time and end time to this
   ],
-  excludeFromDetailList: [
-    "_id",
-    "id",
-    "videoIntakeQuestions",
-    "individualIntakeQuestions",
-    "eventIntakeQuestions",
-    "excludeFromDetailList",
-    "videoQuestionsFormFieldGroup",
-    "individualQuestionsFormFieldGroup",
-    "eventQuestionsFormFieldGroup",
-    "videos",
-    "individuals",
-  ],
+  excludeFromDetailList: excludeFromCollectionTableDisplay,
 };
 
 export const shamCollection2: Collection = {
@@ -667,16 +656,5 @@ export const shamCollection2: Collection = {
     moveRating,
     comment,
   ],
-  excludeFromDetailList: [
-    "id",
-    "videoIntakeQuestions",
-    "individualIntakeQuestions",
-    "eventIntakeQuestions",
-    "excludeFromDetailList",
-    "videoQuestionsFormFieldGroup",
-    "individualQuestionsFormFieldGroup",
-    "eventQuestionsFormFieldGroup",
-    "videos",
-    "individuals",
-  ],
+  excludeFromDetailList: excludeFromCollectionTableDisplay,
 };

@@ -12,7 +12,7 @@ import { FormattedMessage, useIntl, IntlShape } from "react-intl";
 import { sendEmailVerification } from "firebase/auth";
 import Typography from "@mui/material/Typography";
 
-import CustomError from "../../components/Error/index";
+import CustomError from "../../components/CustomError/index";
 import {
   isValidEmail,
   isValidPassword,

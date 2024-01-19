@@ -1,20 +1,30 @@
-import { Grid, Typography } from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 
 import { map } from "lodash-es";
 
-import { Collection } from "../../types";
 import InfoPanel from "../InfoPanel";
 import {
   capitalizeEachWord,
   convertCamelCaseToCapitalCase,
 } from "../../utilities/textUtils";
+import useGetCollection from "../../hooks/useGetCollection";
+import CustomError from "../CustomError";
+import { IntlShape, useIntl } from "react-intl";
 
 const CollectionDetailsView: React.FC<{
-  collection: Collection;
+  collectionUrl: string;
   showEditButton: boolean;
   setIsCollectionDetailsInEditMode?: (val: boolean) => void;
-}> = ({ collection, showEditButton, setIsCollectionDetailsInEditMode }) => {
+}> = ({ collectionUrl, showEditButton, setIsCollectionDetailsInEditMode }) => {
+  const intl: IntlShape = useIntl();
+  const {
+    data: collection,
+    isError,
+    isLoading,
+    errorMsg,
+  } = useGetCollection(collectionUrl);
   const excludeFromDetailsList: string[] = collection.excludeFromDetailList;
+
   return (
     <InfoPanel
       titleId="COLLECTION_DETAILS"
@@ -24,23 +34,37 @@ const CollectionDetailsView: React.FC<{
       includeCornerEditButton={showEditButton}
       setEditButton={setIsCollectionDetailsInEditMode}
     >
-      <Grid container>
-        {map(collection.metadata, (collectionEl, elKey) => {
-          const showInView: boolean = !excludeFromDetailsList.includes(
-            elKey.toString()
-          );
-          return (
-            <Grid key={elKey} item lg={12} sm={12}>
-              {showInView && (
-                <Typography key={elKey}>
-                  {convertCamelCaseToCapitalCase(elKey)} :{" "}
-                  {capitalizeEachWord(collectionEl?.toString() || "No value")}
-                </Typography>
-              )}
-            </Grid>
-          );
-        })}
-      </Grid>
+      {!isLoading && !isError && (
+        <Grid container>
+          {map(collection.metadata, (collectionEl, elKey) => {
+            const showInView: boolean = !excludeFromDetailsList.includes(
+              elKey.toString()
+            );
+            return (
+              <Grid key={elKey} item lg={12} sm={12}>
+                {showInView && (
+                  <Typography key={elKey}>
+                    {convertCamelCaseToCapitalCase(elKey)} :{" "}
+                    {capitalizeEachWord(collectionEl?.toString() || "No value")}
+                  </Typography>
+                )}
+              </Grid>
+            );
+          })}
+        </Grid>
+      )}
+      {isLoading && <CircularProgress color="inherit" />}
+      {isError && (
+        <CustomError
+          errorMsg={
+            errorMsg ||
+            intl.formatMessage({
+              id: "COLLECTION_NOT_FOUND",
+              defaultMessage: "Collection not found",
+            })
+          }
+        />
+      )}
     </InfoPanel>
   );
 };

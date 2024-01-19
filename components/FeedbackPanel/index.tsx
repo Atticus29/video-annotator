@@ -5,7 +5,7 @@ import { TextField, Grid, Button } from "@mui/material";
 
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
-import CustomError from "../Error";
+import CustomError from "../CustomError";
 import useOnEnter from "../../hooks/useOnEnter";
 import {
   isValidUrl,

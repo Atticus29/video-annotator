@@ -12,7 +12,7 @@ import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
 import DataTable from "../../../components/DataTable";
-import CustomError from "../../../components/Error";
+import CustomError from "../../../components/CustomError";
 import IndividualIntake from "../../../components/IndividualIntake";
 import VideoIntake from "../../../components/VideoIntake";
 import useGetCollection from "../../../hooks/useGetCollection";
@@ -48,7 +48,7 @@ const CollectionView: React.FC = () => {
   const { isLoading, isError, data, error } = useGetUserRolesAsync(user?.uid);
   const isAdmin: boolean = true; // @TODO change
   const isOwner: boolean = useMemo(() => {
-    if (user?.uid && collectionData.metadata.ownerId) {
+    if (user?.uid && collectionData?.metadata?.ownerId) {
       return user?.uid === collectionData.metadata.ownerId;
     }
     return false;
@@ -205,10 +205,15 @@ const CollectionView: React.FC = () => {
       {showCollection && (
         <>
           {isCollectionDetailsInEditMode ? (
-            <CollectionDetailsEdit collection={collectionData} />
+            <CollectionDetailsEdit
+              collection={collectionData}
+              setIsCollectionDetailsInEditMode={
+                setIsCollectionDetailsInEditMode
+              }
+            />
           ) : (
             <CollectionDetailsView
-              collection={collectionData}
+              collectionUrl={collectionData.metadata.urlPath || ""}
               showEditButton={canEdit}
               setIsCollectionDetailsInEditMode={
                 setIsCollectionDetailsInEditMode

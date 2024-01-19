@@ -3,8 +3,8 @@ import { Interface } from "readline/promises";
 export interface User {
   uid: string;
   roles: UserRoles;
-  collectionIds: string[];
-  videoIds: string[];
+  collectionIds?: string[];
+  videoIds?: string[];
 }
 
 export interface UserRoles {
@@ -29,9 +29,9 @@ export interface Collection {
 }
 
 export interface CollectionMetadata {
-  urlPath?: string;
   name: string;
-  ownerId: string;
+  urlPath?: string;
+  ownerId?: string;
   createdByEmail: string;
   dateCreated: string;
   dateLastUpdated?: string;

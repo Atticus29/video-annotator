@@ -4,7 +4,7 @@ import useGetIndividuals from "../../hooks/useGetIndividuals";
 import DataTable from "../DataTable";
 import { IntlShape, useIntl } from "react-intl";
 import { CircularProgress } from "@mui/material";
-import CustomError from "../Error";
+import CustomError from "../CustomError";
 
 const IndividualsTableView: React.FC<{
   collectionUrl: string;

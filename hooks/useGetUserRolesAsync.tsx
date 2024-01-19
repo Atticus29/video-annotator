@@ -20,6 +20,7 @@ export default function useGetUserRolesAsync(uid: string) {
 
         // Fetch user roles based on uid
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         const result = useGetUserRoles(uid);
 
         // Set data and loading state based on the result
