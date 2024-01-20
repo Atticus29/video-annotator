@@ -30,20 +30,29 @@ import router from "next/router";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import usePostCollectionMetadata from "../../hooks/usePostCollectionMetadata";
 import { useQueryClient } from "@tanstack/react-query";
+import useGetCollection from "../../hooks/useGetCollection";
+import { shamCollectionShell } from "../../dummy_data/dummyCollection";
 
 const CollectionDetailsEdit: React.FC<{
-  collection: Collection;
-  // setCollection: (col: Collection) => void;
   setIsCollectionDetailsInEditMode: (val: boolean) => void;
   titleId?: string;
   mode?: string;
+  collectionUrl?: string;
 }> = ({
-  collection,
-  // setCollection,
   setIsCollectionDetailsInEditMode,
   titleId,
   mode = "edit",
+  collectionUrl = "",
 }) => {
+  const {
+    data: collection,
+    isLoading: isCollectionLoading, //@TODO implement
+    isError: isCollectionError,
+    errorMsg: collectionErrorMsg,
+  } = useGetCollection(collectionUrl);
+
+  const dummyCollection: Collection = shamCollectionShell;
+
   const intl: IntlShape = useIntl();
   const queryClient = useQueryClient();
   const { user } = useFirebaseAuth();
@@ -76,17 +85,45 @@ const CollectionDetailsEdit: React.FC<{
 
   useEffect(() => {
     // initialize the form with template
-    setName(collection.metadata.name);
-    setNameOfVideo(collection.metadata.nameOfVideo);
-    setNameOfVideoPlural(collection.metadata.nameOfVideoPlural);
-    setNameOfEvent(collection.metadata.nameOfEvent);
-    setNameOfEventPlural(collection.metadata.nameOfEventPlural);
-    setNameOfIndividual(collection.metadata.nameOfIndividual);
-    setLanguage(collection.metadata.language);
-    setNameOfIndividualPlural(collection.metadata.nameOfIndividualPlural);
-    setIsPrivate(collection.metadata.isPrivate);
-    setCreatedByEmail(collection.metadata.createdByEmail);
-  }, [collection]);
+    if (mode !== "create") {
+      setName(collection.metadata.name);
+      setNameOfVideo(collection.metadata.nameOfVideo);
+      setNameOfVideoPlural(collection.metadata.nameOfVideoPlural);
+      setNameOfEvent(collection.metadata.nameOfEvent);
+      setNameOfEventPlural(collection.metadata.nameOfEventPlural);
+      setNameOfIndividual(collection.metadata.nameOfIndividual);
+      setLanguage(collection.metadata.language);
+      setNameOfIndividualPlural(collection.metadata.nameOfIndividualPlural);
+      setIsPrivate(collection.metadata.isPrivate);
+      setCreatedByEmail(collection.metadata.createdByEmail);
+    } else {
+      setName(dummyCollection.metadata.name);
+      setNameOfVideo(dummyCollection.metadata.nameOfVideo);
+      setNameOfVideoPlural(dummyCollection.metadata.nameOfVideoPlural);
+      setNameOfEvent(dummyCollection.metadata.nameOfEvent);
+      setNameOfEventPlural(dummyCollection.metadata.nameOfEventPlural);
+      setNameOfIndividual(dummyCollection.metadata.nameOfIndividual);
+      setLanguage(dummyCollection.metadata.language);
+      setNameOfIndividualPlural(
+        dummyCollection.metadata.nameOfIndividualPlural
+      );
+      setIsPrivate(dummyCollection.metadata.isPrivate);
+      setCreatedByEmail(dummyCollection.metadata.createdByEmail);
+    }
+  }, [
+    collection,
+    dummyCollection.metadata.createdByEmail,
+    dummyCollection.metadata.isPrivate,
+    dummyCollection.metadata.language,
+    dummyCollection.metadata.name,
+    dummyCollection.metadata.nameOfEvent,
+    dummyCollection.metadata.nameOfEventPlural,
+    dummyCollection.metadata.nameOfIndividual,
+    dummyCollection.metadata.nameOfIndividualPlural,
+    dummyCollection.metadata.nameOfVideo,
+    dummyCollection.metadata.nameOfVideoPlural,
+    mode,
+  ]);
 
   // const [error, setError] = useState<string>("");
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(false);

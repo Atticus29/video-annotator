@@ -549,6 +549,24 @@ const comment: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
+export const shamCollectionShell: Collection = {
+  // _id: "test123",
+  metadata: {
+    name: "Example Collection",
+    createdByEmail: "public@example.com",
+    dateCreated: Date(),
+    nameOfVideo: "Match",
+    nameOfVideoPlural: "Matches",
+    nameOfEvent: "Move",
+    nameOfEventPlural: "Moves",
+    nameOfIndividual: "Athlete",
+    nameOfIndividualPlural: "Athletes",
+    isPrivate: false,
+    language: "English",
+  },
+  excludeFromDetailList: excludeFromCollectionTableDisplay,
+};
+
 export const shamCollection: Collection = {
   // _id: "test123",
   metadata: {

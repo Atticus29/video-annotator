@@ -41,6 +41,7 @@ const SingleVideoIntakeQuestion: React.FC<{
   wholeQuestion: SingleFormField;
   intakeQuestionsInvalid: {};
   intakeQuestionIdx: number;
+  // collectionUrl: string;
   collection: Collection;
   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
@@ -52,6 +53,7 @@ const SingleVideoIntakeQuestion: React.FC<{
   intakeQuestionIdx,
   collection,
   setCollection,
+  // collectionUrl,
   formFieldGroup,
 }) => {
   const types: string[] =
@@ -95,7 +97,6 @@ const SingleVideoIntakeQuestion: React.FC<{
     );
 
     updateSingleQuestionInCollection(
-      collection,
       setCollection,
       intakeQuestionIdx,
       transformedQuestion,

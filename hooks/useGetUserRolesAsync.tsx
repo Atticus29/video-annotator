@@ -15,13 +15,12 @@ export default function useGetUserRolesAsync(uid: string) {
         // Set loading state to true while fetching data
         setIsLoading(true);
 
-        console.log("deleteMe got here d1 and uid is: ");
-        console.log(uid);
-
         // Fetch user roles based on uid
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const result = useGetUserRoles(uid);
+        console.log("deleteMe result is: ");
+        console.log(result);
 
         // Set data and loading state based on the result
         setData(result);

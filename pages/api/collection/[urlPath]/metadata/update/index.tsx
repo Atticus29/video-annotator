@@ -10,7 +10,7 @@ const collectionMetadataUpdate = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const allowedMethods: string[] = ["PATCH", "POST"];
+  const allowedMethods: string[] = ["PATCH"];
   if (!allowedMethods.includes(req?.method || "") || req.method === "OPTIONS") {
     return res.status(405).json({ message: "Method not allowed." });
   }

@@ -91,7 +91,6 @@ export function transformQuestion(
 }
 
 export function updateSingleQuestionInCollection(
-  collection: Collection,
   setCollection: (input: any) => void,
   questionIdx: number,
   newQuestion: SingleFormField,

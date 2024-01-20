@@ -8,16 +8,57 @@ import { FormattedMessage, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
 import SingleVideoIntakeQuestion from "../SingleVideoIntakeQuestion";
-import { defaultDoNotDisplays } from "../../dummy_data/dummyCollection";
+import {
+  defaultDoNotDisplays,
+  shamCollection,
+} from "../../dummy_data/dummyCollection";
+import useGetCollection from "../../hooks/useGetCollection";
+import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 
 const VideoIntakeQuestions: React.FC<{
-  collection: Collection;
-  setCollection: (collection: any) => void;
-  formFieldGroup: FormFieldGroup;
-}> = ({ collection, setCollection, formFieldGroup }) => {
+  collectionUrl: string;
+  mode?: string;
+}> = ({ collectionUrl, mode = "edit" }) => {
+  const {
+    isLoading,
+    isError,
+    errorMsg,
+    data: collection,
+  } = useGetCollection(collectionUrl);
+
+  const [localCollection, setLocalCollection] = useState<Collection | null>();
+
+  const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
+    {}
+  );
+  const [
+    arevideoQuestionFormValuesInvalid,
+    setArevideoQuestionFormValuesInvalid,
+  ] = useState<{}>({});
+  const formFieldGroup: FormFieldGroup = useMemo(() => {
+    return {
+      title: "VideoFormFieldGroupForTheWholeCollection",
+      setValues: setVideoQuestionFormValues,
+      actualValues: videoQuestionFormValues,
+      isInvalids: arevideoQuestionFormValuesInvalid,
+      setIsInvalids: setArevideoQuestionFormValuesInvalid,
+    };
+  }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
+
   const [videoIntakeQuestions, setVideoIntakeQuestions] = useState<
-    SingleFormField[] | undefined
-  >(get(collection, ["videoIntakeQuestions"]));
+    SingleFormField[]
+  >([]);
+
+  useEffect(() => {
+    if (mode === "create" && videoIntakeQuestions.length < 1) {
+      setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
+    }
+    // else {
+    //   // @TODO decide
+    //   // return collection?.videoIntakeQuestions;
+    // }
+  }, [mode, videoIntakeQuestions.length, videoQuestionFormValues]);
+
   const [error, setError] = useState<string>("");
 
   const newQuestion: SingleFormField = useMemo(() => {
@@ -32,16 +73,16 @@ const VideoIntakeQuestions: React.FC<{
       validatorMethods: [],
       shouldBeCheckboxes: ["isRequired"],
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [collection]);
 
-  useEffect(() => {
-    setCollection((prevState: any) => {
-      return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
-    });
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
+  // useEffect(() => {
+  //   setCollection((prevState: any) => {
+  //     // @TODO LEFT OFF HERE MAKDING usePostCollectionVideoIntakeQuestions
+  //     return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
+  //   });
+  //   // }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setVideoIntakeQuestions((prevState) => {
@@ -68,7 +109,8 @@ const VideoIntakeQuestions: React.FC<{
   };
 
   const intakeQuestionElements = map(
-    collection?.videoIntakeQuestions || [],
+    // collection?.videoIntakeQuestions || [],
+    videoIntakeQuestions || [],
     (intakeQuestion, intakeQuestionIdx) => {
       const intakeQuesionsInvalid: {} =
         collection?.videoQuestionsFormFieldGroup?.isInvalids || {};
@@ -90,7 +132,7 @@ const VideoIntakeQuestions: React.FC<{
                         data-testid={"collection-details-submit-button"}
                         variant="contained"
                         onClick={() => {
-                          deleteIntakeQuestion(intakeQuestionIdx);
+                          deleteIntakeQuestion(Number(intakeQuestionIdx));
                         }}
                       >
                         <FormattedMessage
@@ -113,7 +155,7 @@ const VideoIntakeQuestions: React.FC<{
                   intakeQuestionsInvalid={intakeQuesionsInvalid}
                   intakeQuestionIdx={intakeQuestionIdx}
                   collection={collection}
-                  setCollection={setCollection}
+                  setCollection={setLocalCollection}
                   formFieldGroup={formFieldGroup}
                 />
               )}
@@ -150,6 +192,17 @@ const VideoIntakeQuestions: React.FC<{
           </Button>
           {error && <CustomError errorMsg={error} />}
         </Grid>
+      </Grid>
+      <Grid item lg={12} sm={12}>
+        <ComposedFormSubmissionButton
+          questionsOfConcern={
+            [...get(collection, ["videoIntakeQuestions"], [])] || []
+          }
+          formFieldGroupOfConcern={formFieldGroup}
+          collectionPath={collection?.metadata?.urlPath}
+          collectionPropToUpdate={"videos"}
+          // onCloseDialog={onCloseDialog}
+        />
       </Grid>
     </InfoPanel>
   );

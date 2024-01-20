@@ -85,7 +85,7 @@ const SingleEventIntakeQuestion: React.FC<{
     );
 
     updateSingleQuestionInCollection(
-      collection,
+      // collection,
       setCollection,
       intakeQuestionIdx,
       transformedQuestion,

@@ -1,9 +1,11 @@
 import {
+  Alert,
   Backdrop,
   Button,
   CircularProgress,
   Dialog,
   DialogContent,
+  Link,
 } from "@mui/material";
 import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
@@ -192,6 +194,25 @@ const CollectionView: React.FC = () => {
     individualsFallback
   );
 
+  const shouldShowCollectionIncompleteAlert: boolean = useMemo(() => {
+    console.log("deleteMe collectionData is: ");
+    console.log(collectionData);
+    console.log(
+      "deleteMe collectionData?.individualIntakeQuestions?.length is: "
+    );
+    console.log(collectionData?.individualIntakeQuestions?.length);
+    return (
+      collectionData?.individualIntakeQuestions == undefined ||
+      collectionData?.videoIntakeQuestions == undefined ||
+      collectionData?.individualIntakeQuestions == undefined ||
+      collectionData?.individualIntakeQuestions?.length < 1 ||
+      collectionData?.videoIntakeQuestions?.length < 1 ||
+      collectionData?.individualIntakeQuestions?.length < 1
+    );
+  }, [collectionData]);
+  // console.log("deleteMe shouldShowCollectionIncompleteAlert is: ");
+  // console.log(shouldShowCollectionIncompleteAlert);
+
   return (
     <>
       {isLoadingCollection && (
@@ -206,7 +227,7 @@ const CollectionView: React.FC = () => {
         <>
           {isCollectionDetailsInEditMode ? (
             <CollectionDetailsEdit
-              collection={collectionData}
+              collectionUrl={collectionData?.metadata?.urlPath}
               setIsCollectionDetailsInEditMode={
                 setIsCollectionDetailsInEditMode
               }
@@ -219,6 +240,49 @@ const CollectionView: React.FC = () => {
                 setIsCollectionDetailsInEditMode
               }
             ></CollectionDetailsView>
+          )}
+          {shouldShowCollectionIncompleteAlert && (
+            <Alert severity="warning" style={{ marginBottom: "4vh" }}>
+              <FormattedMessage
+                id="YOUR_COLLECTION_IS_INCOMPLETE"
+                defaultMessage="Your collection isn't ready for primetime yet. You must create individual intake questions, video intake questions, and event intake questions in order for users of your collection to be able to create and annotate videos in your collection first."
+                values={{
+                  individualIntakeQuestions: (
+                    <Link
+                      href={
+                        "/collection/" +
+                        collectionData?.metadata?.urlPath +
+                        "/individualIntakeQuestions/new"
+                      }
+                    >
+                      Individual Intake Questions
+                    </Link>
+                  ),
+                  videoIntakeQuestions: (
+                    <Link
+                      href={
+                        "/collection/" +
+                        collectionData?.metadata?.urlPath +
+                        "/videoIntakeQuestions/new"
+                      }
+                    >
+                      Video Intake Questions
+                    </Link>
+                  ),
+                  eventIntakeQuestions: (
+                    <Link
+                      href={
+                        "/collection/" +
+                        collectionData?.metadata?.urlPath +
+                        "/eventIntakeQuestions/new"
+                      }
+                    >
+                      Event Intake Questions
+                    </Link>
+                  ),
+                }}
+              />
+            </Alert>
           )}
 
           {/* Video creation */}
@@ -245,6 +309,7 @@ const CollectionView: React.FC = () => {
             linkIds={linkIds}
           ></DataTable>
           <Button
+            disabled={shouldShowCollectionIncompleteAlert}
             data-testid={"new-video-add-button"}
             variant="contained"
             onClick={handleNewVideoClick}
@@ -277,6 +342,7 @@ const CollectionView: React.FC = () => {
             )}
           />
           <Button
+            disabled={shouldShowCollectionIncompleteAlert}
             data-testid={"new-video-add-button"}
             variant="contained"
             onClick={handleNewIndividualClick}

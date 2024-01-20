@@ -270,7 +270,7 @@ const CollectionEditor: React.FC = () => {
             <Grid item sm={12} md={12}>
               {isCollectionDetailsInEditMode ? (
                 <CollectionDetailsEdit
-                  collection={collection}
+                  collectionUrl={collection?.metadata?.urlPath}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
                   }
@@ -304,9 +304,8 @@ const CollectionEditor: React.FC = () => {
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && videoQuestionsFormFieldGroup && (
                 <VideoIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={videoQuestionsFormFieldGroup}
+                  collectionUrl={collection?.metadata?.urlPath || ""}
+                  mode="edit"
                 />
               )}
             </Grid>

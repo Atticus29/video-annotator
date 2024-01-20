@@ -41,19 +41,19 @@ const NewCollection: React.FC = () => {
   const collectionSaveMsg: string = intl.formatMessage({
     id: "COLLECTION_SAVED_SUCCESSFULL",
   });
-  const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
-    {}
-  );
+  // const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
+  //   {}
+  // );
   const [individualQuestionFormValues, setIndividualQuestionFormValues] =
     useState<{}>({});
   const [eventQuestionFormValues, setEventQuestionFormValues] = useState<{}>(
     {}
   );
 
-  const [
-    arevideoQuestionFormValuesInvalid,
-    setArevideoQuestionFormValuesInvalid,
-  ] = useState<{}>({});
+  // const [
+  //   arevideoQuestionFormValuesInvalid,
+  //   setArevideoQuestionFormValuesInvalid,
+  // ] = useState<{}>({});
   const [
     areIndividualQuestionFormValuesInvalid,
     setAreIndividualQuestionFormValuesInvalid,
@@ -71,69 +71,69 @@ const NewCollection: React.FC = () => {
   const [saveFail, setSaveFail] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
-  useEffect(() => {
-    const initialCollection = { ...shamCollection };
-    initialCollection.videoQuestionsFormFieldGroup =
-      videoQuestionsFormFieldGroup;
-    initialCollection.individualQuestionsFormFieldGroup =
-      individualQuestionsFormFieldGroup;
-    initialCollection.eventQuestionsFormFieldGroup =
-      eventQuestionsFormFieldGroup;
-    initialCollection.metadata.createdByEmail =
-      collection?.metadata.createdByEmail ||
-      user?.email ||
-      "public@example.com";
-    setCollection(initialCollection);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  // useEffect(() => {
+  //   const initialCollection = { ...shamCollection };
+  //   initialCollection.videoQuestionsFormFieldGroup =
+  //     videoQuestionsFormFieldGroup;
+  //   initialCollection.individualQuestionsFormFieldGroup =
+  //     individualQuestionsFormFieldGroup;
+  //   initialCollection.eventQuestionsFormFieldGroup =
+  //     eventQuestionsFormFieldGroup;
+  //   initialCollection.metadata.createdByEmail =
+  //     collection?.metadata.createdByEmail ||
+  //     user?.email ||
+  //     "public@example.com";
+  //   setCollection(initialCollection);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user]);
 
-  const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
-    return {
-      title: "VideoFormFieldGroupForTheWholeDummyCollection",
-      setValues: setVideoQuestionFormValues,
-      actualValues: videoQuestionFormValues,
-      isInvalids: arevideoQuestionFormValuesInvalid,
-      setIsInvalids: setArevideoQuestionFormValuesInvalid,
-    };
-  }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
+  // const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
+  //   return {
+  //     title: "VideoFormFieldGroupForTheWholeDummyCollection",
+  //     setValues: setVideoQuestionFormValues,
+  //     actualValues: videoQuestionFormValues,
+  //     isInvalids: arevideoQuestionFormValuesInvalid,
+  //     setIsInvalids: setArevideoQuestionFormValuesInvalid,
+  //   };
+  // }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
 
-  const individualQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
-    return {
-      title: "IndividualFormFieldGroupForTheWholeDummyCollection",
-      setValues: setIndividualQuestionFormValues,
-      actualValues: individualQuestionFormValues,
-      isInvalids: areIndividualQuestionFormValuesInvalid,
-      setIsInvalids: setAreIndividualQuestionFormValuesInvalid,
-    };
-  }, [areIndividualQuestionFormValuesInvalid, individualQuestionFormValues]);
+  // const individualQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
+  //   return {
+  //     title: "IndividualFormFieldGroupForTheWholeDummyCollection",
+  //     setValues: setIndividualQuestionFormValues,
+  //     actualValues: individualQuestionFormValues,
+  //     isInvalids: areIndividualQuestionFormValuesInvalid,
+  //     setIsInvalids: setAreIndividualQuestionFormValuesInvalid,
+  //   };
+  // }, [areIndividualQuestionFormValuesInvalid, individualQuestionFormValues]);
 
-  const eventQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
-    return {
-      title: "EventFormFieldGroupForTheWholeDummyCollection",
-      setValues: setEventQuestionFormValues,
-      actualValues: eventQuestionFormValues,
-      isInvalids: areEventQuestionFormValuesInvalid,
-      setIsInvalids: setAreEventQuestionFormValuesInvalid,
-    };
-  }, [areEventQuestionFormValuesInvalid, eventQuestionFormValues]);
+  // const eventQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
+  //   return {
+  //     title: "EventFormFieldGroupForTheWholeDummyCollection",
+  //     setValues: setEventQuestionFormValues,
+  //     actualValues: eventQuestionFormValues,
+  //     isInvalids: areEventQuestionFormValuesInvalid,
+  //     setIsInvalids: setAreEventQuestionFormValuesInvalid,
+  //   };
+  // }, [areEventQuestionFormValuesInvalid, eventQuestionFormValues]);
 
-  useEffect(() => {
-    setCollection((prevState: any) => {
-      return {
-        ...prevState,
-        videoQuestionsFormFieldGroup: videoQuestionsFormFieldGroup,
-        individualQuestionsFormFieldGroup: individualQuestionsFormFieldGroup,
-        eventQuestionsFormFieldGroup: eventQuestionsFormFieldGroup,
-      };
-    });
-  }, [
-    videoQuestionsFormFieldGroup,
-    videoQuestionsFormFieldGroup?.actualValues,
-    individualQuestionsFormFieldGroup,
-    individualQuestionsFormFieldGroup?.actualValues,
-    eventQuestionsFormFieldGroup,
-    eventQuestionsFormFieldGroup?.actualValues,
-  ]);
+  // useEffect(() => {
+  //   setCollection((prevState: any) => {
+  //     return {
+  //       ...prevState,
+  //       videoQuestionsFormFieldGroup: videoQuestionsFormFieldGroup,
+  //       individualQuestionsFormFieldGroup: individualQuestionsFormFieldGroup,
+  //       eventQuestionsFormFieldGroup: eventQuestionsFormFieldGroup,
+  //     };
+  //   });
+  // }, [
+  //   videoQuestionsFormFieldGroup,
+  //   videoQuestionsFormFieldGroup?.actualValues,
+  //   individualQuestionsFormFieldGroup,
+  //   individualQuestionsFormFieldGroup?.actualValues,
+  //   eventQuestionsFormFieldGroup,
+  //   eventQuestionsFormFieldGroup?.actualValues,
+  // ]);
 
   // const collectionMutation: UseMutationResult<any> = useMutation({
   //   // @TODO move this into a custom hook?
@@ -231,7 +231,7 @@ const NewCollection: React.FC = () => {
               {/* {isCollectionDetailsInEditMode ? ( */}
               <CollectionDetailsEdit
                 titleId="CREATE_COLLECTION"
-                collection={collection}
+                // collection={collection}
                 // setCollection={setCollection}
                 setIsCollectionDetailsInEditMode={
                   setIsCollectionDetailsInEditMode
