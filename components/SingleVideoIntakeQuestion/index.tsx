@@ -34,6 +34,9 @@ import {
   transformQuestion,
   updateSingleQuestionInCollection,
 } from "../../utilities/videoIntakeQuestionUtils";
+import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 const SingleVideoIntakeQuestion: React.FC<{
   intakeQuestionEl: any;
@@ -41,7 +44,7 @@ const SingleVideoIntakeQuestion: React.FC<{
   wholeQuestion: SingleFormField;
   intakeQuestionsInvalid: {};
   intakeQuestionIdx: number;
-  // collectionUrl: string;
+  collectionUrl: string;
   collection: Collection;
   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
@@ -53,9 +56,17 @@ const SingleVideoIntakeQuestion: React.FC<{
   intakeQuestionIdx,
   collection,
   setCollection,
-  // collectionUrl,
+  collectionUrl,
   formFieldGroup,
 }) => {
+  // console.log("deleteMe got here a1");
+  const queryClient = useQueryClient();
+  const {
+    mutate: updateVideoIntakeQuestions,
+    isPending,
+    error,
+    isError,
+  } = useUpdateCollectionVideoIntakeQuestions();
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
@@ -87,23 +98,55 @@ const SingleVideoIntakeQuestion: React.FC<{
     onTheDisplayListForThisQuestionType;
 
   const intl: IntlShape = useIntl();
+  const [currentQuestionType, setCurrentQuestionType] =
+    useState<string>(intakeQuestionEl);
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
+    setCurrentQuestionType(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       wholeQuestion,
       currentVal
     );
 
-    updateSingleQuestionInCollection(
-      setCollection,
-      intakeQuestionIdx,
-      transformedQuestion,
-      collection?.videoIntakeQuestions || [],
-      "videoIntakeQuestions"
-    ); // @TODO LEFT OFF HERE REPLACING INTAKEQUESTIONS GLOBALLY AND ALSO FIGURING OUT HOW TO HIDE FORMFIELD GROUPS FROM THE COLLECTION DETAILS
+    const newIntakeQuestionSet: SingleFormField[] = get(
+      collection,
+      ["videoIntakeQuestions"],
+      []
+    );
+    newIntakeQuestionSet[intakeQuestionIdx] = transformedQuestion;
+
+    updateVideoIntakeQuestions(
+      // @TODO maybe put this part under control of a save button
+      {
+        collectionUrl,
+        collectionVideoIntakeQuestions: newIntakeQuestionSet,
+      },
+      {
+        onSuccess: (responseData: any) => {
+          console.log("deleteMe responseData of successful update:");
+          console.log(responseData);
+          queryClient.invalidateQueries({
+            queryKey: ["singleCollection", collectionUrl],
+          });
+        },
+        onError: (error) => {
+          console.error("Mutation error", error);
+        },
+      }
+    );
+
+    // updateSingleQuestionInCollection(
+    //   setCollection,
+    //   intakeQuestionIdx,
+    //   transformedQuestion,
+    //   collection?.videoIntakeQuestions || [],
+    //   "videoIntakeQuestions"
+    // ); // @TODO LEFT OFF HERE REPLACING INTAKEQUESTIONS GLOBALLY AND ALSO FIGURING OUT HOW TO HIDE FORMFIELD GROUPS FROM THE COLLECTION DETAILS
   };
+
+  const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
 
   const handleChange: (event: any) => void = (event: any) => {
     // if the change is in the TYPE field, this should
@@ -111,14 +154,54 @@ const SingleVideoIntakeQuestion: React.FC<{
     // 2) change what options are visible/available in the video intake questions section
 
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
+    setCurrentValue(currentVal);
 
-    updateCollection(
+    console.log("deleteMe currentVal is: ");
+    console.log(currentVal);
+
+    // updateCollection(
+    //   collection,
+    //   intakeQuestionIdx,
+    //   intakeQuestionKey,
+    //   currentVal,
+    //   setCollection,
+    //   "videoIntakeQuestions"
+    // );
+
+    const targetQuestion: SingleFormField = get(
       collection,
-      intakeQuestionIdx,
-      intakeQuestionKey,
-      currentVal,
-      setCollection,
-      "videoIntakeQuestions"
+      ["videoIntakeQuestions", intakeQuestionIdx],
+      {}
+    );
+    const modifiedQuestion: any = {
+      ...targetQuestion,
+      [intakeQuestionKey]: currentVal,
+    };
+    const newIntakeQuestionSet: SingleFormField[] = get(
+      collection,
+      ["videoIntakeQuestions"],
+      []
+    );
+    newIntakeQuestionSet[intakeQuestionIdx] = modifiedQuestion;
+
+    updateVideoIntakeQuestions(
+      // @TODO maybe put this part under control of a save button
+      {
+        collectionUrl,
+        collectionVideoIntakeQuestions: newIntakeQuestionSet,
+      },
+      {
+        onSuccess: (responseData: any) => {
+          console.log("deleteMe responseData of successful update:");
+          console.log(responseData);
+          queryClient.invalidateQueries({
+            queryKey: ["singleCollection", collectionUrl],
+          });
+        },
+        onError: (error) => {
+          console.error("Mutation error", error);
+        },
+      }
     );
   };
 
@@ -213,7 +296,7 @@ const SingleVideoIntakeQuestion: React.FC<{
             }
             style={{ marginBottom: 10, maxWidth: 400 }}
             onChange={handleChange}
-            value={intakeQuestionEl}
+            value={currentValue}
           ></TextField>
         )}
         {shouldBeTypeDropdown && (
@@ -224,7 +307,7 @@ const SingleVideoIntakeQuestion: React.FC<{
             <Select
               labelId={intakeQuestionKey + "-" + intakeQuestionEl}
               id={intakeQuestionKey + "-" + intakeQuestionEl + "-select"}
-              value={intakeQuestionEl}
+              value={currentQuestionType}
               label="TODO deleteMe"
               onChange={handleQuestionChange} //this is currently assuming that the only dropdown is a question type change
               style={{ marginBottom: 10 }}
@@ -237,7 +320,7 @@ const SingleVideoIntakeQuestion: React.FC<{
           <FormControlLabel
             style={{ marginRight: 10 }}
             control={<Checkbox checked={intakeQuestionEl} />}
-            value={intakeQuestionEl}
+            value={currentValue}
             onChange={handleCheckChange}
             label={convertCamelCaseToCapitalCase(intakeQuestionKey)}
           />

@@ -11,6 +11,7 @@ import SingleVideoIntakeQuestion from "../SingleVideoIntakeQuestion";
 import {
   defaultDoNotDisplays,
   shamCollection,
+  shamCollectionShell,
 } from "../../dummy_data/dummyCollection";
 import useGetCollection from "../../hooks/useGetCollection";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
@@ -26,7 +27,12 @@ const VideoIntakeQuestions: React.FC<{
     data: collection,
   } = useGetCollection(collectionUrl);
 
-  const [localCollection, setLocalCollection] = useState<Collection | null>();
+  const [localCollection, setLocalCollection] =
+    useState<Collection>(shamCollectionShell);
+
+  useEffect(() => {
+    setLocalCollection(collection);
+  }, [collection]);
 
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
@@ -112,11 +118,16 @@ const VideoIntakeQuestions: React.FC<{
     // collection?.videoIntakeQuestions || [],
     videoIntakeQuestions || [],
     (intakeQuestion, intakeQuestionIdx) => {
+      // console.log("deleteMe intakeQuestion is: ");
+      // console.log(intakeQuestion);
       const intakeQuesionsInvalid: {} =
-        collection?.videoQuestionsFormFieldGroup?.isInvalids || {};
+        collection?.videoQuestionsFormFieldGroup?.isInvalids || {}; // @TODO this might be the problem
       return map(
         intakeQuestion,
         (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
+          // console.log("deleteMe wholeQuestion is: ");
+          // console.log(wholeQuestion);
+          const isDelible: boolean = !wholeQuestion?.isACoreQuestion;
           return (
             <>
               <>
@@ -126,7 +137,7 @@ const VideoIntakeQuestions: React.FC<{
                       {"Question " + (intakeQuestionIdx + 1) + ". "}
                     </Typography>
 
-                    {!wholeQuestion?.isACoreQuestion && (
+                    {isDelible && (
                       <Button
                         style={{ marginBottom: 10 }}
                         data-testid={"collection-details-submit-button"}
@@ -144,9 +155,7 @@ const VideoIntakeQuestions: React.FC<{
                   </>
                 )}
               </>
-              {(!wholeQuestion?.isACoreQuestion ||
-                (intakeQuestionKey === "label" &&
-                  wholeQuestion?.isACoreQuestion)) && (
+              {(isDelible || (intakeQuestionKey === "label" && !isDelible)) && (
                 <SingleVideoIntakeQuestion
                   key={intakeQuestionKey}
                   intakeQuestionEl={intakeQuestionEl}
@@ -154,7 +163,8 @@ const VideoIntakeQuestions: React.FC<{
                   wholeQuestion={wholeQuestion}
                   intakeQuestionsInvalid={intakeQuesionsInvalid}
                   intakeQuestionIdx={intakeQuestionIdx}
-                  collection={collection}
+                  collectionUrl={localCollection?.metadata?.urlPath || ""}
+                  collection={localCollection}
                   setCollection={setLocalCollection}
                   formFieldGroup={formFieldGroup}
                 />
@@ -173,7 +183,7 @@ const VideoIntakeQuestions: React.FC<{
       textOverrides={{ textAlign: "center" }}
     >
       <Grid container>
-        {collection?.videoIntakeQuestions && (
+        {videoIntakeQuestions && (
           <Grid item lg={12} sm={12}>
             {intakeQuestionElements}
           </Grid>

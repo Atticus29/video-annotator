@@ -30,6 +30,7 @@ export function updateCollection(
   setCollection: (collection: any) => void,
   whichIntakeQuestions: string
 ) {
+  console.log("deleteMe got here x");
   const targetQuestion: SingleFormField = get(
     collection,
     [whichIntakeQuestions, questionIdx],
