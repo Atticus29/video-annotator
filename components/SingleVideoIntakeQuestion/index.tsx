@@ -103,47 +103,47 @@ const SingleVideoIntakeQuestion: React.FC<{
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    setCurrentQuestionType(currentVal);
+    // setCurrentQuestionType(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       wholeQuestion,
       currentVal
     );
 
-    const newIntakeQuestionSet: SingleFormField[] = get(
-      collection,
-      ["videoIntakeQuestions"],
-      []
-    );
-    newIntakeQuestionSet[intakeQuestionIdx] = transformedQuestion;
+    // const newIntakeQuestionSet: SingleFormField[] = get(
+    //   collection,
+    //   ["videoIntakeQuestions"],
+    //   []
+    // );
+    // newIntakeQuestionSet[intakeQuestionIdx] = transformedQuestion;
 
-    updateVideoIntakeQuestions(
-      // @TODO maybe put this part under control of a save button
-      {
-        collectionUrl,
-        collectionVideoIntakeQuestions: newIntakeQuestionSet,
-      },
-      {
-        onSuccess: (responseData: any) => {
-          console.log("deleteMe responseData of successful update:");
-          console.log(responseData);
-          queryClient.invalidateQueries({
-            queryKey: ["singleCollection", collectionUrl],
-          });
-        },
-        onError: (error) => {
-          console.error("Mutation error", error);
-        },
-      }
-    );
+    // updateVideoIntakeQuestions(
+    //   // @TODO maybe put this part under control of a save button
+    //   {
+    //     collectionUrl,
+    //     collectionVideoIntakeQuestions: newIntakeQuestionSet,
+    //   },
+    //   {
+    //     onSuccess: (responseData: any) => {
+    //       console.log("deleteMe responseData of successful update:");
+    //       console.log(responseData);
+    //       queryClient.invalidateQueries({
+    //         queryKey: ["singleCollection", collectionUrl],
+    //       });
+    //     },
+    //     onError: (error) => {
+    //       console.error("Mutation error", error);
+    //     },
+    //   }
+    // );
 
-    // updateSingleQuestionInCollection(
-    //   setCollection,
-    //   intakeQuestionIdx,
-    //   transformedQuestion,
-    //   collection?.videoIntakeQuestions || [],
-    //   "videoIntakeQuestions"
-    // ); // @TODO LEFT OFF HERE REPLACING INTAKEQUESTIONS GLOBALLY AND ALSO FIGURING OUT HOW TO HIDE FORMFIELD GROUPS FROM THE COLLECTION DETAILS
+    updateSingleQuestionInCollection(
+      setCollection,
+      intakeQuestionIdx,
+      transformedQuestion,
+      collection?.videoIntakeQuestions || [],
+      "videoIntakeQuestions"
+    ); // @TODO LEFT OFF HERE REPLACING INTAKEQUESTIONS GLOBALLY AND ALSO FIGURING OUT HOW TO HIDE FORMFIELD GROUPS FROM THE COLLECTION DETAILS
   };
 
   const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
@@ -154,7 +154,7 @@ const SingleVideoIntakeQuestion: React.FC<{
     // 2) change what options are visible/available in the video intake questions section
 
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    setCurrentValue(currentVal);
+    // setCurrentValue(currentVal);
 
     console.log("deleteMe currentVal is: ");
     console.log(currentVal);
@@ -320,7 +320,7 @@ const SingleVideoIntakeQuestion: React.FC<{
           <FormControlLabel
             style={{ marginRight: 10 }}
             control={<Checkbox checked={intakeQuestionEl} />}
-            value={currentValue}
+            value={currentValue} // @TODO LEFT OFF HERE should be intakeQuestionEl or something
             onChange={handleCheckChange}
             label={convertCamelCaseToCapitalCase(intakeQuestionKey)}
           />

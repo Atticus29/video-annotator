@@ -1,40 +1,34 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  CollectionMetadata,
-  Collection as CollectionData,
-  SingleFormField,
-} from "../types";
+import { SingleFormField } from "../types";
 import axios from "axios";
 
-export default function usePostCollectionVideoIntakeQuestions() {
+export default function usePostCollectionEventIntakeQuestions() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (variables: {
       collectionUrl: string;
-      collectionVideoIntakeQuestions: SingleFormField[];
+      collectionEventIntakeQuestions: SingleFormField[];
     }) => {
       try {
         const response = await axios.post(
-          "/api/collection/" +
+          "/api/collection" +
             variables?.collectionUrl +
-            "/videoIntakeQuestions/create",
+            "/eventIntakeQuestions/create",
           {
-            videoIntakeQuestions: variables?.collectionVideoIntakeQuestions,
+            eventIntakeQuestions: variables?.collectionEventIntakeQuestions,
             urlPath: variables?.collectionUrl,
           }
         );
         if (response.status === 200) {
           return response?.data;
         } else {
-          console.log("deleteMe failing response is: ");
-          console.log(response);
           throw new Error(
-            "Invalid status code when creating collection video intake questions"
+            "Invalid status code when creating collection event intake questions"
           );
         }
       } catch (error: any) {
         throw new Error(
-          "Error creating collection video intake questions: " + error.message
+          "Error creating collection event intake questions: " + error.message
         );
       }
     },

@@ -15,6 +15,7 @@ import {
 } from "../../dummy_data/dummyCollection";
 import useGetCollection from "../../hooks/useGetCollection";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
+import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollectionVideoIntakeQuestions";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -26,6 +27,13 @@ const VideoIntakeQuestions: React.FC<{
     errorMsg,
     data: collection,
   } = useGetCollection(collectionUrl);
+
+  const {
+    mutate: postCollectionVideoIntakeQuestions,
+    isPending,
+    isError: isPostCollectionVideoIntakeQuestionsError,
+    error: postCollectionVideoIntakeQuestionError,
+  } = usePostCollectionVideoIntakeQuestions();
 
   const [localCollection, setLocalCollection] =
     useState<Collection>(shamCollectionShell);
@@ -81,14 +89,30 @@ const VideoIntakeQuestions: React.FC<{
     };
   }, [collection]);
 
-  // useEffect(() => {
-  //   setCollection((prevState: any) => {
-  //     // @TODO LEFT OFF HERE MAKDING usePostCollectionVideoIntakeQuestions
-  //     return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
-  //   });
-  //   // }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
+  useEffect(() => {
+    postCollectionVideoIntakeQuestions(
+      {
+        collectionVideoIntakeQuestions: videoIntakeQuestions,
+        collectionUrl: collectionUrl,
+      },
+      {
+        onSuccess: (responseData) => {
+          console.log("deleteMe success got here and responseData is: ");
+          console.log(responseData);
+        },
+        onError: (error) => {
+          console.log("deleteMe error is: ");
+          console.log(error);
+        },
+      }
+    );
+    // setCollection((prevState: any) => {
+    //   // @TODO LEFT OFF HERE MAKDING usePostCollectionVideoIntakeQuestions
+    //   return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
+    // });
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setVideoIntakeQuestions((prevState) => {
