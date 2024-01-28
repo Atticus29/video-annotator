@@ -34,4 +34,10 @@ export default function usePostCollectionIndividualIntakeQuestions() {
       }
     },
   });
+  return {
+    mutate: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error,
+    isError: mutation.isError,
+  };
 }

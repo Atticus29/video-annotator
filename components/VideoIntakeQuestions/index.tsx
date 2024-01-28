@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { map, get } from "lodash-es";
 
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
-import { Button, Grid, Typography } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
+import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
 import SingleVideoIntakeQuestion from "../SingleVideoIntakeQuestion";
@@ -16,6 +16,7 @@ import {
 import useGetCollection from "../../hooks/useGetCollection";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollectionVideoIntakeQuestions";
+import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -28,12 +29,21 @@ const VideoIntakeQuestions: React.FC<{
     data: collection,
   } = useGetCollection(collectionUrl);
 
+  const intl: IntlShape = useIntl();
+
   const {
     mutate: postCollectionVideoIntakeQuestions,
     isPending,
     isError: isPostCollectionVideoIntakeQuestionsError,
     error: postCollectionVideoIntakeQuestionError,
   } = usePostCollectionVideoIntakeQuestions();
+
+  const {
+    mutate: updateCollectionVideoIntakeQuestions,
+    isPending: isUpdateCollectionVideoIntakeQuestionsPending,
+    isError: isUpdateCollectionVideoIntakeQuestionsError,
+    error: updateCollectionVideoIntakeQuestionError,
+  } = useUpdateCollectionVideoIntakeQuestions();
 
   const [localCollection, setLocalCollection] =
     useState<Collection>(shamCollectionShell);
@@ -106,8 +116,7 @@ const VideoIntakeQuestions: React.FC<{
         },
       }
     );
-    // setCollection((prevState: any) => {
-    //   // @TODO LEFT OFF HERE MAKDING usePostCollectionVideoIntakeQuestions
+    // setCollection((prevState: any) => { // @TODO deleteMe after the above proves successful
     //   return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
     // });
     // }
@@ -201,44 +210,71 @@ const VideoIntakeQuestions: React.FC<{
   );
 
   return (
-    <InfoPanel
-      titleId="VIDEO_INTAKE_QUESTIONS"
-      titleDefault="Video Intake Questions"
-      textOverrides={{ textAlign: "center" }}
-    >
-      <Grid container>
-        {videoIntakeQuestions && (
-          <Grid item lg={12} sm={12}>
-            {intakeQuestionElements}
-          </Grid>
-        )}
-        <Grid item lg={12} sm={12}>
-          <Button
-            style={{ marginBottom: 10 }}
-            data-testid={"collection-details-submit-button"}
-            variant="contained"
-            onClick={createNewIntakeQuestion}
-          >
-            <FormattedMessage
-              id="ADD_ANOTHER_QUESTION"
-              defaultMessage="Add another question"
-            />
-          </Button>
-          {error && <CustomError errorMsg={error} />}
-        </Grid>
-      </Grid>
-      <Grid item lg={12} sm={12}>
-        <ComposedFormSubmissionButton
-          questionsOfConcern={
-            [...get(collection, ["videoIntakeQuestions"], [])] || []
+    <>
+      {(isLoading || isPending) && <CircularProgress color="inherit" />}
+      {!isLoading && isError && (
+        <CustomError
+          errorMsg={
+            errorMsg ||
+            intl.formatMessage({
+              id: "COLLECTION_NOT_FOUND",
+              defaultMessage: "Collection not found",
+            })
           }
-          formFieldGroupOfConcern={formFieldGroup}
-          collectionPath={collection?.metadata?.urlPath}
-          collectionPropToUpdate={"videos"}
-          // onCloseDialog={onCloseDialog}
         />
-      </Grid>
-    </InfoPanel>
+      )}
+      {!isPending && isPostCollectionVideoIntakeQuestionsError && (
+        <CustomError
+          errorMsg={
+            postCollectionVideoIntakeQuestionError?.message ||
+            intl.formatMessage({
+              id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
+              defaultMessage: "Failed to post video intake questions",
+            })
+          }
+        />
+      )}
+      {!isLoading && !isError && (
+        <InfoPanel
+          titleId="VIDEO_INTAKE_QUESTIONS"
+          titleDefault="Video Intake Questions"
+          textOverrides={{ textAlign: "center" }}
+        >
+          <Grid container>
+            {videoIntakeQuestions && (
+              <Grid item lg={12} sm={12}>
+                {intakeQuestionElements}
+              </Grid>
+            )}
+            <Grid item lg={12} sm={12}>
+              <Button
+                style={{ marginBottom: 10 }}
+                data-testid={"collection-details-submit-button"}
+                variant="contained"
+                onClick={createNewIntakeQuestion}
+              >
+                <FormattedMessage
+                  id="ADD_ANOTHER_QUESTION"
+                  defaultMessage="Add another question"
+                />
+              </Button>
+              {error && <CustomError errorMsg={error} />}
+            </Grid>
+          </Grid>
+          <Grid item lg={12} sm={12}>
+            <ComposedFormSubmissionButton
+              questionsOfConcern={
+                [...get(collection, ["videoIntakeQuestions"], [])] || []
+              }
+              formFieldGroupOfConcern={formFieldGroup}
+              collectionPath={collection?.metadata?.urlPath}
+              collectionPropToUpdate={"videos"}
+              // onCloseDialog={onCloseDialog}
+            />
+          </Grid>
+        </InfoPanel>
+      )}
+    </>
   );
 };
 export default VideoIntakeQuestions;

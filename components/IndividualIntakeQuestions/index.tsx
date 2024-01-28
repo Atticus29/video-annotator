@@ -4,19 +4,50 @@ import { map, get } from "lodash-es";
 
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
 import { Button, Grid, Typography } from "@mui/material";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
 import SingleIndividualIntakeQuestion from "../SingleIndividualIntakeQuestion";
 import { defaultDoNotDisplays } from "../../dummy_data/dummyCollection";
 import { sanitizeString } from "../../utilities/textUtils";
 import useUpdateCollectionIndividualIntakeQuestions from "../../hooks/useUpdateCollectionIndividualIntakeQuestions";
+import useGetCollection from "../../hooks/useGetCollection";
+import usePostCollectionIndividualIntakeQuestions from "../../hooks/usePostCollectionIndividualIntakeQuestions";
 
 const IndividualIntakeQuestions: React.FC<{
-  collection: Collection;
-  setCollection: (collection: any) => void;
-  formFieldGroup: FormFieldGroup;
-}> = ({ collection, setCollection, formFieldGroup }) => {
+  // collection: Collection;
+  // setCollection: (collection: any) => void;
+  // formFieldGroup: FormFieldGroup;
+  collectionUrl: string;
+  mode?: string;
+}> = ({
+  collectionUrl,
+  mode = "edit",
+  // collection, setCollection, formFieldGroup
+}) => {
+  const {
+    isLoading,
+    isError,
+    errorMsg,
+    data: collection,
+  } = useGetCollection(collectionUrl);
+
+  const intl: IntlShape = useIntl();
+
+  const {
+    mutate: postCollectionIndividualIntakeQuestions,
+    isPending: isPostIndividualIntakeQuestionsPending,
+    isError: isPostCollectionIndividualIntakeQuestionsError,
+    error: postCollectionIndividualIntakeQuestionError,
+  } = usePostCollectionIndividualIntakeQuestions();
+
+  // const {
+  //   mutate: updateCollectionIndividualIntakeQuestions,
+  //   isPending: isUpdateCollectionIndividualIntakeQuestionsPending,
+  //   isError: isUpdateCollectionIndividualIntakeQuestionsError,
+  //   error: updateCollectionIndividualIntakeQuestionError,
+  // } = useUpdateCollectionIndividualIntakeQuestions();
+
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
@@ -25,7 +56,7 @@ const IndividualIntakeQuestions: React.FC<{
     mutate,
     isPending,
     error: individualIntakeError,
-    isError,
+    isError: updateCollectionIndividualIntakeQuestionsError,
   } = useUpdateCollectionIndividualIntakeQuestions();
 
   const newQuestion: SingleFormField = useMemo(() => {

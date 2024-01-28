@@ -1,7 +1,7 @@
-import VideoIntakeQuestions from "../../../../../components/VideoIntakeQuestions";
 import { useRouter } from "next/router";
+import IndividualIntakeQuestions from "../../../../../components/IndividualIntakeQuestions";
 
-const UpdateVideoIntakeQuestions: React.FC = () => {
+const UpdateIndividualIntakeQuestions: React.FC = () => {
   const router = useRouter();
   const collectionUrlBlob: string | string[] | undefined =
     router?.query?.urlPath;
@@ -9,9 +9,7 @@ const UpdateVideoIntakeQuestions: React.FC = () => {
     (Array.isArray(collectionUrlBlob)
       ? collectionUrlBlob.join()
       : collectionUrlBlob) || "";
-  return (
-    <VideoIntakeQuestions collectionUrl={collectionUrl}></VideoIntakeQuestions>
-  );
+  return <IndividualIntakeQuestions collectionUrl={collectionUrl} />;
 };
 
-export default UpdateVideoIntakeQuestions;
+export default UpdateIndividualIntakeQuestions;
