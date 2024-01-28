@@ -2,6 +2,7 @@ import { Interface } from "readline/promises";
 
 export interface User {
   uid: string;
+  alternateIds?: string[];
   roles: UserRoles;
   collectionIds?: string[];
   videoIds?: string[];

@@ -6,8 +6,7 @@ import {
 import axios from "axios";
 import { SingleFormField } from "../types";
 
-export default function useMutateIndividualIntakeQuestions() {
-  const queryClient: QueryClient = useQueryClient();
+export default function useUpdateCollectionIndividualIntakeQuestions() {
   const mutation = useMutation({
     mutationFn: async (variables: {
       collectionUrl: string;

@@ -3,7 +3,6 @@ import { SingleFormField } from "../types";
 import axios from "axios";
 
 export default function usePostCollectionEventIntakeQuestions() {
-  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (variables: {
       collectionUrl: string;
@@ -23,7 +22,7 @@ export default function usePostCollectionEventIntakeQuestions() {
           return response?.data;
         } else {
           throw new Error(
-            "Invalid status code when creating collection event intake questions"
+            "Invalid status code when creating collection event intake questions."
           );
         }
       } catch (error: any) {

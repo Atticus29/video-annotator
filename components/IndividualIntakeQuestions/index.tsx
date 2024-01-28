@@ -10,7 +10,7 @@ import InfoPanel from "../InfoPanel";
 import SingleIndividualIntakeQuestion from "../SingleIndividualIntakeQuestion";
 import { defaultDoNotDisplays } from "../../dummy_data/dummyCollection";
 import { sanitizeString } from "../../utilities/textUtils";
-import useMutateIndividualIntakeQuestions from "../../hooks/useMutateIndividualIntakeQuestions";
+import useUpdateCollectionIndividualIntakeQuestions from "../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const IndividualIntakeQuestions: React.FC<{
   collection: Collection;
@@ -26,7 +26,7 @@ const IndividualIntakeQuestions: React.FC<{
     isPending,
     error: individualIntakeError,
     isError,
-  } = useMutateIndividualIntakeQuestions();
+  } = useUpdateCollectionIndividualIntakeQuestions();
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {

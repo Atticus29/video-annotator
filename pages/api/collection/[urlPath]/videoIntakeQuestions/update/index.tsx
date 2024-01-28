@@ -43,7 +43,7 @@ const collectionVideoIntakeQuestionsUpdate = async (
         });
       } else {
         res.status(200).json({
-          message: "Video intake questions updated successfully",
+          message: "Video intake questions updated successfully.",
           data: videoIntakeQuestions,
           result: result,
         });

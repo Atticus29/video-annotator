@@ -537,6 +537,25 @@ const moveRating: SingleFormField = {
   usersCanAddCustomOptions: false,
 };
 
+const typeOfRoundQuestion: SingleFormField = {
+  label: "What type of round is this?",
+  type: "Autocomplete",
+  language: "English",
+  isRequired: true,
+  testId: "typeOfRound",
+  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
+  shouldBeCheckboxes: ["isRequired"],
+  validatorMethods: [isNonEmptyString],
+  invalidInputMessage: "INPUT_INVALID",
+  autocompleteOptions: [
+    "Finals",
+    "Semi-finals",
+    "Quarter-finals",
+    "Not applicable",
+  ],
+  usersCanAddCustomOptions: true,
+};
+
 const comment: SingleFormField = {
   label: "Comment - any information not captured by the other questions?",
   type: "Text",
@@ -586,6 +605,7 @@ export const shamCollection: Collection = {
     // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
     firstQuestion,
     natureOfTheMatch,
+    typeOfRoundQuestion,
     secondQuestion,
     locationName,
     thirdQuestion,

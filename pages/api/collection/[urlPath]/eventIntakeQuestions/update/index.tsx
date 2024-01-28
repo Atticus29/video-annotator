@@ -33,7 +33,20 @@ const collectionEventIntakeQuestionsUpdate = async (
           },
         }
       );
-      // @TODO LEFT OFF HERE
+      if (result.modifiedCount < 1) {
+        res.status(404).json({
+          message:
+            "Event intake questions could not be updated on target collection.",
+        });
+      } else {
+        res
+          .status(200)
+          .json({
+            message: "Event intake questions updated successfully.",
+            data: eventIntakeQuestions,
+            result: result,
+          });
+      }
     }
   } catch (error: any) {
     console.log(error);

@@ -5,14 +5,17 @@ import {
   SingleFormField,
   Collection as CollectionData,
 } from "../../../../../../types";
+import { ResetTv } from "@mui/icons-material";
 
-const collectionEventIntakeQuestionsPost = async (
+const individualIntakeQuestionCollectionCreate = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   const allowedMethods: string[] = ["POST"];
-
-  if (!allowedMethods.includes(req?.method || "") || req.method === "OPTIONS") {
+  if (
+    !allowedMethods.includes(req?.method || "") ||
+    req?.method === "OPTIONS"
+  ) {
     return res.status(405).json({ message: "Method not allowed." });
   }
 
@@ -22,33 +25,36 @@ const collectionEventIntakeQuestionsPost = async (
     const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "POST") {
       let {
-        eventIntakeQuestions,
+        individualIntakeQuestions,
         urlPath,
-      }: { eventIntakeQuestions: SingleFormField[]; urlPath: string } =
+      }: { individualIntakeQuestions: SingleFormField[]; urlPath: string } =
         req.body;
-
-      const targetEventIntakeQuestions = await coll.findOne(
+      const targetIndividualIntakeQuestions = await coll.findOne(
         {
           "metadata.urlPath": urlPath,
         },
-        { projection: { eventIntakeQuestions: 1 } }
+        { projection: { individualIntakeQuestions: 1 } }
       );
-      if (!Boolean(targetEventIntakeQuestions)) {
+      if (!Boolean(targetIndividualIntakeQuestions)) {
         const creationResult = await coll.updateOne(
           {
-            "metadata.urlPath": urlPath,
+            "metadata.urlPath": urlPath.toLowerCase(),
           },
-          { $set: { eventIntakeQuestions } }
+          { $set: { individualIntakeQuestions } }
         );
         res.status(200).json({
-          message: "Event intake questions successfully added to collection.",
-          data: eventIntakeQuestions,
+          message:
+            "Individual intake questions successfully added to collection.",
+          data: individualIntakeQuestions,
           result: creationResult,
         });
       } else {
-        res.status(200).json({
-          message: "Event intake questions already exist for this collection.",
-        });
+        res
+          .status(200)
+          .json({
+            message:
+              "Individual intake questions already exist for this collection.",
+          });
       }
     }
   } catch (error: any) {
@@ -57,4 +63,4 @@ const collectionEventIntakeQuestionsPost = async (
   }
 };
 
-export default collectionEventIntakeQuestionsPost;
+export default individualIntakeQuestionCollectionCreate;
