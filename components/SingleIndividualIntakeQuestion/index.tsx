@@ -24,6 +24,7 @@ import {
   transformQuestion,
   updateSingleQuestionInCollection,
 } from "../../utilities/videoIntakeQuestionUtils";
+import useUpdateCollectionIndividualIntakeQuestions from "../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const SingleIndividualIntakeQuestion: React.FC<{
   intakeQuestionEl: any;
@@ -44,6 +45,13 @@ const SingleIndividualIntakeQuestion: React.FC<{
   setCollection,
   formFieldGroup,
 }) => {
+  const {
+    mutate,
+    isPending,
+    error: individualIntakeError,
+    isError: updateCollectionIndividualIntakeQuestionsError,
+  } = useUpdateCollectionIndividualIntakeQuestions();
+
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
@@ -84,14 +92,42 @@ const SingleIndividualIntakeQuestion: React.FC<{
       currentVal
     );
 
-    updateSingleQuestionInCollection(
-      // collection,
-      setCollection,
-      intakeQuestionIdx,
-      transformedQuestion,
-      collection?.individualIntakeQuestions || [],
-      "individualIntakeQuestions"
-    ); // @TODO LEFT OFF HERE REPLACING INTAKEQUESTIONS GLOBALLY AND ALSO FIGURING OUT HOW TO HIDE FORMFIELD GROUPS FROM THE COLLECTION DETAILS
+    const modifiedQuestionSet: SingleFormField[] =
+      collection?.individualIntakeQuestions || [];
+    modifiedQuestionSet[intakeQuestionIdx] = transformedQuestion;
+
+    mutate(
+      {
+        collectionUrl: collection?.metadata?.urlPath || "",
+        updatedIndividualIntakeQuestions: modifiedQuestionSet || [],
+      },
+      {
+        onSuccess: (responseData) => {
+          console.log("Mutation successful", responseData);
+        },
+        onError: (error) => {
+          // Handle error
+          console.error("Mutation error", error);
+        },
+      }
+    );
+
+    // setCollection((prevState: any) => {
+    //   // LEFT OFF HERE deleteMe
+    //   return {
+    //     ...prevState,
+    //     ["individualIntakeQuestions"]: modifiedQuestionSet,
+    //   };
+    // });
+
+    // updateSingleQuestionInCollection(
+    //   // collection,
+    //   setCollection,
+    //   intakeQuestionIdx,
+    //   transformedQuestion,
+    //   collection?.individualIntakeQuestions || [],
+    //   "individualIntakeQuestions"
+    // ); // @TODO LEFT OFF HERE REPLACING INTAKEQUESTIONS GLOBALLY AND ALSO FIGURING OUT HOW TO HIDE FORMFIELD GROUPS FROM THE COLLECTION DETAILS
   };
 
   const handleChange: (event: any) => void = (event: any) => {

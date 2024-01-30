@@ -41,23 +41,17 @@ const IndividualIntakeQuestions: React.FC<{
     error: postCollectionIndividualIntakeQuestionError,
   } = usePostCollectionIndividualIntakeQuestions();
 
-  // const {
-  //   mutate: updateCollectionIndividualIntakeQuestions,
-  //   isPending: isUpdateCollectionIndividualIntakeQuestionsPending,
-  //   isError: isUpdateCollectionIndividualIntakeQuestionsError,
-  //   error: updateCollectionIndividualIntakeQuestionError,
-  // } = useUpdateCollectionIndividualIntakeQuestions();
+  const {
+    mutate: updateCollectionIndividualIntakeQuestions,
+    isPending,
+    error: individualIntakeError,
+    isError: updateCollectionIndividualIntakeQuestionsError,
+  } = useUpdateCollectionIndividualIntakeQuestions();
 
   const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
     SingleFormField[] | undefined
   >(get(collection, ["individualIntakeQuestions"]));
   const [error, setError] = useState<string>("");
-  const {
-    mutate,
-    isPending,
-    error: individualIntakeError,
-    isError: updateCollectionIndividualIntakeQuestionsError,
-  } = useUpdateCollectionIndividualIntakeQuestions();
 
   const newQuestion: SingleFormField = useMemo(() => {
     return {
@@ -73,12 +67,51 @@ const IndividualIntakeQuestions: React.FC<{
   }, []);
 
   useEffect(() => {
-    setCollection((prevState: any) => {
-      return {
-        ...prevState,
-        individualIntakeQuestions: individualIntakeQuestions,
-      };
-    });
+    if (collection?.metadata?.urlPath) {
+      if (mode === "edit") {
+        updateCollectionIndividualIntakeQuestions(
+          {
+            collectionUrl: collection?.metadata?.urlPath || "",
+            updatedIndividualIntakeQuestions:
+              collection?.individualIntakeQuestions || [],
+          },
+          {
+            onSuccess: (responseData) => {
+              console.log("Mutation successful", responseData);
+            },
+            onError: (error) => {
+              // Handle error
+              console.error("Mutation error", error);
+            },
+          }
+        );
+      }
+
+      if (mode === "create") {
+        postCollectionIndividualIntakeQuestions(
+          {
+            collectionUrl: collection?.metadata?.urlPath || "",
+            collectionIndividualIntakeQuestions:
+              collection?.individualIntakeQuestions || [],
+          },
+          {
+            onSuccess: (responseData) => {
+              console.log("Mutation successful", responseData);
+            },
+            onError: (error) => {
+              // Handle error
+              console.error("Mutation error", error);
+            },
+          }
+        );
+      }
+    }
+    // setCollection((prevState: any) => {
+    //   return {
+    //     ...prevState,
+    //     individualIntakeQuestions: individualIntakeQuestions,
+    //   };
+    // });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [individualIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates...but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
@@ -93,22 +126,42 @@ const IndividualIntakeQuestions: React.FC<{
   };
 
   const handleSaveIndividualIntakeQuestionsAndPreview = () => {
-    mutate(
-      {
-        collectionUrl: collection.metadata.urlPath || "",
-        updatedIndividualIntakeQuestions:
-          collection.individualIntakeQuestions || [],
-      },
-      {
-        onSuccess: (responseData) => {
-          console.log("Mutation successful", responseData);
+    if (mode === "edit") {
+      updateCollectionIndividualIntakeQuestions(
+        {
+          collectionUrl: collection.metadata.urlPath || "",
+          updatedIndividualIntakeQuestions:
+            collection.individualIntakeQuestions || [],
         },
-        onError: (error) => {
-          // Handle error
-          console.error("Mutation error", error);
+        {
+          onSuccess: (responseData) => {
+            console.log("Mutation successful", responseData);
+          },
+          onError: (error) => {
+            // Handle error
+            console.error("Mutation error", error);
+          },
+        }
+      );
+    }
+    if (mode === "create") {
+      postCollectionIndividualIntakeQuestions(
+        {
+          collectionUrl: collection?.metadata?.urlPath || "",
+          collectionIndividualIntakeQuestions:
+            collection?.individualIntakeQuestions || [],
         },
-      }
-    );
+        {
+          onSuccess: (responseData) => {
+            console.log("Mutation successful", responseData);
+          },
+          onError: (error) => {
+            // Handle error
+            console.error("Mutation error", error);
+          },
+        }
+      );
+    }
   };
 
   const createNewIntakeQuestion: () => void = () => {
@@ -127,7 +180,7 @@ const IndividualIntakeQuestions: React.FC<{
 
   const intakeQuestionElements = map(
     collection?.individualIntakeQuestions || [],
-    (intakeQuestion, intakeQuestionIdx) => {
+    (intakeQuestion, intakeQuestionIdx: number) => {
       const intakeQuesionsInvalid: {} =
         collection?.individualQuestionsFormFieldGroup?.isInvalids || {};
       return map(
@@ -162,8 +215,9 @@ const IndividualIntakeQuestions: React.FC<{
                 wholeQuestion={wholeQuestion}
                 intakeQuestionsInvalid={intakeQuesionsInvalid}
                 intakeQuestionIdx={intakeQuestionIdx}
-                collection={collection}
-                setCollection={setCollection}
+                collectionUrl={collectionUrl}
+                collection={collection} // @TODO decide whether this is needed
+                // setCollection={setCollection}
                 formFieldGroup={formFieldGroup}
               />
             </>
