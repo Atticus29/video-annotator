@@ -28,11 +28,10 @@ const collectionVideoIntakeQuestionsPost = async (
         {
           "metadata.urlPath": urlPath,
         },
-        { projection: { videoIntakeQuestions: 1 } }
+        { projection: { videoIntakeQuestions: 1, _id: 0 } }
       );
-      // const targetVideoIntakeQuestions = true;
 
-      if (!Boolean(targetVideoIntakeQuestions)) {
+      if (Object.keys(targetVideoIntakeQuestions || {}).length === 0) {
         const creationResult = await coll.updateOne(
           {
             "metadata.urlPath": urlPath,
@@ -47,6 +46,8 @@ const collectionVideoIntakeQuestionsPost = async (
       } else {
         res.status(200).json({
           message: "Video intake questions already exist for this collection.",
+          result: targetVideoIntakeQuestions,
+          data: videoIntakeQuestions,
         });
       }
     }
