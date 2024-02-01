@@ -68,7 +68,10 @@ const IndividualIntakeQuestions: React.FC<{
 
   useEffect(() => {
     if (collection?.metadata?.urlPath) {
-      if (mode === "edit") {
+      if (
+        mode === "edit" &&
+        collection?.individualIntakeQuestions?.length > 0
+      ) {
         updateCollectionIndividualIntakeQuestions(
           {
             collectionUrl: collection?.metadata?.urlPath || "",
@@ -87,7 +90,11 @@ const IndividualIntakeQuestions: React.FC<{
         );
       }
 
-      if (mode === "create") {
+      if (
+        mode === "create" &&
+        collection?.individualIntakeQuestions?.length > 0
+      ) {
+        console.log("deleteMe got here b1");
         postCollectionIndividualIntakeQuestions(
           {
             collectionUrl: collection?.metadata?.urlPath || "",

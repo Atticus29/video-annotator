@@ -28,7 +28,7 @@ export default function usePostCollectionIndividualIntakeQuestions() {
         }
       } catch (error: any) {
         throw new Error(
-          "Error creating collection individual intake question: " +
+          "got here a1 Error creating collection individual intake question: " +
             error.message
         );
       }

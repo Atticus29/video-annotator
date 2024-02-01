@@ -74,14 +74,40 @@ const VideoIntakeQuestions: React.FC<{
   >([]);
 
   useEffect(() => {
-    if (mode === "create" && videoIntakeQuestions.length < 1) {
-      setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
+    if (
+      mode === "create" &&
+      videoIntakeQuestions.length < 1 &&
+      (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
+    ) {
+      // setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
+      postCollectionVideoIntakeQuestions(
+        {
+          collectionUrl: collectionUrl,
+          collectionVideoIntakeQuestions:
+            shamCollection.videoIntakeQuestions || [],
+        },
+        {
+          onSuccess: (responseData) => {
+            console.log("Mutation successful", responseData);
+          },
+          onError: (error) => {
+            // Handle error
+            console.error("Mutation error", error);
+          },
+        }
+      );
     }
     // else {
     //   // @TODO decide
     //   // return collection?.videoIntakeQuestions;
     // }
-  }, [mode, videoIntakeQuestions.length, videoQuestionFormValues]);
+  }, [
+    collectionUrl,
+    mode,
+    postCollectionVideoIntakeQuestions,
+    videoIntakeQuestions.length,
+    videoQuestionFormValues,
+  ]);
 
   const [error, setError] = useState<string>("");
 
@@ -102,8 +128,8 @@ const VideoIntakeQuestions: React.FC<{
   useEffect(() => {
     postCollectionVideoIntakeQuestions(
       {
-        collectionVideoIntakeQuestions: videoIntakeQuestions,
         collectionUrl: collectionUrl,
+        collectionVideoIntakeQuestions: videoIntakeQuestions,
       },
       {
         onSuccess: (responseData) => {

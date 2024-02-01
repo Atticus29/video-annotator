@@ -49,16 +49,15 @@ const individualIntakeQuestionCollectionCreate = async (
           result: creationResult,
         });
       } else {
-        res
-          .status(200)
-          .json({
-            message:
-              "Individual intake questions already exist for this collection.",
-          });
+        res.status(200).json({
+          message:
+            "Individual intake questions already exist for this collection.",
+        });
       }
     }
   } catch (error: any) {
     console.log(error);
+    console.log("deleteMe got here c1");
     res.status(500).json({ message: error.message });
   }
 };

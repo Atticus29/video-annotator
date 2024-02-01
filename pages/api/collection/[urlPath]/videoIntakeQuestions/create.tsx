@@ -1,10 +1,10 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "../../../../../../middleware/mongodb";
+import clientPromise from "../../../../../middleware/mongodb";
 import {
   SingleFormField,
   Collection as CollectionData,
-} from "../../../../../../types";
+} from "../../../../../types";
 const collectionVideoIntakeQuestionsPost = async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -15,23 +15,24 @@ const collectionVideoIntakeQuestionsPost = async (
     return res.status(405).json({ message: "Method not allowed." });
   }
 
+  const client: MongoClient = await clientPromise;
+  const db: Db = client.db("videoAnnotator1");
+  const coll: Collection<CollectionData> = db.collection("collections");
+  let {
+    videoIntakeQuestions,
+    urlPath,
+  }: { videoIntakeQuestions: SingleFormField[]; urlPath: string } = req.body;
   try {
-    const client: MongoClient = await clientPromise;
-    const db: Db = client.db("videoAnnotator1");
-    const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "POST") {
-      let {
-        videoIntakeQuestions,
-        urlPath,
-      }: { videoIntakeQuestions: SingleFormField[]; urlPath: string } =
-        req.body;
-      const targetVidoeIntakeQuestions = await coll.findOne(
+      const targetVideoIntakeQuestions = await coll.findOne(
         {
           "metadata.urlPath": urlPath,
         },
         { projection: { videoIntakeQuestions: 1 } }
       );
-      if (!Boolean(targetVidoeIntakeQuestions)) {
+      // const targetVideoIntakeQuestions = true;
+
+      if (!Boolean(targetVideoIntakeQuestions)) {
         const creationResult = await coll.updateOne(
           {
             "metadata.urlPath": urlPath,
@@ -44,16 +45,17 @@ const collectionVideoIntakeQuestionsPost = async (
           result: creationResult,
         });
       } else {
-        res
-          .status(200)
-          .json({
-            message:
-              "Video intake questions already exist for this collection.",
-          });
+        res.status(200).json({
+          message: "Video intake questions already exist for this collection.",
+        });
       }
     }
   } catch (error: any) {
     console.log(error);
+    console.log("deleteMe got here d1");
+    console.log(videoIntakeQuestions);
+    console.log(urlPath);
     res.status(500).json({ message: error.message });
   }
 };
+export default collectionVideoIntakeQuestionsPost;
