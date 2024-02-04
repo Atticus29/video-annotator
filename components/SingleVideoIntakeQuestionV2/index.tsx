@@ -82,7 +82,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
   const [localQuestion, setLocalQuestion] =
     useState<SingleFormField>(wholeQuestion);
-  const [formFieldUpdater, setFormFieldUpdater] = useState<number>(0);
+  // const [formFieldUpdater, setFormFieldUpdater] = useState<number>(0);
 
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
@@ -159,10 +159,10 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
     updateIntakeQuestionFormField(
       currentVal,
-      localQuestion,
       intakeQuestionKey,
-      formFieldGroup,
-      setFormFieldUpdater
+      intakeQuestionIdx,
+      formFieldGroup
+      // setFormFieldUpdater
     );
 
     // console.log("deleteMe formFieldGroup is now: ");
@@ -264,7 +264,11 @@ const SingleVideoIntakeQuestionV2: React.FC<{
           <TextField
             fullWidth
             data-testid={intakeQuestionKey + "-" + intakeQuestionEl}
-            error={formFieldGroup?.isInvalids[intakeQuestionKey] || false}
+            error={
+              formFieldGroup?.isInvalids[
+                intakeQuestionKey + "--" + intakeQuestionIdx
+              ] || false
+            }
             variant="filled"
             label={
               <FormattedMessage
@@ -274,7 +278,9 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             }
             required
             helperText={
-              formFieldGroup?.isInvalids[intakeQuestionKey] || false
+              formFieldGroup?.isInvalids[
+                intakeQuestionKey + "--" + intakeQuestionIdx
+              ] || false
                 ? intl.formatMessage(
                     {
                       id: "GENERIC_CANNOT_BE_BLANK",

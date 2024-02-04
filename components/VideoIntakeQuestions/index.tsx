@@ -296,9 +296,7 @@ const VideoIntakeQuestions: React.FC<{
           </Grid>
           <Grid item lg={12} sm={12}>
             <ComposedFormSubmissionButtonVideoIntakeQuestions
-              questionsOfConcern={
-                [...get(localCollection, ["videoIntakeQuestions"], [])] || []
-              }
+              questionsOfConcern={videoIntakeQuestions}
               formFieldGroupOfConcern={formFieldGroup}
               collectionPath={localCollection?.metadata?.urlPath}
               collectionPropToUpdate={"videos"}

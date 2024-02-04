@@ -26,12 +26,13 @@ export function updateIntakeQuestionFormField(
   currentVal: any,
   // question: SingleFormField,
   intakeQuestionKey: string,
-  formFieldGroup: FormFieldGroup,
-  setFormFieldUpdater: (input: any) => void
+  intakeQuestionIdx: number,
+  formFieldGroup: FormFieldGroup
+  // setFormFieldUpdater: (input: any) => void
 ) {
-  setFormFieldUpdater((prevState: number) => {
-    return prevState++;
-  }); // this is just to kick off the re-render in vase the FormFieldGroup object is too complex to see updates in
+  // setFormFieldUpdater((prevState: number) => {
+  //   return prevState++;
+  // }); // this is just to kick off the re-render in vase the FormFieldGroup object is too complex to see updates in
   const valueSetter: ((input: any) => void) | undefined = get(formFieldGroup, [
     "setValues",
   ]);
@@ -43,7 +44,8 @@ export function updateIntakeQuestionFormField(
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey]: !isNonEmptyString(currentVal),
+        [intakeQuestionKey + "--" + intakeQuestionIdx]:
+          !isNonEmptyString(currentVal),
       };
     });
   }
@@ -51,7 +53,7 @@ export function updateIntakeQuestionFormField(
     valueSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey]: currentVal,
+        [intakeQuestionKey + "--" + intakeQuestionIdx]: currentVal,
       };
     });
   }

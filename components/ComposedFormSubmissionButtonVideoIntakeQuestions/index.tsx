@@ -122,6 +122,8 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
 
   useEffect(() => {
     if (formFieldGroupOfConcern) {
+      console.log("deleteMe got here b1 and formFieldGroupOfConcern is: ");
+      console.log(formFieldGroupOfConcern);
       const totalInvalidCount: number = reduce(
         Object.values(formFieldGroupOfConcern?.isInvalids || []),
         (memo: any, entry: any) => {
@@ -129,6 +131,10 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
         },
         0
       );
+      console.log("deleteMe totalInvalidCount is: ");
+      console.log(totalInvalidCount);
+      console.log("deleteMe questionsOfConcern is: ");
+      console.log(questionsOfConcern);
       setAllRequiredValid(
         totalInvalidCount < 1 &&
           calculateAllRequiredsHaveValues(
@@ -207,7 +213,10 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
         disabled={!allRequiredValid}
         onClick={handleFormSubmission}
       >
-        <FormattedMessage id="PREVIEW" defaultMessage="Preview" />
+        <FormattedMessage
+          id="SAVE_AND_PREVIEW"
+          defaultMessage="Save and Preview"
+        />
       </Button>
       {error && <CustomError errorMsg={error} />}
       <Snackbar
