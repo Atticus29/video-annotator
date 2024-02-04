@@ -66,6 +66,8 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   collectionUrl,
   formFieldGroup,
 }) => {
+  // console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
+  // console.log(wholeQuestion);
   const [isInvalid, setIsinvalid] = useState<boolean>(false);
   useEffect(() => {
     console.log("deleteMe formFieldGroup is now: ");
@@ -159,10 +161,9 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
     updateIntakeQuestionFormField(
       currentVal,
+      wholeQuestion?.label || String(intakeQuestionIdx),
       intakeQuestionKey,
-      intakeQuestionIdx,
       formFieldGroup
-      // setFormFieldUpdater
     );
 
     // console.log("deleteMe formFieldGroup is now: ");
@@ -266,7 +267,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             data-testid={intakeQuestionKey + "-" + intakeQuestionEl}
             error={
               formFieldGroup?.isInvalids[
-                intakeQuestionKey + "--" + intakeQuestionIdx
+                intakeQuestionKey + "--" + wholeQuestion?.label
               ] || false
             }
             variant="filled"
@@ -279,7 +280,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             required
             helperText={
               formFieldGroup?.isInvalids[
-                intakeQuestionKey + "--" + intakeQuestionIdx
+                intakeQuestionKey + "--" + wholeQuestion?.label
               ] || false
                 ? intl.formatMessage(
                     {

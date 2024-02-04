@@ -24,9 +24,10 @@ export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
 
 export function updateIntakeQuestionFormField(
   currentVal: any,
+  wholeQuestionLabel: string,
   // question: SingleFormField,
   intakeQuestionKey: string,
-  intakeQuestionIdx: number,
+  // intakeQuestionIdx: number,
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
@@ -44,7 +45,7 @@ export function updateIntakeQuestionFormField(
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey + "--" + intakeQuestionIdx]:
+        [intakeQuestionKey + "--" + wholeQuestionLabel]:
           !isNonEmptyString(currentVal),
       };
     });
@@ -53,7 +54,7 @@ export function updateIntakeQuestionFormField(
     valueSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey + "--" + intakeQuestionIdx]: currentVal,
+        [intakeQuestionKey + "--" + wholeQuestionLabel]: currentVal,
       };
     });
   }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { map, get } from "lodash-es";
+import { map, get, reduce } from "lodash-es";
 
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
 import { Button, CircularProgress, Grid, Typography } from "@mui/material";
@@ -19,6 +19,7 @@ import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollection
 import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
 import ComposedFormSubmissionButtonVideoIntakeQuestions from "../ComposedFormSubmissionButtonVideoIntakeQuestions";
 import SingleVideoIntakeQuestionV2 from "../SingleVideoIntakeQuestionV2";
+import { transformIntakeQuestionIntoActualValueObj } from "../../utilities/videoIntakeQuestionUtils";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -82,6 +83,28 @@ const VideoIntakeQuestions: React.FC<{
       (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
     ) {
       setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
+
+      // add their values to the formFieldGroup
+      const transformedVideoIntakeQuestions =
+        transformIntakeQuestionIntoActualValueObj(
+          shamCollection.videoIntakeQuestions || []
+        );
+
+      const formFieldGroupValueSetter: ((input: any) => void) | undefined =
+        formFieldGroup?.setValues;
+
+      if (formFieldGroupValueSetter) {
+        formFieldGroupValueSetter((prevState: any) => {
+          return {
+            ...prevState,
+            ...transformedVideoIntakeQuestions,
+          };
+        });
+      }
+      // currently, don't have to add invalids to the formFieldGroup here, because the dummy data is all valid
+      // end add their values to the formFieldGroup
+      //////////////////////////////////////////////
+
       // postCollectionVideoIntakeQuestions(
       //   {
       //     collectionUrl: collectionUrl,
@@ -105,6 +128,7 @@ const VideoIntakeQuestions: React.FC<{
     // }
   }, [
     collectionUrl,
+    formFieldGroup?.setValues,
     mode,
     postCollectionVideoIntakeQuestions,
     videoIntakeQuestions.length,
@@ -171,6 +195,20 @@ const VideoIntakeQuestions: React.FC<{
           return [newQuestion];
         }
       });
+
+      const transformedNewIntakeQuestionForFormFieldGroup =
+        transformIntakeQuestionIntoActualValueObj([newQuestion]);
+      const formFieldGroupValueSetter: ((input: any) => void) | undefined =
+        formFieldGroup?.setValues;
+
+      if (formFieldGroupValueSetter) {
+        formFieldGroupValueSetter((prevState: any) => {
+          return {
+            ...prevState,
+            ...transformedNewIntakeQuestionForFormFieldGroup,
+          };
+        });
+      }
     } catch (error: any) {
       setError(error?.message);
     }

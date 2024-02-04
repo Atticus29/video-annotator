@@ -1,5 +1,5 @@
 import { Tulpen_One } from "@next/font/google";
-import { get } from "lodash-es";
+import { get, reduce } from "lodash-es";
 import { defaultDoNotDisplays } from "../dummy_data/dummyCollection";
 import { Collection, SingleFormField } from "../types";
 import { isNonEmptyString, isValidEmail, isValidUrl } from "./validators";
@@ -89,6 +89,31 @@ export function transformQuestion(
   } else {
     return question;
   }
+}
+
+export function transformIntakeQuestionIntoActualValueObj(
+  intakeQuestions: SingleFormField[]
+) {
+  return reduce(
+    intakeQuestions,
+    (memo, intakeQuestion) => {
+      const objKeys: string[] = Object.keys(intakeQuestion);
+      const currentLabel: string = intakeQuestion.label;
+      const newObj = reduce(
+        objKeys,
+        (memo, objKey) => {
+          const currentVal: any = get(intakeQuestion, [objKey]);
+          const newEntry: {} = {
+            [objKey + "--" + currentLabel]: currentVal,
+          };
+          return { ...memo, ...newEntry };
+        },
+        {}
+      );
+      return { ...memo, ...newObj };
+    },
+    {}
+  );
 }
 
 export function updateSingleQuestionInCollection(

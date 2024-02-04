@@ -11,7 +11,7 @@ import axios from "axios";
 import { FormFieldGroup, SingleFormField, Collection } from "../../types";
 import CustomError from "../CustomError";
 import CloseIcon from "@mui/icons-material/Close";
-import { calculateAllRequiredsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
+import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
 import useGetCollection from "../../hooks/useGetCollection";
 
 const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
@@ -131,13 +131,13 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
         },
         0
       );
-      console.log("deleteMe totalInvalidCount is: ");
-      console.log(totalInvalidCount);
-      console.log("deleteMe questionsOfConcern is: ");
-      console.log(questionsOfConcern);
+      // console.log("deleteMe totalInvalidCount is: ");
+      // console.log(totalInvalidCount);
+      // console.log("deleteMe questionsOfConcern is: ");
+      // console.log(questionsOfConcern);
       setAllRequiredValid(
         totalInvalidCount < 1 &&
-          calculateAllRequiredsHaveValues(
+          calculateAllRequiredIntakeQuestionsHaveValues(
             questionsOfConcern,
             formFieldGroupOfConcern
           )
