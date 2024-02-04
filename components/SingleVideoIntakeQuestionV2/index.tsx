@@ -16,12 +16,16 @@ import {
   // QuestionValidity,
   SingleFormField,
 } from "../../types";
-import { convertCamelCaseToCapitalCase } from "../../utilities/textUtils";
+import {
+  capitalizeEachWord,
+  convertCamelCaseToCapitalCase,
+} from "../../utilities/textUtils";
 import formFieldConfig from "../../formFieldConfig.json";
 import {
   calculateCurrentAttributesToDisplay,
   updateCollection,
   updateFormFieldStates,
+  updateIntakeQuestionFormField,
   updateIsRequiredChecked,
   updateIsRequiredUnchecked,
   updateUsersCanAddCustomOptionsChecked,
@@ -30,23 +34,26 @@ import {
 import OptionSet from "../OptionSet";
 import { isNonEmptyString } from "../../utilities/validators";
 import {
+  calculateShouldBeCheckbox,
+  calculateShouldBeTextField,
+  calculateShouldBeTypeDropdown,
   deleteSingleQuestionInCollection,
   transformQuestion,
   updateSingleQuestionInCollection,
 } from "../../utilities/videoIntakeQuestionUtils";
 import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const SingleVideoIntakeQuestion: React.FC<{
+const SingleVideoIntakeQuestionV2: React.FC<{
   intakeQuestionEl: any;
   intakeQuestionKey: string;
   wholeQuestion: SingleFormField;
   intakeQuestionsInvalid: {};
   intakeQuestionIdx: number;
   collectionUrl: string;
-  collection: Collection;
-  setCollection: (collection: any) => void;
+  //   collection: Collection;
+  //   setCollection: (collection: any) => void;
   formFieldGroup: FormFieldGroup;
 }> = ({
   intakeQuestionEl,
@@ -54,48 +61,50 @@ const SingleVideoIntakeQuestion: React.FC<{
   wholeQuestion,
   intakeQuestionsInvalid,
   intakeQuestionIdx,
-  collection,
-  setCollection,
+  //   collection,
+  //   setCollection,
   collectionUrl,
   formFieldGroup,
 }) => {
-  // console.log("deleteMe got here a1");
-  // const queryClient = useQueryClient();
-  // const {
-  //   mutate: updateVideoIntakeQuestions,
-  //   isPending,
-  //   error,
-  //   isError,
-  // } = useUpdateCollectionVideoIntakeQuestions();
+  const [isInvalid, setIsinvalid] = useState<boolean>(false);
+  useEffect(() => {
+    console.log("deleteMe formFieldGroup is now: ");
+    console.log(formFieldGroup);
+    console.log("deleteMe intakeQuestionKey is: ");
+    console.log(intakeQuestionKey);
+    const currentIsInvalid: boolean =
+      formFieldGroup?.isInvalids[intakeQuestionKey] || false;
+
+    console.log("deleteMe currentIsInvalid is: ");
+    console.log(currentIsInvalid);
+    setIsinvalid(currentIsInvalid);
+  }, [formFieldGroup, intakeQuestionKey]);
+
+  const [localQuestion, setLocalQuestion] =
+    useState<SingleFormField>(wholeQuestion);
+  const [formFieldUpdater, setFormFieldUpdater] = useState<number>(0);
+
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
-  const onTheNoDisplayList: boolean = (
-    wholeQuestion?.doNotDisplay || []
-  ).includes(intakeQuestionKey);
+  const shouldBeTypeDropdown: boolean = calculateShouldBeTypeDropdown(
+    localQuestion,
+    intakeQuestionKey
+  );
 
-  const currentAttributesToDisplay: string[] =
-    calculateCurrentAttributesToDisplay(wholeQuestion);
+  const shouldBeTextField: boolean = useMemo(() => {
+    return calculateShouldBeTextField(localQuestion, intakeQuestionKey);
+  }, [localQuestion, intakeQuestionKey]);
 
-  const onTheDisplayListForThisQuestionType: boolean =
-    currentAttributesToDisplay.includes(intakeQuestionKey);
+  const shouldBeCheckbox: boolean = useMemo(() => {
+    // console.log("deleteMe re-evaluated:");
+    // console.log("deleteMe localQuestion is: ");
+    // console.log(localQuestion);
+    return calculateShouldBeCheckbox(localQuestion, intakeQuestionKey);
+  }, [localQuestion, intakeQuestionKey]);
 
-  const onCheckboxList: boolean = (
-    wholeQuestion?.shouldBeCheckboxes || []
-  ).includes(intakeQuestionKey);
-
-  const shouldBeTypeDropdown: boolean =
-    intakeQuestionKey === "type" && onTheDisplayListForThisQuestionType;
-  const shouldBeTextField: boolean =
-    !onTheNoDisplayList &&
-    !onCheckboxList &&
-    !shouldBeTypeDropdown &&
-    onTheDisplayListForThisQuestionType;
-  const shouldBeCheckbox: boolean =
-    !onTheNoDisplayList &&
-    onCheckboxList &&
-    !shouldBeTypeDropdown &&
-    onTheDisplayListForThisQuestionType;
+  // console.log("deleteMe shouldBeCheckbox is: ");
+  // console.log(shouldBeCheckbox);
 
   const intl: IntlShape = useIntl();
   const [currentQuestionType, setCurrentQuestionType] =
@@ -106,45 +115,30 @@ const SingleVideoIntakeQuestion: React.FC<{
     setCurrentQuestionType(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
-      wholeQuestion,
+      localQuestion,
       currentVal
     );
 
-    const newIntakeQuestionSet: SingleFormField[] = get(
-      collection,
-      ["videoIntakeQuestions"],
-      []
-    );
-    newIntakeQuestionSet[intakeQuestionIdx] = transformedQuestion;
+    // console.log("deleteMe transformedQuestion in handleQuestionChange is: ");
+    // console.log(transformedQuestion);
 
-    // updateVideoIntakeQuestions(
-    //   // @TODO maybe put this part under control of a save button
-    //   {
-    //     collectionUrl,
-    //     collectionVideoIntakeQuestions: newIntakeQuestionSet,
-    //   },
-    //   {
-    //     onSuccess: (responseData: any) => {
-    //       console.log("deleteMe responseData of successful update:");
-    //       console.log(responseData);
-    //       queryClient.invalidateQueries({
-    //         queryKey: ["singleCollection", collectionUrl],
-    //       });
-    //     },
-    //     onError: (error) => {
-    //       console.error("Mutation error", error);
-    //     },
-    //   }
+    setLocalQuestion(transformedQuestion);
+
+    // const newIntakeQuestionSet: SingleFormField[] = get(
+    //   collection,
+    //   ["videoIntakeQuestions"],
+    //   []
     // );
+    // newIntakeQuestionSet[intakeQuestionIdx] = transformedQuestion;
 
-    updateSingleQuestionInCollection(
-      setCollection,
-      intakeQuestionIdx,
-      transformedQuestion,
-      newIntakeQuestionSet,
-      // collection?.videoIntakeQuestions || [],
-      "videoIntakeQuestions"
-    );
+    // updateSingleQuestionInCollection(
+    //   setCollection,
+    //   intakeQuestionIdx,
+    //   transformedQuestion,
+    //   newIntakeQuestionSet,
+    //   // collection?.videoIntakeQuestions || [],
+    //   "videoIntakeQuestions"
+    // );
   };
 
   const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
@@ -156,94 +150,89 @@ const SingleVideoIntakeQuestion: React.FC<{
 
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
     setCurrentValue(currentVal);
+    console.log("deleteMe intakeQuestionKey is: ");
+    console.log(intakeQuestionKey);
+    console.log("deleteMe intakeQuestionEl is: ");
+    console.log(intakeQuestionEl);
+    // console.log("deleteMe currentVal is: ");
+    // console.log(currentVal);
 
-    console.log("deleteMe currentVal is: ");
-    console.log(currentVal);
-
-    updateCollection(
-      collection,
-      intakeQuestionIdx,
-      intakeQuestionKey,
+    updateIntakeQuestionFormField(
       currentVal,
-      setCollection,
-      "videoIntakeQuestions"
+      localQuestion,
+      intakeQuestionKey,
+      formFieldGroup,
+      setFormFieldUpdater
     );
 
-    const targetQuestion: SingleFormField = get(
-      collection,
-      ["videoIntakeQuestions", intakeQuestionIdx],
-      {}
-    );
-    const modifiedQuestion: any = {
-      ...targetQuestion,
-      [intakeQuestionKey]: currentVal,
-    };
-    const newIntakeQuestionSet: SingleFormField[] = get(
-      collection,
-      ["videoIntakeQuestions"],
-      []
-    );
-    newIntakeQuestionSet[intakeQuestionIdx] = modifiedQuestion;
+    // console.log("deleteMe formFieldGroup is now: ");
+    // console.log(formFieldGroup);
 
-    // updateVideoIntakeQuestions(
-    //   // @TODO maybe put this part under control of a save button
-    //   {
-    //     collectionUrl,
-    //     collectionVideoIntakeQuestions: newIntakeQuestionSet,
-    //   },
-    //   {
-    //     onSuccess: (responseData: any) => {
-    //       console.log("deleteMe responseData of successful update:");
-    //       console.log(responseData);
-    //       queryClient.invalidateQueries({
-    //         queryKey: ["singleCollection", collectionUrl],
-    //       });
-    //     },
-    //     onError: (error) => {
-    //       console.error("Mutation error", error);
-    //     },
-    //   }
+    // updateCollection(
+    //   collection,
+    //   intakeQuestionIdx,
+    //   intakeQuestionKey,
+    //   currentVal,
+    //   setCollection,
+    //   "videoIntakeQuestions"
     // );
+
+    // const targetQuestion: SingleFormField = get(
+    //   collection,
+    //   ["videoIntakeQuestions", intakeQuestionIdx],
+    //   {}
+    // );
+    // const modifiedQuestion: any = {
+    //   ...targetQuestion,
+    //   [intakeQuestionKey]: currentVal,
+    // };
+    // const newIntakeQuestionSet: SingleFormField[] = get(
+    //   collection,
+    //   ["videoIntakeQuestions"],
+    //   []
+    // );
+    // newIntakeQuestionSet[intakeQuestionIdx] = modifiedQuestion;
   };
 
   const handleCheckChange: (event: any) => void = (_event: any) => {
+    console.log("deleteMe handleCheckChange called");
     if (intakeQuestionKey === "isRequired" && !intakeQuestionEl === false) {
       // isRequired is being set to false. This means that we need to remove the isNonEmptyString method from the validationMethods array for this question
-      updateIsRequiredUnchecked(
-        formFieldGroup,
-        "videoQuestionsFormFieldGroup",
-        wholeQuestion,
-        collection,
-        intakeQuestionIdx,
-        intakeQuestionKey,
-        intakeQuestionEl,
-        setCollection,
-        "videoIntakeQuestions"
-      );
+      //   updateIsRequiredUnchecked(
+      //     formFieldGroup,
+      //     "videoQuestionsFormFieldGroup",
+      //     localQuestion,
+      //     collection,
+      //     intakeQuestionIdx,
+      //     intakeQuestionKey,
+      //     intakeQuestionEl,
+      //     setCollection,
+      //     "videoIntakeQuestions"
+      //   );
     } else if (
       intakeQuestionKey === "isRequired" &&
       !intakeQuestionEl === true
     ) {
-      updateIsRequiredChecked(
-        formFieldGroup,
-        "videoQuestionsFormFieldGroup",
-        wholeQuestion,
-        collection,
-        intakeQuestionIdx,
-        intakeQuestionKey,
-        intakeQuestionEl,
-        setCollection,
-        "videoIntakeQuestions"
-      );
+      //   updateIsRequiredChecked(
+      //     formFieldGroup,
+      //     "videoQuestionsFormFieldGroup",
+      //     localQuestion,
+      //     collection,
+      //     intakeQuestionIdx,
+      //     intakeQuestionKey,
+      //     intakeQuestionEl,
+      //     setCollection,
+      //     "videoIntakeQuestions"
+      //   );
     } else {
-      updateCollection(
-        collection,
-        intakeQuestionIdx,
-        intakeQuestionKey,
-        !intakeQuestionEl,
-        setCollection,
-        "videoIntakeQuestions"
-      );
+      //   updateCollection(
+      //     collection,
+      //     intakeQuestionIdx,
+      //     intakeQuestionKey,
+      //     !intakeQuestionEl,
+      //     setCollection,
+      //     "videoIntakeQuestions"
+      //   );
     }
   };
 
@@ -260,22 +249,22 @@ const SingleVideoIntakeQuestion: React.FC<{
   return (
     <>
       <Grid item lg={12} sm={12}>
-        {shouldBeOptionField && (
+        {/* {shouldBeOptionField && ( // @TODO comment this back in a refactor
           <OptionSet
             key={intakeQuestionIdx}
-            formField={wholeQuestion}
+            formField={localQuestion}
             formFieldGroupString={"videoQuestionsFormFieldGroup"}
-            collection={collection}
+            collection={collection} //@TODO update this as well
             targetFormFieldIdx={intakeQuestionIdx}
-            setCollection={setCollection}
+            setCollection={setCollection} //@TODO update this as well
             whichIntakeQuestions={"videoIntakeQuestions"}
           />
-        )}
+        )} */}
         {shouldBeTextField && (
           <TextField
             fullWidth
             data-testid={intakeQuestionKey + "-" + intakeQuestionEl}
-            error={get(intakeQuestionsInvalid, [intakeQuestionKey])}
+            error={formFieldGroup?.isInvalids[intakeQuestionKey] || false}
             variant="filled"
             label={
               <FormattedMessage
@@ -285,13 +274,13 @@ const SingleVideoIntakeQuestion: React.FC<{
             }
             required
             helperText={
-              get(intakeQuestionsInvalid, [intakeQuestionKey])
+              formFieldGroup?.isInvalids[intakeQuestionKey] || false
                 ? intl.formatMessage(
                     {
                       id: "GENERIC_CANNOT_BE_BLANK",
                       defaultMessage: "Field cannot be blank",
                     },
-                    { name: "Question" + intakeQuestionKey } // @TODO internationalize this, too
+                    { name: capitalizeEachWord(intakeQuestionKey) } // @TODO internationalize this, too
                   )
                 : ""
             }
@@ -321,7 +310,7 @@ const SingleVideoIntakeQuestion: React.FC<{
           <FormControlLabel
             style={{ marginRight: 10 }}
             control={<Checkbox checked={intakeQuestionEl} />}
-            value={currentValue} // @TODO LEFT OFF HERE should be intakeQuestionEl or something
+            value={currentValue}
             onChange={handleCheckChange}
             label={convertCamelCaseToCapitalCase(intakeQuestionKey)}
           />
@@ -331,4 +320,4 @@ const SingleVideoIntakeQuestion: React.FC<{
   );
 };
 
-export default SingleVideoIntakeQuestion;
+export default SingleVideoIntakeQuestionV2;

@@ -17,6 +17,8 @@ import useGetCollection from "../../hooks/useGetCollection";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollectionVideoIntakeQuestions";
 import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
+import ComposedFormSubmissionButtonVideoIntakeQuestions from "../ComposedFormSubmissionButtonVideoIntakeQuestions";
+import SingleVideoIntakeQuestionV2 from "../SingleVideoIntakeQuestionV2";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -79,23 +81,23 @@ const VideoIntakeQuestions: React.FC<{
       videoIntakeQuestions.length < 1 &&
       (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
     ) {
-      // setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
-      postCollectionVideoIntakeQuestions(
-        {
-          collectionUrl: collectionUrl,
-          collectionVideoIntakeQuestions:
-            shamCollection.videoIntakeQuestions || [],
-        },
-        {
-          onSuccess: (responseData) => {
-            console.log("Mutation successful", responseData);
-          },
-          onError: (error) => {
-            // Handle error
-            console.error("Mutation error", error);
-          },
-        }
-      );
+      setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
+      // postCollectionVideoIntakeQuestions(
+      //   {
+      //     collectionUrl: collectionUrl,
+      //     collectionVideoIntakeQuestions:
+      //       shamCollection.videoIntakeQuestions || [],
+      //   },
+      //   {
+      //     onSuccess: (responseData) => {
+      //       console.log("Mutation successful a1", responseData);
+      //     },
+      //     onError: (error) => {
+      //       // Handle error
+      //       console.error("Mutation error", error);
+      //     },
+      //   }
+      // );
     }
     // else {
     //   // @TODO decide
@@ -147,7 +149,8 @@ const VideoIntakeQuestions: React.FC<{
     // });
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
+    // }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
+  }, [collectionUrl, postCollectionVideoIntakeQuestions, videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setVideoIntakeQuestions((prevState) => {
@@ -184,6 +187,10 @@ const VideoIntakeQuestions: React.FC<{
       return map(
         intakeQuestion,
         (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
+          // console.log("deleteMe intakeQuestionEl is: ");
+          // console.log(intakeQuestionEl);
+          // console.log("deleteMe intakeQuestionKey is: ");
+          // console.log(intakeQuestionKey);
           // console.log("deleteMe wholeQuestion is: ");
           // console.log(wholeQuestion);
           const isDelible: boolean = !wholeQuestion?.isACoreQuestion;
@@ -215,7 +222,7 @@ const VideoIntakeQuestions: React.FC<{
                 )}
               </>
               {(isDelible || (intakeQuestionKey === "label" && !isDelible)) && (
-                <SingleVideoIntakeQuestion
+                <SingleVideoIntakeQuestionV2
                   key={intakeQuestionKey}
                   intakeQuestionEl={intakeQuestionEl}
                   intakeQuestionKey={intakeQuestionKey}
@@ -223,8 +230,8 @@ const VideoIntakeQuestions: React.FC<{
                   intakeQuestionsInvalid={intakeQuesionsInvalid}
                   intakeQuestionIdx={intakeQuestionIdx}
                   collectionUrl={localCollection?.metadata?.urlPath || ""}
-                  collection={localCollection}
-                  setCollection={setLocalCollection}
+                  // collection={localCollection}
+                  // setCollection={setLocalCollection}
                   formFieldGroup={formFieldGroup}
                 />
               )}
@@ -288,14 +295,15 @@ const VideoIntakeQuestions: React.FC<{
             </Grid>
           </Grid>
           <Grid item lg={12} sm={12}>
-            <ComposedFormSubmissionButton
+            <ComposedFormSubmissionButtonVideoIntakeQuestions
               questionsOfConcern={
-                [...get(collection, ["videoIntakeQuestions"], [])] || []
+                [...get(localCollection, ["videoIntakeQuestions"], [])] || []
               }
               formFieldGroupOfConcern={formFieldGroup}
-              collectionPath={collection?.metadata?.urlPath}
+              collectionPath={localCollection?.metadata?.urlPath}
               collectionPropToUpdate={"videos"}
               // onCloseDialog={onCloseDialog}
+              updateMethod={postCollectionVideoIntakeQuestions}
             />
           </Grid>
         </InfoPanel>

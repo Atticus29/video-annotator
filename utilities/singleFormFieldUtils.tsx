@@ -22,6 +22,49 @@ export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
   return currentAttributesToDisplay;
 }
 
+export function updateIntakeQuestionFormField(
+  currentVal: any,
+  // question: SingleFormField,
+  intakeQuestionKey: string,
+  formFieldGroup: FormFieldGroup,
+  setFormFieldUpdater: (input: any) => void
+) {
+  setFormFieldUpdater((prevState: number) => {
+    return prevState++;
+  }); // this is just to kick off the re-render in vase the FormFieldGroup object is too complex to see updates in
+  const valueSetter: ((input: any) => void) | undefined = get(formFieldGroup, [
+    "setValues",
+  ]);
+  const invalidSetter: ((input: any) => void) | undefined = get(
+    formFieldGroup,
+    ["setIsInvalids"]
+  );
+  if (invalidSetter) {
+    invalidSetter((prevState: {}) => {
+      return {
+        ...prevState,
+        [intakeQuestionKey]: !isNonEmptyString(currentVal),
+      };
+    });
+  }
+  if (valueSetter) {
+    valueSetter((prevState: {}) => {
+      return {
+        ...prevState,
+        [intakeQuestionKey]: currentVal,
+      };
+    });
+  }
+
+  // console.log("deleteMe updateFormField called.");
+  // console.log("deleteMe question is: ");
+  // console.log(question);
+  // console.log("deleteMe intakeQuestionIdx is: ");
+  // console.log(intakeQuestionIdx);
+  // console.log("deleteMe formFieldGroup is: ");
+  // console.log(formFieldGroup);
+}
+
 export function updateCollection(
   collection: Collection,
   questionIdx: number,
@@ -30,7 +73,7 @@ export function updateCollection(
   setCollection: (collection: any) => void,
   whichIntakeQuestions: string
 ) {
-  console.log("deleteMe got here x");
+  // console.log("deleteMe got here x");
   const targetQuestion: SingleFormField = get(
     collection,
     [whichIntakeQuestions, questionIdx],

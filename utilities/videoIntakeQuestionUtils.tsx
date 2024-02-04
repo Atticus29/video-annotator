@@ -3,6 +3,7 @@ import { get } from "lodash-es";
 import { defaultDoNotDisplays } from "../dummy_data/dummyCollection";
 import { Collection, SingleFormField } from "../types";
 import { isNonEmptyString, isValidEmail, isValidUrl } from "./validators";
+import { calculateCurrentAttributesToDisplay } from "./singleFormFieldUtils";
 
 export function transformQuestion(
   question: SingleFormField,
@@ -119,4 +120,74 @@ export function deleteSingleQuestionInCollection(
   setCollection((prevState: any) => {
     return { ...prevState, [whichIntakeQuestion]: modifiedQuestionSet };
   });
+}
+
+export function calculateShouldBeTypeDropdown(
+  question: SingleFormField,
+  questionKey: string
+) {
+  const currentAttributesToDisplay =
+    calculateCurrentAttributesToDisplay(question);
+
+  const onTheDisplayListForThisQuestionType: boolean =
+    currentAttributesToDisplay.includes(questionKey);
+  return questionKey === "type" && onTheDisplayListForThisQuestionType;
+}
+
+export function calculateShouldBeTextField(
+  question: SingleFormField,
+  questionKey: string
+) {
+  const onTheNoDisplayList: boolean = (question?.doNotDisplay || []).includes(
+    questionKey
+  );
+
+  const onCheckboxList: boolean = (question?.shouldBeCheckboxes || []).includes(
+    questionKey
+  );
+
+  const currentAttributesToDisplay =
+    calculateCurrentAttributesToDisplay(question);
+
+  const onTheDisplayListForThisQuestionType: boolean =
+    currentAttributesToDisplay.includes(questionKey);
+
+  const shouldBeTypeDropdown: boolean = calculateShouldBeTypeDropdown(
+    question,
+    questionKey
+  );
+
+  return (
+    !onTheNoDisplayList &&
+    !onCheckboxList &&
+    !shouldBeTypeDropdown &&
+    onTheDisplayListForThisQuestionType
+  );
+}
+
+export function calculateShouldBeCheckbox(
+  question: SingleFormField,
+  questionKey: string
+) {
+  const onTheNoDisplayList: boolean = (question?.doNotDisplay || []).includes(
+    questionKey
+  );
+
+  const onCheckboxList: boolean = (question?.shouldBeCheckboxes || []).includes(
+    questionKey
+  );
+  const currentAttributesToDisplay =
+    calculateCurrentAttributesToDisplay(question);
+
+  const onTheDisplayListForThisQuestionType: boolean =
+    currentAttributesToDisplay.includes(questionKey);
+
+  const shouldBeTypeDropdown: boolean =
+    questionKey === "type" && onTheDisplayListForThisQuestionType;
+  return (
+    !onTheNoDisplayList &&
+    onCheckboxList &&
+    !shouldBeTypeDropdown &&
+    onTheDisplayListForThisQuestionType
+  );
 }
