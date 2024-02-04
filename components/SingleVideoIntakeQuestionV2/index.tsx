@@ -197,19 +197,28 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
   const handleCheckChange: (event: any) => void = (_event: any) => {
     console.log("deleteMe handleCheckChange called");
+    console.log("deleteMe intakeQuestionKey is: ");
+    console.log(intakeQuestionKey);
+    console.log("deleteMe intakeQuestionEl is: ");
+    console.log(intakeQuestionEl);
+    const currentVal: any = event.target.checked;
+    console.log("deleteMe currentVal is: ");
+    console.log(currentVal);
+    setCurrentValue(currentVal);
+
     if (intakeQuestionKey === "isRequired" && !intakeQuestionEl === false) {
       // isRequired is being set to false. This means that we need to remove the isNonEmptyString method from the validationMethods array for this question
-      //   updateIsRequiredUnchecked(
-      //     formFieldGroup,
-      //     "videoQuestionsFormFieldGroup",
-      //     localQuestion,
-      //     collection,
-      //     intakeQuestionIdx,
-      //     intakeQuestionKey,
-      //     intakeQuestionEl,
-      //     setCollection,
-      //     "videoIntakeQuestions"
-      //   );
+      updateIsRequiredUnchecked(
+        formFieldGroup,
+        // "videoQuestionsFormFieldGroup",
+        localQuestion,
+        // collection,
+        intakeQuestionIdx,
+        intakeQuestionKey,
+        intakeQuestionEl,
+        // setCollection,
+        "videoIntakeQuestions"
+      );
     } else if (
       intakeQuestionKey === "isRequired" &&
       !intakeQuestionEl === true
@@ -316,7 +325,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
         {shouldBeCheckbox && (
           <FormControlLabel
             style={{ marginRight: 10 }}
-            control={<Checkbox checked={intakeQuestionEl} />}
+            control={<Checkbox checked={currentValue} />}
             value={currentValue}
             onChange={handleCheckChange}
             label={convertCamelCaseToCapitalCase(intakeQuestionKey)}
