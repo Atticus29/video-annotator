@@ -31,6 +31,8 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
+  console.log("deleteMe e1 wholeQuestionLabel is: ");
+  console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {
   //   return prevState++;
   // }); // this is just to kick off the re-render in vase the FormFieldGroup object is too complex to see updates in
@@ -42,11 +44,14 @@ export function updateIntakeQuestionFormField(
     ["setIsInvalids"]
   );
   if (invalidSetter) {
+    const isValid: boolean =
+      intakeQuestionKey === "isRequired"
+        ? false
+        : !isNonEmptyString(currentVal);
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey + "--" + wholeQuestionLabel]:
-          !isNonEmptyString(currentVal),
+        [intakeQuestionKey + "--" + wholeQuestionLabel]: isValid,
       };
     });
   }

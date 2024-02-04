@@ -195,30 +195,39 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     // newIntakeQuestionSet[intakeQuestionIdx] = modifiedQuestion;
   };
 
-  const handleCheckChange: (event: any) => void = (_event: any) => {
+  const handleCheckChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("deleteMe handleCheckChange called");
     console.log("deleteMe intakeQuestionKey is: ");
     console.log(intakeQuestionKey);
     console.log("deleteMe intakeQuestionEl is: ");
     console.log(intakeQuestionEl);
-    const currentVal: any = event.target.checked;
+    const currentVal: any = event?.target?.checked || false;
     console.log("deleteMe currentVal is: ");
     console.log(currentVal);
     setCurrentValue(currentVal);
 
+    updateIntakeQuestionFormField(
+      currentVal,
+      wholeQuestion?.label || String(intakeQuestionIdx),
+      intakeQuestionKey,
+      formFieldGroup
+    );
+
     if (intakeQuestionKey === "isRequired" && !intakeQuestionEl === false) {
       // isRequired is being set to false. This means that we need to remove the isNonEmptyString method from the validationMethods array for this question
-      updateIsRequiredUnchecked(
-        formFieldGroup,
-        // "videoQuestionsFormFieldGroup",
-        localQuestion,
-        // collection,
-        intakeQuestionIdx,
-        intakeQuestionKey,
-        intakeQuestionEl,
-        // setCollection,
-        "videoIntakeQuestions"
-      );
+      // updateIsRequiredUnchecked(
+      //   formFieldGroup,
+      //   // "videoQuestionsFormFieldGroup",
+      //   localQuestion,
+      //   // collection,
+      //   intakeQuestionIdx,
+      //   intakeQuestionKey,
+      //   intakeQuestionEl,
+      //   // setCollection,
+      //   "videoIntakeQuestions"
+      // );
     } else if (
       intakeQuestionKey === "isRequired" &&
       !intakeQuestionEl === true
@@ -325,9 +334,11 @@ const SingleVideoIntakeQuestionV2: React.FC<{
         {shouldBeCheckbox && (
           <FormControlLabel
             style={{ marginRight: 10 }}
-            control={<Checkbox checked={currentValue} />}
+            control={
+              <Checkbox checked={currentValue} onChange={handleCheckChange} />
+            }
             value={currentValue}
-            onChange={handleCheckChange}
+            // onChange={handleCheckChange}
             label={convertCamelCaseToCapitalCase(intakeQuestionKey)}
           />
         )}
