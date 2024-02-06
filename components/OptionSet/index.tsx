@@ -5,7 +5,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { filter, get, map } from "lodash-es";
+import { filter, get, map, reduce } from "lodash-es";
 import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
@@ -48,10 +48,26 @@ const OptionSet: React.FC<{
   });
 
   let options: string[] = get(question, ["autocompleteOptions"], []);
+  // const seedAutocompleteVals: {} = reduce(
+  //   options,
+  //   (memo, option, optionIdx) => ({ ...memo, ["Option " + optionIdx]: option }),
+  //   {}
+  // );
+
+  const seedAutocompleteVals: {} = reduce(
+    options,
+    (memo, option, optionIdx) => ({
+      ...memo,
+      ["Option " + optionIdx]: option,
+    }),
+    {}
+  );
 
   const [canAddOptions, setCanAddOptions] = useState<boolean>(true);
 
-  const [autocompleteValues, setAutocompleteValues] = useState<{}>({});
+  const [autocompleteValues, setAutocompleteValues] = useState<{}>(
+    seedAutocompleteVals
+  );
   const [invalidOptions, setInvalidOptions] = useState<{}>({});
   const optionFormFieldGroup: FormFieldGroup = useMemo(() => {
     console.log("deleteMe autocompleteValues updated and is now:");
@@ -138,7 +154,7 @@ const OptionSet: React.FC<{
     // );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionFormFieldGroup]);
-  const mappableOpts: string[] = Object.values(autocompleteValues) || options;
+  const mappableOpts: string[] = Object.values(autocompleteValues);
 
   const formFieldSet: SingleFormField[] = map(
     mappableOpts,
