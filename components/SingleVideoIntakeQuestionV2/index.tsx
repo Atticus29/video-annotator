@@ -70,15 +70,15 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   // console.log(wholeQuestion);
   const [isInvalid, setIsinvalid] = useState<boolean>(false);
   useEffect(() => {
-    console.log("deleteMe formFieldGroup is now: ");
-    console.log(formFieldGroup);
-    console.log("deleteMe intakeQuestionKey is: ");
-    console.log(intakeQuestionKey);
+    // console.log("deleteMe formFieldGroup is now: ");
+    // console.log(formFieldGroup);
+    // console.log("deleteMe intakeQuestionKey is: ");
+    // console.log(intakeQuestionKey);
     const currentIsInvalid: boolean =
       formFieldGroup?.isInvalids[intakeQuestionKey] || false;
 
-    console.log("deleteMe currentIsInvalid is: ");
-    console.log(currentIsInvalid);
+    // console.log("deleteMe currentIsInvalid is: ");
+    // console.log(currentIsInvalid);
     setIsinvalid(currentIsInvalid);
   }, [formFieldGroup, intakeQuestionKey]);
 
@@ -152,10 +152,10 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
     setCurrentValue(currentVal);
-    console.log("deleteMe intakeQuestionKey is: ");
-    console.log(intakeQuestionKey);
-    console.log("deleteMe intakeQuestionEl is: ");
-    console.log(intakeQuestionEl);
+    // console.log("deleteMe intakeQuestionKey is: ");
+    // console.log(intakeQuestionKey);
+    // console.log("deleteMe intakeQuestionEl is: ");
+    // console.log(intakeQuestionEl);
     // console.log("deleteMe currentVal is: ");
     // console.log(currentVal);
 
@@ -198,14 +198,14 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   const handleCheckChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("deleteMe handleCheckChange called");
-    console.log("deleteMe intakeQuestionKey is: ");
-    console.log(intakeQuestionKey);
-    console.log("deleteMe intakeQuestionEl is: ");
-    console.log(intakeQuestionEl);
+    // console.log("deleteMe handleCheckChange called");
+    // console.log("deleteMe intakeQuestionKey is: ");
+    // console.log(intakeQuestionKey);
+    // console.log("deleteMe intakeQuestionEl is: ");
+    // console.log(intakeQuestionEl);
     const currentVal: any = event?.target?.checked || false;
-    console.log("deleteMe currentVal is: ");
-    console.log(currentVal);
+    // console.log("deleteMe currentVal is: ");
+    // console.log(currentVal);
     setCurrentValue(currentVal);
 
     updateIntakeQuestionFormField(
@@ -268,17 +268,18 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   return (
     <>
       <Grid item lg={12} sm={12}>
-        {/* {shouldBeOptionField && ( // @TODO comment this back in a refactor
+        {shouldBeOptionField && ( // @TODO comment this back in a refactor
           <OptionSet
             key={intakeQuestionIdx}
-            formField={localQuestion}
-            formFieldGroupString={"videoQuestionsFormFieldGroup"}
-            collection={collection} //@TODO update this as well
+            question={localQuestion}
+            formFieldGroup={formFieldGroup}
+            // collection={collection} //@TODO update this as well
             targetFormFieldIdx={intakeQuestionIdx}
-            setCollection={setCollection} //@TODO update this as well
+            // setCollection  ={setCollection} //@TODO update this as well
             whichIntakeQuestions={"videoIntakeQuestions"}
+            stringForAutocompleteOptions="Option"
           />
-        )} */}
+        )}
         {shouldBeTextField && (
           <TextField
             fullWidth

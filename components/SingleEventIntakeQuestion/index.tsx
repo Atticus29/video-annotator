@@ -168,12 +168,14 @@ const SingleEventIntakeQuestion: React.FC<{
         {shouldBeOptionField && (
           <OptionSet
             key={intakeQuestionIdx}
-            formField={wholeQuestion}
-            formFieldGroupString={"eventQuestionsFormFieldGroup"}
-            collection={collection}
+            question={wholeQuestion}
+            formFieldGroup={formFieldGroup}
+            // formFieldGroupString={"eventQuestionsFormFieldGroup"}
+            // collection={collection}
             targetFormFieldIdx={intakeQuestionIdx}
-            setCollection={setCollection}
+            // setCollection={setCollection}
             whichIntakeQuestions={"eventIntakeQuestions"}
+            stringForAutocompleteOptions="Option"
           />
         )}
         {shouldBeTextField && (

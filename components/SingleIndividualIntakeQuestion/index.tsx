@@ -204,7 +204,7 @@ const SingleIndividualIntakeQuestion: React.FC<{
         {shouldBeOptionField && (
           <OptionSet
             key={intakeQuestionIdx}
-            formField={wholeQuestion}
+            question={wholeQuestion}
             formFieldGroupString={"individualQuestionsFormFieldGroup"}
             collection={collection}
             targetFormFieldIdx={intakeQuestionIdx}

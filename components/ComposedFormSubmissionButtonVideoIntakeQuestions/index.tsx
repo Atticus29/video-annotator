@@ -122,8 +122,8 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
 
   useEffect(() => {
     if (formFieldGroupOfConcern) {
-      console.log("deleteMe got here b1 and formFieldGroupOfConcern is: ");
-      console.log(formFieldGroupOfConcern);
+      // console.log("deleteMe got here b1 and formFieldGroupOfConcern is: ");
+      // console.log(formFieldGroupOfConcern);
       const totalInvalidCount: number = reduce(
         Object.values(formFieldGroupOfConcern?.isInvalids || []),
         (memo: any, entry: any) => {

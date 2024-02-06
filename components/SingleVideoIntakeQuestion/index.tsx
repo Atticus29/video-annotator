@@ -263,12 +263,14 @@ const SingleVideoIntakeQuestion: React.FC<{
         {shouldBeOptionField && (
           <OptionSet
             key={intakeQuestionIdx}
-            formField={wholeQuestion}
-            formFieldGroupString={"videoQuestionsFormFieldGroup"}
-            collection={collection}
+            question={wholeQuestion}
+            formFieldGroup={formFieldGroup}
+            // formFieldGroupString={"videoQuestionsFormFieldGroup"}
+            // collection={collection}
             targetFormFieldIdx={intakeQuestionIdx}
-            setCollection={setCollection}
+            // setCollection={setCollection}
             whichIntakeQuestions={"videoIntakeQuestions"}
+            stringForAutocompleteOptions="Option"
           />
         )}
         {shouldBeTextField && (

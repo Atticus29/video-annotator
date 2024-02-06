@@ -13,6 +13,7 @@ import { SingleFormField, Collection, FormFieldGroup } from "../../types";
 import {
   calculateWhetherCustomOptionValuesArePermitted,
   updateCollection,
+  updateIntakeQuestionFormField,
   updateOptionFormFieldGroupWithOptionList,
   updateUsersCanAddCustomOptionsChecked,
   updateUsersCanAddCustomOptionsUnchecked,
@@ -22,19 +23,22 @@ import InfoIcon from "../InfoIcon";
 import SingleFormFieldComponent from "../SingleFormField";
 
 const OptionSet: React.FC<{
-  formField: SingleFormField;
-  formFieldGroupString: string;
-  collection: Collection;
+  question: SingleFormField;
+  formFieldGroup: FormFieldGroup;
+  // formFieldGroupString: string;
+  // collection: Collection;
   targetFormFieldIdx: number;
-  setCollection: (collection: Collection) => void;
+  // setCollection: (collection: Collection) => void;
   whichIntakeQuestions: string;
+  stringForAutocompleteOptions: string;
 }> = ({
-  formField,
-  formFieldGroupString,
-  collection,
+  question,
+  formFieldGroup,
+  // collection,
   targetFormFieldIdx,
-  setCollection,
+  // setCollection,
   whichIntakeQuestions,
+  stringForAutocompleteOptions,
 }) => {
   const intl: IntlShape = useIntl();
   const checkBoxLabel: string = intl.formatMessage({
@@ -43,13 +47,15 @@ const OptionSet: React.FC<{
       "Can video annotators in this collection add their own options?",
   });
 
-  let options: string[] = get(formField, ["autocompleteOptions"], []);
+  let options: string[] = get(question, ["autocompleteOptions"], []);
 
   const [canAddOptions, setCanAddOptions] = useState<boolean>(true);
 
   const [autocompleteValues, setAutocompleteValues] = useState<{}>({});
   const [invalidOptions, setInvalidOptions] = useState<{}>({});
   const optionFormFieldGroup: FormFieldGroup = useMemo(() => {
+    console.log("deleteMe autocompleteValues updated and is now:");
+    console.log(autocompleteValues);
     return {
       title: "OptionFormFieldGroup",
       setValues: setAutocompleteValues,
@@ -60,7 +66,12 @@ const OptionSet: React.FC<{
   }, [invalidOptions, autocompleteValues]);
 
   useEffect(() => {
-    updateOptionFormFieldGroupWithOptionList(options, optionFormFieldGroup);
+    updateOptionFormFieldGroupWithOptionList(
+      options,
+      // optionFormFieldGroup,
+      setAutocompleteValues,
+      stringForAutocompleteOptions
+    );
 
     const newKey: string = intl.formatMessage({
       id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
@@ -89,38 +100,53 @@ const OptionSet: React.FC<{
         return optionFormFieldGroupKey.startsWith("Option"); // @TODO prevent the collection owner from making labels that start with Option??? Or at least test for wonky behavior
       }
     );
-    updateCollection(
-      collection,
-      targetFormFieldIdx,
-      "autocompleteOptions",
+    console.log("deleteMe e1 whichIntakeQuestions is: ");
+    console.log(whichIntakeQuestions);
+    updateIntakeQuestionFormField(
       autoCompleteVals,
-      setCollection,
-      whichIntakeQuestions
+      question?.label,
+      "autocompleteOptions",
+      formFieldGroup
     );
+    // updateCollection(
+    //   collection, // collection
+    //   targetFormFieldIdx, //questionIdx
+    //   "autocompleteOptions", // questionKey
+    //   autoCompleteVals, //newVal
+    //   setCollection, //setCollection
+    //   whichIntakeQuestions // whichIntakeQuestions
+    // );
 
     const canEndUserAddCustomOptionsVals =
       calculateWhetherCustomOptionValuesArePermitted(
         optionFormFieldGroup,
         intl
       );
-    updateCollection(
-      collection,
-      targetFormFieldIdx,
-      "usersCanAddCustomOptions",
+    updateIntakeQuestionFormField(
       canEndUserAddCustomOptionsVals,
-      setCollection,
-      whichIntakeQuestions
+      question?.label,
+      "usersCanAddCustomOptions",
+      formFieldGroup
     );
+    // updateCollection(
+    //   collection,
+    //   targetFormFieldIdx, //questionIdx
+    //   "usersCanAddCustomOptions", //questionKey
+    //   canEndUserAddCustomOptionsVals, //newVal
+    //   setCollection,
+    //   whichIntakeQuestions
+    // );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionFormFieldGroup]);
+  const mappableOpts: string[] = Object.values(autocompleteValues) || options;
 
   const formFieldSet: SingleFormField[] = map(
-    options,
+    mappableOpts,
     (_option: string, optionIdx: number) => {
       const currentFormFieldForOption = {
         label: "Option " + (optionIdx + 1),
         type: "Text",
-        language: formField?.language,
+        language: question?.language,
         isRequired: true,
         shouldBeCheckboxes: [],
         invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
@@ -139,6 +165,7 @@ const OptionSet: React.FC<{
           question={optionFormField}
           areAutocompleteOptionsDeletable={true}
           formFieldGroup={optionFormFieldGroup}
+          setAutocompleteValues={setAutocompleteValues}
           stringForAutocompleteOptions={"Option"}
         />
       </>
@@ -147,7 +174,16 @@ const OptionSet: React.FC<{
 
   const handleAddAnotherOption: () => void = () => {
     options.push("");
-    updateOptionFormFieldGroupWithOptionList(options, optionFormFieldGroup);
+    console.log(
+      "deleteMe before calling updateOptionFormFieldGroupWithOptionList options is now: "
+    );
+    console.log(options);
+    updateOptionFormFieldGroupWithOptionList(
+      options,
+      // optionFormFieldGroup,
+      setAutocompleteValues,
+      stringForAutocompleteOptions
+    );
   };
 
   const handleCheckChange: (event: any) => void = (_event: any) => {
@@ -159,29 +195,35 @@ const OptionSet: React.FC<{
       });
     }
     if (!canAddOptions === true) {
-      updateUsersCanAddCustomOptionsChecked(
-        optionFormFieldGroup,
-        formFieldGroupString,
-        formField,
-        collection,
-        targetFormFieldIdx,
-        "usersCanAddCustomOptions",
-        !canAddOptions,
-        setCollection,
-        whichIntakeQuestions
+      console.log(
+        "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is true)"
       );
+      // updateUsersCanAddCustomOptionsChecked(
+      //   optionFormFieldGroup,
+      //   formFieldGroupString,
+      //   formField,
+      //   collection,
+      //   targetFormFieldIdx,
+      //   "usersCanAddCustomOptions",
+      //   !canAddOptions,
+      //   setCollection,
+      //   whichIntakeQuestions
+      // );
     } else if (!canAddOptions === false) {
-      updateUsersCanAddCustomOptionsUnchecked(
-        optionFormFieldGroup,
-        formFieldGroupString,
-        formField,
-        collection,
-        targetFormFieldIdx,
-        "usersCanAddCustomOptions",
-        !canAddOptions,
-        setCollection,
-        whichIntakeQuestions
+      console.log(
+        "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is false)"
       );
+      // updateUsersCanAddCustomOptionsUnchecked(
+      //   optionFormFieldGroup,
+      //   formFieldGroupString,
+      //   formField,
+      //   collection,
+      //   targetFormFieldIdx,
+      //   "usersCanAddCustomOptions",
+      //   !canAddOptions,
+      //   setCollection,
+      //   whichIntakeQuestions
+      // );
     }
   };
 
@@ -198,7 +240,10 @@ const OptionSet: React.FC<{
           paddingRight: "3vw",
         }}
       >
-        <Typography style={{ marginBottom: 10 }}>{formField?.label}</Typography>
+        <Typography style={{ marginBottom: 10 }}>
+          Options for {question?.label}
+          {/* @TODO internationalize Options for */}
+        </Typography>
         {optionFormFields}
         <Button
           variant="contained"

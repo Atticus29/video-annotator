@@ -31,8 +31,8 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  console.log("deleteMe e1 wholeQuestionLabel is: ");
-  console.log("e1: " + wholeQuestionLabel);
+  // console.log("deleteMe e1 wholeQuestionLabel is: ");
+  // console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {
   //   return prevState++;
   // }); // this is just to kick off the re-render in vase the FormFieldGroup object is too complex to see updates in
@@ -198,30 +198,54 @@ export function clearAllOptionFields(
     },
     {}
   );
+  console.log("deleteMe purgedActualVals is: ");
+  console.log(purgedActualVals);
   return purgedActualVals;
 }
 
 export function updateOptionFormFieldGroupWithOptionList(
   options: string[],
-  optionFormFieldGroup: FormFieldGroup
+  // optionFormFieldGroup: FormFieldGroup,
+  setAutocompleteValues: (val: any) => void,
+  stringForAutocompleteOptions: string
 ) {
+  console.log("deleteMe entering updateOptionFormFieldGroupWithOptionList");
+  console.log("deleteMe setAutocompleteValues is: ");
+  console.log(setAutocompleteValues);
+  console.log("deleteMe options is: ");
+  console.log(options);
   //first, remove all existing options
   const cleanedActualVals: {} = clearAllOptionFields(
-    get(optionFormFieldGroup, ["actualValues"]),
-    "Option"
+    get(setAutocompleteValues, ["actualValues"]),
+    stringForAutocompleteOptions
   );
-  if (optionFormFieldGroup.setValues) {
-    optionFormFieldGroup.setValues(cleanedActualVals);
+  if (setAutocompleteValues) {
+    setAutocompleteValues(cleanedActualVals);
   }
+  let newActualValues: {} = {};
   forEach(options, (option, optionIdx) => {
-    const newActualValue: {} = { ["Option " + (optionIdx + 1)]: option }; // @TODO somehow shunt part of this to en.json
-    if (optionFormFieldGroup.setValues) {
-      optionFormFieldGroup.setValues((prevState: {}) => {
-        const returnVal = { ...prevState, ...newActualValue };
-        return returnVal;
-      });
-    }
+    console.log("deleteMe current option is: ");
+    console.log(option);
+    newActualValues = {
+      ...newActualValues,
+      [stringForAutocompleteOptions + " " + (optionIdx + 1)]: option,
+    };
+    // if (optionFormFieldGroup.setValues) {
+    //   optionFormFieldGroup.setValues((prevState: {}) => {
+    //     const returnVal = { ...prevState, ...newActualValue };
+    //     return returnVal;
+    //   });
+    // }
   });
+  if (setAutocompleteValues) {
+    setAutocompleteValues({
+      ...cleanedActualVals,
+      ...newActualValues,
+    });
+  }
+
+  // console.log("deleteMe setAutocompleteValues after is: ");
+  // console.log(setAutocompleteValues);
 }
 
 export function calculateWhetherCustomOptionValuesArePermitted(

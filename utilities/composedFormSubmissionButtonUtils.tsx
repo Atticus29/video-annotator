@@ -25,8 +25,8 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
   questions: SingleFormField[],
   formFieldGroup: FormFieldGroup
 ) {
-  console.log("deleteMe questions are: ");
-  console.log(questions);
+  // console.log("deleteMe questions are: ");
+  // console.log(questions);
   const questionLabels: string[] = reduce(
     questions,
     (memo: string[], question: SingleFormField) => {
@@ -40,8 +40,8 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
     },
     []
   );
-  console.log("deleteMe questionLabels are: ");
-  console.log(questionLabels);
+  // console.log("deleteMe questionLabels are: ");
+  // console.log(questionLabels);
 
   // const requiredQuestions: any[] =
   //   filter(questions, (question) => {
@@ -57,19 +57,18 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
         questionLabel.startsWith("isRequired--")
       // @TODO find the questions with type autocomplete and add in autocompleteOptions here somehow
     ) || [];
-  console.log("deleteMe requiredQuestionLabels are: ");
-  console.log(requiredQuestionLabels);
+  // console.log("deleteMe requiredQuestionLabels are: ");
+  // console.log(requiredQuestionLabels);
   const existingValues: string[] = formFieldGroup?.actualValues
     ? Object.keys(formFieldGroup.actualValues)
     : [];
-  console.log("deleteMe existingValues are: ");
-  console.log(existingValues);
+  // console.log("deleteMe existingValues are: ");
+  // console.log(existingValues);
   const missingRequiredLabels: string[] = filter(
     requiredQuestionLabels,
     (requiredQuestionLabel) => !existingValues.includes(requiredQuestionLabel)
   );
-  console.log("deleteMe missingRequiredLabels are: ");
-  console.log(missingRequiredLabels);
-  console.log(missingRequiredLabels);
+  // console.log("deleteMe missingRequiredLabels are: ");
+  // console.log(missingRequiredLabels);
   return missingRequiredLabels.length < 1;
 }

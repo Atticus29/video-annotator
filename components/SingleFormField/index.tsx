@@ -27,12 +27,14 @@ const SingleFormField: React.FC<{
   areAutocompleteOptionsDeletable?: boolean;
   stringForAutocompleteOptions?: string;
   parentCollection?: Collection | undefined;
+  setAutocompleteValues?: (val: any) => void;
 }> = ({
   question,
   formFieldGroup,
   areAutocompleteOptionsDeletable = false,
   stringForAutocompleteOptions = "Option",
   parentCollection = undefined,
+  setAutocompleteValues,
 }) => {
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
@@ -111,6 +113,8 @@ const SingleFormField: React.FC<{
       },
       {}
     );
+    // console.log("deleteMe filteredAcutalValues is: ");
+    // console.log(filteredAcutalValues);
 
     // Now, we have to rename some of the labels, because, say, if Option 2 got removed, the old Option 3 should become the new Option 2.
 
@@ -120,10 +124,17 @@ const SingleFormField: React.FC<{
         return optionFormFieldGroupKey.startsWith(stringForAutocompleteOptions);
       }
     );
-    if (formFieldGroup) {
+
+    // console.log(
+    //   "deleteMe autoCompleteVals going into updateOptionFormFieldGroupWithOptionList is: "
+    // );
+    // console.log(autoCompleteVals);
+    if (setAutocompleteValues) {
       updateOptionFormFieldGroupWithOptionList(
         autoCompleteVals,
-        formFieldGroup
+        // formFieldGroup,
+        setAutocompleteValues,
+        stringForAutocompleteOptions
       );
     }
   };
