@@ -226,6 +226,8 @@ export function updateOptionFormFieldGroupWithOptionList(
   forEach(options, (option, optionIdx) => {
     console.log("deleteMe current option is: ");
     console.log(option);
+    console.log("deleteMe optionIdx is: ");
+    console.log(optionIdx);
     newActualValues = {
       ...newActualValues,
       [stringForAutocompleteOptions + " " + (optionIdx + 1)]: option,

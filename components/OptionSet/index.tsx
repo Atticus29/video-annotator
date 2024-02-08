@@ -48,20 +48,19 @@ const OptionSet: React.FC<{
   });
 
   let initialOptions: string[] = get(question, ["autocompleteOptions"], []);
-  // const seedAutocompleteVals: {} = reduce(
-  //   options,
-  //   (memo, option, optionIdx) => ({ ...memo, ["Option " + optionIdx]: option }),
-  //   {}
-  // );
+  // console.log("deleteMe initialOptions are: ");
+  // console.log(initialOptions);
 
   const seedAutocompleteVals: {} = reduce(
     initialOptions,
     (memo, option, optionIdx) => ({
       ...memo,
-      ["Option " + optionIdx]: option,
+      ["Option " + String(optionIdx + 1)]: option,
     }),
     {}
   );
+  // console.log("deleteMe seedAutocompleteVals are: ");
+  // console.log(seedAutocompleteVals);
 
   const [canAddOptions, setCanAddOptions] = useState<boolean>(true);
 
@@ -155,6 +154,8 @@ const OptionSet: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionFormFieldGroup]);
   const mappableOpts: string[] = Object.values(autocompleteValues);
+  // console.log("deleteMe mappableOpts are: ");
+  // console.log(mappableOpts);
 
   const formFieldSet: SingleFormField[] = map(
     mappableOpts,
@@ -173,14 +174,16 @@ const OptionSet: React.FC<{
   );
 
   const optionFormFields = map(formFieldSet, (optionFormField, optionIdx) => {
+    // console.log("deleteMe optionFormField in map loop is: ");
+    // console.log(optionFormField);
     const key: string = "option-" + (optionIdx + 1);
     return (
       <>
         <SingleFormFieldComponent
           key={key}
           question={optionFormField}
-          areAutocompleteOptionsDeletable={true}
           formFieldGroup={optionFormFieldGroup}
+          areAutocompleteOptionsDeletable={true}
           setAutocompleteValues={setAutocompleteValues}
           stringForAutocompleteOptions={"Option"}
         />

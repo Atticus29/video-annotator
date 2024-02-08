@@ -36,6 +36,10 @@ const SingleFormField: React.FC<{
   parentCollection = undefined,
   setAutocompleteValues,
 }) => {
+  // console.log("deleteMe question going into SingleFormField is: ");
+  // console.log(question);
+  // console.log("deleteMe formFieldGroup is: ");
+  // console.log(formFieldGroup);
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
   const questionLabel: string | undefined = get(question, ["label"]);
@@ -113,8 +117,8 @@ const SingleFormField: React.FC<{
       },
       {}
     );
-    // console.log("deleteMe filteredAcutalValues is: ");
-    // console.log(filteredAcutalValues);
+    console.log("deleteMe filteredAcutalValues is: ");
+    console.log(filteredAcutalValues);
 
     // Now, we have to rename some of the labels, because, say, if Option 2 got removed, the old Option 3 should become the new Option 2.
 
