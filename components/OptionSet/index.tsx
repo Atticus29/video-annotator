@@ -47,7 +47,7 @@ const OptionSet: React.FC<{
       "Can video annotators in this collection add their own options?",
   });
 
-  let options: string[] = get(question, ["autocompleteOptions"], []);
+  let initialOptions: string[] = get(question, ["autocompleteOptions"], []);
   // const seedAutocompleteVals: {} = reduce(
   //   options,
   //   (memo, option, optionIdx) => ({ ...memo, ["Option " + optionIdx]: option }),
@@ -55,7 +55,7 @@ const OptionSet: React.FC<{
   // );
 
   const seedAutocompleteVals: {} = reduce(
-    options,
+    initialOptions,
     (memo, option, optionIdx) => ({
       ...memo,
       ["Option " + optionIdx]: option,
@@ -81,33 +81,33 @@ const OptionSet: React.FC<{
     };
   }, [invalidOptions, autocompleteValues]);
 
-  useEffect(() => {
-    updateOptionFormFieldGroupWithOptionList(
-      options,
-      // optionFormFieldGroup,
-      setAutocompleteValues,
-      stringForAutocompleteOptions
-    );
+  // useEffect(() => {
+  //   updateOptionFormFieldGroupWithOptionList(
+  //     options,
+  //     // optionFormFieldGroup,
+  //     setAutocompleteValues,
+  //     stringForAutocompleteOptions
+  //   );
 
-    const newKey: string = intl.formatMessage({
-      id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
-      defaultMessage:
-        "Can video annotators in this collection add their own options?",
-    });
+  //   const newKey: string = intl.formatMessage({
+  //     id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
+  //     defaultMessage:
+  //       "Can video annotators in this collection add their own options?",
+  //   });
 
-    const canEndUserAddCustomOptionsVals =
-      calculateWhetherCustomOptionValuesArePermitted(
-        optionFormFieldGroup,
-        intl
-      );
+  //   const canEndUserAddCustomOptionsVals =
+  //     calculateWhetherCustomOptionValuesArePermitted(
+  //       optionFormFieldGroup,
+  //       intl
+  //     );
 
-    if (optionFormFieldGroup?.setValues) {
-      optionFormFieldGroup.setValues((prevState: {}) => {
-        return { ...prevState, [newKey]: canEndUserAddCustomOptionsVals };
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   if (optionFormFieldGroup?.setValues) {
+  //     optionFormFieldGroup.setValues((prevState: {}) => {
+  //       return { ...prevState, [newKey]: canEndUserAddCustomOptionsVals };
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     const autoCompleteVals: string[] = filter(
@@ -189,13 +189,18 @@ const OptionSet: React.FC<{
   });
 
   const handleAddAnotherOption: () => void = () => {
-    options.push("");
-    console.log(
-      "deleteMe before calling updateOptionFormFieldGroupWithOptionList options is now: "
-    );
-    console.log(options);
+    // console.log(
+    //   "deleteMe autocompleteValues going into handleAddAnotherOption are: "
+    // );
+    // console.log(autocompleteValues);
+    // options.push("");
+    // console.log(
+    //   "deleteMe before calling updateOptionFormFieldGroupWithOptionList options is now: "
+    // );
+    // console.log(options);
+    const currentOptions: string[] = Object.values(autocompleteValues) || [];
     updateOptionFormFieldGroupWithOptionList(
-      options,
+      [...currentOptions, ""],
       // optionFormFieldGroup,
       setAutocompleteValues,
       stringForAutocompleteOptions
