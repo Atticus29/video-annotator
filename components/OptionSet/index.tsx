@@ -210,8 +210,12 @@ const OptionSet: React.FC<{
     );
   };
 
-  const handleCheckChange: (event: any) => void = (_event: any) => {
-    const newActualValue: {} = { [checkBoxLabel]: !canAddOptions }; // !canAddOptions instead of canAddOptions because it hasn't re-rendered yet
+  const handleCheckChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newActualValue: {} = {
+      [checkBoxLabel]: event?.target?.checked || true,
+    }; // @TODO confirm that this is no longer true !canAddOptions instead of canAddOptions because it hasn't re-rendered yet
     setCanAddOptions((prev) => !prev);
     if (optionFormFieldGroup?.setValues) {
       optionFormFieldGroup.setValues((prevState: {}) => {
@@ -286,13 +290,14 @@ const OptionSet: React.FC<{
         >
           <FormControlLabel
             style={{ marginRight: 10 }}
-            control={<Checkbox checked={canAddOptions} />}
+            control={
+              <Checkbox checked={canAddOptions} onChange={handleCheckChange} />
+            }
             value={get(
               optionFormFieldGroup,
               ["actualValues", checkBoxLabel],
               true
             )}
-            onChange={handleCheckChange}
             label={checkBoxLabel}
           />
         </div>
