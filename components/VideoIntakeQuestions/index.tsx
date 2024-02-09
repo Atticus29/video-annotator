@@ -19,7 +19,10 @@ import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollection
 import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
 import ComposedFormSubmissionButtonVideoIntakeQuestions from "../ComposedFormSubmissionButtonVideoIntakeQuestions";
 import SingleVideoIntakeQuestionV2 from "../SingleVideoIntakeQuestionV2";
-import { transformIntakeQuestionIntoActualValueObj } from "../../utilities/videoIntakeQuestionUtils";
+import {
+  transformActualValueObjIntoIntakeQuestions,
+  transformIntakeQuestionsIntoActualValueObj,
+} from "../../utilities/videoIntakeQuestionUtils";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -86,9 +89,12 @@ const VideoIntakeQuestions: React.FC<{
 
       // add their values to the formFieldGroup
       const transformedVideoIntakeQuestions =
-        transformIntakeQuestionIntoActualValueObj(
+        transformIntakeQuestionsIntoActualValueObj(
           shamCollection.videoIntakeQuestions || []
         );
+
+      console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
+      console.log(transformedVideoIntakeQuestions);
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -105,7 +111,7 @@ const VideoIntakeQuestions: React.FC<{
       // end add their values to the formFieldGroup
       //////////////////////////////////////////////
 
-      // postCollectionVideoIntakeQuestions(
+      // postCollectionVideoIntakeQuestions( // @TODO figure out where to do this (not here)
       //   {
       //     collectionUrl: collectionUrl,
       //     collectionVideoIntakeQuestions:
@@ -154,6 +160,17 @@ const VideoIntakeQuestions: React.FC<{
   useEffect(() => {
     console.log("deleteMe formFieldGroup changed and is now: ");
     console.log(formFieldGroup);
+    const deleteMe: any = transformActualValueObjIntoIntakeQuestions(
+      formFieldGroup.actualValues
+    );
+    console.log("deleteMe deleteMe is: ");
+    console.log(deleteMe);
+    //update setVideoIntakeQuestions with new values
+    // if (Object.keys(formFieldGroup.actualValues).length > 0) {
+    //   setVideoIntakeQuestions(
+    //     transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
+    //   );
+    // }
   }, [formFieldGroup]);
 
   useEffect(() => {
@@ -237,6 +254,16 @@ const VideoIntakeQuestions: React.FC<{
 
   const createNewIntakeQuestion: () => void = () => {
     try {
+      const transformedNewIntakeQuestionForFormFieldGroup =
+        transformIntakeQuestionsIntoActualValueObj([
+          ...videoIntakeQuestions,
+          newQuestion,
+        ]);
+      console.log(
+        "deleteMe transformedNewIntakeQuestionForFormFieldGroup is: "
+      );
+      console.log(transformedNewIntakeQuestionForFormFieldGroup);
+
       setVideoIntakeQuestions((prevState: any) => {
         if (prevState) {
           return [...prevState, newQuestion];
@@ -245,8 +272,6 @@ const VideoIntakeQuestions: React.FC<{
         }
       });
 
-      const transformedNewIntakeQuestionForFormFieldGroup =
-        transformIntakeQuestionIntoActualValueObj([newQuestion]);
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
 

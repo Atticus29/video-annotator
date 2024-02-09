@@ -168,8 +168,8 @@ const OptionSet: React.FC<{
     }
   );
   const mappableOpts: string[] = Object.values(onlyAutocompletes);
-  console.log("deleteMe mappableOpts are: ");
-  console.log(mappableOpts);
+  // console.log("deleteMe mappableOpts are: ");
+  // console.log(mappableOpts);
 
   const formFieldSet: SingleFormField[] = map(
     mappableOpts,

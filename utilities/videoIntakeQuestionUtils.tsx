@@ -1,5 +1,5 @@
 import { Tulpen_One } from "@next/font/google";
-import { get, reduce } from "lodash-es";
+import { filter, get, reduce } from "lodash-es";
 import { defaultDoNotDisplays } from "../dummy_data/dummyCollection";
 import { Collection, SingleFormField } from "../types";
 import { isNonEmptyString, isValidEmail, isValidUrl } from "./validators";
@@ -91,7 +91,56 @@ export function transformQuestion(
   }
 }
 
-export function transformIntakeQuestionIntoActualValueObj(
+export function transformActualValueObjIntoIntakeQuestions(
+  actualValueObj: any
+) {
+  console.log(
+    "deleteMe got here in transformActualValueObjIntoIntakeQuestions"
+  );
+  console.log("deleteMe actualValueObj is: ");
+  console.log(actualValueObj);
+  const numberOfQuestions: number = filter(
+    Object.keys(actualValueObj),
+    (attrKey) => attrKey.indexOf("label") > -1
+  ).length;
+  console.log("deleteMe numberOfQuestions is: " + numberOfQuestions);
+
+  return reduce(
+    actualValueObj,
+    (memo, attribute, attributeKey) => {
+      // console.log("deleteMe attribute is: ");
+      // console.log(attribute);
+      // console.log("attributeKey is: ");
+      // console.log(attributeKey);
+      const targetIntakeQuestionArrayIndex: number = Number(
+        attributeKey.split("--")[1]
+      );
+
+      // console.log(
+      //   "deleteMe targetIntakeQuestionArrayIndex is: " +
+      //     targetIntakeQuestionArrayIndex
+      // );
+      const newObj = ["test"];
+      // const objKeys: string[] = Object.keys(intakeQuestion);
+      // // const currentLabel: string = intakeQuestion.label;
+      // const newObj = reduce(
+      //   objKeys,
+      //   (memo, objKey) => {
+      //     const currentVal: any = get(intakeQuestion, [objKey]);
+      //     const newEntry: {} = {
+      //       [objKey + "--" + intakeQuestionIdx]: currentVal,
+      //     };
+      //     return { ...memo, ...newEntry };
+      //   },
+      //   []
+      // );
+      return [...memo, ...newObj];
+    },
+    [] as any[]
+  );
+}
+
+export function transformIntakeQuestionsIntoActualValueObj(
   intakeQuestions: SingleFormField[]
 ) {
   return reduce(
