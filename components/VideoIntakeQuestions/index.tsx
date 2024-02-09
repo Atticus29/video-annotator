@@ -80,11 +80,14 @@ const VideoIntakeQuestions: React.FC<{
   >([]);
 
   useEffect(() => {
+    console.log("deleteMe video intake questions changed and is now:");
+    console.log(videoIntakeQuestions);
     if (
       mode === "create" &&
       videoIntakeQuestions.length < 1 &&
       (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
     ) {
+      console.log("deleteMe should only get here during initialization");
       setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
 
       // add their values to the formFieldGroup
@@ -93,8 +96,8 @@ const VideoIntakeQuestions: React.FC<{
           shamCollection.videoIntakeQuestions || []
         );
 
-      console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
-      console.log(transformedVideoIntakeQuestions);
+      // console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
+      // console.log(transformedVideoIntakeQuestions);
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -160,17 +163,17 @@ const VideoIntakeQuestions: React.FC<{
   useEffect(() => {
     console.log("deleteMe formFieldGroup changed and is now: ");
     console.log(formFieldGroup);
-    const deleteMe: any = transformActualValueObjIntoIntakeQuestions(
-      formFieldGroup.actualValues
-    );
-    console.log("deleteMe deleteMe is: ");
-    console.log(deleteMe);
+    // const deleteMe: any = transformActualValueObjIntoIntakeQuestions(
+    //   formFieldGroup.actualValues
+    // );
+    // console.log("deleteMe deleteMe is: ");
+    // console.log(deleteMe);
     //update setVideoIntakeQuestions with new values
-    // if (Object.keys(formFieldGroup.actualValues).length > 0) {
-    //   setVideoIntakeQuestions(
-    //     transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-    //   );
-    // }
+    if (Object.keys(formFieldGroup.actualValues).length > 0) {
+      setVideoIntakeQuestions(
+        transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
+      );
+    }
   }, [formFieldGroup]);
 
   useEffect(() => {

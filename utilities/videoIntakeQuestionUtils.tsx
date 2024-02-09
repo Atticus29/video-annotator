@@ -94,50 +94,65 @@ export function transformQuestion(
 export function transformActualValueObjIntoIntakeQuestions(
   actualValueObj: any
 ) {
-  console.log(
-    "deleteMe got here in transformActualValueObjIntoIntakeQuestions"
-  );
-  console.log("deleteMe actualValueObj is: ");
-  console.log(actualValueObj);
+  // console.log(
+  //   "deleteMe got here in transformActualValueObjIntoIntakeQuestions"
+  // );
+  // console.log("deleteMe actualValueObj is: ");
+  // console.log(actualValueObj);
+  const returnVal: SingleFormField[] = [];
   const numberOfQuestions: number = filter(
     Object.keys(actualValueObj),
     (attrKey) => attrKey.indexOf("label") > -1
   ).length;
-  console.log("deleteMe numberOfQuestions is: " + numberOfQuestions);
+  for (let i = 0; i < numberOfQuestions; i++) {
+    const currentQuestion: any = reduce(
+      actualValueObj,
+      (memo, attribute, attributeKey) => {
+        if (Number(attributeKey.split("--")[1]) === i) {
+          return { ...memo, [attributeKey.split("--")[0]]: attribute };
+        } else {
+          return { ...memo };
+        }
+      },
+      {}
+    );
+    returnVal.push(currentQuestion);
+  }
+  return returnVal;
 
-  return reduce(
-    actualValueObj,
-    (memo, attribute, attributeKey) => {
-      // console.log("deleteMe attribute is: ");
-      // console.log(attribute);
-      // console.log("attributeKey is: ");
-      // console.log(attributeKey);
-      const targetIntakeQuestionArrayIndex: number = Number(
-        attributeKey.split("--")[1]
-      );
+  // return reduce(
+  //   actualValueObj,
+  //   (memo, attribute, attributeKey) => {
+  //     // console.log("deleteMe attribute is: ");
+  //     // console.log(attribute);
+  //     // console.log("attributeKey is: ");
+  //     // console.log(attributeKey);
+  //     const targetIntakeQuestionArrayIndex: number = Number(
+  //       attributeKey.split("--")[1]
+  //     );
 
-      // console.log(
-      //   "deleteMe targetIntakeQuestionArrayIndex is: " +
-      //     targetIntakeQuestionArrayIndex
-      // );
-      const newObj = ["test"];
-      // const objKeys: string[] = Object.keys(intakeQuestion);
-      // // const currentLabel: string = intakeQuestion.label;
-      // const newObj = reduce(
-      //   objKeys,
-      //   (memo, objKey) => {
-      //     const currentVal: any = get(intakeQuestion, [objKey]);
-      //     const newEntry: {} = {
-      //       [objKey + "--" + intakeQuestionIdx]: currentVal,
-      //     };
-      //     return { ...memo, ...newEntry };
-      //   },
-      //   []
-      // );
-      return [...memo, ...newObj];
-    },
-    [] as any[]
-  );
+  //     // console.log(
+  //     //   "deleteMe targetIntakeQuestionArrayIndex is: " +
+  //     //     targetIntakeQuestionArrayIndex
+  //     // );
+  //     const newObj = ["test"];
+  //     // const objKeys: string[] = Object.keys(intakeQuestion);
+  //     // // const currentLabel: string = intakeQuestion.label;
+  //     // const newObj = reduce(
+  //     //   objKeys,
+  //     //   (memo, objKey) => {
+  //     //     const currentVal: any = get(intakeQuestion, [objKey]);
+  //     //     const newEntry: {} = {
+  //     //       [objKey + "--" + intakeQuestionIdx]: currentVal,
+  //     //     };
+  //     //     return { ...memo, ...newEntry };
+  //     //   },
+  //     //   []
+  //     // );
+  //     return [...memo, ...newObj];
+  //   },
+  //   [] as any[]
+  // );
 }
 
 export function transformIntakeQuestionsIntoActualValueObj(
