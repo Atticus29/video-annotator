@@ -55,7 +55,7 @@ const OptionSet: React.FC<{
     initialOptions,
     (memo, option, optionIdx) => ({
       ...memo,
-      ["Option " + String(optionIdx + 1)]: option,
+      [stringForAutocompleteOptions + " " + String(optionIdx + 1)]: option,
     }),
     {}
   );
@@ -109,10 +109,11 @@ const OptionSet: React.FC<{
   // }, []);
 
   useEffect(() => {
+    console.log("deleteMe optionFormFieldGroup updates");
     const autoCompleteVals: string[] = filter(
       optionFormFieldGroup?.actualValues || {},
       (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
-        return optionFormFieldGroupKey.startsWith("Option"); // @TODO prevent the collection owner from making labels that start with Option??? Or at least test for wonky behavior
+        return optionFormFieldGroupKey.startsWith(stringForAutocompleteOptions); // @TODO prevent the collection owner from making labels that start with Option??? Or at least test for wonky behavior
       }
     );
     console.log("deleteMe e1 whichIntakeQuestions is: ");
@@ -137,6 +138,9 @@ const OptionSet: React.FC<{
         optionFormFieldGroup,
         intl
       );
+    console.log("deleteMe canEndUserAddCustomOptionsVals is: ");
+    console.log(canEndUserAddCustomOptionsVals);
+
     updateIntakeQuestionFormField(
       canEndUserAddCustomOptionsVals,
       question?.label,
@@ -153,9 +157,15 @@ const OptionSet: React.FC<{
     // );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionFormFieldGroup]);
-  const mappableOpts: string[] = Object.values(autocompleteValues);
-  // console.log("deleteMe mappableOpts are: ");
-  // console.log(mappableOpts);
+  const onlyAutocompletes: {} = filter(
+    autocompleteValues,
+    (_autocompleteValue, autoCompleteValueKey) => {
+      return autoCompleteValueKey.startsWith(stringForAutocompleteOptions);
+    }
+  );
+  const mappableOpts: string[] = Object.values(onlyAutocompletes);
+  console.log("deleteMe mappableOpts are: ");
+  console.log(mappableOpts);
 
   const formFieldSet: SingleFormField[] = map(
     mappableOpts,
@@ -213,9 +223,13 @@ const OptionSet: React.FC<{
   const handleCheckChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("deleteMe handleCheckChange called:");
+    console.log(checkBoxLabel);
+    console.log("deleteMe and value is: ");
+    console.log(event?.target?.checked);
     const newActualValue: {} = {
       [checkBoxLabel]: event?.target?.checked || true,
-    }; // @TODO confirm that this is no longer true !canAddOptions instead of canAddOptions because it hasn't re-rendered yet
+    };
     setCanAddOptions((prev) => !prev);
     if (optionFormFieldGroup?.setValues) {
       optionFormFieldGroup.setValues((prevState: {}) => {
@@ -223,9 +237,9 @@ const OptionSet: React.FC<{
       });
     }
     if (!canAddOptions === true) {
-      console.log(
-        "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is true)"
-      );
+      // console.log(
+      //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is true)"
+      // );
       // updateUsersCanAddCustomOptionsChecked(
       //   optionFormFieldGroup,
       //   formFieldGroupString,
@@ -238,9 +252,9 @@ const OptionSet: React.FC<{
       //   whichIntakeQuestions
       // );
     } else if (!canAddOptions === false) {
-      console.log(
-        "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is false)"
-      );
+      // console.log(
+      //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is false)"
+      // );
       // updateUsersCanAddCustomOptionsUnchecked(
       //   optionFormFieldGroup,
       //   formFieldGroupString,
