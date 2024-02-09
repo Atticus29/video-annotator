@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { map, get, reduce } from "lodash-es";
+import { map, get, reduce, filter } from "lodash-es";
 
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
 import { Button, CircularProgress, Grid, Typography } from "@mui/material";
@@ -152,6 +152,11 @@ const VideoIntakeQuestions: React.FC<{
   }, [collection]);
 
   useEffect(() => {
+    console.log("deleteMe formFieldGroup changed and is now: ");
+    console.log(formFieldGroup);
+  }, [formFieldGroup]);
+
+  useEffect(() => {
     postCollectionVideoIntakeQuestions(
       {
         collectionUrl: collectionUrl,
@@ -177,13 +182,57 @@ const VideoIntakeQuestions: React.FC<{
   }, [collectionUrl, postCollectionVideoIntakeQuestions, videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
+    console.log("deleteMe deleteIntakeQuestion questionIdx is: ");
+    console.log(questionIdx);
     setVideoIntakeQuestions((prevState) => {
       const newVideoIntakeQuestions: SingleFormField[] =
         prevState?.filter((_entry, idx) => {
           return idx !== questionIdx;
         }) || [];
+      console.log("deleteMe newVideoIntakeQuestions passing the filter are: ");
+      console.log(newVideoIntakeQuestions);
       return newVideoIntakeQuestions;
     });
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // remove the question from the formFieldGroup actualValues as well as from isInvalids
+    const actualValueSetter: any = formFieldGroup.setValues; // @TODO DRY this up by creating a removeFromFormGroup method that takes formFieldGroup, questionIdx, and setterString ("setValues" or "setInvalids") as arguments
+    if (actualValueSetter) {
+      actualValueSetter((prevState: any) => {
+        const updatedState = reduce(
+          prevState,
+          (memo, stateItem, stateItemKey) => {
+            if (stateItemKey.indexOf("--" + questionIdx) < 0) {
+              return { ...memo, [stateItemKey]: stateItem };
+            } else {
+              return memo;
+            }
+          },
+          {}
+        );
+        return updatedState;
+      });
+    }
+
+    const isInvalidSetter: any = formFieldGroup.setIsInvalids; // @TODO DRY this up by creating a removeFromFormGroup method that takes formFieldGroup, questionIdx, and setterString ("setValues" or "setInvalids") as arguments
+    if (isInvalidSetter) {
+      isInvalidSetter((prevState: any) => {
+        const updatedState = reduce(
+          prevState,
+          (memo, stateItem, stateItemKey) => {
+            if (stateItemKey.indexOf("--" + questionIdx) < 0) {
+              return { ...memo, [stateItemKey]: stateItem };
+            } else {
+              return memo;
+            }
+          },
+          {}
+        );
+        return updatedState;
+      });
+    }
+    // End remove the question from the formFieldGroup actualValues as well as from isInvalids
+    ////////////////////////////////////////////////////////////////////////////////////////////////
   };
 
   const createNewIntakeQuestion: () => void = () => {

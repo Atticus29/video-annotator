@@ -29,12 +29,12 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
   // console.log(questions);
   const questionLabels: string[] = reduce(
     questions,
-    (memo: string[], question: SingleFormField) => {
+    (memo: string[], question: SingleFormField, questionIdx: number) => {
       const currentLabel: string = question.label;
       const currentKeys: string[] = Object.keys(question);
       const labelsForCurrentQuestion: string[] = map(
         currentKeys,
-        (currentKey) => currentKey + "--" + currentLabel
+        (currentKey) => currentKey + "--" + questionIdx
       );
       return [...memo, ...labelsForCurrentQuestion];
     },

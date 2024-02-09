@@ -24,15 +24,15 @@ export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
 
 export function updateIntakeQuestionFormField(
   currentVal: any,
-  wholeQuestionLabel: string,
+  // wholeQuestionLabel: string,
   // question: SingleFormField,
   intakeQuestionKey: string,
-  // intakeQuestionIdx: number,
+  intakeQuestionIdx: number,
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  console.log("deleteMe e1 wholeQuestionLabel is: ");
-  console.log("e1: " + wholeQuestionLabel);
+  // console.log("deleteMe e1 wholeQuestionLabel is: ");
+  // console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {
   //   return prevState++;
   // }); // this is just to kick off the re-render in vase the FormFieldGroup object is too complex to see updates in
@@ -53,7 +53,7 @@ export function updateIntakeQuestionFormField(
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey + "--" + wholeQuestionLabel]: isValid,
+        [intakeQuestionKey + "--" + intakeQuestionIdx]: isValid,
       };
     });
   }
@@ -61,7 +61,7 @@ export function updateIntakeQuestionFormField(
     valueSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey + "--" + wholeQuestionLabel]: currentVal,
+        [intakeQuestionKey + "--" + intakeQuestionIdx]: currentVal,
       };
     });
   }

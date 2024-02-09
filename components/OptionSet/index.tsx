@@ -24,6 +24,7 @@ import SingleFormFieldComponent from "../SingleFormField";
 
 const OptionSet: React.FC<{
   question: SingleFormField;
+  questionIdx: number;
   formFieldGroup: FormFieldGroup;
   // formFieldGroupString: string;
   // collection: Collection;
@@ -33,6 +34,7 @@ const OptionSet: React.FC<{
   stringForAutocompleteOptions: string;
 }> = ({
   question,
+  questionIdx,
   formFieldGroup,
   // collection,
   targetFormFieldIdx,
@@ -120,8 +122,9 @@ const OptionSet: React.FC<{
     console.log(whichIntakeQuestions);
     updateIntakeQuestionFormField(
       autoCompleteVals,
-      question?.label,
+      // question?.label,
       "autocompleteOptions",
+      questionIdx,
       formFieldGroup
     );
     // updateCollection(
@@ -143,8 +146,9 @@ const OptionSet: React.FC<{
 
     updateIntakeQuestionFormField(
       canEndUserAddCustomOptionsVals,
-      question?.label,
+      // question?.label,
       "usersCanAddCustomOptions",
+      questionIdx,
       formFieldGroup
     );
     // updateCollection(

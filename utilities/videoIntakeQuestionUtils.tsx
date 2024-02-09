@@ -96,15 +96,15 @@ export function transformIntakeQuestionIntoActualValueObj(
 ) {
   return reduce(
     intakeQuestions,
-    (memo, intakeQuestion) => {
+    (memo, intakeQuestion, intakeQuestionIdx) => {
       const objKeys: string[] = Object.keys(intakeQuestion);
-      const currentLabel: string = intakeQuestion.label;
+      // const currentLabel: string = intakeQuestion.label;
       const newObj = reduce(
         objKeys,
         (memo, objKey) => {
           const currentVal: any = get(intakeQuestion, [objKey]);
           const newEntry: {} = {
-            [objKey + "--" + currentLabel]: currentVal,
+            [objKey + "--" + intakeQuestionIdx]: currentVal,
           };
           return { ...memo, ...newEntry };
         },

@@ -161,8 +161,9 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
     updateIntakeQuestionFormField(
       currentVal,
-      wholeQuestion?.label || String(intakeQuestionIdx),
+      // wholeQuestion?.label || String(intakeQuestionIdx),
       intakeQuestionKey,
+      intakeQuestionIdx,
       formFieldGroup
     );
 
@@ -210,8 +211,9 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
     updateIntakeQuestionFormField(
       currentVal,
-      wholeQuestion?.label || String(intakeQuestionIdx),
+      // wholeQuestion?.label || String(intakeQuestionIdx),
       intakeQuestionKey,
+      questionIdx,
       formFieldGroup
     );
 
@@ -272,6 +274,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
           <OptionSet
             key={intakeQuestionIdx}
             question={localQuestion}
+            questionIdx={intakeQuestionIdx}
             formFieldGroup={formFieldGroup}
             // collection={collection} //@TODO update this as well
             targetFormFieldIdx={intakeQuestionIdx}
@@ -286,7 +289,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             data-testid={intakeQuestionKey + "-" + intakeQuestionEl}
             error={
               formFieldGroup?.isInvalids[
-                intakeQuestionKey + "--" + wholeQuestion?.label
+                intakeQuestionKey + "--" + intakeQuestionIdx //wholeQuestion?.label
               ] || false
             }
             variant="filled"
@@ -299,7 +302,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             required
             helperText={
               formFieldGroup?.isInvalids[
-                intakeQuestionKey + "--" + wholeQuestion?.label
+                intakeQuestionKey + "--" + intakeQuestionIdx //wholeQuestion?.label
               ] || false
                 ? intl.formatMessage(
                     {
