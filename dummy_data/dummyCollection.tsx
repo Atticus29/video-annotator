@@ -13,10 +13,10 @@ import { excludeFromCollectionTableDisplay } from "../constants";
 
 export const defaultDoNotDisplays: string[] = [
   "_id",
+  "key",
   "testId",
   "doNotDisplay",
   "shouldBeCheckboxes",
-
   "invalidInputMessage",
   "validatorMethods",
   "shouldBeCheckboxes",

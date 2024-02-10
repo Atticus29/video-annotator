@@ -202,15 +202,17 @@ const VideoIntakeQuestions: React.FC<{
   }, [collectionUrl, postCollectionVideoIntakeQuestions, videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
-    console.log("deleteMe deleteIntakeQuestion questionIdx is: ");
-    console.log(questionIdx);
+    // console.log("deleteMe deleteIntakeQuestion questionIdx is: ");
+    // console.log(questionIdx);
     setVideoIntakeQuestions((prevState) => {
+      // console.log("deleteMe prevState is delete call is: ");
+      // console.log(prevState);
       const newVideoIntakeQuestions: SingleFormField[] =
         prevState?.filter((_entry, idx) => {
           return idx !== questionIdx;
         }) || [];
-      console.log("deleteMe newVideoIntakeQuestions passing the filter are: ");
-      console.log(newVideoIntakeQuestions);
+      // console.log("deleteMe newVideoIntakeQuestions passing the filter are: ");
+      // console.log(newVideoIntakeQuestions);
       return newVideoIntakeQuestions;
     });
 
@@ -219,6 +221,8 @@ const VideoIntakeQuestions: React.FC<{
     const actualValueSetter: any = formFieldGroup.setValues; // @TODO DRY this up by creating a removeFromFormGroup method that takes formFieldGroup, questionIdx, and setterString ("setValues" or "setInvalids") as arguments
     if (actualValueSetter) {
       actualValueSetter((prevState: any) => {
+        // console.log("deleteMe prevState for actualValues during delete is: ");
+        // console.log(prevState);
         const updatedState = reduce(
           prevState,
           (memo, stateItem, stateItemKey) => {
@@ -237,6 +241,8 @@ const VideoIntakeQuestions: React.FC<{
     const isInvalidSetter: any = formFieldGroup.setIsInvalids; // @TODO DRY this up by creating a removeFromFormGroup method that takes formFieldGroup, questionIdx, and setterString ("setValues" or "setInvalids") as arguments
     if (isInvalidSetter) {
       isInvalidSetter((prevState: any) => {
+        // console.log("deleteMe prevState for isInvalids during delete is: ");
+        // console.log(prevState);
         const updatedState = reduce(
           prevState,
           (memo, stateItem, stateItemKey) => {
@@ -291,71 +297,84 @@ const VideoIntakeQuestions: React.FC<{
     }
   };
 
-  const intakeQuestionElements = map(
-    // collection?.videoIntakeQuestions || [],
-    videoIntakeQuestions || [],
-    (intakeQuestion, intakeQuestionIdx) => {
-      // console.log("deleteMe intakeQuestion is: ");
-      // console.log(intakeQuestion);
-      const intakeQuesionsInvalid: {} =
-        collection?.videoQuestionsFormFieldGroup?.isInvalids || {}; // @TODO this might be the problem
-      return map(
-        intakeQuestion,
-        (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
-          // console.log("deleteMe intakeQuestionEl is: ");
-          // console.log(intakeQuestionEl);
-          // console.log("deleteMe intakeQuestionKey is: ");
-          // console.log(intakeQuestionKey);
-          // console.log("deleteMe wholeQuestion is: ");
-          // console.log(wholeQuestion);
-          const isDelible: boolean = !wholeQuestion?.isACoreQuestion;
-          return (
-            <>
+  const intakeQuestionElements = useMemo(() => {
+    console.log(
+      "deleteMe videoIntakeQuestions updated. Using the following to re-render:"
+    );
+    // console.log(videoIntakeQuestions);
+    return map(
+      // collection?.videoIntakeQuestions || [],
+      videoIntakeQuestions || [],
+      (intakeQuestion, intakeQuestionIdx) => {
+        console.log("deleteMe intakeQuestion is: ");
+        console.log(intakeQuestion);
+        const intakeQuesionsInvalid: {} =
+          collection?.videoQuestionsFormFieldGroup?.isInvalids || {}; // @TODO this might be the problem
+        return map(
+          intakeQuestion,
+          (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
+            console.log("deleteMe intakeQuestionEl is: ");
+            console.log(intakeQuestionEl);
+            console.log("deleteMe intakeQuestionKey is: ");
+            console.log(intakeQuestionKey);
+            console.log("deleteMe wholeQuestion is: ");
+            console.log(wholeQuestion);
+            const isDelible: boolean = !wholeQuestion?.isACoreQuestion;
+            return (
               <>
-                {intakeQuestionKey === "label" && (
-                  <>
-                    <Typography style={{ marginBottom: 10 }}>
-                      {"Question " + (intakeQuestionIdx + 1) + ". "}
-                    </Typography>
+                <>
+                  {intakeQuestionKey === "label" && (
+                    <>
+                      <Typography style={{ marginBottom: 10 }}>
+                        {"Question " + (intakeQuestionIdx + 1) + ". "}
+                      </Typography>
 
-                    {isDelible && (
-                      <Button
-                        style={{ marginBottom: 10 }}
-                        data-testid={"collection-details-submit-button"}
-                        variant="contained"
-                        onClick={() => {
-                          deleteIntakeQuestion(Number(intakeQuestionIdx));
-                        }}
-                      >
-                        <FormattedMessage
-                          id="REMOVE_QUESTION"
-                          defaultMessage="Remove this question"
-                        />
-                      </Button>
-                    )}
-                  </>
+                      {isDelible && (
+                        <Button
+                          style={{ marginBottom: 10 }}
+                          data-testid={"collection-details-submit-button"}
+                          variant="contained"
+                          onClick={() => {
+                            deleteIntakeQuestion(Number(intakeQuestionIdx));
+                          }}
+                        >
+                          <FormattedMessage
+                            id="REMOVE_QUESTION"
+                            defaultMessage="Remove this question"
+                          />
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </>
+                {(isDelible ||
+                  (intakeQuestionKey === "label" && !isDelible)) && (
+                  <SingleVideoIntakeQuestionV2
+                    key={intakeQuestionKey}
+                    intakeQuestionEl={intakeQuestionEl}
+                    intakeQuestionKey={intakeQuestionKey}
+                    wholeQuestion={wholeQuestion}
+                    intakeQuestionsInvalid={intakeQuesionsInvalid}
+                    intakeQuestionIdx={intakeQuestionIdx}
+                    collectionUrl={localCollection?.metadata?.urlPath || ""}
+                    // collection={localCollection}
+                    // setCollection={setLocalCollection}
+                    formFieldGroup={formFieldGroup}
+                  />
                 )}
               </>
-              {(isDelible || (intakeQuestionKey === "label" && !isDelible)) && (
-                <SingleVideoIntakeQuestionV2
-                  key={intakeQuestionKey}
-                  intakeQuestionEl={intakeQuestionEl}
-                  intakeQuestionKey={intakeQuestionKey}
-                  wholeQuestion={wholeQuestion}
-                  intakeQuestionsInvalid={intakeQuesionsInvalid}
-                  intakeQuestionIdx={intakeQuestionIdx}
-                  collectionUrl={localCollection?.metadata?.urlPath || ""}
-                  // collection={localCollection}
-                  // setCollection={setLocalCollection}
-                  formFieldGroup={formFieldGroup}
-                />
-              )}
-            </>
-          );
-        }
-      );
-    }
-  );
+            );
+          }
+        );
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    collection?.videoQuestionsFormFieldGroup?.isInvalids,
+    formFieldGroup,
+    localCollection?.metadata?.urlPath,
+    videoIntakeQuestions,
+  ]);
 
   return (
     <>
