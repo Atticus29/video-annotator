@@ -31,6 +31,7 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
+  console.log("deleteMe updateIntakeQuestionFormField is called");
   // console.log("deleteMe e1 wholeQuestionLabel is: ");
   // console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {

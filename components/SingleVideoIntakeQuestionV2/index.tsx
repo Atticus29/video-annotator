@@ -146,11 +146,13 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
 
   const handleChange: (event: any) => void = (event: any) => {
+    console.log("deleteMe handleChange in SingleVideoIntakeQuestionV2 called");
     // if the change is in the TYPE field, this should
     // 1) automatically modify other parts of the SingleFormField
     // 2) change what options are visible/available in the video intake questions section
 
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
+    console.log("deleteMe currentVal is: " + currentVal);
     setCurrentValue(currentVal);
     // console.log("deleteMe intakeQuestionKey is: ");
     // console.log(intakeQuestionKey);
@@ -213,7 +215,8 @@ const SingleVideoIntakeQuestionV2: React.FC<{
       currentVal,
       // wholeQuestion?.label || String(intakeQuestionIdx),
       intakeQuestionKey,
-      questionIdx,
+      // questionIdx,
+      intakeQuestionIdx,
       formFieldGroup
     );
 
