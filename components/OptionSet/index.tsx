@@ -64,7 +64,7 @@ const OptionSet: React.FC<{
   // console.log("deleteMe seedAutocompleteVals are: ");
   // console.log(seedAutocompleteVals);
 
-  const [canAddOptions, setCanAddOptions] = useState<boolean>(true);
+  // const [canAddOptions, setCanAddOptions] = useState<boolean>(true);
 
   const [autocompleteValues, setAutocompleteValues] = useState<{}>(
     seedAutocompleteVals
@@ -232,45 +232,49 @@ const OptionSet: React.FC<{
     console.log("deleteMe and value is: ");
     console.log(event?.target?.checked);
     const newActualValue: {} = {
-      [checkBoxLabel]: event?.target?.checked || true,
+      [checkBoxLabel]: event.target.checked,
     };
-    setCanAddOptions((prev) => !prev);
+    console.log("deleteMe newActualValue is: ");
+    console.log(newActualValue);
+    // setCanAddOptions((prev) => !prev);
     if (optionFormFieldGroup?.setValues) {
       optionFormFieldGroup.setValues((prevState: {}) => {
         return { ...prevState, ...newActualValue };
       });
     }
-    if (!canAddOptions === true) {
-      // console.log(
-      //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is true)"
-      // );
-      // updateUsersCanAddCustomOptionsChecked(
-      //   optionFormFieldGroup,
-      //   formFieldGroupString,
-      //   formField,
-      //   collection,
-      //   targetFormFieldIdx,
-      //   "usersCanAddCustomOptions",
-      //   !canAddOptions,
-      //   setCollection,
-      //   whichIntakeQuestions
-      // );
-    } else if (!canAddOptions === false) {
-      // console.log(
-      //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is false)"
-      // );
-      // updateUsersCanAddCustomOptionsUnchecked(
-      //   optionFormFieldGroup,
-      //   formFieldGroupString,
-      //   formField,
-      //   collection,
-      //   targetFormFieldIdx,
-      //   "usersCanAddCustomOptions",
-      //   !canAddOptions,
-      //   setCollection,
-      //   whichIntakeQuestions
-      // );
-    }
+    console.log("deleteMe optionFormFieldGroup after updating is: ");
+    console.log(optionFormFieldGroup.actualValues);
+    // if (!canAddOptions === true) {
+    //   // console.log(
+    //   //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is true)"
+    //   // );
+    //   // updateUsersCanAddCustomOptionsChecked(
+    //   //   optionFormFieldGroup,
+    //   //   formFieldGroupString,
+    //   //   formField,
+    //   //   collection,
+    //   //   targetFormFieldIdx,
+    //   //   "usersCanAddCustomOptions",
+    //   //   !canAddOptions,
+    //   //   setCollection,
+    //   //   whichIntakeQuestions
+    //   // );
+    // } else if (!canAddOptions === false) {
+    //   // console.log(
+    //   //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is false)"
+    //   // );
+    //   // updateUsersCanAddCustomOptionsUnchecked(
+    //   //   optionFormFieldGroup,
+    //   //   formFieldGroupString,
+    //   //   formField,
+    //   //   collection,
+    //   //   targetFormFieldIdx,
+    //   //   "usersCanAddCustomOptions",
+    //   //   !canAddOptions,
+    //   //   setCollection,
+    //   //   whichIntakeQuestions
+    //   // );
+    // }
   };
 
   return (
@@ -309,13 +313,20 @@ const OptionSet: React.FC<{
           <FormControlLabel
             style={{ marginRight: 10 }}
             control={
-              <Checkbox checked={canAddOptions} onChange={handleCheckChange} />
+              <Checkbox
+                checked={get(
+                  optionFormFieldGroup,
+                  ["actualValues", checkBoxLabel],
+                  true
+                )}
+                onChange={handleCheckChange}
+              />
             }
-            value={get(
-              optionFormFieldGroup,
-              ["actualValues", checkBoxLabel],
-              true
-            )}
+            // value={get(
+            //   optionFormFieldGroup,
+            //   ["actualValues", checkBoxLabel],
+            //   true
+            // )}
             label={checkBoxLabel}
           />
         </div>

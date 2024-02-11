@@ -31,7 +31,7 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  console.log("deleteMe updateIntakeQuestionFormField is called");
+  // console.log("deleteMe updateIntakeQuestionFormField is called");
   // console.log("deleteMe e1 wholeQuestionLabel is: ");
   // console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {
@@ -49,8 +49,8 @@ export function updateIntakeQuestionFormField(
       intakeQuestionKey === "isRequired"
         ? false
         : !isNonEmptyString(currentVal);
-    console.log("deleteMe e2: isValid is: ");
-    console.log(isValid);
+    // console.log("deleteMe e2: isValid is: ");
+    // console.log(isValid);
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,
@@ -201,8 +201,8 @@ export function clearAllOptionFields(
     },
     {}
   );
-  console.log("deleteMe purgedActualVals is: ");
-  console.log(purgedActualVals);
+  // console.log("deleteMe purgedActualVals is: ");
+  // console.log(purgedActualVals);
   return purgedActualVals;
 }
 
@@ -212,11 +212,11 @@ export function updateOptionFormFieldGroupWithOptionList(
   setAutocompleteValues: (val: any) => void,
   stringForAutocompleteOptions: string
 ) {
-  console.log("deleteMe entering updateOptionFormFieldGroupWithOptionList");
-  console.log("deleteMe setAutocompleteValues is: ");
-  console.log(setAutocompleteValues);
-  console.log("deleteMe options is: ");
-  console.log(options);
+  // console.log("deleteMe entering updateOptionFormFieldGroupWithOptionList");
+  // console.log("deleteMe setAutocompleteValues is: ");
+  // console.log(setAutocompleteValues);
+  // console.log("deleteMe options is: ");
+  // console.log(options);
   //first, remove all existing options
   const cleanedActualVals: {} = clearAllOptionFields(
     get(setAutocompleteValues, ["actualValues"]),
@@ -227,10 +227,10 @@ export function updateOptionFormFieldGroupWithOptionList(
   }
   let newActualValues: {} = {};
   forEach(options, (option, optionIdx) => {
-    console.log("deleteMe current option is: ");
-    console.log(option);
-    console.log("deleteMe optionIdx is: ");
-    console.log(optionIdx);
+    // console.log("deleteMe current option is: ");
+    // console.log(option);
+    // console.log("deleteMe optionIdx is: ");
+    // console.log(optionIdx);
     newActualValues = {
       ...newActualValues,
       [stringForAutocompleteOptions + " " + (optionIdx + 1)]: option,

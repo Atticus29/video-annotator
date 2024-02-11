@@ -66,19 +66,19 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   collectionUrl,
   formFieldGroup,
 }) => {
-  console.log(
-    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
-      intakeQuestionKey
-  );
-  console.log(
-    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
-      intakeQuestionEl
-  );
-  console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
-  console.log(wholeQuestion);
-  console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
-  console.log("deleteMe formFieldGroup.actualValues is: ");
-  console.log(formFieldGroup.actualValues);
+  // console.log(
+  //   "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
+  //     intakeQuestionKey
+  // );
+  // console.log(
+  //   "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
+  //     intakeQuestionEl
+  // );
+  // console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
+  // console.log(wholeQuestion);
+  // console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
+  // console.log("deleteMe formFieldGroup.actualValues is: ");
+  // console.log(formFieldGroup.actualValues);
   const [isInvalid, setIsinvalid] = useState<boolean>(false);
   useEffect(() => {
     // console.log("deleteMe formFieldGroup is now: ");
@@ -222,7 +222,8 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     const currentVal: any = event?.target?.checked || false;
     // console.log("deleteMe currentVal is: ");
     // console.log(currentVal);
-    setCurrentValue(currentVal);
+
+    // setCurrentValue(currentVal);
 
     updateIntakeQuestionFormField(
       currentVal,
