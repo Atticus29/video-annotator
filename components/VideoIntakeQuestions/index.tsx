@@ -80,10 +80,10 @@ const VideoIntakeQuestions: React.FC<{
   // >([]);
 
   useEffect(() => {
-    console.log("deleteMe video intake questions changed and is now:");
-    console.log(
-      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-    );
+    // console.log("deleteMe video intake questions changed and is now:");
+    // console.log(
+    //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
+    // );
     if (
       mode === "create" &&
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -379,10 +379,10 @@ const VideoIntakeQuestions: React.FC<{
         return map(
           intakeQuestion,
           (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
-            console.log("deleteMe intakeQuestionEl is: ");
-            console.log(intakeQuestionEl);
-            console.log("deleteMe intakeQuestionKey is: ");
-            console.log(intakeQuestionKey);
+            // console.log("deleteMe intakeQuestionEl is: ");
+            // console.log(intakeQuestionEl);
+            // console.log("deleteMe intakeQuestionKey is: ");
+            // console.log(intakeQuestionKey);
             // console.log("deleteMe wholeQuestion is: ");
             // console.log(wholeQuestion);
             const isDelible: boolean = !wholeQuestion?.isACoreQuestion;

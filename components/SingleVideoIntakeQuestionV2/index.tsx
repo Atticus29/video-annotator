@@ -66,8 +66,19 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   collectionUrl,
   formFieldGroup,
 }) => {
-  // console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
-  // console.log(wholeQuestion);
+  console.log(
+    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
+      intakeQuestionKey
+  );
+  console.log(
+    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
+      intakeQuestionEl
+  );
+  console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
+  console.log(wholeQuestion);
+  console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
+  console.log("deleteMe formFieldGroup.actualValues is: ");
+  console.log(formFieldGroup.actualValues);
   const [isInvalid, setIsinvalid] = useState<boolean>(false);
   useEffect(() => {
     // console.log("deleteMe formFieldGroup is now: ");
@@ -143,7 +154,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     // );
   };
 
-  const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
+  // const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
 
   const handleChange: (event: any) => void = (event: any) => {
     console.log("deleteMe handleChange in SingleVideoIntakeQuestionV2 called");
@@ -152,8 +163,10 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     // 2) change what options are visible/available in the video intake questions section
 
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    console.log("deleteMe currentVal is: " + currentVal);
-    setCurrentValue(currentVal);
+
+    // console.log("deleteMe currentVal is: " + currentVal);
+    // setCurrentValue(currentVal);
+
     // console.log("deleteMe intakeQuestionKey is: ");
     // console.log(intakeQuestionKey);
     // console.log("deleteMe intakeQuestionEl is: ");
@@ -318,7 +331,11 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             }
             style={{ marginBottom: 10, maxWidth: 400 }}
             onChange={handleChange}
-            value={currentValue}
+            value={
+              formFieldGroup.actualValues[
+                intakeQuestionKey + "--" + intakeQuestionIdx
+              ]
+            }
           ></TextField>
         )}
         {shouldBeTypeDropdown && (
@@ -342,9 +359,20 @@ const SingleVideoIntakeQuestionV2: React.FC<{
           <FormControlLabel
             style={{ marginRight: 10 }}
             control={
-              <Checkbox checked={currentValue} onChange={handleCheckChange} />
+              <Checkbox
+                checked={
+                  formFieldGroup.actualValues[
+                    intakeQuestionKey + "--" + intakeQuestionIdx
+                  ]
+                }
+                onChange={handleCheckChange}
+              />
             }
-            value={currentValue}
+            value={
+              formFieldGroup.actualValues[
+                intakeQuestionKey + "--" + intakeQuestionIdx
+              ]
+            }
             // onChange={handleCheckChange}
             label={convertCamelCaseToCapitalCase(intakeQuestionKey)}
           />
