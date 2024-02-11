@@ -79,6 +79,9 @@ const VideoIntakeQuestions: React.FC<{
   //   SingleFormField[]
   // >([]);
 
+  const [hasAQuestionBeenDeleted, setHasAQuestionBeenDeleted] =
+    useState<boolean>(false);
+
   useEffect(() => {
     // console.log("deleteMe video intake questions changed and is now:");
     // console.log(
@@ -88,6 +91,7 @@ const VideoIntakeQuestions: React.FC<{
       mode === "create" &&
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1 &&
+      !hasAQuestionBeenDeleted &&
       (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
     ) {
       console.log("deleteMe should only get here during initialization");
@@ -207,6 +211,7 @@ const VideoIntakeQuestions: React.FC<{
   // }, [collectionUrl, postCollectionVideoIntakeQuestions, videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
 
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
+    setHasAQuestionBeenDeleted(true);
     // console.log("deleteMe deleteIntakeQuestion questionIdx is: ");
     // console.log(questionIdx);
     // setVideoIntakeQuestions((prevState) => {
