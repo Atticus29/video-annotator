@@ -22,6 +22,37 @@ export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
   return currentAttributesToDisplay;
 }
 
+export function replaceFormFieldValuesWith(
+  originalFormFieldGroup: FormFieldGroup,
+  replacementValues: {},
+  removeAllOld: boolean = true
+): {} {
+  if (removeAllOld) {
+    // get rid of all values with the same --num index, in case some are missing in the new
+    const currentIndex: number = Number(
+      get(Object.keys(replacementValues), [0])?.split("--")[1]
+    );
+    console.log("deleteMe currentIndex is: ");
+    console.log(currentIndex);
+    const originalWithOldRemoved: {} = reduce(
+      originalFormFieldGroup.actualValues,
+      (memo, value, valueKey) => {
+        if (valueKey.indexOf(String(currentIndex)) < 0) {
+          return { ...memo, [valueKey]: value };
+        } else {
+          return memo;
+        }
+      },
+      {}
+    );
+    console.log("deleteMe originalWithOldRemoved is: ");
+    console.log(originalWithOldRemoved);
+    return { ...originalWithOldRemoved, ...replacementValues };
+  } else {
+    return { ...originalFormFieldGroup.actualValues, ...replacementValues };
+  }
+}
+
 export function updateIntakeQuestionFormField(
   currentVal: any,
   // wholeQuestionLabel: string,

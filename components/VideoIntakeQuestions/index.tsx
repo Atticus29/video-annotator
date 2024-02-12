@@ -103,8 +103,8 @@ const VideoIntakeQuestions: React.FC<{
           shamCollection.videoIntakeQuestions || []
         );
 
-      // console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
-      // console.log(transformedVideoIntakeQuestions);
+      console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
+      console.log(transformedVideoIntakeQuestions);
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -366,6 +366,8 @@ const VideoIntakeQuestions: React.FC<{
     console.log(
       "deleteMe videoIntakeQuestions updated. Using the following to re-render:"
     );
+    console.log("deleteMe formFieldGroup is: ");
+    console.log(formFieldGroup);
     // console.log(formFieldGroup.actualValues);
     // console.log("deleteMe and the transformed value of the same is: ");
     // console.log(

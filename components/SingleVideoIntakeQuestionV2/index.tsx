@@ -23,6 +23,7 @@ import {
 import formFieldConfig from "../../formFieldConfig.json";
 import {
   calculateCurrentAttributesToDisplay,
+  replaceFormFieldValuesWith,
   updateCollection,
   updateFormFieldStates,
   updateIntakeQuestionFormField,
@@ -38,6 +39,7 @@ import {
   calculateShouldBeTextField,
   calculateShouldBeTypeDropdown,
   deleteSingleQuestionInCollection,
+  transformIntakeQuestionsIntoActualValueObj,
   transformQuestion,
   updateSingleQuestionInCollection,
 } from "../../utilities/videoIntakeQuestionUtils";
@@ -124,18 +126,42 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     useState<string>(intakeQuestionEl);
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
+    console.log("deleteMe handleQuestionChange entered");
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
     setCurrentQuestionType(currentVal);
+    console.log("deleteMe currentVal is: ");
+    console.log(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       localQuestion,
       currentVal
     );
 
-    // console.log("deleteMe transformedQuestion in handleQuestionChange is: ");
-    // console.log(transformedQuestion);
+    const transformedQuestionAsActualValueObj =
+      transformIntakeQuestionsIntoActualValueObj(
+        [transformedQuestion],
+        intakeQuestionIdx
+      );
 
-    setLocalQuestion(transformedQuestion);
+    console.log(
+      "deleteMe transformedQuestionAsActualValueObj in handleQuestionChange is: "
+    );
+    console.log(transformedQuestionAsActualValueObj);
+    console.log("deleteMe formFieldGroup is: ");
+    console.log(formFieldGroup);
+    const replacementActualValues: {} = replaceFormFieldValuesWith(
+      formFieldGroup,
+      transformedQuestionAsActualValueObj
+    );
+    console.log("deleteMe replacementActualValues are: ");
+    console.log(replacementActualValues);
+
+    const formFieldGroupSetter = formFieldGroup.setValues;
+    if (formFieldGroupSetter) {
+      formFieldGroupSetter(replacementActualValues);
+    }
+
+    // setLocalQuestion(transformedQuestion);
 
     // const newIntakeQuestionSet: SingleFormField[] = get(
     //   collection,

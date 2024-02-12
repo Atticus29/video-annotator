@@ -45,7 +45,7 @@ export function transformQuestion(
             invalidInputMessage: "INPUT_INVALID",
             validatorMethods: [],
             autocompleteOptions: ["Option 1 - change me"],
-            useCanAddCustomOptions: true,
+            usersCanAddCustomOptions: true,
           };
         case "Checkbox":
           return {
@@ -156,7 +156,8 @@ export function transformActualValueObjIntoIntakeQuestions(
 }
 
 export function transformIntakeQuestionsIntoActualValueObj(
-  intakeQuestions: SingleFormField[]
+  intakeQuestions: SingleFormField[],
+  questionIdx?: number
 ) {
   return reduce(
     intakeQuestions,
@@ -168,7 +169,8 @@ export function transformIntakeQuestionsIntoActualValueObj(
         (memo, objKey) => {
           const currentVal: any = get(intakeQuestion, [objKey]);
           const newEntry: {} = {
-            [objKey + "--" + intakeQuestionIdx]: currentVal,
+            [objKey + "--" + (questionIdx ? questionIdx : intakeQuestionIdx)]:
+              currentVal,
           };
           return { ...memo, ...newEntry };
         },
