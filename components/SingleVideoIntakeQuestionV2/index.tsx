@@ -234,44 +234,44 @@ const SingleVideoIntakeQuestionV2: React.FC<{
       formFieldGroup
     );
 
-    if (intakeQuestionKey === "isRequired" && !intakeQuestionEl === false) {
-      // isRequired is being set to false. This means that we need to remove the isNonEmptyString method from the validationMethods array for this question
-      // updateIsRequiredUnchecked(
-      //   formFieldGroup,
-      //   // "videoQuestionsFormFieldGroup",
-      //   localQuestion,
-      //   // collection,
-      //   intakeQuestionIdx,
-      //   intakeQuestionKey,
-      //   intakeQuestionEl,
-      //   // setCollection,
-      //   "videoIntakeQuestions"
-      // );
-    } else if (
-      intakeQuestionKey === "isRequired" &&
-      !intakeQuestionEl === true
-    ) {
-      //   updateIsRequiredChecked(
-      //     formFieldGroup,
-      //     "videoQuestionsFormFieldGroup",
-      //     localQuestion,
-      //     collection,
-      //     intakeQuestionIdx,
-      //     intakeQuestionKey,
-      //     intakeQuestionEl,
-      //     setCollection,
-      //     "videoIntakeQuestions"
-      //   );
-    } else {
-      //   updateCollection(
-      //     collection,
-      //     intakeQuestionIdx,
-      //     intakeQuestionKey,
-      //     !intakeQuestionEl,
-      //     setCollection,
-      //     "videoIntakeQuestions"
-      //   );
-    }
+    // if (intakeQuestionKey === "isRequired" && !intakeQuestionEl === false) {
+    //   // isRequired is being set to false. This means that we need to remove the isNonEmptyString method from the validationMethods array for this question
+    //   // updateIsRequiredUnchecked(
+    //   //   formFieldGroup,
+    //   //   // "videoQuestionsFormFieldGroup",
+    //   //   localQuestion,
+    //   //   // collection,
+    //   //   intakeQuestionIdx,
+    //   //   intakeQuestionKey,
+    //   //   intakeQuestionEl,
+    //   //   // setCollection,
+    //   //   "videoIntakeQuestions"
+    //   // );
+    // } else if (
+    //   intakeQuestionKey === "isRequired" &&
+    //   !intakeQuestionEl === true
+    // ) {
+    //   //   updateIsRequiredChecked(
+    //   //     formFieldGroup,
+    //   //     "videoQuestionsFormFieldGroup",
+    //   //     localQuestion,
+    //   //     collection,
+    //   //     intakeQuestionIdx,
+    //   //     intakeQuestionKey,
+    //   //     intakeQuestionEl,
+    //   //     setCollection,
+    //   //     "videoIntakeQuestions"
+    //   //   );
+    // } else {
+    //   //   updateCollection(
+    //   //     collection,
+    //   //     intakeQuestionIdx,
+    //   //     intakeQuestionKey,
+    //   //     !intakeQuestionEl,
+    //   //     setCollection,
+    //   //     "videoIntakeQuestions"
+    //   //   );
+    // }
   };
 
   const typeElements = map(types, (type: string) => {

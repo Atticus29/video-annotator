@@ -31,7 +31,15 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  // console.log("deleteMe updateIntakeQuestionFormField is called");
+  console.log("deleteMe updateIntakeQuestionFormField is called");
+  console.log("deleteMe currentVal is: ");
+  console.log(currentVal);
+  console.log("deleteMe intakeQuestionKey is: ");
+  console.log(intakeQuestionKey);
+  console.log("deleteMe intakeQuestionIdx is: ");
+  console.log(intakeQuestionIdx);
+  console.log("deleteMe formFieldGroup is: ");
+  console.log(formFieldGroup);
   // console.log("deleteMe e1 wholeQuestionLabel is: ");
   // console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {
@@ -45,8 +53,10 @@ export function updateIntakeQuestionFormField(
     ["setIsInvalids"]
   );
   if (invalidSetter) {
-    const isValid: boolean =
-      intakeQuestionKey === "isRequired"
+    console.log("deleteMe e1 intakeQuestionKey is: " + intakeQuestionKey);
+    const isInvalid: boolean =
+      intakeQuestionKey === "isRequired" ||
+      intakeQuestionKey === "usersCanAddCustomOptions"
         ? false
         : !isNonEmptyString(currentVal);
     // console.log("deleteMe e2: isValid is: ");
@@ -54,7 +64,7 @@ export function updateIntakeQuestionFormField(
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,
-        [intakeQuestionKey + "--" + intakeQuestionIdx]: isValid,
+        [intakeQuestionKey + "--" + intakeQuestionIdx]: isInvalid,
       };
     });
   }

@@ -231,17 +231,37 @@ const OptionSet: React.FC<{
     console.log(checkBoxLabel);
     console.log("deleteMe and value is: ");
     console.log(event?.target?.checked);
-    const newActualValue: {} = {
-      [checkBoxLabel]: event.target.checked,
-    };
-    console.log("deleteMe newActualValue is: ");
-    console.log(newActualValue);
-    // setCanAddOptions((prev) => !prev);
-    if (optionFormFieldGroup?.setValues) {
-      optionFormFieldGroup.setValues((prevState: {}) => {
-        return { ...prevState, ...newActualValue };
-      });
-    }
+    // const newActualValue: {} = {
+    //   [checkBoxLabel]: event.target.checked,
+    // };
+    // console.log("deleteMe newActualValue is: ");
+    // console.log(newActualValue);
+
+    // console.log("deleteMe checkBoxLabel is: ");
+    // console.log(checkBoxLabel);
+
+    console.log("deleteMe questionIdx is: " + questionIdx);
+    console.log("deleteMe question is: ");
+    console.log(question);
+    console.log("deleteMe whichIntakeQuestions is:");
+    console.log(whichIntakeQuestions);
+
+    updateIntakeQuestionFormField(
+      event.target.checked,
+      checkBoxLabel ===
+        "Can video annotators in this collection add their own options?"
+        ? "usersCanAddCustomOptions"
+        : checkBoxLabel, // @TODO change this
+      questionIdx,
+      optionFormFieldGroup
+    );
+
+    // // setCanAddOptions((prev) => !prev);
+    // if (optionFormFieldGroup?.setValues) {
+    //   optionFormFieldGroup.setValues((prevState: {}) => {
+    //     return { ...prevState, ...newActualValue };
+    //   });
+    // }
     console.log("deleteMe optionFormFieldGroup after updating is: ");
     console.log(optionFormFieldGroup.actualValues);
     // if (!canAddOptions === true) {
@@ -316,7 +336,15 @@ const OptionSet: React.FC<{
               <Checkbox
                 checked={get(
                   optionFormFieldGroup,
-                  ["actualValues", checkBoxLabel],
+                  [
+                    "actualValues",
+                    (checkBoxLabel ===
+                    "Can video annotators in this collection add their own options?"
+                      ? "usersCanAddCustomOptions"
+                      : checkBoxLabel) +
+                      "--" +
+                      questionIdx,
+                  ],
                   true
                 )}
                 onChange={handleCheckChange}

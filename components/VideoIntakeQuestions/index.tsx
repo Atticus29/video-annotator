@@ -146,6 +146,7 @@ const VideoIntakeQuestions: React.FC<{
     collectionUrl,
     formFieldGroup.actualValues,
     formFieldGroup?.setValues,
+    hasAQuestionBeenDeleted,
     mode,
     postCollectionVideoIntakeQuestions,
     videoQuestionFormValues,

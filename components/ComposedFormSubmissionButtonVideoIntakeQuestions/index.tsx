@@ -39,6 +39,8 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
   onCloseDialog,
   updateMethod,
 }) => {
+  console.log("deleteMe formFieldGroupOfConcern is: ");
+  console.log(formFieldGroupOfConcern);
   const queryClient = useQueryClient();
   const { isLoading, isError, data } = useGetCollection(collectionPath || "");
 
