@@ -379,7 +379,9 @@ const VideoIntakeQuestions: React.FC<{
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
       (intakeQuestion, intakeQuestionIdx) => {
-        console.log("deleteMe intakeQuestion is: ");
+        console.log(
+          "deleteMe intakeQuestion in VideoIntakeQuestions component display loop is: "
+        );
         console.log(intakeQuestion);
         const intakeQuesionsInvalid: {} =
           // collection?.videoQuestionsFormFieldGroup?.isInvalids || {}; // @TODO this might be the problem
@@ -387,13 +389,16 @@ const VideoIntakeQuestions: React.FC<{
         return map(
           intakeQuestion,
           (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
-            // console.log("deleteMe intakeQuestionEl is: ");
+            // console.log("deleteMe intakeQuestionEl VideoIntakeQuestion is: ");
             // console.log(intakeQuestionEl);
-            // console.log("deleteMe intakeQuestionKey is: ");
-            // console.log(intakeQuestionKey);
+            // console.log(
+            //   "deleteMe intakeQuestionKey VideoIntakeQuestion is: " +
+            //     intakeQuestionKey
+            // );
             // console.log("deleteMe wholeQuestion is: ");
             // console.log(wholeQuestion);
             const isDelible: boolean = !wholeQuestion?.isACoreQuestion;
+            // console.log("deleteMe isDelible is: " + isDelible);
             return (
               <>
                 <>

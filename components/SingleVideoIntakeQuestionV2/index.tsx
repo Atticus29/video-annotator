@@ -39,6 +39,7 @@ import {
   calculateShouldBeTextField,
   calculateShouldBeTypeDropdown,
   deleteSingleQuestionInCollection,
+  transformActualValueObjIntoIntakeQuestions,
   transformIntakeQuestionsIntoActualValueObj,
   transformQuestion,
   updateSingleQuestionInCollection,
@@ -68,19 +69,19 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   collectionUrl,
   formFieldGroup,
 }) => {
-  // console.log(
-  //   "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
-  //     intakeQuestionKey
-  // );
-  // console.log(
-  //   "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
-  //     intakeQuestionEl
-  // );
-  // console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
-  // console.log(wholeQuestion);
-  // console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
-  // console.log("deleteMe formFieldGroup.actualValues is: ");
-  // console.log(formFieldGroup.actualValues);
+  console.log(
+    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
+      intakeQuestionKey
+  );
+  console.log(
+    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
+      intakeQuestionEl
+  );
+  console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
+  console.log(wholeQuestion);
+  console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
+  console.log("deleteMe formFieldGroup.actualValues is: ");
+  console.log(formFieldGroup.actualValues);
   const [isInvalid, setIsinvalid] = useState<boolean>(false);
   useEffect(() => {
     // console.log("deleteMe formFieldGroup is now: ");
@@ -112,11 +113,19 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   }, [localQuestion, intakeQuestionKey]);
 
   const shouldBeCheckbox: boolean = useMemo(() => {
-    // console.log("deleteMe re-evaluated:");
-    // console.log("deleteMe localQuestion is: ");
-    // console.log(localQuestion);
-    return calculateShouldBeCheckbox(localQuestion, intakeQuestionKey);
-  }, [localQuestion, intakeQuestionKey]);
+    const reconstitutedTotipotentQuestion: SingleFormField =
+      transformActualValueObjIntoIntakeQuestions(
+        formFieldGroup.actualValues
+      )[0];
+    const deleteMeShouldBeCheckBox: boolean = calculateShouldBeCheckbox(
+      reconstitutedTotipotentQuestion,
+      intakeQuestionKey
+    );
+    return calculateShouldBeCheckbox(
+      reconstitutedTotipotentQuestion,
+      intakeQuestionKey
+    );
+  }, [formFieldGroup.actualValues, intakeQuestionKey]);
 
   // console.log("deleteMe shouldBeCheckbox is: ");
   // console.log(shouldBeCheckbox);
@@ -136,6 +145,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
       localQuestion,
       currentVal
     );
+    setLocalQuestion(transformedQuestion);
 
     const transformedQuestionAsActualValueObj =
       transformIntakeQuestionsIntoActualValueObj(

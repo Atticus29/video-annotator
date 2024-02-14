@@ -260,21 +260,49 @@ export function calculateShouldBeCheckbox(
   question: SingleFormField,
   questionKey: string
 ) {
+  console.log("deleteMe calculateShouldBeCheckbox entered and question is: ");
+  console.log(question);
+
+  console.log(
+    "deleteMe calculateShouldBeCheckbox and questionKey in calculateShouldBeCheckbox is: " +
+      questionKey
+  );
+
   const onTheNoDisplayList: boolean = (question?.doNotDisplay || []).includes(
     questionKey
   );
+  console.log(
+    "deleteMe calculateShouldBeCheckbox onTheNoDisplayList is: " +
+      onTheNoDisplayList
+  );
+  // console.log(onTheNoDisplayList);
 
   const onCheckboxList: boolean = (question?.shouldBeCheckboxes || []).includes(
     questionKey
   );
+  console.log(
+    "deleteMe calculateShouldBeCheckbox onCheckboxList is: " + onCheckboxList
+  );
   const currentAttributesToDisplay =
     calculateCurrentAttributesToDisplay(question);
+  console.log(
+    "deleteMe calculateShouldBeCheckbox currentAttributesToDisplay are: " +
+      currentAttributesToDisplay.toString()
+  );
+  console.log(currentAttributesToDisplay);
 
   const onTheDisplayListForThisQuestionType: boolean =
     currentAttributesToDisplay.includes(questionKey);
 
+  console.log(
+    "deleteMe calculateShouldBeCheckbox onTheDisplayListForThisQuestionType is: " +
+      onTheDisplayListForThisQuestionType
+  );
+
   const shouldBeTypeDropdown: boolean =
     questionKey === "type" && onTheDisplayListForThisQuestionType;
+
+  console.log("deleteMe shouldBeTypeDropdown is: " + shouldBeTypeDropdown);
   return (
     !onTheNoDisplayList &&
     onCheckboxList &&
