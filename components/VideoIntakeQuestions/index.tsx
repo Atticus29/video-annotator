@@ -83,10 +83,12 @@ const VideoIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    // console.log("deleteMe video intake questions changed and is now:");
-    // console.log(
-    //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-    // );
+    console.log("deleteMe video intake questions changed and is now:");
+    console.log(
+      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
+    );
+    console.log("deleteMe and formFieldGroup.actualValues is now: ");
+    console.log(formFieldGroup.actualValues);
     if (
       mode === "create" &&
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -94,7 +96,7 @@ const VideoIntakeQuestions: React.FC<{
       !hasAQuestionBeenDeleted &&
       (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
     ) {
-      console.log("deleteMe should only get here during initialization");
+      // console.log("deleteMe should only get here during initialization");
       // setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
 
       // add their values to the formFieldGroup
@@ -103,8 +105,8 @@ const VideoIntakeQuestions: React.FC<{
           shamCollection.videoIntakeQuestions || []
         );
 
-      console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
-      console.log(transformedVideoIntakeQuestions);
+      // console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
+      // console.log(transformedVideoIntakeQuestions);
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -363,11 +365,11 @@ const VideoIntakeQuestions: React.FC<{
   };
 
   const intakeQuestionElements = useMemo(() => {
-    console.log(
-      "deleteMe videoIntakeQuestions updated. Using the following to re-render:"
-    );
-    console.log("deleteMe formFieldGroup is: ");
-    console.log(formFieldGroup);
+    // console.log(
+    //   "deleteMe videoIntakeQuestions updated. Using the following to re-render:"
+    // );
+    // console.log("deleteMe formFieldGroup is: ");
+    // console.log(formFieldGroup);
     // console.log(formFieldGroup.actualValues);
     // console.log("deleteMe and the transformed value of the same is: ");
     // console.log(
@@ -379,10 +381,10 @@ const VideoIntakeQuestions: React.FC<{
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
       (intakeQuestion, intakeQuestionIdx) => {
-        console.log(
-          "deleteMe intakeQuestion in VideoIntakeQuestions component display loop is: "
-        );
-        console.log(intakeQuestion);
+        // console.log(
+        //   "deleteMe intakeQuestion in VideoIntakeQuestions component display loop is: "
+        // );
+        // console.log(intakeQuestion);
         const intakeQuesionsInvalid: {} =
           // collection?.videoQuestionsFormFieldGroup?.isInvalids || {}; // @TODO this might be the problem
           formFieldGroup.isInvalids || {}; // @TODO this might be the problem

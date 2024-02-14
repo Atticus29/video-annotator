@@ -69,19 +69,19 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   collectionUrl,
   formFieldGroup,
 }) => {
-  console.log(
-    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
-      intakeQuestionKey
-  );
-  console.log(
-    "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
-      intakeQuestionEl
-  );
-  console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
-  console.log(wholeQuestion);
-  console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
-  console.log("deleteMe formFieldGroup.actualValues is: ");
-  console.log(formFieldGroup.actualValues);
+  // console.log(
+  //   "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionKey is: " +
+  //     intakeQuestionKey
+  // );
+  // console.log(
+  //   "deleteMe f1 SingleVideoIntakeQuestionV2 entered and intakeQuestionEl is: " +
+  //     intakeQuestionEl
+  // );
+  // console.log("deleteMe wholeQuestion in SingleVideoIntakeQuestionV2 is: ");
+  // console.log(wholeQuestion);
+  // console.log("deleteMe f1 intakeQuestionIdx is: " + intakeQuestionIdx);
+  // console.log("deleteMe formFieldGroup.actualValues is: ");
+  // console.log(formFieldGroup.actualValues);
   const [isInvalid, setIsinvalid] = useState<boolean>(false);
   useEffect(() => {
     // console.log("deleteMe formFieldGroup is now: ");
@@ -135,17 +135,17 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     useState<string>(intakeQuestionEl);
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
-    console.log("deleteMe handleQuestionChange entered");
+    // console.log("deleteMe handleQuestionChange entered");
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
     setCurrentQuestionType(currentVal);
-    console.log("deleteMe currentVal is: ");
-    console.log(currentVal);
+    // console.log("deleteMe currentVal is: ");
+    // console.log(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       localQuestion,
       currentVal
     );
-    setLocalQuestion(transformedQuestion);
+    // setLocalQuestion(transformedQuestion);
 
     const transformedQuestionAsActualValueObj =
       transformIntakeQuestionsIntoActualValueObj(
@@ -153,18 +153,18 @@ const SingleVideoIntakeQuestionV2: React.FC<{
         intakeQuestionIdx
       );
 
-    console.log(
-      "deleteMe transformedQuestionAsActualValueObj in handleQuestionChange is: "
-    );
-    console.log(transformedQuestionAsActualValueObj);
-    console.log("deleteMe formFieldGroup is: ");
-    console.log(formFieldGroup);
+    // console.log(
+    //   "deleteMe transformedQuestionAsActualValueObj in handleQuestionChange is: "
+    // );
+    // console.log(transformedQuestionAsActualValueObj);
+    // console.log("deleteMe formFieldGroup is: ");
+    // console.log(formFieldGroup);
     const replacementActualValues: {} = replaceFormFieldValuesWith(
       formFieldGroup,
       transformedQuestionAsActualValueObj
     );
-    console.log("deleteMe replacementActualValues are: ");
-    console.log(replacementActualValues);
+    // console.log("deleteMe replacementActualValues are: ");
+    // console.log(replacementActualValues);
 
     const formFieldGroupSetter = formFieldGroup.setValues;
     if (formFieldGroupSetter) {
@@ -193,7 +193,7 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   // const [currentValue, setCurrentValue] = useState<any>(intakeQuestionEl);
 
   const handleChange: (event: any) => void = (event: any) => {
-    console.log("deleteMe handleChange in SingleVideoIntakeQuestionV2 called");
+    // console.log("deleteMe handleChange in SingleVideoIntakeQuestionV2 called");
     // if the change is in the TYPE field, this should
     // 1) automatically modify other parts of the SingleFormField
     // 2) change what options are visible/available in the video intake questions section

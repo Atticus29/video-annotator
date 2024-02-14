@@ -157,8 +157,8 @@ const SingleVideoIntakeQuestion: React.FC<{
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
     setCurrentValue(currentVal);
 
-    console.log("deleteMe currentVal is: ");
-    console.log(currentVal);
+    // console.log("deleteMe currentVal is: ");
+    // console.log(currentVal);
 
     updateCollection(
       collection,

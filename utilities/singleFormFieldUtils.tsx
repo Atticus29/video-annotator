@@ -32,8 +32,8 @@ export function replaceFormFieldValuesWith(
     const currentIndex: number = Number(
       get(Object.keys(replacementValues), [0])?.split("--")[1]
     );
-    console.log("deleteMe currentIndex is: ");
-    console.log(currentIndex);
+    // console.log("deleteMe currentIndex is: ");
+    // console.log(currentIndex);
     const originalWithOldRemoved: {} = reduce(
       originalFormFieldGroup.actualValues,
       (memo, value, valueKey) => {
@@ -45,8 +45,8 @@ export function replaceFormFieldValuesWith(
       },
       {}
     );
-    console.log("deleteMe originalWithOldRemoved is: ");
-    console.log(originalWithOldRemoved);
+    // console.log("deleteMe originalWithOldRemoved is: ");
+    // console.log(originalWithOldRemoved);
     return { ...originalWithOldRemoved, ...replacementValues };
   } else {
     return { ...originalFormFieldGroup.actualValues, ...replacementValues };
@@ -62,15 +62,15 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  console.log("deleteMe updateIntakeQuestionFormField is called");
-  console.log("deleteMe currentVal is: ");
-  console.log(currentVal);
-  console.log("deleteMe intakeQuestionKey singleFormUtils is: ");
-  console.log(intakeQuestionKey);
-  console.log("deleteMe intakeQuestionIdx is: ");
-  console.log(intakeQuestionIdx);
-  console.log("deleteMe formFieldGroup is: ");
-  console.log(formFieldGroup);
+  // console.log("deleteMe updateIntakeQuestionFormField is called");
+  // console.log("deleteMe currentVal is: ");
+  // console.log(currentVal);
+  // console.log("deleteMe intakeQuestionKey singleFormUtils is: ");
+  // console.log(intakeQuestionKey);
+  // console.log("deleteMe intakeQuestionIdx is: ");
+  // console.log(intakeQuestionIdx);
+  // console.log("deleteMe formFieldGroup is: ");
+  // console.log(formFieldGroup);
   // console.log("deleteMe e1 wholeQuestionLabel is: ");
   // console.log("e1: " + wholeQuestionLabel);
   // setFormFieldUpdater((prevState: number) => {
@@ -84,7 +84,7 @@ export function updateIntakeQuestionFormField(
     ["setIsInvalids"]
   );
   if (invalidSetter) {
-    console.log("deleteMe e1 intakeQuestionKey is: " + intakeQuestionKey);
+    // console.log("deleteMe e1 intakeQuestionKey is: " + intakeQuestionKey);
     const isInvalid: boolean =
       intakeQuestionKey === "isRequired" ||
       intakeQuestionKey === "usersCanAddCustomOptions"

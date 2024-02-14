@@ -71,8 +71,8 @@ const OptionSet: React.FC<{
   );
   const [invalidOptions, setInvalidOptions] = useState<{}>({});
   const optionFormFieldGroup: FormFieldGroup = useMemo(() => {
-    console.log("deleteMe autocompleteValues updated and is now:");
-    console.log(autocompleteValues);
+    // console.log("deleteMe autocompleteValues updated and is now:");
+    // console.log(autocompleteValues);
     return {
       title: "OptionFormFieldGroup",
       setValues: setAutocompleteValues,
@@ -111,15 +111,15 @@ const OptionSet: React.FC<{
   // }, []);
 
   useEffect(() => {
-    console.log("deleteMe optionFormFieldGroup updates");
+    // console.log("deleteMe optionFormFieldGroup updates");
     const autoCompleteVals: string[] = filter(
       optionFormFieldGroup?.actualValues || {},
       (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
         return optionFormFieldGroupKey.startsWith(stringForAutocompleteOptions); // @TODO prevent the collection owner from making labels that start with Option??? Or at least test for wonky behavior
       }
     );
-    console.log("deleteMe e1 whichIntakeQuestions is: ");
-    console.log(whichIntakeQuestions);
+    // console.log("deleteMe e1 whichIntakeQuestions is: ");
+    // console.log(whichIntakeQuestions);
     updateIntakeQuestionFormField(
       autoCompleteVals,
       // question?.label,
@@ -141,8 +141,8 @@ const OptionSet: React.FC<{
         optionFormFieldGroup,
         intl
       );
-    console.log("deleteMe canEndUserAddCustomOptionsVals is: ");
-    console.log(canEndUserAddCustomOptionsVals);
+    // console.log("deleteMe canEndUserAddCustomOptionsVals is: ");
+    // console.log(canEndUserAddCustomOptionsVals);
 
     updateIntakeQuestionFormField(
       canEndUserAddCustomOptionsVals,
@@ -227,10 +227,10 @@ const OptionSet: React.FC<{
   const handleCheckChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("deleteMe handleCheckChange called:");
-    console.log(checkBoxLabel);
-    console.log("deleteMe and value is: ");
-    console.log(event?.target?.checked);
+    // console.log("deleteMe handleCheckChange called:");
+    // console.log(checkBoxLabel);
+    // console.log("deleteMe and value is: ");
+    // console.log(event?.target?.checked);
     // const newActualValue: {} = {
     //   [checkBoxLabel]: event.target.checked,
     // };
@@ -240,11 +240,11 @@ const OptionSet: React.FC<{
     // console.log("deleteMe checkBoxLabel is: ");
     // console.log(checkBoxLabel);
 
-    console.log("deleteMe questionIdx is: " + questionIdx);
-    console.log("deleteMe question is: ");
-    console.log(question);
-    console.log("deleteMe whichIntakeQuestions is:");
-    console.log(whichIntakeQuestions);
+    // console.log("deleteMe questionIdx is: " + questionIdx);
+    // console.log("deleteMe question is: ");
+    // console.log(question);
+    // console.log("deleteMe whichIntakeQuestions is:");
+    // console.log(whichIntakeQuestions);
 
     updateIntakeQuestionFormField(
       event.target.checked,
@@ -262,8 +262,8 @@ const OptionSet: React.FC<{
     //     return { ...prevState, ...newActualValue };
     //   });
     // }
-    console.log("deleteMe optionFormFieldGroup after updating is: ");
-    console.log(optionFormFieldGroup.actualValues);
+    // console.log("deleteMe optionFormFieldGroup after updating is: ");
+    // console.log(optionFormFieldGroup.actualValues);
     // if (!canAddOptions === true) {
     //   // console.log(
     //   //   "deleteMe updateUsersCanAddCustomOptionsChecked here (canAddOptions is true)"
