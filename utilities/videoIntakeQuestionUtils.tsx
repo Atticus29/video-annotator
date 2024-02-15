@@ -260,8 +260,8 @@ export function calculateShouldBeCheckbox(
   question: SingleFormField,
   questionKey: string
 ) {
-  // console.log("deleteMe calculateShouldBeCheckbox entered and question is: ");
-  // console.log(question);
+  console.log("deleteMe calculateShouldBeCheckbox entered and question is: ");
+  console.log(question);
 
   // console.log(
   //   "deleteMe calculateShouldBeCheckbox and questionKey in calculateShouldBeCheckbox is: " +

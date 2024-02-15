@@ -103,10 +103,9 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
-  const shouldBeTypeDropdown: boolean = calculateShouldBeTypeDropdown(
-    localQuestion,
-    intakeQuestionKey
-  );
+  const shouldBeTypeDropdown: boolean = useMemo(() => {
+    return calculateShouldBeTypeDropdown(localQuestion, intakeQuestionKey);
+  }, [intakeQuestionKey, localQuestion]);
 
   const shouldBeTextField: boolean = useMemo(() => {
     return calculateShouldBeTextField(localQuestion, intakeQuestionKey);
@@ -114,12 +113,18 @@ const SingleVideoIntakeQuestionV2: React.FC<{
 
   const shouldBeCheckbox: boolean = useMemo(() => {
     const reconstitutedTotipotentQuestion: SingleFormField =
-      transformActualValueObjIntoIntakeQuestions(
-        formFieldGroup.actualValues
-      )[0];
+      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
+        intakeQuestionIdx
+      ];
     const deleteMeShouldBeCheckBox: boolean = calculateShouldBeCheckbox(
       reconstitutedTotipotentQuestion,
       intakeQuestionKey
+    );
+    console.log(
+      "deleteMe deleteMeShouldBeCheckBox for questionKey: " +
+        intakeQuestionKey +
+        " is: " +
+        deleteMeShouldBeCheckBox
     );
     return calculateShouldBeCheckbox(
       reconstitutedTotipotentQuestion,

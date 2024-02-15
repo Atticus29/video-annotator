@@ -85,9 +85,9 @@ const VideoIntakeQuestions: React.FC<{
 
   useEffect(() => {
     console.log("deleteMe video intake questions changed and is now:");
-    console.log(
-      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-    );
+    // console.log(
+    //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
+    // );
     console.log("deleteMe and formFieldGroup.actualValues is now: ");
     console.log(formFieldGroup.actualValues);
     if (
@@ -524,15 +524,23 @@ const VideoIntakeQuestions: React.FC<{
               updateMethod={postCollectionVideoIntakeQuestions}
             /> */}
             <SaveOrUpdateButtonWithValidation
-              saveOrUpdateMethod={postCollectionVideoIntakeQuestions}
-              queryData={{
-                isPending,
-                isError: isPostCollectionVideoIntakeQuestionsError,
-                error: postCollectionVideoIntakeQuestionError,
+              usePostOrUseUpdate={usePostCollectionVideoIntakeQuestions}
+              mutationData={{
+                collectionUrl: collectionUrl,
+                collectionVideoIntakeQuestions:
+                  transformActualValueObjIntoIntakeQuestions(
+                    formFieldGroup.actualValues
+                  ) || [],
               }}
-              transformationMethod={() => {
-                console.log("deleteMe test");
-              }}
+              // saveOrUpdateMethod={postCollectionVideoIntakeQuestions}
+              // queryData={{
+              //   isPending,
+              //   isError: isPostCollectionVideoIntakeQuestionsError,
+              //   error: postCollectionVideoIntakeQuestionError,
+              // }}
+              // transformationMethod={() => {
+              //   console.log("deleteMe test");
+              // }}
               actualValues={formFieldGroup.actualValues}
               invalidValues={formFieldGroup.isInvalids}
             />

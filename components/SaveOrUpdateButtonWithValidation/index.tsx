@@ -9,15 +9,18 @@ import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/c
 import { transformActualValueObjIntoIntakeQuestions } from "../../utilities/videoIntakeQuestionUtils";
 
 const SaveOrUpdateButtonWithValidation: React.FC<{
-  saveOrUpdateMethod: any;
-  queryData: { isPending: boolean; isError: boolean; error: any };
-  transformationMethod: (actualValues: {}) => any;
+  //   saveOrUpdateMethod: any;
+  usePostOrUseUpdate: any;
+  mutationData: {};
+  //   queryData: { isPending: boolean; isError: boolean; error: any };
+  //   transformationMethod: (actualValues: {}) => any;
   actualValues: {};
   invalidValues: {};
 }> = ({
-  saveOrUpdateMethod,
-  queryData,
-  transformationMethod,
+  usePostOrUseUpdate,
+  mutationData,
+  //   queryData,
+  //   transformationMethod,
   actualValues,
   invalidValues,
 }) => {
@@ -27,6 +30,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
     useState<boolean>(false);
   const [saveOrUpdateUnsuccessful, setSaveOrUpdateUnsuccessful] =
     useState<boolean>(false);
+  const { mutate, isPending, isError, error } = usePostOrUseUpdate();
 
   useEffect(() => {
     if (invalidValues) {
@@ -49,6 +53,15 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
 
   const handleFormSubmission: () => void = async () => {
     console.log("deleteMe handleFormSubmission called");
+    mutate(mutationData, {
+      onSuccess: (responseData: any) => {
+        console.log("Mutation successful a1", responseData);
+      },
+      onError: (error: any) => {
+        // Handle error
+        console.error("Mutation error", error);
+      },
+    });
   };
 
   const handleSnackbarClose = (
@@ -79,7 +92,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
           defaultMessage="Save and Preview"
         />
       </Button>
-      {queryData?.error && <CustomError errorMsg={queryData?.error} />}
+      {error && <CustomError errorMsg={error} />}
       <Snackbar
         open={saveOrUpdateSuccessful || saveOrUpdateUnsuccessful}
         onClose={handleSnackbarClose}
