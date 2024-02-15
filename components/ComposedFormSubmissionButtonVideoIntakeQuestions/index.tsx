@@ -141,7 +141,7 @@ const ComposedFormSubmissionButtonVideoIntakeQuestions: React.FC<{
         totalInvalidCount < 1 &&
           calculateAllRequiredIntakeQuestionsHaveValues(
             questionsOfConcern,
-            formFieldGroupOfConcern
+            formFieldGroupOfConcern.actualValues
           )
       );
     }

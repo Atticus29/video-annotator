@@ -23,6 +23,7 @@ import {
   transformActualValueObjIntoIntakeQuestions,
   transformIntakeQuestionsIntoActualValueObj,
 } from "../../utilities/videoIntakeQuestionUtils";
+import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -512,7 +513,7 @@ const VideoIntakeQuestions: React.FC<{
             </Grid>
           </Grid>
           <Grid item lg={12} sm={12}>
-            <ComposedFormSubmissionButtonVideoIntakeQuestions
+            {/* <ComposedFormSubmissionButtonVideoIntakeQuestions
               questionsOfConcern={transformActualValueObjIntoIntakeQuestions(
                 formFieldGroup.actualValues
               )}
@@ -521,6 +522,19 @@ const VideoIntakeQuestions: React.FC<{
               collectionPropToUpdate={"videos"}
               // onCloseDialog={onCloseDialog}
               updateMethod={postCollectionVideoIntakeQuestions}
+            /> */}
+            <SaveOrUpdateButtonWithValidation
+              saveOrUpdateMethod={postCollectionVideoIntakeQuestions}
+              queryData={{
+                isPending,
+                isError: isPostCollectionVideoIntakeQuestionsError,
+                error: postCollectionVideoIntakeQuestionError,
+              }}
+              transformationMethod={() => {
+                console.log("deleteMe test");
+              }}
+              actualValues={formFieldGroup.actualValues}
+              invalidValues={formFieldGroup.isInvalids}
             />
           </Grid>
         </InfoPanel>

@@ -23,7 +23,7 @@ export function calculateAllRequiredsHaveValues(
 
 export function calculateAllRequiredIntakeQuestionsHaveValues(
   questions: SingleFormField[],
-  formFieldGroup: FormFieldGroup
+  actualValues: {}
 ) {
   // console.log("deleteMe questions are: ");
   // console.log(questions);
@@ -59,8 +59,8 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
     ) || [];
   // console.log("deleteMe requiredQuestionLabels are: ");
   // console.log(requiredQuestionLabels);
-  const existingValues: string[] = formFieldGroup?.actualValues
-    ? Object.keys(formFieldGroup.actualValues)
+  const existingValues: string[] = actualValues
+    ? Object.keys(actualValues)
     : [];
   // console.log("deleteMe existingValues are: ");
   // console.log(existingValues);
