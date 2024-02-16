@@ -39,7 +39,7 @@ const collectionVideoIntakeQuestionsUpdate = async (
       if (result.modifiedCount < 1) {
         res.status(404).json({
           message:
-            "Video intake questions could not be updated on target collection.",
+            "Video intake questions not updated. It's possible that the request was identical to the existing data.",
         });
       } else {
         res.status(200).json({

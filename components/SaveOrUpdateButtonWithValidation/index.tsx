@@ -1,29 +1,37 @@
-import { Button, IconButton, Snackbar } from "@mui/material";
+import { Button, CircularProgress, IconButton, Snackbar } from "@mui/material";
 import CustomError from "../CustomError";
 import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from "react";
-import { UseMutateFunction } from "@tanstack/react-query";
+import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import CloseIcon from "@mui/icons-material/Close";
 import { reduce } from "lodash-es";
 import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
 import { transformActualValueObjIntoIntakeQuestions } from "../../utilities/videoIntakeQuestionUtils";
 
 const SaveOrUpdateButtonWithValidation: React.FC<{
-  //   saveOrUpdateMethod: any;
+  buttonTitle: string;
+  successMsg: string;
+  failMsg: string;
   usePostOrUseUpdate: any;
   mutationData: {};
-  //   queryData: { isPending: boolean; isError: boolean; error: any };
-  //   transformationMethod: (actualValues: {}) => any;
   actualValues: {};
   invalidValues: {};
+  setParentStateOnSuccess?: (input: boolean) => void; // maybe to trigger dialogs in the parent component
+  setParentStateOnFailure?: (input: boolean) => void; // maybe to trigger dialogs in the parent component
+  queryKeysToInvalidate?: string[][];
 }> = ({
+  buttonTitle,
+  successMsg,
+  failMsg,
   usePostOrUseUpdate,
   mutationData,
-  //   queryData,
-  //   transformationMethod,
   actualValues,
   invalidValues,
+  setParentStateOnSuccess,
+  setParentStateOnFailure,
+  queryKeysToInvalidate,
 }) => {
+  const queryClient = useQueryClient();
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(true);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [saveOrUpdateSuccessful, setSaveOrUpdateSuccessful] =
@@ -31,6 +39,8 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   const [saveOrUpdateUnsuccessful, setSaveOrUpdateUnsuccessful] =
     useState<boolean>(false);
   const { mutate, isPending, isError, error } = usePostOrUseUpdate();
+  console.log("deleteMe error is: ");
+  console.log(error);
 
   useEffect(() => {
     if (invalidValues) {
@@ -52,14 +62,25 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   }, [actualValues, invalidValues]);
 
   const handleFormSubmission: () => void = async () => {
-    console.log("deleteMe handleFormSubmission called");
     mutate(mutationData, {
       onSuccess: (responseData: any) => {
-        console.log("Mutation successful a1", responseData);
+        if (queryKeysToInvalidate) {
+          queryKeysToInvalidate.forEach((currentQueryKey) => {
+            queryClient.invalidateQueries({
+              queryKey: currentQueryKey,
+            });
+          });
+        }
+        console.log("Mutation successful: ", responseData);
+        setSaveOrUpdateSuccessful(true);
+        setSnackbarMessage(successMsg);
+        if (setParentStateOnSuccess) setParentStateOnSuccess(true);
       },
       onError: (error: any) => {
-        // Handle error
         console.error("Mutation error", error);
+        setSaveOrUpdateUnsuccessful(true);
+        setSnackbarMessage(failMsg);
+        if (setParentStateOnFailure) setParentStateOnFailure(true);
       },
     });
   };
@@ -71,11 +92,15 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
     if (reason === "clickaway") {
       // in case you want this behavior to be different eventually
       setSnackbarMessage("");
+      setSaveOrUpdateSuccessful(false);
+      setSaveOrUpdateUnsuccessful(false);
       return;
     }
 
     // the "finally" of it all
     setSnackbarMessage("");
+    setSaveOrUpdateSuccessful(false);
+    setSaveOrUpdateUnsuccessful(false);
   };
 
   return (
@@ -87,12 +112,10 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
         disabled={!allRequiredValid}
         onClick={handleFormSubmission}
       >
-        <FormattedMessage
-          id="SAVE_AND_PREVIEW"
-          defaultMessage="Save and Preview"
-        />
+        {isPending && <CircularProgress color="inherit" />}
+        {!isPending && buttonTitle}
       </Button>
-      {error && <CustomError errorMsg={error} />}
+      {error && <CustomError errorMsg={error.message} />}
       <Snackbar
         open={saveOrUpdateSuccessful || saveOrUpdateUnsuccessful}
         onClose={handleSnackbarClose}

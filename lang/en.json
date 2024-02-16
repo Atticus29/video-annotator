@@ -100,7 +100,7 @@
   "AUTOCOMPLETEOPTIONS": "Autocomplete options",
   "VIDEO_INTAKE_QUESTIONS": "Video Intake Questions",
   "VIDEO_INTAKE_PREVIEW": "Video Intake Preview",
-  "INTAKE_PREVIEW_DETAILS": "Contributors to your collection will see the following questions when they submit new videos to the collection: ",
+  "INTAKE_PREVIEW_DETAILS": "Contributors to your collection will see the following questions when they submit new videos to the collection (as well as a submit button): ",
   "FIELD_CANNOT_BE_BLANK": "Field cannot be blank",
   "INPUT_INVALID": "Field cannot be blank or invalid",
   "THIS_FIELD_IS_REQUIRED": "This field is required",
@@ -150,7 +150,8 @@
   "CREATE": "Create",
   "UPDATE": "Update",
   "YOUR_COLLECTION_IS_INCOMPLETE": "Your collection isn't ready for primetime yet. You must create {individualIntakeQuestions}, {videoIntakeQuestions}, and {eventIntakeQuestions} in order for users of your collection to be able to create and annotate videos in your collection first.",
-  "VIDEO_INTAKE_QUESTION_POST_FAILED": "Failed to post video intake questions",
+  "VIDEO_INTAKE_QUESTION_POST_FAILED": "Failed to update video intake questions",
   "PREVIEW": "Preview",
-  "SAVE_AND_PREVIEW": "Save and Preview"
+  "SAVE_AND_PREVIEW": "Save and Preview",
+  "UPDATE_AND_PREVIEW": "Update and Preview"
 }

@@ -3,7 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { map, get, reduce, filter } from "lodash-es";
 
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
-import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
@@ -24,19 +31,21 @@ import {
   transformIntakeQuestionsIntoActualValueObj,
 } from "../../utilities/videoIntakeQuestionUtils";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
+import VideoIntakePreview from "../VideoIntakePreview";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
   mode?: string;
 }> = ({ collectionUrl, mode = "edit" }) => {
-  // const {
-  //   isLoading,
-  //   isError,
-  //   errorMsg,
-  //   data: collection,
-  // } = useGetCollection(collectionUrl);
+  const {
+    isLoading,
+    isError,
+    errorMsg,
+    data: collection,
+  } = useGetCollection(collectionUrl);
 
   const intl: IntlShape = useIntl();
+  const [showPreview, setShowPreview] = useState<boolean>(false);
 
   const {
     mutate: postCollectionVideoIntakeQuestions,
@@ -84,18 +93,18 @@ const VideoIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    console.log("deleteMe video intake questions changed and is now:");
+    // console.log("deleteMe video intake questions changed and is now:");
     // console.log(
     //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
     // );
-    console.log("deleteMe and formFieldGroup.actualValues is now: ");
-    console.log(formFieldGroup.actualValues);
+    // console.log("deleteMe and formFieldGroup.actualValues is now: ");
+    // console.log(formFieldGroup.actualValues);
     if (
       mode === "create" &&
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1 &&
       !hasAQuestionBeenDeleted &&
-      (shamCollection?.videoIntakeQuestions || []).length > 0 // @TODO this smells like an antipattern
+      (shamCollection?.videoIntakeQuestions || []).length > 0
     ) {
       // console.log("deleteMe should only get here during initialization");
       // setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
@@ -458,6 +467,25 @@ const VideoIntakeQuestions: React.FC<{
     // localCollection?.metadata?.urlPath,
   ]);
 
+  const videoIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
+    console.log(
+      "deleteMe collection updated in videoIntakeQuestionsAlreadyExist and is: "
+    );
+    console.log(collection);
+    return collection?.videoIntakeQuestions?.length > 0;
+  }, [collection]);
+
+  const buttonTitle: string = intl.formatMessage({
+    id: videoIntakeQuestionsAlreadyExist
+      ? "UPDATE_AND_PREVIEW"
+      : "SAVE_AND_PREVIEW",
+    defaultMessage: videoIntakeQuestionsAlreadyExist
+      ? "Update and Preview"
+      : "Save and Preview",
+  });
+  console.log("deleteMe got here and videoIntakeQuestionsAlreadyExist is: ");
+  console.log(videoIntakeQuestionsAlreadyExist);
+
   return (
     <>
       {isPending && <CircularProgress color="inherit" />}
@@ -523,27 +551,47 @@ const VideoIntakeQuestions: React.FC<{
               // onCloseDialog={onCloseDialog}
               updateMethod={postCollectionVideoIntakeQuestions}
             /> */}
-            <SaveOrUpdateButtonWithValidation
-              usePostOrUseUpdate={usePostCollectionVideoIntakeQuestions}
-              mutationData={{
-                collectionUrl: collectionUrl,
-                collectionVideoIntakeQuestions:
-                  transformActualValueObjIntoIntakeQuestions(
-                    formFieldGroup.actualValues
-                  ) || [],
+            {!isLoading && !isError && collection && (
+              <SaveOrUpdateButtonWithValidation
+                buttonTitle={buttonTitle}
+                successMsg={intl.formatMessage({
+                  id: "COLLECTION_UPDATED_SUCCESSFULLY",
+                  defaultMessage: "Collection was updated successfully.",
+                })}
+                failMsg={intl.formatMessage({
+                  id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
+                  defaultMessage: "Failed to update video intake questions",
+                })}
+                usePostOrUseUpdate={
+                  videoIntakeQuestionsAlreadyExist
+                    ? useUpdateCollectionVideoIntakeQuestions
+                    : usePostCollectionVideoIntakeQuestions
+                }
+                mutationData={{
+                  collectionUrl: collectionUrl,
+                  collectionVideoIntakeQuestions:
+                    transformActualValueObjIntoIntakeQuestions(
+                      formFieldGroup.actualValues
+                    ) || [],
+                }}
+                actualValues={formFieldGroup.actualValues}
+                invalidValues={formFieldGroup.isInvalids}
+                setParentStateOnSuccess={setShowPreview}
+                queryKeysToInvalidate={[
+                  ["singleCollection", collection.urlPath],
+                ]}
+              />
+            )}
+            <Dialog
+              open={showPreview}
+              onClose={() => {
+                setShowPreview(false);
               }}
-              // saveOrUpdateMethod={postCollectionVideoIntakeQuestions}
-              // queryData={{
-              //   isPending,
-              //   isError: isPostCollectionVideoIntakeQuestionsError,
-              //   error: postCollectionVideoIntakeQuestionError,
-              // }}
-              // transformationMethod={() => {
-              //   console.log("deleteMe test");
-              // }}
-              actualValues={formFieldGroup.actualValues}
-              invalidValues={formFieldGroup.isInvalids}
-            />
+            >
+              <DialogContent>
+                <VideoIntakePreview collectionUrl={collectionUrl} />
+              </DialogContent>
+            </Dialog>
           </Grid>
         </InfoPanel>
       )}

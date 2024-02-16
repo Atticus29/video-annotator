@@ -31,7 +31,9 @@ export default function useUpdateCollectionVideoIntakeQuestions() {
           );
         }
       } catch (error: any) {
-        throw new Error("Error updating collection metadata: " + error.message);
+        throw new Error(
+          "Error updating collection video intake questions. It's possible that the request and the existing data are identical."
+        );
       }
     },
   });

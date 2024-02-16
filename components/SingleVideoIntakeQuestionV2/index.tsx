@@ -116,21 +116,21 @@ const SingleVideoIntakeQuestionV2: React.FC<{
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
         intakeQuestionIdx
       ];
-    const deleteMeShouldBeCheckBox: boolean = calculateShouldBeCheckbox(
-      reconstitutedTotipotentQuestion,
-      intakeQuestionKey
-    );
-    console.log(
-      "deleteMe deleteMeShouldBeCheckBox for questionKey: " +
-        intakeQuestionKey +
-        " is: " +
-        deleteMeShouldBeCheckBox
-    );
+    // const deleteMeShouldBeCheckBox: boolean = calculateShouldBeCheckbox(
+    //   reconstitutedTotipotentQuestion,
+    //   intakeQuestionKey
+    // );
+    // console.log(
+    //   "deleteMe deleteMeShouldBeCheckBox for questionKey: " +
+    //     intakeQuestionKey +
+    //     " is: " +
+    //     deleteMeShouldBeCheckBox
+    // );
     return calculateShouldBeCheckbox(
       reconstitutedTotipotentQuestion,
       intakeQuestionKey
     );
-  }, [formFieldGroup.actualValues, intakeQuestionKey]);
+  }, [formFieldGroup.actualValues, intakeQuestionIdx, intakeQuestionKey]);
 
   // console.log("deleteMe shouldBeCheckbox is: ");
   // console.log(shouldBeCheckbox);
