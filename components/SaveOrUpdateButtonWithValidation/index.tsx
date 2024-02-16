@@ -39,8 +39,8 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   const [saveOrUpdateUnsuccessful, setSaveOrUpdateUnsuccessful] =
     useState<boolean>(false);
   const { mutate, isPending, isError, error } = usePostOrUseUpdate();
-  console.log("deleteMe error is: ");
-  console.log(error);
+  // console.log("deleteMe error is: ");
+  // console.log(error);
 
   useEffect(() => {
     if (invalidValues) {

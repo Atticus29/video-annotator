@@ -62,13 +62,13 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  // console.log("deleteMe updateIntakeQuestionFormField is called");
-  // console.log("deleteMe currentVal is: ");
-  // console.log(currentVal);
-  // console.log("deleteMe intakeQuestionKey singleFormUtils is: ");
-  // console.log(intakeQuestionKey);
-  // console.log("deleteMe intakeQuestionIdx is: ");
-  // console.log(intakeQuestionIdx);
+  console.log("deleteMe updateIntakeQuestionFormField is called");
+  console.log("deleteMe currentVal is: ");
+  console.log(currentVal);
+  console.log("deleteMe intakeQuestionKey singleFormUtils is: ");
+  console.log(intakeQuestionKey);
+  console.log("deleteMe intakeQuestionIdx is: ");
+  console.log(intakeQuestionIdx);
   // console.log("deleteMe formFieldGroup is: ");
   // console.log(formFieldGroup);
   // console.log("deleteMe e1 wholeQuestionLabel is: ");

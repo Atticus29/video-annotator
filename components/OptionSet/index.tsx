@@ -175,7 +175,7 @@ const OptionSet: React.FC<{
     mappableOpts,
     (_option: string, optionIdx: number) => {
       const currentFormFieldForOption = {
-        label: "Option " + (optionIdx + 1),
+        label: stringForAutocompleteOptions + " " + (optionIdx + 1),
         type: "Text",
         language: question?.language,
         isRequired: true,
@@ -199,17 +199,17 @@ const OptionSet: React.FC<{
           formFieldGroup={optionFormFieldGroup}
           areAutocompleteOptionsDeletable={true}
           setAutocompleteValues={setAutocompleteValues}
-          stringForAutocompleteOptions={"Option"}
+          stringForAutocompleteOptions={stringForAutocompleteOptions}
         />
       </>
     );
   });
 
   const handleAddAnotherOption: () => void = () => {
-    // console.log(
-    //   "deleteMe autocompleteValues going into handleAddAnotherOption are: "
-    // );
-    // console.log(autocompleteValues);
+    console.log(
+      "deleteMe autocompleteValues going into handleAddAnotherOption are: "
+    );
+    console.log(autocompleteValues);
     // options.push("");
     // console.log(
     //   "deleteMe before calling updateOptionFormFieldGroupWithOptionList options is now: "
@@ -227,7 +227,7 @@ const OptionSet: React.FC<{
   const handleCheckChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("deleteMe handleCheckChange called:");
+    console.log("deleteMe handleCheckChange called:");
     // console.log(checkBoxLabel);
     // console.log("deleteMe and value is: ");
     // console.log(event?.target?.checked);
@@ -253,7 +253,8 @@ const OptionSet: React.FC<{
         ? "usersCanAddCustomOptions"
         : checkBoxLabel, // @TODO change this
       questionIdx,
-      optionFormFieldGroup
+      // optionFormFieldGroup
+      formFieldGroup
     );
 
     // // setCanAddOptions((prev) => !prev);
@@ -335,7 +336,7 @@ const OptionSet: React.FC<{
             control={
               <Checkbox
                 checked={get(
-                  optionFormFieldGroup,
+                  formFieldGroup,
                   [
                     "actualValues",
                     (checkBoxLabel ===

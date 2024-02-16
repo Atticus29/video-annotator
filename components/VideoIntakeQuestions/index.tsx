@@ -21,10 +21,8 @@ import {
   shamCollectionShell,
 } from "../../dummy_data/dummyCollection";
 import useGetCollection from "../../hooks/useGetCollection";
-import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollectionVideoIntakeQuestions";
 import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
-import ComposedFormSubmissionButtonVideoIntakeQuestions from "../ComposedFormSubmissionButtonVideoIntakeQuestions";
 import SingleVideoIntakeQuestionV2 from "../SingleVideoIntakeQuestionV2";
 import {
   transformActualValueObjIntoIntakeQuestions,
@@ -93,12 +91,12 @@ const VideoIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    // console.log("deleteMe video intake questions changed and is now:");
+    console.log("deleteMe video intake questions changed and is now:");
     // console.log(
     //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
     // );
-    // console.log("deleteMe and formFieldGroup.actualValues is now: ");
-    // console.log(formFieldGroup.actualValues);
+    console.log("deleteMe and formFieldGroup.actualValues is now: ");
+    console.log(formFieldGroup.actualValues);
     if (
       mode === "create" &&
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -483,8 +481,8 @@ const VideoIntakeQuestions: React.FC<{
       ? "Update and Preview"
       : "Save and Preview",
   });
-  console.log("deleteMe got here and videoIntakeQuestionsAlreadyExist is: ");
-  console.log(videoIntakeQuestionsAlreadyExist);
+  // console.log("deleteMe got here and videoIntakeQuestionsAlreadyExist is: ");
+  // console.log(videoIntakeQuestionsAlreadyExist);
 
   return (
     <>
