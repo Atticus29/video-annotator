@@ -263,9 +263,11 @@ export function updateOptionFormFieldGroupWithOptionList(
     get(setAutocompleteValues, ["actualValues"]),
     stringForAutocompleteOptions
   );
-  if (setAutocompleteValues) {
-    setAutocompleteValues(cleanedActualVals);
-  }
+  console.log("deleteMe cleanedActualVals are: ");
+  console.log(cleanedActualVals);
+  // if (setAutocompleteValues) {
+  //   setAutocompleteValues(cleanedActualVals);
+  // }
   let newActualValues: {} = {};
   forEach(options, (option, optionIdx) => {
     // console.log("deleteMe current option is: ");
@@ -295,27 +297,32 @@ export function updateOptionFormFieldGroupWithOptionList(
 }
 
 export function calculateWhetherCustomOptionValuesArePermitted(
-  optionFormFieldGroup: FormFieldGroup,
+  formFieldGroup: FormFieldGroup,
+  questionIdx: number,
   intl: IntlShape
 ) {
-  const canEndUserAddCustomOptionsValsArr: string[] = filter(
-    optionFormFieldGroup?.actualValues || {},
-    (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
-      const targetString: string = intl.formatMessage({
-        id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
-        defaultMessage:
-          "Can video annotators in this collection add their own options?",
-      });
-      return optionFormFieldGroupKey.startsWith(targetString);
-    }
-  );
-  const canEndUserAddCustomOptionsVals = get(
-    canEndUserAddCustomOptionsValsArr,
-    [0],
-    true
-  );
+  const targetValue: boolean =
+    formFieldGroup.actualValues["usersCanAddCustomOptions--" + questionIdx];
+  return targetValue;
 
-  return canEndUserAddCustomOptionsVals;
+  // const canEndUserAddCustomOptionsValsArr: string[] = filter(
+  //   formFieldGroup?.actualValues || {},
+  //   (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
+  //     const targetString: string = intl.formatMessage({
+  //       id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
+  //       defaultMessage:
+  //         "Can video annotators in this collection add their own options?",
+  //     });
+  //     return optionFormFieldGroupKey.startsWith(targetString);
+  //   }
+  // );
+  // const canEndUserAddCustomOptionsVals = get(
+  //   canEndUserAddCustomOptionsValsArr,
+  //   [0],
+  //   true
+  // );
+
+  // return canEndUserAddCustomOptionsVals;
 }
 
 export function updateIsRequiredUnchecked(

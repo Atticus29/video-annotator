@@ -138,11 +138,12 @@ const OptionSet: React.FC<{
 
     const canEndUserAddCustomOptionsVals =
       calculateWhetherCustomOptionValuesArePermitted(
-        optionFormFieldGroup,
+        formFieldGroup,
+        questionIdx,
         intl
       );
-    // console.log("deleteMe canEndUserAddCustomOptionsVals is: ");
-    // console.log(canEndUserAddCustomOptionsVals);
+    console.log("deleteMe canEndUserAddCustomOptionsVals is: ");
+    console.log(canEndUserAddCustomOptionsVals);
 
     updateIntakeQuestionFormField(
       canEndUserAddCustomOptionsVals,
@@ -198,7 +199,7 @@ const OptionSet: React.FC<{
           question={optionFormField}
           formFieldGroup={optionFormFieldGroup}
           areAutocompleteOptionsDeletable={true}
-          setAutocompleteValues={setAutocompleteValues}
+          setAutocompleteValues={optionFormFieldGroup.setValues}
           stringForAutocompleteOptions={stringForAutocompleteOptions}
         />
       </>
@@ -219,7 +220,7 @@ const OptionSet: React.FC<{
     updateOptionFormFieldGroupWithOptionList(
       [...currentOptions, ""],
       // optionFormFieldGroup,
-      setAutocompleteValues,
+      optionFormFieldGroup.setValues,
       stringForAutocompleteOptions
     );
   };
