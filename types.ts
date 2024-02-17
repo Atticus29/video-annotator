@@ -56,10 +56,10 @@ export interface FormFieldGroup {
 }
 
 export interface SingleFormField {
-  label: string;
   type: string;
-  language: string;
+  label: string;
   isRequired?: boolean;
+  language: string;
   testId?: string;
   doNotDisplay?: string[];
   invalidInputMessage?: string;

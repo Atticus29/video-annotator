@@ -37,9 +37,8 @@ const collectionVideoIntakeQuestionsUpdate = async (
         }
       );
       if (result.modifiedCount < 1) {
-        res.status(404).json({
-          message:
-            "Video intake questions not updated. It's possible that the request was identical to the existing data.",
+        res.status(200).json({
+          message: "Nothing changed.",
         });
       } else {
         res.status(200).json({

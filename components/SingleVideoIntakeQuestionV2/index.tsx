@@ -147,7 +147,9 @@ const SingleVideoIntakeQuestionV2: React.FC<{
     // console.log(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
-      localQuestion,
+      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
+        intakeQuestionIdx
+      ],
       currentVal
     );
     // setLocalQuestion(transformedQuestion);

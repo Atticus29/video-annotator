@@ -23,10 +23,10 @@ export const defaultDoNotDisplays: string[] = [
 ];
 
 export const individualsQuestion: SingleFormField = {
-  label: "Individuals",
   type: "text",
-  language: "English",
+  label: "Individuals",
   isRequired: true,
+  language: "English",
   testId: "individuals",
   doNotDisplay: defaultDoNotDisplays,
   invalidInputMessage: "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL",
@@ -35,10 +35,10 @@ export const individualsQuestion: SingleFormField = {
 };
 
 const firstQuestion: SingleFormField = {
-  label: "URL",
   type: "URL",
-  language: "English",
+  label: "URL",
   isRequired: true,
+  language: "English",
   testId: "url",
   doNotDisplay: defaultDoNotDisplays,
   invalidInputMessage: "MUST_BE_VALID_URL",
@@ -48,38 +48,38 @@ const firstQuestion: SingleFormField = {
 };
 
 const secondQuestion: SingleFormField = {
-  label: "Tournament Name",
   type: "Autocomplete",
-  language: "English",
+  label: "Tournament Name",
   isRequired: false,
+  autocompleteOptions: [...tournamentNames],
+  usersCanAddCustomOptions: true,
+  language: "English",
   testId: "tournament",
   doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
   shouldBeCheckboxes: ["isRequired"],
   validatorMethods: [isNonEmptyString],
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
-  autocompleteOptions: [...tournamentNames],
-  usersCanAddCustomOptions: true,
 };
 
 const locationName: SingleFormField = {
-  label: "Location Name",
   type: "Autocomplete",
-  language: "English",
+  label: "Location Name",
   isRequired: false,
+  autocompleteOptions: [...locationNames],
+  usersCanAddCustomOptions: true,
+  language: "English",
   testId: "locationNames",
   doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
   shouldBeCheckboxes: ["isRequired"],
   validatorMethods: [isNonEmptyString],
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
-  autocompleteOptions: [...locationNames],
-  usersCanAddCustomOptions: true,
 };
 
 const thirdQuestion: SingleFormField = {
-  label: "Gi?",
   type: "Checkbox",
-  language: "English",
+  label: "Gi?",
   isRequired: false,
+  language: "English",
   testId: "isGi",
   doNotDisplay: defaultDoNotDisplays,
   validatorMethods: [],
@@ -87,8 +87,8 @@ const thirdQuestion: SingleFormField = {
 };
 
 const fourthQuestion: SingleFormField = {
-  label: "Date of match",
   type: "Date",
+  label: "Date of match",
   language: "English",
   testId: "matchDate",
   doNotDisplay: defaultDoNotDisplays,
@@ -248,15 +248,9 @@ const allRanks: SingleFormField = {
 };
 
 const natureOfTheMatch: SingleFormField = {
-  label: "Nature of the Match",
   type: "Autocomplete",
-  language: "English",
+  label: "Nature of the Match",
   isRequired: true,
-  testId: "natureOfTheMatch",
-  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
-  shouldBeCheckboxes: ["isRequired"],
-  validatorMethods: [isNonEmptyString],
-  invalidInputMessage: "INPUT_INVALID",
   autocompleteOptions: [
     "Competition",
     "Practice/Training",
@@ -264,6 +258,12 @@ const natureOfTheMatch: SingleFormField = {
     "Instructional",
   ],
   usersCanAddCustomOptions: true,
+  language: "English",
+  testId: "natureOfTheMatch",
+  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
+  shouldBeCheckboxes: ["isRequired"],
+  validatorMethods: [isNonEmptyString],
+  invalidInputMessage: "INPUT_INVALID",
 };
 
 const weightClassIndividualQuestion: SingleFormField = {

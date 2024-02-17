@@ -169,10 +169,10 @@ const VideoIntakeQuestions: React.FC<{
       key:
         transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
           .length + 1,
-      label: "Change Me",
       type: "Text",
-      language: "English",
+      label: "Change Me",
       isRequired: false,
+      language: "English",
       doNotDisplay: defaultDoNotDisplays,
       invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
       validatorMethods: [],
@@ -412,7 +412,7 @@ const VideoIntakeQuestions: React.FC<{
             return (
               <>
                 <>
-                  {intakeQuestionKey === "label" && (
+                  {intakeQuestionKey === "type" && (
                     <>
                       <Typography style={{ marginBottom: 10 }}>
                         {"Question " + (intakeQuestionIdx + 1) + ". "}

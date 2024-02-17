@@ -12,6 +12,7 @@ export function transformQuestion(
   if (question?.type !== newQuestionType) {
     const baseQuestion: {} = {
       label: question.label,
+      isRequired: question.isRequired || false,
       language: question.language,
       testId: question.testId,
       shouldBeCheckboxes: ["isRequired"],
@@ -20,63 +21,63 @@ export function transformQuestion(
       switch (newQuestionType) {
         case "URL":
           return {
-            ...baseQuestion,
             type: "URL",
-            isRequired: question.isRequired || false,
+            ...baseQuestion,
+            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "MUST_BE_VALID_URL",
             validatorMethods: [isValidUrl],
           };
         case "Email":
           return {
-            ...baseQuestion,
             type: "Email",
-            isRequired: question.isRequired || false,
+            ...baseQuestion,
+            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "MUST_BE_VALID_EMAIL",
             validatorMethods: [isValidEmail],
           };
         case "Autocomplete":
           return {
-            ...baseQuestion,
             type: "Autocomplete",
-            isRequired: question.isRequired || false,
+            ...baseQuestion,
+            // isRequired: question.isRequired || false,
+            autocompleteOptions: ["Option 1 - change me"],
+            usersCanAddCustomOptions: true,
             doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
             invalidInputMessage: "INPUT_INVALID",
             validatorMethods: [],
-            autocompleteOptions: ["Option 1 - change me"],
-            usersCanAddCustomOptions: true,
           };
         case "Checkbox":
           return {
-            ...baseQuestion,
             type: "Checkbox",
+            ...baseQuestion,
             isRequired: true,
             doNotDisplay: defaultDoNotDisplays,
             validatorMethods: [],
           };
         case "Date":
           return {
-            ...baseQuestion,
             type: "Date",
-            isRequired: question.isRequired || false,
+            ...baseQuestion,
+            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             validatorMethods: [],
           };
         case "Number":
           return {
-            ...baseQuestion,
             type: "Number",
-            isRequired: question.isRequired || false,
+            ...baseQuestion,
+            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "INPUT_INVALID",
             validatorMethods: [],
           };
         case "Text":
           return {
-            ...baseQuestion,
             type: "Text",
-            isRequired: question.isRequired || false,
+            ...baseQuestion,
+            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
             validatorMethods: [isNonEmptyString],
