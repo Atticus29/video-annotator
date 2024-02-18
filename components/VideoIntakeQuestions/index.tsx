@@ -470,7 +470,7 @@ const VideoIntakeQuestions: React.FC<{
       "deleteMe collection updated in videoIntakeQuestionsAlreadyExist and is: "
     );
     console.log(collection);
-    return collection?.videoIntakeQuestions?.length > 0;
+    return Boolean(collection?.videoIntakeQuestions);
   }, [collection]);
 
   const buttonTitle: string = intl.formatMessage({
