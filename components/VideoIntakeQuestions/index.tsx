@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { map, get, reduce, filter } from "lodash-es";
+import { map, reduce } from "lodash-es";
 
-import { Collection, SingleFormField, FormFieldGroup } from "../../types";
+import { SingleFormField, FormFieldGroup } from "../../types";
 import {
   Backdrop,
   Button,
@@ -15,11 +15,9 @@ import {
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
-import SingleVideoIntakeQuestion from "../SingleVideoIntakeQuestion";
 import {
   defaultDoNotDisplays,
   shamCollection,
-  shamCollectionShell,
 } from "../../dummy_data/dummyCollection";
 import useGetCollection from "../../hooks/useGetCollection";
 import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollectionVideoIntakeQuestions";
@@ -53,20 +51,6 @@ const VideoIntakeQuestions: React.FC<{
     error: postCollectionVideoIntakeQuestionError,
   } = usePostCollectionVideoIntakeQuestions();
 
-  const {
-    mutate: updateCollectionVideoIntakeQuestions,
-    isPending: isUpdateCollectionVideoIntakeQuestionsPending,
-    isError: isUpdateCollectionVideoIntakeQuestionsError,
-    error: updateCollectionVideoIntakeQuestionError,
-  } = useUpdateCollectionVideoIntakeQuestions();
-
-  // const [localCollection, setLocalCollection] =
-  //   useState<Collection>(shamCollectionShell);
-
-  // useEffect(() => {
-  //   setLocalCollection(collection);
-  // }, [collection]);
-
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
   );
@@ -84,38 +68,22 @@ const VideoIntakeQuestions: React.FC<{
     };
   }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
 
-  // const [videoIntakeQuestions, setVideoIntakeQuestions] = useState<
-  //   SingleFormField[]
-  // >([]);
-
   const [hasAQuestionBeenDeleted, setHasAQuestionBeenDeleted] =
     useState<boolean>(false);
 
   useEffect(() => {
-    console.log("deleteMe video intake questions changed and is now:");
-    // console.log(
-    //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-    // );
-    console.log("deleteMe and formFieldGroup.actualValues is now: ");
-    console.log(formFieldGroup.actualValues);
     if (
-      mode === "create" &&
+      mode === "create" && // @TODO maybe this is moot now
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1 &&
       !hasAQuestionBeenDeleted &&
       (shamCollection?.videoIntakeQuestions || []).length > 0
     ) {
-      // console.log("deleteMe should only get here during initialization");
-      // setVideoIntakeQuestions(shamCollection.videoIntakeQuestions || []);
-
       // add their values to the formFieldGroup
       const transformedVideoIntakeQuestions =
         transformIntakeQuestionsIntoActualValueObj(
           shamCollection.videoIntakeQuestions || []
         );
-
-      // console.log("deleteMe transformedVideoIntakeQuestions a3 are: ");
-      // console.log(transformedVideoIntakeQuestions);
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -128,31 +96,7 @@ const VideoIntakeQuestions: React.FC<{
           };
         });
       }
-      // currently, don't have to add invalids to the formFieldGroup here, because the dummy data is all valid
-      // end add their values to the formFieldGroup
-      //////////////////////////////////////////////
-
-      // postCollectionVideoIntakeQuestions( // @TODO figure out where to do this (not here)
-      //   {
-      //     collectionUrl: collectionUrl,
-      //     collectionVideoIntakeQuestions:
-      //       shamCollection.videoIntakeQuestions || [],
-      //   },
-      //   {
-      //     onSuccess: (responseData) => {
-      //       console.log("Mutation successful a1", responseData);
-      //     },
-      //     onError: (error) => {
-      //       // Handle error
-      //       console.error("Mutation error", error);
-      //     },
-      //   }
-      // );
     }
-    // else {
-    //   // @TODO decide
-    //   // return collection?.videoIntakeQuestions;
-    // }
   }, [
     collectionUrl,
     formFieldGroup.actualValues,
@@ -181,70 +125,13 @@ const VideoIntakeQuestions: React.FC<{
     };
   }, [formFieldGroup.actualValues]);
 
-  // useEffect(() => {
-  //   console.log("deleteMe formFieldGroup changed and is now: ");
-  //   console.log(formFieldGroup);
-  //   // const deleteMe: any = transformActualValueObjIntoIntakeQuestions(
-  //   //   formFieldGroup.actualValues
-  //   // );
-  //   // console.log("deleteMe deleteMe is: ");
-  //   // console.log(deleteMe);
-  //   //update setVideoIntakeQuestions with new values
-  //   if (Object.keys(formFieldGroup.actualValues).length > 0) {
-  //     setVideoIntakeQuestions(
-  //       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-  //     );
-  //   }
-  // }, [formFieldGroup]);
-
-  // useEffect(() => {
-  //   postCollectionVideoIntakeQuestions(
-  //     {
-  //       collectionUrl: collectionUrl,
-  //       collectionVideoIntakeQuestions: videoIntakeQuestions,
-  //     },
-  //     {
-  //       onSuccess: (responseData) => {
-  //         console.log("deleteMe success got here and responseData is: ");
-  //         console.log(responseData);
-  //       },
-  //       onError: (error) => {
-  //         console.log("deleteMe error is: ");
-  //         console.log(error);
-  //       },
-  //     }
-  //   );
-  //   // setCollection((prevState: any) => { // @TODO deleteMe after the above proves successful
-  //   //   return { ...prevState, videoIntakeQuestions: videoIntakeQuestions };
-  //   // });
-  //   // }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   // }, [videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
-  // }, [collectionUrl, postCollectionVideoIntakeQuestions, videoIntakeQuestions]); // I was having trouble with async updating the collection's intakeQuestion array. It seems to have been resolved if I use a local state and then call off to setCollection every time that local thing updates... but then it creates a different problem. See https://github.com/Atticus29/video-annotator/issues/33
-
   const deleteIntakeQuestion: (questionIdx: number) => void = (questionIdx) => {
     setHasAQuestionBeenDeleted(true);
-    // console.log("deleteMe deleteIntakeQuestion questionIdx is: ");
-    // console.log(questionIdx);
-    // setVideoIntakeQuestions((prevState) => {
-    //   // console.log("deleteMe prevState is delete call is: ");
-    //   // console.log(prevState);
-    //   const newVideoIntakeQuestions: SingleFormField[] =
-    //     prevState?.filter((_entry, idx) => {
-    //       return idx !== questionIdx;
-    //     }) || [];
-    //   // console.log("deleteMe newVideoIntakeQuestions passing the filter are: ");
-    //   // console.log(newVideoIntakeQuestions);
-    //   return newVideoIntakeQuestions;
-    // });
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     // remove the question from the formFieldGroup actualValues as well as from isInvalids
     const actualValueSetter: any = formFieldGroup.setValues; // @TODO DRY this up by creating a removeFromFormGroup method that takes formFieldGroup, questionIdx, and setterString ("setValues" or "setInvalids") as arguments
     if (actualValueSetter) {
       actualValueSetter((prevState: any) => {
-        // console.log("deleteMe prevState for actualValues during delete is: ");
-        // console.log(prevState);
         const updatedState = reduce(
           prevState,
           (memo, stateItem, stateItemKey) => {
@@ -289,8 +176,6 @@ const VideoIntakeQuestions: React.FC<{
     const isInvalidSetter: any = formFieldGroup.setIsInvalids; // @TODO DRY this up by creating a removeFromFormGroup method that takes formFieldGroup, questionIdx, and setterString ("setValues" or "setInvalids") as arguments
     if (isInvalidSetter) {
       isInvalidSetter((prevState: any) => {
-        // console.log("deleteMe prevState for isInvalids during delete is: ");
-        // console.log(prevState);
         const updatedState = reduce(
           prevState,
           (memo, stateItem, stateItemKey) => {
@@ -332,7 +217,6 @@ const VideoIntakeQuestions: React.FC<{
       });
     }
     // End remove the question from the formFieldGroup actualValues as well as from isInvalids
-    ////////////////////////////////////////////////////////////////////////////////////////////////
   };
 
   const createNewIntakeQuestion: () => void = () => {
@@ -344,18 +228,6 @@ const VideoIntakeQuestions: React.FC<{
           ),
           newQuestion,
         ]);
-      // console.log(
-      //   "deleteMe transformedNewIntakeQuestionForFormFieldGroup is: "
-      // );
-      // console.log(transformedNewIntakeQuestionForFormFieldGroup);
-
-      // setVideoIntakeQuestions((prevState: any) => {
-      //   if (prevState) {
-      //     return [...prevState, newQuestion];
-      //   } else {
-      //     return [newQuestion];
-      //   }
-      // });
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -374,42 +246,15 @@ const VideoIntakeQuestions: React.FC<{
   };
 
   const intakeQuestionElements = useMemo(() => {
-    // console.log(
-    //   "deleteMe videoIntakeQuestions updated. Using the following to re-render:"
-    // );
-    // console.log("deleteMe formFieldGroup is: ");
-    // console.log(formFieldGroup);
-    // console.log(formFieldGroup.actualValues);
-    // console.log("deleteMe and the transformed value of the same is: ");
-    // console.log(
-    //   transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
-    // );
-
     return map(
-      // collection?.videoIntakeQuestions || [],
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
       (intakeQuestion, intakeQuestionIdx) => {
-        // console.log(
-        //   "deleteMe intakeQuestion in VideoIntakeQuestions component display loop is: "
-        // );
-        // console.log(intakeQuestion);
-        const intakeQuesionsInvalid: {} =
-          // collection?.videoQuestionsFormFieldGroup?.isInvalids || {}; // @TODO this might be the problem
-          formFieldGroup.isInvalids || {}; // @TODO this might be the problem
+        const intakeQuesionsInvalid: {} = formFieldGroup.isInvalids || {};
         return map(
           intakeQuestion,
           (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
-            // console.log("deleteMe intakeQuestionEl VideoIntakeQuestion is: ");
-            // console.log(intakeQuestionEl);
-            // console.log(
-            //   "deleteMe intakeQuestionKey VideoIntakeQuestion is: " +
-            //     intakeQuestionKey
-            // );
-            // console.log("deleteMe wholeQuestion is: ");
-            // console.log(wholeQuestion);
             const isDelible: boolean = !wholeQuestion?.isACoreQuestion;
-            // console.log("deleteMe isDelible is: " + isDelible);
             return (
               <>
                 <>
@@ -447,8 +292,6 @@ const VideoIntakeQuestions: React.FC<{
                     intakeQuestionsInvalid={intakeQuesionsInvalid}
                     intakeQuestionIdx={intakeQuestionIdx}
                     collectionUrl={collectionUrl}
-                    // collection={localCollection}
-                    // setCollection={setLocalCollection}
                     formFieldGroup={formFieldGroup}
                   />
                 )}
@@ -459,18 +302,9 @@ const VideoIntakeQuestions: React.FC<{
       }
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    // collection?.videoQuestionsFormFieldGroup?.isInvalids,
-    // deleteIntakeQuestion,
-    formFieldGroup.actualValues,
-    // localCollection?.metadata?.urlPath,
-  ]);
+  }, [collectionUrl, formFieldGroup]);
 
   const videoIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
-    console.log(
-      "deleteMe collection updated in videoIntakeQuestionsAlreadyExist and is: "
-    );
-    console.log(collection);
     return Boolean(collection?.videoIntakeQuestions);
   }, [collection]);
 
@@ -482,8 +316,6 @@ const VideoIntakeQuestions: React.FC<{
       ? "Update and Preview"
       : "Save and Preview",
   });
-  // console.log("deleteMe got here and videoIntakeQuestionsAlreadyExist is: ");
-  // console.log(videoIntakeQuestionsAlreadyExist);
 
   return (
     <>
@@ -548,16 +380,6 @@ const VideoIntakeQuestions: React.FC<{
               </Grid>
             </Grid>
             <Grid item lg={12} sm={12}>
-              {/* <ComposedFormSubmissionButtonVideoIntakeQuestions
-              questionsOfConcern={transformActualValueObjIntoIntakeQuestions(
-                formFieldGroup.actualValues
-              )}
-              formFieldGroupOfConcern={formFieldGroup}
-              collectionPath={collectionUrl}
-              collectionPropToUpdate={"videos"}
-              // onCloseDialog={onCloseDialog}
-              updateMethod={postCollectionVideoIntakeQuestions}
-            /> */}
               {!isLoading && !isError && (
                 <SaveOrUpdateButtonWithValidation
                   disabled={!Boolean(collection)}

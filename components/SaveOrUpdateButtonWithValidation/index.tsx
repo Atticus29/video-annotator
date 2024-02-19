@@ -3,14 +3,12 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
-  DialogTitle,
   IconButton,
   Snackbar,
 } from "@mui/material";
 import CustomError from "../CustomError";
-import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from "react";
-import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import CloseIcon from "@mui/icons-material/Close";
 import { reduce } from "lodash-es";
 import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
@@ -24,8 +22,8 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   mutationData: {};
   actualValues: {};
   invalidValues: {};
-  setParentStateOnSuccess?: (input: boolean) => void; // maybe to trigger dialogs in the parent component
-  setParentStateOnFailure?: (input: boolean) => void; // maybe to trigger dialogs in the parent component
+  setParentStateOnSuccess?: (input: boolean) => void; // to trigger dialogs in the parent component
+  setParentStateOnFailure?: (input: boolean) => void; // to trigger dialogs in the parent component
   queryKeysToInvalidate?: string[][];
   disabled?: boolean;
 }> = ({
@@ -49,8 +47,6 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   const [saveOrUpdateUnsuccessful, setSaveOrUpdateUnsuccessful] =
     useState<boolean>(false);
   const { mutate, isPending, isError, error } = usePostOrUseUpdate();
-  // console.log("deleteMe error is: ");
-  // console.log(error);
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
   const handleCloseErrorDialog: () => void = () => {
     setShowErrorDialog(false);
@@ -119,7 +115,6 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
       return;
     }
 
-    // the "finally" of it all
     setSnackbarMessage("");
     setSaveOrUpdateSuccessful(false);
     setSaveOrUpdateUnsuccessful(false);
