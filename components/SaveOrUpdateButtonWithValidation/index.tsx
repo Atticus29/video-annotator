@@ -3,6 +3,7 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
+  DialogTitle,
   IconButton,
   Snackbar,
 } from "@mui/material";
@@ -137,8 +138,8 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
         {!isPending && buttonTitle}
       </Button>
       <Dialog open={showErrorDialog} onClose={handleCloseErrorDialog}>
-        <DialogContent>
-          <CustomError errorMsg={error?.message} />
+        <DialogContent style={{ marginTop: 0 }}>
+          <CustomError ignorePaper={true} errorMsg={error?.message} />
         </DialogContent>
       </Dialog>
       <Snackbar
