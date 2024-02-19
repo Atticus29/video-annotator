@@ -250,7 +250,6 @@ const VideoIntakeQuestions: React.FC<{
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
       (intakeQuestion, intakeQuestionIdx) => {
-        const intakeQuesionsInvalid: {} = formFieldGroup.isInvalids || {};
         return map(
           intakeQuestion,
           (intakeQuestionEl, intakeQuestionKey, wholeQuestion) => {
@@ -288,10 +287,7 @@ const VideoIntakeQuestions: React.FC<{
                     key={intakeQuestionKey}
                     intakeQuestionEl={intakeQuestionEl}
                     intakeQuestionKey={intakeQuestionKey}
-                    wholeQuestion={wholeQuestion}
-                    intakeQuestionsInvalid={intakeQuesionsInvalid}
                     intakeQuestionIdx={intakeQuestionIdx}
-                    collectionUrl={collectionUrl}
                     formFieldGroup={formFieldGroup}
                   />
                 )}
@@ -302,7 +298,7 @@ const VideoIntakeQuestions: React.FC<{
       }
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collectionUrl, formFieldGroup]);
+  }, [formFieldGroup]);
 
   const videoIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
     return Boolean(collection?.videoIntakeQuestions);

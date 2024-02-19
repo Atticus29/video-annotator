@@ -28,46 +28,39 @@ import {
   transformIntakeQuestionsIntoActualValueObj,
   transformQuestion,
 } from "../../utilities/videoIntakeQuestionUtils";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const SingleVideoIntakeQuestionV2: React.FC<{
   intakeQuestionEl: any;
   intakeQuestionKey: string;
-  wholeQuestion: SingleFormField;
-  // intakeQuestionsInvalid: {};
   intakeQuestionIdx: number;
-  // collectionUrl: string;
   formFieldGroup: FormFieldGroup;
 }> = ({
   intakeQuestionEl,
   intakeQuestionKey,
-  wholeQuestion,
-  // intakeQuestionsInvalid,
   intakeQuestionIdx,
-  // collectionUrl,
   formFieldGroup,
 }) => {
-  // const [isInvalid, setIsinvalid] = useState<boolean>(false);
-  useEffect(() => {
-    const currentIsInvalid: boolean =
-      formFieldGroup?.isInvalids[intakeQuestionKey] || false;
-
-    // setIsinvalid(currentIsInvalid);
-  }, [formFieldGroup, intakeQuestionKey]);
-
-  const [localQuestion, setLocalQuestion] =
-    useState<SingleFormField>(wholeQuestion);
-
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
   const shouldBeTypeDropdown: boolean = useMemo(() => {
-    return calculateShouldBeTypeDropdown(localQuestion, intakeQuestionKey);
-  }, [intakeQuestionKey, localQuestion]);
+    return calculateShouldBeTypeDropdown(
+      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
+        intakeQuestionIdx
+      ],
+      intakeQuestionKey
+    );
+  }, [formFieldGroup.actualValues, intakeQuestionIdx, intakeQuestionKey]);
 
   const shouldBeTextField: boolean = useMemo(() => {
-    return calculateShouldBeTextField(localQuestion, intakeQuestionKey);
-  }, [localQuestion, intakeQuestionKey]);
+    return calculateShouldBeTextField(
+      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
+        intakeQuestionIdx
+      ],
+      intakeQuestionKey
+    );
+  }, [formFieldGroup.actualValues, intakeQuestionIdx, intakeQuestionKey]);
 
   const shouldBeCheckbox: boolean = useMemo(() => {
     const reconstitutedTotipotentQuestion: SingleFormField =
@@ -156,7 +149,11 @@ const SingleVideoIntakeQuestionV2: React.FC<{
         {shouldBeOptionField && (
           <OptionSet
             key={intakeQuestionIdx}
-            question={localQuestion}
+            question={
+              transformActualValueObjIntoIntakeQuestions(
+                formFieldGroup.actualValues
+              )[intakeQuestionIdx]
+            }
             questionIdx={intakeQuestionIdx}
             formFieldGroup={formFieldGroup}
             targetFormFieldIdx={intakeQuestionIdx}
