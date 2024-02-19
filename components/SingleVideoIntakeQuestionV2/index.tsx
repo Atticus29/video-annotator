@@ -156,8 +156,6 @@ const SingleVideoIntakeQuestionV2: React.FC<{
             }
             questionIdx={intakeQuestionIdx}
             formFieldGroup={formFieldGroup}
-            targetFormFieldIdx={intakeQuestionIdx}
-            whichIntakeQuestions={"videoIntakeQuestions"}
             stringForAutocompleteOptions="Option"
           />
         )}
