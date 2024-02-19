@@ -4,6 +4,7 @@ import { map, get, reduce, filter } from "lodash-es";
 
 import { Collection, SingleFormField, FormFieldGroup } from "../../types";
 import {
+  Backdrop,
   Button,
   CircularProgress,
   Dialog,
@@ -486,8 +487,13 @@ const VideoIntakeQuestions: React.FC<{
 
   return (
     <>
-      {isPending && <CircularProgress color="inherit" />}
-      {/* {!isLoading && isError && (
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading || isPending}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {!isLoading && !isPending && isError && (
         <CustomError
           errorMsg={
             errorMsg ||
@@ -497,7 +503,7 @@ const VideoIntakeQuestions: React.FC<{
             })
           }
         />
-      )} */}
+      )}
       {!isPending && isPostCollectionVideoIntakeQuestionsError && (
         <CustomError
           errorMsg={
@@ -509,37 +515,40 @@ const VideoIntakeQuestions: React.FC<{
           }
         />
       )}
-      {!isPending && !isPostCollectionVideoIntakeQuestionsError && (
-        <InfoPanel
-          titleId="VIDEO_INTAKE_QUESTIONS"
-          titleDefault="Video Intake Questions"
-          textOverrides={{ textAlign: "center" }}
-        >
-          <Grid container>
-            {transformActualValueObjIntoIntakeQuestions(
-              formFieldGroup.actualValues
-            ) && (
+      {!isLoading &&
+        !isError &&
+        !isPending &&
+        !isPostCollectionVideoIntakeQuestionsError && (
+          <InfoPanel
+            titleId="VIDEO_INTAKE_QUESTIONS"
+            titleDefault="Video Intake Questions"
+            textOverrides={{ textAlign: "center" }}
+          >
+            <Grid container>
+              {transformActualValueObjIntoIntakeQuestions(
+                formFieldGroup.actualValues
+              ) && (
+                <Grid item lg={12} sm={12}>
+                  {intakeQuestionElements}
+                </Grid>
+              )}
               <Grid item lg={12} sm={12}>
-                {intakeQuestionElements}
+                <Button
+                  style={{ marginBottom: 10 }}
+                  data-testid={"collection-details-submit-button"}
+                  variant="contained"
+                  onClick={createNewIntakeQuestion}
+                >
+                  <FormattedMessage
+                    id="ADD_ANOTHER_QUESTION"
+                    defaultMessage="Add another question"
+                  />
+                </Button>
+                {error && <CustomError errorMsg={error} />}
               </Grid>
-            )}
-            <Grid item lg={12} sm={12}>
-              <Button
-                style={{ marginBottom: 10 }}
-                data-testid={"collection-details-submit-button"}
-                variant="contained"
-                onClick={createNewIntakeQuestion}
-              >
-                <FormattedMessage
-                  id="ADD_ANOTHER_QUESTION"
-                  defaultMessage="Add another question"
-                />
-              </Button>
-              {error && <CustomError errorMsg={error} />}
             </Grid>
-          </Grid>
-          <Grid item lg={12} sm={12}>
-            {/* <ComposedFormSubmissionButtonVideoIntakeQuestions
+            <Grid item lg={12} sm={12}>
+              {/* <ComposedFormSubmissionButtonVideoIntakeQuestions
               questionsOfConcern={transformActualValueObjIntoIntakeQuestions(
                 formFieldGroup.actualValues
               )}
@@ -549,50 +558,51 @@ const VideoIntakeQuestions: React.FC<{
               // onCloseDialog={onCloseDialog}
               updateMethod={postCollectionVideoIntakeQuestions}
             /> */}
-            {!isLoading && !isError && collection && (
-              <SaveOrUpdateButtonWithValidation
-                buttonTitle={buttonTitle}
-                successMsg={intl.formatMessage({
-                  id: "COLLECTION_UPDATED_SUCCESSFULLY",
-                  defaultMessage: "Collection was updated successfully.",
-                })}
-                failMsg={intl.formatMessage({
-                  id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
-                  defaultMessage: "Failed to update video intake questions",
-                })}
-                usePostOrUseUpdate={
-                  videoIntakeQuestionsAlreadyExist
-                    ? useUpdateCollectionVideoIntakeQuestions
-                    : usePostCollectionVideoIntakeQuestions
-                }
-                mutationData={{
-                  collectionUrl: collectionUrl,
-                  collectionVideoIntakeQuestions:
-                    transformActualValueObjIntoIntakeQuestions(
-                      formFieldGroup.actualValues
-                    ) || [],
+              {!isLoading && !isError && (
+                <SaveOrUpdateButtonWithValidation
+                  disabled={!Boolean(collection)}
+                  buttonTitle={buttonTitle}
+                  successMsg={intl.formatMessage({
+                    id: "COLLECTION_UPDATED_SUCCESSFULLY",
+                    defaultMessage: "Collection was updated successfully.",
+                  })}
+                  failMsg={intl.formatMessage({
+                    id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
+                    defaultMessage: "Failed to update video intake questions",
+                  })}
+                  usePostOrUseUpdate={
+                    videoIntakeQuestionsAlreadyExist
+                      ? useUpdateCollectionVideoIntakeQuestions
+                      : usePostCollectionVideoIntakeQuestions
+                  }
+                  mutationData={{
+                    collectionUrl: collectionUrl,
+                    collectionVideoIntakeQuestions:
+                      transformActualValueObjIntoIntakeQuestions(
+                        formFieldGroup.actualValues
+                      ) || [],
+                  }}
+                  actualValues={formFieldGroup.actualValues}
+                  invalidValues={formFieldGroup.isInvalids}
+                  setParentStateOnSuccess={setShowPreview}
+                  queryKeysToInvalidate={[
+                    ["singleCollection", collection?.urlPath],
+                  ]}
+                />
+              )}
+              <Dialog
+                open={showPreview}
+                onClose={() => {
+                  setShowPreview(false);
                 }}
-                actualValues={formFieldGroup.actualValues}
-                invalidValues={formFieldGroup.isInvalids}
-                setParentStateOnSuccess={setShowPreview}
-                queryKeysToInvalidate={[
-                  ["singleCollection", collection.urlPath],
-                ]}
-              />
-            )}
-            <Dialog
-              open={showPreview}
-              onClose={() => {
-                setShowPreview(false);
-              }}
-            >
-              <DialogContent>
-                <VideoIntakePreview collectionUrl={collectionUrl} />
-              </DialogContent>
-            </Dialog>
-          </Grid>
-        </InfoPanel>
-      )}
+              >
+                <DialogContent>
+                  <VideoIntakePreview collectionUrl={collectionUrl} />
+                </DialogContent>
+              </Dialog>
+            </Grid>
+          </InfoPanel>
+        )}
     </>
   );
 };

@@ -1,4 +1,11 @@
-import { Button, CircularProgress, IconButton, Snackbar } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  IconButton,
+  Snackbar,
+} from "@mui/material";
 import CustomError from "../CustomError";
 import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from "react";
@@ -19,6 +26,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   setParentStateOnSuccess?: (input: boolean) => void; // maybe to trigger dialogs in the parent component
   setParentStateOnFailure?: (input: boolean) => void; // maybe to trigger dialogs in the parent component
   queryKeysToInvalidate?: string[][];
+  disabled?: boolean;
 }> = ({
   buttonTitle,
   successMsg,
@@ -30,6 +38,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   setParentStateOnSuccess,
   setParentStateOnFailure,
   queryKeysToInvalidate,
+  disabled = false,
 }) => {
   const queryClient = useQueryClient();
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(true);
@@ -41,6 +50,18 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   const { mutate, isPending, isError, error } = usePostOrUseUpdate();
   // console.log("deleteMe error is: ");
   // console.log(error);
+  const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
+  const handleCloseErrorDialog: () => void = () => {
+    setShowErrorDialog(false);
+  };
+
+  useEffect(() => {
+    if (isError) {
+      setShowErrorDialog(true);
+    } else {
+      setShowErrorDialog(false);
+    }
+  }, [isError]);
 
   useEffect(() => {
     if (invalidValues) {
@@ -109,13 +130,17 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
         style={{ marginBottom: 10 }}
         data-testid={"submit-button"}
         variant="contained"
-        disabled={!allRequiredValid}
+        disabled={!allRequiredValid || disabled}
         onClick={handleFormSubmission}
       >
         {isPending && <CircularProgress color="inherit" />}
         {!isPending && buttonTitle}
       </Button>
-      {error && <CustomError errorMsg={error.message} />}
+      <Dialog open={showErrorDialog} onClose={handleCloseErrorDialog}>
+        <DialogContent>
+          <CustomError errorMsg={error?.message} />
+        </DialogContent>
+      </Dialog>
       <Snackbar
         open={saveOrUpdateSuccessful || saveOrUpdateUnsuccessful}
         onClose={handleSnackbarClose}
