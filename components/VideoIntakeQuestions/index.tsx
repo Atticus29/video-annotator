@@ -22,13 +22,13 @@ import {
 import useGetCollection from "../../hooks/useGetCollection";
 import usePostCollectionVideoIntakeQuestions from "../../hooks/usePostCollectionVideoIntakeQuestions";
 import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollectionVideoIntakeQuestions";
-import SingleVideoIntakeQuestionV2 from "../SingleVideoIntakeQuestionV2";
 import {
   transformActualValueObjIntoIntakeQuestions,
   transformIntakeQuestionsIntoActualValueObj,
 } from "../../utilities/videoIntakeQuestionUtils";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import VideoIntakePreview from "../VideoIntakePreview";
+import SingleIntakeQuestion from "../SingleIntakeQuestion";
 
 const VideoIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -283,7 +283,7 @@ const VideoIntakeQuestions: React.FC<{
                 </>
                 {(isDelible ||
                   (intakeQuestionKey === "label" && !isDelible)) && (
-                  <SingleVideoIntakeQuestionV2
+                  <SingleIntakeQuestion
                     key={intakeQuestionKey}
                     intakeQuestionEl={intakeQuestionEl}
                     intakeQuestionKey={intakeQuestionKey}

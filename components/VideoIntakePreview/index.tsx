@@ -48,14 +48,12 @@ const VideoIntakePreview: React.FC<{
         bodyId="INTAKE_PREVIEW_DETAILS"
         bodyDefault="Contributors to your collection will see the following questions when they submit new videos to the collection (as well as a submit button): "
       />
-      {/* {isLoading && ( */}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      {/* )} */}
       {!isLoading && !isError && (
         <Grid container>
           {map(
@@ -65,9 +63,9 @@ const VideoIntakePreview: React.FC<{
                 return (
                   <Grid item lg={12} sm={12} key={intakeQuestionIdx}>
                     <SingleFormField
+                      key={intakeQuestionIdx}
                       question={intakeQuestion}
                       formFieldGroup={formFieldGroup}
-                      key={intakeQuestionIdx}
                     />
                   </Grid>
                 );

@@ -30,7 +30,7 @@ import {
 } from "../../utilities/videoIntakeQuestionUtils";
 import { useMemo, useState } from "react";
 
-const SingleVideoIntakeQuestionV2: React.FC<{
+const SingleIntakeQuestion: React.FC<{
   intakeQuestionEl: any;
   intakeQuestionKey: string;
   intakeQuestionIdx: number;
@@ -241,4 +241,4 @@ const SingleVideoIntakeQuestionV2: React.FC<{
   );
 };
 
-export default SingleVideoIntakeQuestionV2;
+export default SingleIntakeQuestion;

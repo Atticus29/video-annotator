@@ -18,7 +18,6 @@ const NewVideoIntakeQuestions: React.FC = () => {
       mode="create"
     ></VideoIntakeQuestions>
   );
-  return <p>hi</p>;
 };
 
 export default NewVideoIntakeQuestions;
