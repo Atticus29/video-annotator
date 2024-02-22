@@ -384,10 +384,13 @@ const VideoIntakeQuestions: React.FC<{
                     id: "COLLECTION_UPDATED_SUCCESSFULLY",
                     defaultMessage: "Collection was updated successfully.",
                   })}
-                  failMsg={intl.formatMessage({
-                    id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
-                    defaultMessage: "Failed to update video intake questions",
-                  })}
+                  failMsg={intl.formatMessage(
+                    {
+                      id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
+                      defaultMessage: "Failed to update video intake questions",
+                    },
+                    { type: "video" } // @TODO i8n
+                  )}
                   usePostOrUseUpdate={
                     videoIntakeQuestionsAlreadyExist
                       ? useUpdateCollectionVideoIntakeQuestions

@@ -2,7 +2,6 @@ import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../../../middleware/mongodb";
 import {
-  CollectionMetadata,
   Collection as CollectionData,
   SingleFormField,
 } from "../../../../../../types";

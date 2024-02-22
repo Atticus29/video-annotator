@@ -81,7 +81,7 @@ const IndividualIntakeQuestions: React.FC<{
       (shamCollection?.individualIntakeQuestions || []).length > 0
     ) {
       // add their values to the formFieldGroup
-      const transformedVideoIntakeQuestions =
+      const transformedIndividualIntakeQuestions =
         transformIntakeQuestionsIntoActualValueObj(
           shamCollection.individualIntakeQuestions || []
         );
@@ -93,7 +93,7 @@ const IndividualIntakeQuestions: React.FC<{
         formFieldGroupValueSetter((prevState: any) => {
           return {
             ...prevState,
-            ...transformedVideoIntakeQuestions,
+            ...transformedIndividualIntakeQuestions,
           };
         });
       }
@@ -104,6 +104,8 @@ const IndividualIntakeQuestions: React.FC<{
     formFieldGroup?.setValues,
     hasAQuestionBeenDeleted,
     mode,
+    postCollectionIndividualIntakeQuestions,
+    individualQuestionFormValues,
   ]);
 
   const [error, setError] = useState<string>("");
@@ -434,10 +436,13 @@ const IndividualIntakeQuestions: React.FC<{
                     id: "COLLECTION_UPDATED_SUCCESSFULLY",
                     defaultMessage: "Collection was updated successfully.",
                   })}
-                  failMsg={intl.formatMessage({
-                    id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
-                    defaultMessage: "Failed to update video intake questions",
-                  })}
+                  failMsg={intl.formatMessage(
+                    {
+                      id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
+                      defaultMessage: "Failed to update video intake questions",
+                    },
+                    { type: "individual" } // @TODO i8n
+                  )}
                   usePostOrUseUpdate={
                     individualIntakeQuestionsAlreadyExist
                       ? useUpdateCollectionIndividualIntakeQuestions
@@ -445,7 +450,7 @@ const IndividualIntakeQuestions: React.FC<{
                   }
                   mutationData={{
                     collectionUrl: collectionUrl,
-                    collectionVideoIntakeQuestions:
+                    collectionIndividualIntakeQuestions:
                       transformActualValueObjIntoIntakeQuestions(
                         formFieldGroup.actualValues
                       ) || [],

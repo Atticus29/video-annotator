@@ -14,16 +14,16 @@ const collectionVideoIntakeQuestionsPost = async (
   if (!allowedMethods.includes(req?.method || "") || req.method === "OPTIONS") {
     return res.status(405).json({ message: "Method not allowed." });
   }
-
-  const client: MongoClient = await clientPromise;
-  const db: Db = client.db("videoAnnotator1");
-  const coll: Collection<CollectionData> = db.collection("collections");
-  let {
-    videoIntakeQuestions,
-    urlPath,
-  }: { videoIntakeQuestions: SingleFormField[]; urlPath: string } = req.body;
   try {
+    const client: MongoClient = await clientPromise;
+    const db: Db = client.db("videoAnnotator1");
+    const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "POST") {
+      let {
+        videoIntakeQuestions,
+        urlPath,
+      }: { videoIntakeQuestions: SingleFormField[]; urlPath: string } =
+        req.body;
       const targetVideoIntakeQuestions = await coll.findOne(
         {
           "metadata.urlPath": urlPath,
@@ -53,9 +53,6 @@ const collectionVideoIntakeQuestionsPost = async (
     }
   } catch (error: any) {
     console.log(error);
-    console.log("deleteMe got here d1");
-    console.log(videoIntakeQuestions);
-    console.log(urlPath);
     res.status(500).json({ message: error.message });
   }
 };

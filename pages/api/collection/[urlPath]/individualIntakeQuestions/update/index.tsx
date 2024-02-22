@@ -1,6 +1,5 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { get } from "lodash-es";
 import clientPromise from "../../../../../../middleware/mongodb";
 import {
   SingleFormField,
@@ -32,7 +31,7 @@ const individualIntakeQuestionCollectionUpdate = async (
         { $set: { individualIntakeQuestions: individualIntakeQuestions } }
       );
       if (result.modifiedCount < 1) {
-        res.status(404).json({ message: "Collection could not be found" });
+        res.status(200).json({ message: "Nothing changed." });
       } else {
         res.status(200).json({
           message: "Individual intake questions updated successfully",

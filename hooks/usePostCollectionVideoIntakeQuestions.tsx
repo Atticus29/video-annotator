@@ -7,7 +7,6 @@ import {
 import axios from "axios";
 
 export default function usePostCollectionVideoIntakeQuestions() {
-  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (variables: {
       collectionUrl: string;
@@ -26,8 +25,6 @@ export default function usePostCollectionVideoIntakeQuestions() {
         if (response.status === 200) {
           return response?.data;
         } else {
-          console.log("deleteMe failing response is: ");
-          console.log(response);
           throw new Error(
             "Invalid status code when creating collection video intake questions"
           );

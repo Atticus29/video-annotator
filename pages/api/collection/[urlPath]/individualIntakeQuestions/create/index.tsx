@@ -5,7 +5,6 @@ import {
   SingleFormField,
   Collection as CollectionData,
 } from "../../../../../../types";
-import { ResetTv } from "@mui/icons-material";
 
 const individualIntakeQuestionCollectionCreate = async (
   req: NextApiRequest,
@@ -33,12 +32,14 @@ const individualIntakeQuestionCollectionCreate = async (
         {
           "metadata.urlPath": urlPath,
         },
-        { projection: { individualIntakeQuestions: 1 } }
+        { projection: { individualIntakeQuestions: 1, _id: 0 } }
       );
-      if (!Boolean(targetIndividualIntakeQuestions)) {
+      console.log("deleteMe targetIndividualIntakeQuestions is: ");
+      console.log(targetIndividualIntakeQuestions);
+      if (Object.keys(targetIndividualIntakeQuestions || {}).length === 0) {
         const creationResult = await coll.updateOne(
           {
-            "metadata.urlPath": urlPath.toLowerCase(),
+            "metadata.urlPath": urlPath,
           },
           { $set: { individualIntakeQuestions } }
         );
@@ -57,7 +58,6 @@ const individualIntakeQuestionCollectionCreate = async (
     }
   } catch (error: any) {
     console.log(error);
-    console.log("deleteMe got here c1");
     res.status(500).json({ message: error.message });
   }
 };
