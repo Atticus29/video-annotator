@@ -207,7 +207,8 @@ const CollectionView: React.FC = () => {
       collectionData?.individualIntakeQuestions == undefined ||
       collectionData?.individualIntakeQuestions?.length < 1 ||
       collectionData?.videoIntakeQuestions?.length < 1 ||
-      collectionData?.individualIntakeQuestions?.length < 1
+      collectionData?.eventIntakeQuestions == undefined ||
+      collectionData?.eventIntakeQuestions?.length < 1
     );
   }, [collectionData]);
   // console.log("deleteMe shouldShowCollectionIncompleteAlert is: ");
