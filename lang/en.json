@@ -154,5 +154,6 @@
   "SAVE_AND_PREVIEW": "Save and Preview",
   "UPDATE_AND_PREVIEW": "Update and Preview",
   "GENERIC_INTAKE_QUESTIONS": "{type} Intake Questions",
-  "GENERIC_INTAKE_PREVIEW": "{type} Intake Preview"
+  "GENERIC_INTAKE_PREVIEW": "{type} Intake Preview",
+  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only it's label can be modified. We recommend using something like, 'Name of {eventName}'."
 }

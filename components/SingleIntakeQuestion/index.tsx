@@ -29,17 +29,23 @@ import {
   transformQuestion,
 } from "../../utilities/intakeQuestionUtils";
 import { useMemo, useState } from "react";
+import InfoIcon from "../InfoIcon";
+import { GridRow } from "@mui/x-data-grid";
 
 const SingleIntakeQuestion: React.FC<{
   intakeQuestionEl: any;
   intakeQuestionKey: string;
   intakeQuestionIdx: number;
   formFieldGroup: FormFieldGroup;
+  isACoreQuestion?: boolean;
+  coreQuestionTranslationsValues?: {};
 }> = ({
   intakeQuestionEl,
   intakeQuestionKey,
   intakeQuestionIdx,
   formFieldGroup,
+  isACoreQuestion = false,
+  coreQuestionTranslationsValues,
 }) => {
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
@@ -160,43 +166,56 @@ const SingleIntakeQuestion: React.FC<{
           />
         )}
         {shouldBeTextField && (
-          <TextField
-            fullWidth
-            data-testid={intakeQuestionKey + "-" + intakeQuestionEl}
-            error={
-              formFieldGroup?.isInvalids[
-                intakeQuestionKey + "--" + intakeQuestionIdx
-              ] || false
-            }
-            variant="filled"
-            label={
-              <FormattedMessage
-                id={intakeQuestionKey.toUpperCase().replace(" ", "_")}
-                defaultMessage="Unknown question key"
-              />
-            }
-            required
-            helperText={
-              formFieldGroup?.isInvalids[
-                intakeQuestionKey + "--" + intakeQuestionIdx
-              ] || false
-                ? intl.formatMessage(
-                    {
-                      id: "GENERIC_CANNOT_BE_BLANK",
-                      defaultMessage: "Field cannot be blank",
-                    },
-                    { name: capitalizeEachWord(intakeQuestionKey) }
-                  )
-                : ""
-            }
-            style={{ marginBottom: 10, maxWidth: 400 }}
-            onChange={handleChange}
-            value={
-              formFieldGroup.actualValues[
-                intakeQuestionKey + "--" + intakeQuestionIdx
-              ]
-            }
-          ></TextField>
+          <>
+            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+              <TextField
+                fullWidth
+                data-testid={intakeQuestionKey + "-" + intakeQuestionEl}
+                error={
+                  formFieldGroup?.isInvalids[
+                    intakeQuestionKey + "--" + intakeQuestionIdx
+                  ] || false
+                }
+                variant="filled"
+                label={
+                  <FormattedMessage
+                    id={intakeQuestionKey.toUpperCase().replace(" ", "_")}
+                    defaultMessage="Unknown question key"
+                  />
+                }
+                required
+                helperText={
+                  formFieldGroup?.isInvalids[
+                    intakeQuestionKey + "--" + intakeQuestionIdx
+                  ] || false
+                    ? intl.formatMessage(
+                        {
+                          id: "GENERIC_CANNOT_BE_BLANK",
+                          defaultMessage: "Field cannot be blank",
+                        },
+                        { name: capitalizeEachWord(intakeQuestionKey) }
+                      )
+                    : ""
+                }
+                style={{ marginBottom: 10, maxWidth: 400 }}
+                onChange={handleChange}
+                value={
+                  formFieldGroup.actualValues[
+                    intakeQuestionKey + "--" + intakeQuestionIdx
+                  ]
+                }
+              ></TextField>
+              {isACoreQuestion && (
+                <div style={{ marginLeft: "1rem" }}>
+                  <InfoIcon
+                    messageId="CORE_QUESTION_EXPLANATION"
+                    defaultMessage="Can the people annotating videos in this collection add their own candidates to this list? You as the collection owner will be able to approve, merge, or remove these later."
+                    values={coreQuestionTranslationsValues}
+                  />
+                </div>
+              )}
+            </div>
+          </>
         )}
         {shouldBeTypeDropdown && (
           <>

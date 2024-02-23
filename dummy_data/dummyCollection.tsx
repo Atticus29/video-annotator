@@ -116,8 +116,8 @@ const fourthQuestion: SingleFormField = {
 // };
 
 const sixthQuestion: SingleFormField = {
-  label: "Age",
   type: "Number",
+  label: "Age",
   language: "English",
   testId: "age",
   doNotDisplay: defaultDoNotDisplays,
@@ -128,8 +128,8 @@ const sixthQuestion: SingleFormField = {
 };
 
 const numberReferees: SingleFormField = {
-  label: "Number of Referees",
   type: "Number",
+  label: "Number of Referees",
   language: "English",
   testId: "numberReferees",
   doNotDisplay: defaultDoNotDisplays,
@@ -140,8 +140,8 @@ const numberReferees: SingleFormField = {
 };
 
 const seventhQuestion: SingleFormField = {
-  label: "mystery string",
   type: "Text",
+  label: "mystery string",
   language: "English",
   isRequired: false,
   testId: "url",
@@ -152,8 +152,8 @@ const seventhQuestion: SingleFormField = {
 };
 
 const lastNameIndividualQuestion: SingleFormField = {
-  label: "Last Name",
   type: "Text",
+  label: "Last Name",
   language: "English",
   isRequired: true,
   testId: "url",
@@ -164,8 +164,8 @@ const lastNameIndividualQuestion: SingleFormField = {
 };
 
 const firstNameIndividualQuestion: SingleFormField = {
-  label: "First Name",
   type: "Text",
+  label: "First Name",
   language: "English",
   isRequired: true,
   testId: "url",
@@ -176,8 +176,8 @@ const firstNameIndividualQuestion: SingleFormField = {
 };
 
 const genderIndividualQuestion: SingleFormField = {
-  label: "Gender",
   type: "Autocomplete",
+  label: "Gender",
   language: "English",
   isRequired: false,
   testId: "gender",
@@ -196,8 +196,8 @@ const genderIndividualQuestion: SingleFormField = {
 };
 
 const giRankIndividualQuestion: SingleFormField = {
-  label: "Gi Rank",
   type: "Autocomplete",
+  label: "Gi Rank",
   language: "English",
   isRequired: false,
   testId: "giRank",
@@ -210,8 +210,8 @@ const giRankIndividualQuestion: SingleFormField = {
 };
 
 const noGiRankIndividualQuestion: SingleFormField = {
-  label: "No Gi Rank",
   type: "Autocomplete",
+  label: "No Gi Rank",
   language: "English",
   isRequired: false,
   testId: "noGiRank",
@@ -224,8 +224,8 @@ const noGiRankIndividualQuestion: SingleFormField = {
 };
 
 const allRanks: SingleFormField = {
-  label: "Rank",
   type: "Autocomplete",
+  label: "Rank",
   language: "English",
   isRequired: false,
   testId: "allRanks",
@@ -267,8 +267,8 @@ const natureOfTheMatch: SingleFormField = {
 };
 
 const weightClassIndividualQuestion: SingleFormField = {
-  label: "Weight Class",
   type: "Autocomplete",
+  label: "Weight Class",
   language: "English",
   isRequired: false,
   testId: "weightClass",
@@ -300,8 +300,8 @@ const weightClassIndividualQuestion: SingleFormField = {
 };
 
 const ageClassIndividualQuestion: SingleFormField = {
-  label: "Age Class",
   type: "Autocomplete",
+  label: "Age Class",
   language: "English",
   isRequired: false,
   testId: "ageClass",
@@ -326,8 +326,8 @@ const ageClassIndividualQuestion: SingleFormField = {
 };
 
 const moveNameQuestion: SingleFormField = {
-  label: "Name of move",
   type: "Autocomplete",
+  label: "Name of move",
   language: "English",
   isRequired: true,
   testId: "moveName",
@@ -341,8 +341,8 @@ const moveNameQuestion: SingleFormField = {
 };
 
 const startingPositionOfActor: SingleFormField = {
-  label: "Starting Position of Actor",
   type: "Autocomplete",
+  label: "Starting Position of Actor",
   language: "English",
   isRequired: true,
   testId: "startingPositionOfActor",
@@ -372,8 +372,8 @@ const startingPositionOfActor: SingleFormField = {
 };
 
 const startingPositionOfSubject: SingleFormField = {
-  label: "Starting Position of Subject/Target",
   type: "Autocomplete",
+  label: "Starting Position of Subject/Target",
   language: "English",
   isRequired: true,
   testId: "startingPositionOfSubject",
@@ -403,8 +403,8 @@ const startingPositionOfSubject: SingleFormField = {
 };
 
 const endingPositionOfActor: SingleFormField = {
-  label: "Ending Position of Actor",
   type: "Autocomplete",
+  label: "Ending Position of Actor",
   language: "English",
   isRequired: true,
   testId: "endingPositionOfActor",
@@ -434,8 +434,8 @@ const endingPositionOfActor: SingleFormField = {
 };
 
 const endingPositionOfSubject: SingleFormField = {
-  label: "Ending Position of Subject/Target",
   type: "Autocomplete",
+  label: "Ending Position of Subject/Target",
   language: "English",
   isRequired: true,
   testId: "endingPositionOfSubject",
@@ -465,8 +465,8 @@ const endingPositionOfSubject: SingleFormField = {
 };
 
 const actorName: SingleFormField = {
-  label: "Actor Name",
   type: "Autocomplete",
+  label: "Actor Name",
   language: "English",
   isRequired: true,
   testId: "actorName",
@@ -479,8 +479,8 @@ const actorName: SingleFormField = {
 };
 
 const pointsScored: SingleFormField = {
-  label: "Number of Points Scored, If Any",
   type: "Number",
+  label: "Number of Points Scored, If Any",
   language: "English",
   testId: "pointsScored",
   doNotDisplay: defaultDoNotDisplays,
@@ -491,8 +491,8 @@ const pointsScored: SingleFormField = {
 };
 
 const isSuccessful: SingleFormField = {
-  label: "Was the move successful?",
   type: "Checkbox",
+  label: "Was the move successful?",
   language: "English",
   isRequired: true,
   testId: "isSuccessful",
@@ -502,8 +502,8 @@ const isSuccessful: SingleFormField = {
 };
 
 const isSubmission: SingleFormField = {
-  label: "Was the move a successful submission?",
   type: "Checkbox",
+  label: "Was the move a successful submission?",
   language: "English",
   isRequired: true,
   testId: "isSubmission",
@@ -513,8 +513,8 @@ const isSubmission: SingleFormField = {
 };
 
 const isAdvantage: SingleFormField = {
-  label: "Did this move score an advantage?",
   type: "Checkbox",
+  label: "Did this move score an advantage?",
   language: "English",
   isRequired: true,
   testId: "isAdvantage",
@@ -524,8 +524,8 @@ const isAdvantage: SingleFormField = {
 };
 
 const moveRating: SingleFormField = {
-  label: "Rating of quality of this move, 1-10 with 10 being best",
   type: "Autocomplete",
+  label: "Rating of quality of this move, 1-10 with 10 being best",
   language: "English",
   isRequired: true,
   testId: "moveRating",
@@ -538,8 +538,8 @@ const moveRating: SingleFormField = {
 };
 
 const typeOfRoundQuestion: SingleFormField = {
-  label: "What type of round is this?",
   type: "Autocomplete",
+  label: "What type of round is this?",
   language: "English",
   isRequired: true,
   testId: "typeOfRound",
@@ -557,8 +557,8 @@ const typeOfRoundQuestion: SingleFormField = {
 };
 
 const comment: SingleFormField = {
-  label: "Comment - any information not captured by the other questions?",
   type: "Text",
+  label: "Comment - any information not captured by the other questions?",
   language: "English",
   isRequired: false,
   testId: "comment",
@@ -628,7 +628,7 @@ export const shamCollection: Collection = {
     // ageClassIndividualQuestion,
   ],
   eventIntakeQuestions: [
-    // moveNameQuestion,
+    moveNameQuestion,
     // actorName,
     // startingPositionOfActor,
     // startingPositionOfSubject,

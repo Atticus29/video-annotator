@@ -298,6 +298,10 @@ const EventIntakeQuestions: React.FC<{
                     intakeQuestionKey={intakeQuestionKey}
                     intakeQuestionIdx={intakeQuestionIdx}
                     formFieldGroup={formFieldGroup}
+                    isACoreQuestion={wholeQuestion?.isACoreQuestion}
+                    coreQuestionTranslationsValues={{
+                      eventName: collection?.metadata?.nameOfEvent,
+                    }}
                   />
                 )}
               </>
