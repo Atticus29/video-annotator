@@ -31,9 +31,9 @@ const collectionEventIntakeQuestionsPost = async (
         {
           "metadata.urlPath": urlPath,
         },
-        { projection: { eventIntakeQuestions: 1 } }
+        { projection: { eventIntakeQuestions: 1, _id: 0 } }
       );
-      if (!Boolean(targetEventIntakeQuestions)) {
+      if (Object.keys(targetEventIntakeQuestions || {}).length === 0) {
         const creationResult = await coll.updateOne(
           {
             "metadata.urlPath": urlPath,

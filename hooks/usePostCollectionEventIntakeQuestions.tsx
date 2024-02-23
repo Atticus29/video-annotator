@@ -10,7 +10,7 @@ export default function usePostCollectionEventIntakeQuestions() {
     }) => {
       try {
         const response = await axios.post(
-          "/api/collection" +
+          "/api/collection/" +
             variables?.collectionUrl +
             "/eventIntakeQuestions/create",
           {
