@@ -45,6 +45,7 @@ const firstQuestion: SingleFormField = {
   validatorMethods: [isValidUrl],
   shouldBeCheckboxes: ["isRequired"],
   isACoreQuestion: true,
+  recommendedLabel: "URL",
 };
 
 const secondQuestion: SingleFormField = {
@@ -338,6 +339,7 @@ const moveNameQuestion: SingleFormField = {
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
   isACoreQuestion: true,
+  recommendedLabel: "Name of move",
 };
 
 const startingPositionOfActor: SingleFormField = {
@@ -619,22 +621,22 @@ export const shamCollection: Collection = {
     // seventhQuestion,
   ],
   individualIntakeQuestions: [
-    // lastNameIndividualQuestion,
-    // firstNameIndividualQuestion,
+    lastNameIndividualQuestion,
+    firstNameIndividualQuestion,
     genderIndividualQuestion,
-    // giRankIndividualQuestion,
-    // noGiRankIndividualQuestion,
-    // weightClassIndividualQuestion,
-    // ageClassIndividualQuestion,
+    giRankIndividualQuestion,
+    noGiRankIndividualQuestion,
+    weightClassIndividualQuestion,
+    ageClassIndividualQuestion,
   ],
   eventIntakeQuestions: [
     moveNameQuestion,
-    // actorName,
-    // startingPositionOfActor,
-    // startingPositionOfSubject,
-    // endingPositionOfActor,
-    // endingPositionOfSubject,
-    // pointsScored,
+    actorName,
+    startingPositionOfActor,
+    startingPositionOfSubject,
+    endingPositionOfActor,
+    endingPositionOfSubject,
+    pointsScored,
     isSuccessful,
     isSubmission,
     moveRating,

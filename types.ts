@@ -69,6 +69,7 @@ export interface SingleFormField {
   usersCanAddCustomOptions?: boolean;
   autocompleteExtras?: {};
   isACoreQuestion?: boolean;
+  recommendedLabel?: string;
 }
 
 // export interface QuestionValidity {

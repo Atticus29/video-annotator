@@ -300,7 +300,9 @@ const EventIntakeQuestions: React.FC<{
                     formFieldGroup={formFieldGroup}
                     isACoreQuestion={wholeQuestion?.isACoreQuestion}
                     coreQuestionTranslationsValues={{
-                      eventName: collection?.metadata?.nameOfEvent,
+                      recommendation:
+                        wholeQuestion?.recommendedLabel ||
+                        "Name of " + collection?.metadata?.nameOfEvent,
                     }}
                   />
                 )}

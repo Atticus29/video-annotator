@@ -209,7 +209,6 @@ const SingleIntakeQuestion: React.FC<{
                 <div style={{ marginLeft: "1rem" }}>
                   <InfoIcon
                     messageId="CORE_QUESTION_EXPLANATION"
-                    defaultMessage="Can the people annotating videos in this collection add their own candidates to this list? You as the collection owner will be able to approve, merge, or remove these later."
                     values={coreQuestionTranslationsValues}
                   />
                 </div>

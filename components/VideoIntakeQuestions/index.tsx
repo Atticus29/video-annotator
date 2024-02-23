@@ -290,6 +290,11 @@ const VideoIntakeQuestions: React.FC<{
                     intakeQuestionKey={intakeQuestionKey}
                     intakeQuestionIdx={intakeQuestionIdx}
                     formFieldGroup={formFieldGroup}
+                    isACoreQuestion={wholeQuestion?.isACoreQuestion}
+                    coreQuestionTranslationsValues={{
+                      recommendation:
+                        wholeQuestion?.recommendedLabel || "URL test",
+                    }}
                   />
                 )}
               </>

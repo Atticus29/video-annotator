@@ -5,7 +5,7 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 const InfoIcon: React.FC<{
   messageId: string;
-  defaultMessage: string;
+  defaultMessage?: string;
   values?: {};
 }> = ({ messageId, defaultMessage, values }) => {
   if (values) {
@@ -38,7 +38,7 @@ const InfoIcon: React.FC<{
         title={intl.formatMessage(
           {
             id: messageId,
-            defaultMessage: defaultMessage,
+            defaultMessage: defaultMessage ? defaultMessage : "",
           },
           values
         )}
