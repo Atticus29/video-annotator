@@ -290,15 +290,14 @@ const CollectionEditor: React.FC = () => {
               {collection.metadata.name &&
                 individualQuestionsFormFieldGroup && (
                   <IndividualIntakeQuestions
-                    collection={collection}
-                    setCollection={setCollection}
-                    formFieldGroup={individualQuestionsFormFieldGroup}
+                    collectionUrl={localUrlPathAsString}
+                    mode="edit"
                   />
                 )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && (
-                <IndividualIntakePreview collection={collection} />
+                <IndividualIntakePreview collectionUrl={localUrlPathAsString} />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
@@ -311,21 +310,20 @@ const CollectionEditor: React.FC = () => {
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && (
-                <VideoIntakePreview collection={collection} />
+                <VideoIntakePreview collectionUrl={localUrlPathAsString} />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && eventQuestionsFormFieldGroup && (
                 <EventIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={eventQuestionsFormFieldGroup}
+                  collectionUrl={localUrlPathAsString}
+                  mode="edit"
                 />
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && (
-                <EventIntakePreview collection={collection} />
+                <EventIntakePreview collectionUrl={localUrlPathAsString} />
               )}
             </Grid>
           </>
