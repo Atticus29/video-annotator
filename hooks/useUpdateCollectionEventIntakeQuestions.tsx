@@ -12,7 +12,7 @@ export default function useUpdateCollectionEventIntakeQuestions() {
         const response = await axios.patch(
           "/api/collection/" +
             variables?.collectionUrl +
-            "/eventIntakeQuestions/update", // @TODO create this
+            "/eventIntakeQuestions/update",
           {
             eventIntakeQuestions: variables?.collectionEventIntakeQuestions,
             urlPath: variables?.collectionUrl,

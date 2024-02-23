@@ -1,8 +1,4 @@
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { SingleFormField } from "../types";
 
@@ -10,18 +6,18 @@ export default function useUpdateCollectionIndividualIntakeQuestions() {
   const mutation = useMutation({
     mutationFn: async (variables: {
       collectionUrl: string;
-      updatedIndividualIntakeQuestions: SingleFormField[];
+      collectionIndividualIntakeQuestions: SingleFormField[];
     }) => {
       try {
         const response = await axios.patch(
           "/api/collection/" +
             variables?.collectionUrl +
-            "individualIntakeQuestions/update/" +
-            {
-              individualIntakeQuestions:
-                variables?.updatedIndividualIntakeQuestions,
-              urlPath: variables?.collectionUrl,
-            }
+            "/individualIntakeQuestions/update",
+          {
+            individualIntakeQuestions:
+              variables?.collectionIndividualIntakeQuestions,
+            urlPath: variables?.collectionUrl,
+          }
         );
         if (response.status === 200) {
           return response?.data;

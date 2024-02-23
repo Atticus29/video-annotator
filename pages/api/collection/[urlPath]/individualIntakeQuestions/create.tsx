@@ -1,20 +1,17 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "../../../../../../middleware/mongodb";
+import clientPromise from "../../../../../middleware/mongodb";
 import {
   SingleFormField,
   Collection as CollectionData,
-} from "../../../../../../types";
+} from "../../../../../types";
 
 const individualIntakeQuestionCollectionCreate = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   const allowedMethods: string[] = ["POST"];
-  if (
-    !allowedMethods.includes(req?.method || "") ||
-    req?.method === "OPTIONS"
-  ) {
+  if (!allowedMethods.includes(req?.method || "") || req.method === "OPTIONS") {
     return res.status(405).json({ message: "Method not allowed." });
   }
 
@@ -34,8 +31,6 @@ const individualIntakeQuestionCollectionCreate = async (
         },
         { projection: { individualIntakeQuestions: 1, _id: 0 } }
       );
-      console.log("deleteMe targetIndividualIntakeQuestions is: ");
-      console.log(targetIndividualIntakeQuestions);
       if (Object.keys(targetIndividualIntakeQuestions || {}).length === 0) {
         const creationResult = await coll.updateOne(
           {

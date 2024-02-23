@@ -12,7 +12,7 @@ export default function usePostCollectionIndividualIntakeQuestions() {
         const response = await axios.post(
           "/api/collection/" +
             variables?.collectionUrl +
-            "/individualIntakeQuestion/create",
+            "/individualIntakeQuestions/create",
           {
             individualIntakeQuestions:
               variables?.collectionIndividualIntakeQuestions,

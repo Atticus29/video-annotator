@@ -24,11 +24,17 @@ const individualIntakeQuestionCollectionUpdate = async (
       let {
         individualIntakeQuestions,
         urlPath,
-      }: { individualIntakeQuestions: SingleFormField[]; urlPath: string } =
-        req.body;
+      }: {
+        individualIntakeQuestions: SingleFormField[];
+        urlPath: string;
+      } = req.body;
       const result = await coll.updateOne(
         { "metadata.urlPath": urlPath.toLowerCase() },
-        { $set: { individualIntakeQuestions: individualIntakeQuestions } }
+        {
+          $set: {
+            individualIntakeQuestions: individualIntakeQuestions,
+          },
+        }
       );
       if (result.modifiedCount < 1) {
         res.status(200).json({ message: "Nothing changed." });
