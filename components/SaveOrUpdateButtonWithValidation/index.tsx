@@ -12,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import CloseIcon from "@mui/icons-material/Close";
 import { reduce } from "lodash-es";
 import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
-import { transformActualValueObjIntoIntakeQuestions } from "../../utilities/videoIntakeQuestionUtils";
+import { transformActualValueObjIntoIntakeQuestions } from "../../utilities/intakeQuestionUtils";
 
 const SaveOrUpdateButtonWithValidation: React.FC<{
   buttonTitle: string;

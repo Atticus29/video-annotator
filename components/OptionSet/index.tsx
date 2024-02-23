@@ -89,13 +89,15 @@ const OptionSet: React.FC<{
       questionIdx,
       formFieldGroup
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    formFieldGroup,
+    // formFieldGroup, // this is a dependency for a useEffect in the {type}IntakeQuestions grandparent component already. If it's dependency here, too, it's just an insane amount of re-renders
     intl,
     optionFormFieldGroup,
     questionIdx,
     stringForAutocompleteOptions,
   ]);
+
   const onlyAutocompletes: {} = filter(
     autocompleteValues,
     (_autocompleteValue, autoCompleteValueKey) => {

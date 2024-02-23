@@ -62,13 +62,14 @@ export function updateIntakeQuestionFormField(
   formFieldGroup: FormFieldGroup
   // setFormFieldUpdater: (input: any) => void
 ) {
-  console.log("deleteMe updateIntakeQuestionFormField is called");
-  console.log("deleteMe currentVal is: ");
-  console.log(currentVal);
-  console.log("deleteMe intakeQuestionKey singleFormUtils is: ");
-  console.log(intakeQuestionKey);
-  console.log("deleteMe intakeQuestionIdx is: ");
-  console.log(intakeQuestionIdx);
+  console.log("deleteMe h1 updateIntakeQuestionFormField entered");
+  // console.log("deleteMe updateIntakeQuestionFormField is called");
+  // console.log("deleteMe currentVal is: ");
+  // console.log(currentVal);
+  // console.log("deleteMe intakeQuestionKey singleFormUtils is: ");
+  // console.log(intakeQuestionKey);
+  // console.log("deleteMe intakeQuestionIdx is: ");
+  // console.log(intakeQuestionIdx);
   // console.log("deleteMe formFieldGroup is: ");
   // console.log(formFieldGroup);
   // console.log("deleteMe e1 wholeQuestionLabel is: ");
@@ -253,7 +254,7 @@ export function updateOptionFormFieldGroupWithOptionList(
   setAutocompleteValues: (val: any) => void,
   stringForAutocompleteOptions: string
 ) {
-  // console.log("deleteMe entering updateOptionFormFieldGroupWithOptionList");
+  console.log("deleteMe g1 entering updateOptionFormFieldGroupWithOptionList");
   // console.log("deleteMe setAutocompleteValues is: ");
   // console.log(setAutocompleteValues);
   // console.log("deleteMe options is: ");

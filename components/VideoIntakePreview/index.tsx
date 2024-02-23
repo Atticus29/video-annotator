@@ -1,12 +1,13 @@
 import { Backdrop, CircularProgress, Grid } from "@mui/material";
-import { get, map } from "lodash-es";
-import { Collection, FormFieldGroup } from "../../types";
+import { map } from "lodash-es";
+import { FormFieldGroup } from "../../types";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useGetCollection from "../../hooks/useGetCollection";
 import { useMemo, useState } from "react";
+import { IntlShape, useIntl } from "react-intl";
 
 const VideoIntakePreview: React.FC<{
   collectionUrl: string;
@@ -17,6 +18,8 @@ const VideoIntakePreview: React.FC<{
     errorMsg,
     data: collection,
   } = useGetCollection(collectionUrl);
+
+  const intl: IntlShape = useIntl();
 
   const [previewVideoQuestionFormValues, setPreviewVideoQuestionFormValues] =
     useState<{}>({});
@@ -39,8 +42,11 @@ const VideoIntakePreview: React.FC<{
 
   return (
     <InfoPanel
-      titleId="VIDEO_INTAKE_PREVIEW"
-      titleDefault="Video Intake Preview"
+      titleDefault={intl.formatMessage(
+        { id: "GENERIC_INTAKE_PREVIEW" },
+        { type: "Video" }
+      )}
+      // titleDefault="Video Intake Preview"
       textOverrides={{ textAlign: "center" }}
       styleOverrides={{ maxHeight: 1000 }}
     >

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { map, reduce } from "lodash-es";
+import { map, get, reduce } from "lodash-es";
 
-import { SingleFormField, FormFieldGroup } from "../../types";
+import { Collection, SingleFormField, FormFieldGroup } from "../../types";
 import {
   Backdrop,
   Button,
@@ -19,22 +19,21 @@ import {
   defaultDoNotDisplays,
   shamCollection,
 } from "../../dummy_data/dummyCollection";
+import useUpdateCollectionIndividualIntakeQuestions from "../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 import useGetCollection from "../../hooks/useGetCollection";
 import usePostCollectionIndividualIntakeQuestions from "../../hooks/usePostCollectionIndividualIntakeQuestions";
-import useUpdateCollectionIndividualIntakeQuestions from "../../hooks/useUpdateCollectionIndividualIntakeQuestions";
+import SingleIntakeQuestion from "../SingleIntakeQuestion";
 import {
   transformActualValueObjIntoIntakeQuestions,
   transformIntakeQuestionsIntoActualValueObj,
 } from "../../utilities/intakeQuestionUtils";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import IndividualIntakePreview from "../IndividualIntakePreview";
-import SingleIntakeQuestion from "../SingleIntakeQuestion";
 
 const IndividualIntakeQuestions: React.FC<{
   collectionUrl: string;
   mode?: string;
 }> = ({ collectionUrl, mode = "edit" }) => {
-  console.log("deleteMe IndividualIntakeQuestions rendered ");
   const {
     isLoading,
     isError,
@@ -59,9 +58,8 @@ const IndividualIntakeQuestions: React.FC<{
     setAreIndividualQuestionFormValuesInvalid,
   ] = useState<{}>({});
   const formFieldGroup: FormFieldGroup = useMemo(() => {
-    console.log("deleteMe useMemo e1 called");
     return {
-      title: "IndividualFormFieldGroupForTheWholeCollection",
+      title: "individualFormFieldGroupForTheWholeCollection",
       setValues: setIndividualQuestionFormValues,
       actualValues: individualQuestionFormValues,
       isInvalids: areIndividualQuestionFormValuesInvalid,
@@ -73,8 +71,6 @@ const IndividualIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    console.log("deleteMe useEffect a1 is called and actual values is now: ");
-    console.log(formFieldGroup.actualValues);
     if (
       mode === "create" && // @TODO maybe this is moot now
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -112,11 +108,19 @@ const IndividualIntakeQuestions: React.FC<{
 
   const [error, setError] = useState<string>("");
 
+  // const {
+  //   mutate: updateCollectionIndividualIntakeQuestions,
+  //   isPending,
+  //   error: individualIntakeError,
+  //   isError: updateCollectionIndividualIntakeQuestionsError,
+  // } = useUpdateCollectionIndividualIntakeQuestions();
+
+  // const [individualIntakeQuestions, setIndividualIntakeQuestions] = useState<
+  //   SingleFormField[] | undefined
+  // >(get(collection, ["individualIntakeQuestions"]));
+  // const [error, setError] = useState<string>("");
+
   const newQuestion: SingleFormField = useMemo(() => {
-    console.log(
-      "deleteMe useMemo b1 is called and formFieldGroup.actualValues are: "
-    );
-    console.log(formFieldGroup.actualValues);
     return {
       key:
         transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -252,8 +256,46 @@ const IndividualIntakeQuestions: React.FC<{
     }
   };
 
+  // const handleSaveIndividualIntakeQuestionsAndPreview = () => {
+  //   if (mode === "edit") {
+  //     updateCollectionIndividualIntakeQuestions(
+  //       {
+  //         collectionUrl: collection.metadata.urlPath || "",
+  //         updatedIndividualIntakeQuestions:
+  //           collection.individualIntakeQuestions || [],
+  //       },
+  //       {
+  //         onSuccess: (responseData) => {
+  //           console.log("Mutation successful", responseData);
+  //         },
+  //         onError: (error) => {
+  //           // Handle error
+  //           console.error("Mutation error", error);
+  //         },
+  //       }
+  //     );
+  //   }
+  //   if (mode === "create") {
+  //     postCollectionIndividualIntakeQuestions(
+  //       {
+  //         collectionUrl: collection?.metadata?.urlPath || "",
+  //         collectionIndividualIntakeQuestions:
+  //           collection?.individualIntakeQuestions || [],
+  //       },
+  //       {
+  //         onSuccess: (responseData) => {
+  //           console.log("Mutation successful", responseData);
+  //         },
+  //         onError: (error) => {
+  //           // Handle error
+  //           console.error("Mutation error", error);
+  //         },
+  //       }
+  //     );
+  //   }
+  // };
+
   const intakeQuestionElements = useMemo(() => {
-    console.log("deleteMe useMemo c1 called");
     return map(
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
@@ -309,7 +351,6 @@ const IndividualIntakeQuestions: React.FC<{
   }, [formFieldGroup]);
 
   const individualIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
-    console.log("deleteMe useMemo d1 called");
     return Boolean(collection?.individualIntakeQuestions);
   }, [collection]);
 
@@ -345,13 +386,10 @@ const IndividualIntakeQuestions: React.FC<{
         <CustomError
           errorMsg={
             postCollectionIndividualIntakeQuestionError?.message ||
-            intl.formatMessage(
-              {
-                id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
-                defaultMessage: "Failed to post individual intake questions",
-              },
-              { type: "individual" }
-            )
+            intl.formatMessage({
+              id: "INDIVIDUAL_INTAKE_QUESTION_POST_FAILED",
+              defaultMessage: "Failed to post individual intake questions",
+            })
           }
         />
       )}
@@ -360,10 +398,8 @@ const IndividualIntakeQuestions: React.FC<{
         !isPending &&
         !isPostCollectionIndividualIntakeQuestionsError && (
           <InfoPanel
-            titleDefault={intl.formatMessage(
-              { id: "GENERIC_INTAKE_QUESTIONS" },
-              { type: "Individual" }
-            )}
+            titleId="INDIVIDUAL_INTAKE_QUESTIONS"
+            titleDefault="Individual Intake Questions"
             textOverrides={{ textAlign: "center" }}
           >
             <Grid container>
@@ -401,8 +437,7 @@ const IndividualIntakeQuestions: React.FC<{
                   failMsg={intl.formatMessage(
                     {
                       id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
-                      defaultMessage:
-                        "Failed to update individual intake questions",
+                      defaultMessage: "Failed to update video intake questions",
                     },
                     { type: "individual" } // @TODO i8n
                   )}
@@ -441,5 +476,48 @@ const IndividualIntakeQuestions: React.FC<{
         )}
     </>
   );
+  // return (
+  //   <InfoPanel
+  //     titleId="INDIVIDUAL_INTAKE_QUESTIONS"
+  //     titleDefault="Individual Intake Questions"
+  //     textOverrides={{ textAlign: "center" }}
+  //   >
+  //     <Grid container>
+  //       {collection?.individualIntakeQuestions && (
+  //         <Grid item lg={12} sm={12}>
+  //           {intakeQuestionElements}
+  //         </Grid>
+  //       )}
+  //       <Grid item lg={12} sm={12}>
+  //         <Button
+  //           style={{ marginBottom: 10 }}
+  //           data-testid={"collection-details-submit-button"}
+  //           variant="contained"
+  //           onClick={createNewIntakeQuestion}
+  //         >
+  //           <FormattedMessage
+  //             id="ADD_ANOTHER_QUESTION"
+  //             defaultMessage="Add another question"
+  //           />
+  //         </Button>
+  //         {error && <CustomError errorMsg={error} />}
+  //       </Grid>
+  //       <Grid item lg={12} sm={12}>
+  //         <Button
+  //           style={{ marginBottom: 10 }}
+  //           data-testid={"collection-details-submit-button"}
+  //           variant="contained"
+  //           onClick={handleSaveIndividualIntakeQuestionsAndPreview}
+  //         >
+  //           <FormattedMessage
+  //             id="SAVE_INDIVIDUAL_INTAKE_QUESTIONS_AND_PREVIEW"
+  //             defaultMessage="Save and Preview"
+  //           />
+  //         </Button>
+  //         {error && <CustomError errorMsg={error} />}
+  //       </Grid>
+  //     </Grid>
+  //   </InfoPanel>
+  // );
 };
 export default IndividualIntakeQuestions;

@@ -27,7 +27,7 @@ import {
   transformActualValueObjIntoIntakeQuestions,
   transformIntakeQuestionsIntoActualValueObj,
   transformQuestion,
-} from "../../utilities/videoIntakeQuestionUtils";
+} from "../../utilities/intakeQuestionUtils";
 import { useMemo, useState } from "react";
 
 const SingleIntakeQuestion: React.FC<{

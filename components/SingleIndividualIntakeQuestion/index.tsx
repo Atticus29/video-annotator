@@ -23,7 +23,7 @@ import OptionSet from "../OptionSet";
 import {
   transformQuestion,
   updateSingleQuestionInCollection,
-} from "../../utilities/videoIntakeQuestionUtils";
+} from "../../utilities/intakeQuestionUtils";
 import useUpdateCollectionIndividualIntakeQuestions from "../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const SingleIndividualIntakeQuestion: React.FC<{

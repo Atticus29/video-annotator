@@ -25,7 +25,7 @@ import useUpdateCollectionVideoIntakeQuestions from "../../hooks/useUpdateCollec
 import {
   transformActualValueObjIntoIntakeQuestions,
   transformIntakeQuestionsIntoActualValueObj,
-} from "../../utilities/videoIntakeQuestionUtils";
+} from "../../utilities/intakeQuestionUtils";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import VideoIntakePreview from "../VideoIntakePreview";
 import SingleIntakeQuestion from "../SingleIntakeQuestion";
@@ -59,6 +59,7 @@ const VideoIntakeQuestions: React.FC<{
     setArevideoQuestionFormValuesInvalid,
   ] = useState<{}>({});
   const formFieldGroup: FormFieldGroup = useMemo(() => {
+    console.log("deleteMe useMemo e2 called");
     return {
       title: "VideoFormFieldGroupForTheWholeCollection",
       setValues: setVideoQuestionFormValues,
@@ -336,10 +337,13 @@ const VideoIntakeQuestions: React.FC<{
         <CustomError
           errorMsg={
             postCollectionVideoIntakeQuestionError?.message ||
-            intl.formatMessage({
-              id: "VIDEO_INTAKE_QUESTION_POST_FAILED",
-              defaultMessage: "Failed to post video intake questions",
-            })
+            intl.formatMessage(
+              {
+                id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
+                defaultMessage: "Failed to post video intake questions",
+              },
+              { type: "video" }
+            )
           }
         />
       )}
@@ -348,8 +352,10 @@ const VideoIntakeQuestions: React.FC<{
         !isPending &&
         !isPostCollectionVideoIntakeQuestionsError && (
           <InfoPanel
-            titleId="VIDEO_INTAKE_QUESTIONS"
-            titleDefault="Video Intake Questions"
+            titleDefault={intl.formatMessage(
+              { id: "GENERIC_INTAKE_QUESTIONS" },
+              { type: "Video" }
+            )}
             textOverrides={{ textAlign: "center" }}
           >
             <Grid container>
