@@ -9,10 +9,10 @@ const InfoIcon: React.FC<{
   values?: {};
 }> = ({ messageId, defaultMessage, values }) => {
   if (values) {
-    console.log("deleteMe values are: ");
-    console.log(values);
-    console.log("deleteMe messageId is: ");
-    console.log(messageId);
+    // console.log("deleteMe values are: ");
+    // console.log(values);
+    // console.log("deleteMe messageId is: ");
+    // console.log(messageId);
   }
   const intl: IntlShape = useIntl();
 

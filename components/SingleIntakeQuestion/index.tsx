@@ -47,10 +47,10 @@ const SingleIntakeQuestion: React.FC<{
   isACoreQuestion = false,
   coreQuestionTranslationsValues,
 }) => {
-  console.log(
-    "deleteMe SingleIntakeQuestion rendered and formFieldGroup.actualValues is: "
-  );
-  console.log(formFieldGroup.actualValues);
+  // console.log(
+  //   "deleteMe SingleIntakeQuestion rendered and formFieldGroup.actualValues is: "
+  // );
+  // console.log(formFieldGroup.actualValues);
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 

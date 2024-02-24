@@ -27,8 +27,8 @@ import {
   transformIntakeQuestionsIntoActualValueObj,
 } from "../../utilities/intakeQuestionUtils";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
-import EventIntakePreview from "../EventIntakePreview";
 import SingleIntakeQuestion from "../SingleIntakeQuestion";
+import GenericIntakePreview from "../GenericIntakePreview";
 
 const EventIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -107,7 +107,7 @@ const EventIntakeQuestions: React.FC<{
     formFieldGroup?.setValues,
     hasAQuestionBeenDeleted,
     mode,
-    postCollectionEventIntakeQuestions,
+    // postCollectionEventIntakeQuestions,
     eventQuestionFormValues,
   ]);
 
@@ -439,7 +439,10 @@ const EventIntakeQuestions: React.FC<{
                 }}
               >
                 <DialogContent>
-                  <EventIntakePreview collectionUrl={collectionUrl} />
+                  <GenericIntakePreview
+                    collectionUrl={collectionUrl}
+                    intakeQuestionType="event"
+                  />
                 </DialogContent>
               </Dialog>
             </Grid>

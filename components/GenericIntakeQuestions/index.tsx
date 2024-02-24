@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { map, reduce } from "lodash-es";
+import { get, map, reduce } from "lodash-es";
 
 import { SingleFormField, FormFieldGroup } from "../../types";
 import {
@@ -27,6 +27,7 @@ import {
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import GenericIntakePreview from "../GenericIntakePreview";
 import SingleIntakeQuestion from "../SingleIntakeQuestion";
+import { capitalizeEachWord } from "../../utilities/textUtils";
 
 const GenericIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -65,6 +66,19 @@ const GenericIntakeQuestions: React.FC<{
     areGenericQuestionFormValuesInvalid,
     setAreGenericQuestionFormValuesInvalid,
   ] = useState<{}>({});
+
+  const intakeQuestionAccessor: string = (() => {
+    switch (intakeQuestionType) {
+      case "individual":
+        return "individualIntakeQuestions";
+      case "video":
+        return "videoIntakeQuestions";
+      case "event":
+        return "eventIntakeQuestions";
+      default:
+        return "videoIntakeQuestions";
+    }
+  })();
   const formFieldGroup: FormFieldGroup = useMemo(() => {
     // console.log("deleteMe useMemo e1 called");
     return {
@@ -87,13 +101,16 @@ const GenericIntakeQuestions: React.FC<{
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1 &&
       !hasAQuestionBeenDeleted &&
-      (shamCollection?.genericIntakeQuestions || []).length > 0
+      (get(shamCollection, intakeQuestionAccessor) || []).length > 0
     ) {
       // add their values to the formFieldGroup
       const transformedGenericIntakeQuestions =
         transformIntakeQuestionsIntoActualValueObj(
-          shamCollection.genericIntakeQuestions || []
+          get(shamCollection, intakeQuestionAccessor) || []
         );
+
+      console.log("deleteMe transformedGenericIntakeQuestions is: ");
+      console.log(transformedGenericIntakeQuestions);
 
       const formFieldGroupValueSetter: ((input: any) => void) | undefined =
         formFieldGroup?.setValues;
@@ -108,13 +125,11 @@ const GenericIntakeQuestions: React.FC<{
       }
     }
   }, [
-    collectionUrl,
     formFieldGroup.actualValues,
     formFieldGroup?.setValues,
     hasAQuestionBeenDeleted,
+    intakeQuestionAccessor,
     mode,
-    postHook,
-    genericQuestionFormValues,
   ]);
 
   const [error, setError] = useState<string>("");
@@ -321,8 +336,8 @@ const GenericIntakeQuestions: React.FC<{
 
   const genericIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
     // console.log("deleteMe useMemo d1 called");
-    return Boolean(collection?.genericIntakeQuestions);
-  }, [collection]);
+    return Boolean(get(collection, intakeQuestionAccessor));
+  }, [collection, intakeQuestionAccessor]);
 
   const buttonTitle: string = intl.formatMessage({
     id: genericIntakeQuestionsAlreadyExist
@@ -373,7 +388,7 @@ const GenericIntakeQuestions: React.FC<{
           <InfoPanel
             titleDefault={intl.formatMessage(
               { id: "GENERIC_INTAKE_QUESTIONS" },
-              { type: intakeQuestionType }
+              { type: capitalizeEachWord(intakeQuestionType) }
             )}
             textOverrides={{ textAlign: "center" }}
           >
@@ -422,7 +437,9 @@ const GenericIntakeQuestions: React.FC<{
                   }
                   mutationData={{
                     collectionUrl: collectionUrl,
-                    collectionGenericIntakeQuestions:
+                    ["collection" +
+                    capitalizeEachWord(intakeQuestionType) +
+                    "IntakeQuestions"]:
                       transformActualValueObjIntoIntakeQuestions(
                         formFieldGroup.actualValues
                       ) || [],
@@ -442,7 +459,10 @@ const GenericIntakeQuestions: React.FC<{
                 }}
               >
                 <DialogContent>
-                  <GenericIntakePreview collectionUrl={collectionUrl} />
+                  <GenericIntakePreview
+                    collectionUrl={collectionUrl}
+                    intakeQuestionType={intakeQuestionType}
+                  />
                 </DialogContent>
               </Dialog>
             </Grid>

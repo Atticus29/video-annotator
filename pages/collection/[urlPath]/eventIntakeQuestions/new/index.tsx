@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
-import EventIntakeQuestions from "../../../../../components/EventIntakeQuestions";
 import { Backdrop, CircularProgress } from "@mui/material";
+import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuestions";
+import useUpdateCollectionEventIntakeQuestions from "../../../../../hooks/useUpdateCollectionEventIntakeQuestions";
+import usePostCollectionEventIntakeQuestions from "../../../../../hooks/usePostCollectionEventIntakeQuestions";
 
 const NewEventIntakeQuestions: React.FC = () => {
   const router = useRouter();
@@ -19,7 +21,13 @@ const NewEventIntakeQuestions: React.FC = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
       {Boolean(collectionUrl) && (
-        <EventIntakeQuestions collectionUrl={collectionUrl} mode="create" />
+        <GenericIntakeQuestions
+          collectionUrl={collectionUrl}
+          mode="create"
+          intakeQuestionType="event"
+          postHook={usePostCollectionEventIntakeQuestions}
+          updateHook={useUpdateCollectionEventIntakeQuestions}
+        />
       )}
     </>
   );
