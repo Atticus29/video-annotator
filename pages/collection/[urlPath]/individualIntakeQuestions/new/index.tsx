@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
-import IndividualIntakeQuestions from "../../../../../components/IndividualIntakeQuestions";
 import { Backdrop, CircularProgress } from "@mui/material";
+import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuestions";
+import usePostCollectionIndividualIntakeQuestions from "../../../../../hooks/usePostCollectionIndividualIntakeQuestions";
+import useUpdateCollectionIndividualIntakeQuestions from "../../../../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const NewIndividualIntakeQuestions: React.FC = () => {
   const router = useRouter();
@@ -19,9 +21,12 @@ const NewIndividualIntakeQuestions: React.FC = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
       {Boolean(collectionUrl) && (
-        <IndividualIntakeQuestions
+        <GenericIntakeQuestions
           collectionUrl={collectionUrl}
           mode="create"
+          postHook={usePostCollectionIndividualIntakeQuestions}
+          updateHook={useUpdateCollectionIndividualIntakeQuestions}
+          intakeQuestionType={""}
         />
       )}
     </>

@@ -1,5 +1,7 @@
-import VideoIntakeQuestions from "../../../../../components/VideoIntakeQuestions";
+import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuestions";
 import { useRouter } from "next/router";
+import usePostCollectionVideoIntakeQuestions from "../../../../../hooks/usePostCollectionVideoIntakeQuestions";
+import useUpdateCollectionVideoIntakeQuestions from "../../../../../hooks/useUpdateCollectionVideoIntakeQuestions";
 
 const UpdateVideoIntakeQuestions: React.FC = () => {
   const router = useRouter();
@@ -10,7 +12,12 @@ const UpdateVideoIntakeQuestions: React.FC = () => {
       ? collectionUrlBlob.join()
       : collectionUrlBlob) || "";
   return (
-    <VideoIntakeQuestions collectionUrl={collectionUrl}></VideoIntakeQuestions>
+    <GenericIntakeQuestions
+      collectionUrl={collectionUrl}
+      postHook={usePostCollectionVideoIntakeQuestions}
+      updateHook={useUpdateCollectionVideoIntakeQuestions}
+      intakeQuestionType="video"
+    />
   );
 };
 

@@ -10,21 +10,9 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import CollectionDetailsEdit from "../../../components/CollectionDetailsEdit";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
-import VideoIntakePreview from "../../../components/VideoIntakePreview";
-import VideoIntakeQuestions from "../../../components/VideoIntakeQuestions";
 import { Collection, FormFieldGroup } from "../../../types";
-import { shamCollection } from "../../../dummy_data/dummyCollection";
-import IndividualIntakeQuestions from "../../../components/IndividualIntakeQuestions";
-import IndividualIntakePreview from "../../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
-import EventIntakeQuestions from "../../../components/EventIntakeQuestions";
-import EventIntakePreview from "../../../components/EventIntakePreview";
-import {
-  QueryFunctionContext,
-  useMutation,
-  UseMutationResult,
-  useQuery,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../../utilities/textUtils";
@@ -33,6 +21,14 @@ import dayjs from "dayjs";
 import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
 import useGetCollection from "../../../hooks/useGetCollection";
 import CustomError from "../../../components/CustomError";
+import GenericIntakeQuestions from "../../../components/GenericIntakeQuestions";
+import usePostCollectionEventIntakeQuestions from "../../../hooks/usePostCollectionEventIntakeQuestions";
+import useUpdateCollectionEventIntakeQuestions from "../../../hooks/useUpdateCollectionEventIntakeQuestions";
+import GenericIntakePreview from "../../../components/GenericIntakePreview";
+import usePostCollectionVideoIntakeQuestions from "../../../hooks/usePostCollectionVideoIntakeQuestions";
+import useUpdateCollectionVideoIntakeQuestions from "../../../hooks/useUpdateCollectionVideoIntakeQuestions";
+import usePostCollectionIndividualIntakeQuestions from "../../../hooks/usePostCollectionIndividualIntakeQuestions";
+import useUpdateCollectionIndividualIntakeQuestions from "../../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const CollectionEditor: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -274,7 +270,6 @@ const CollectionEditor: React.FC = () => {
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
                   }
-                  // setCollection={setCollection}
                 />
               ) : (
                 <CollectionDetailsView
@@ -289,41 +284,59 @@ const CollectionEditor: React.FC = () => {
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name &&
                 individualQuestionsFormFieldGroup && (
-                  <IndividualIntakeQuestions
+                  <GenericIntakeQuestions
                     collectionUrl={localUrlPathAsString}
                     mode="edit"
+                    postHook={usePostCollectionIndividualIntakeQuestions}
+                    updateHook={useUpdateCollectionIndividualIntakeQuestions}
+                    intakeQuestionType="invidual"
                   />
                 )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && (
-                <IndividualIntakePreview collectionUrl={localUrlPathAsString} />
+                <GenericIntakePreview
+                  collectionUrl={localUrlPathAsString}
+                  intakeQuestionType="individual"
+                />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && videoQuestionsFormFieldGroup && (
-                <VideoIntakeQuestions
+                <GenericIntakeQuestions
                   collectionUrl={collection?.metadata?.urlPath || ""}
                   mode="edit"
+                  postHook={usePostCollectionVideoIntakeQuestions}
+                  updateHook={useUpdateCollectionVideoIntakeQuestions}
+                  intakeQuestionType="video"
                 />
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && (
-                <VideoIntakePreview collectionUrl={localUrlPathAsString} />
+                <GenericIntakePreview
+                  collectionUrl={localUrlPathAsString}
+                  intakeQuestionType="video"
+                />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && eventQuestionsFormFieldGroup && (
-                <EventIntakeQuestions
+                <GenericIntakeQuestions
                   collectionUrl={localUrlPathAsString}
                   mode="edit"
+                  postHook={usePostCollectionEventIntakeQuestions}
+                  updateHook={useUpdateCollectionEventIntakeQuestions}
+                  intakeQuestionType="event"
                 />
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
               {collection.metadata.name && (
-                <EventIntakePreview collectionUrl={localUrlPathAsString} />
+                <GenericIntakePreview
+                  collectionUrl={localUrlPathAsString}
+                  intakeQuestionType="event"
+                />
               )}
             </Grid>
           </>

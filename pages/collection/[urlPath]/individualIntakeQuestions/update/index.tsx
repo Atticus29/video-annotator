@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
-import IndividualIntakeQuestions from "../../../../../components/IndividualIntakeQuestions";
+import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuestions";
+import usePostCollectionIndividualIntakeQuestions from "../../../../../hooks/usePostCollectionIndividualIntakeQuestions";
+import useUpdateCollectionIndividualIntakeQuestions from "../../../../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const UpdateIndividualIntakeQuestions: React.FC = () => {
   const router = useRouter();
@@ -9,7 +11,14 @@ const UpdateIndividualIntakeQuestions: React.FC = () => {
     (Array.isArray(collectionUrlBlob)
       ? collectionUrlBlob.join()
       : collectionUrlBlob) || "";
-  return <IndividualIntakeQuestions collectionUrl={collectionUrl} />;
+  return (
+    <GenericIntakeQuestions
+      collectionUrl={collectionUrl}
+      postHook={usePostCollectionIndividualIntakeQuestions}
+      updateHook={useUpdateCollectionIndividualIntakeQuestions}
+      intakeQuestionType="individual"
+    />
+  );
 };
 
 export default UpdateIndividualIntakeQuestions;

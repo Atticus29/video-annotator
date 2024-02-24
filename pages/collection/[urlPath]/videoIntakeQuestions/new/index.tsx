@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import VideoIntakeQuestions from "../../../../../components/VideoIntakeQuestions";
-import useGetCollection from "../../../../../hooks/useGetCollection";
-import { FormFieldGroup } from "../../../../../types";
 import { useRouter } from "next/router";
+import usePostCollectionVideoIntakeQuestions from "../../../../../hooks/usePostCollectionVideoIntakeQuestions";
+import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuestions";
+import useUpdateCollectionVideoIntakeQuestions from "../../../../../hooks/useUpdateCollectionVideoIntakeQuestions";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const NewVideoIntakeQuestions: React.FC = () => {
   const router = useRouter();
@@ -13,10 +13,22 @@ const NewVideoIntakeQuestions: React.FC = () => {
       ? collectionUrlBlob.join()
       : collectionUrlBlob) || "";
   return (
-    <VideoIntakeQuestions
-      collectionUrl={collectionUrl}
-      mode="create"
-    ></VideoIntakeQuestions>
+    <>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={!collectionUrl}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {Boolean(collectionUrl) && (
+        <GenericIntakeQuestions
+          collectionUrl={collectionUrl}
+          postHook={usePostCollectionVideoIntakeQuestions}
+          updateHook={useUpdateCollectionVideoIntakeQuestions}
+          intakeQuestionType="video"
+        />
+      )}
+    </>
   );
 };
 

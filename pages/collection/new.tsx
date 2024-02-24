@@ -1,28 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  Backdrop,
-  Button,
-  CircularProgress,
-  Grid,
-  IconButton,
-  Snackbar,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import { Grid } from "@mui/material";
 import CollectionDetailsEdit from "../../components/CollectionDetailsEdit";
-import CollectionDetailsView from "../../components/CollectionDetailsView";
-import VideoIntakePreview from "../../components/VideoIntakePreview";
-import VideoIntakeQuestions from "../../components/VideoIntakeQuestions";
-import { Collection, FormFieldGroup } from "../../types";
-import { shamCollection } from "../../dummy_data/dummyCollection";
-import IndividualIntakeQuestions from "../../components/IndividualIntakeQuestions";
-import IndividualIntakePreview from "../../components/IndividualIntakePreview";
-import { get } from "lodash-es";
-import EventIntakeQuestions from "../../components/EventIntakeQuestions";
-import EventIntakePreview from "../../components/EventIntakePreview";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import axios from "axios";
-import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { sanitizeString } from "../../utilities/textUtils";
+import { Collection } from "../../types";
+import { IntlShape, useIntl } from "react-intl";
 import { NextRouter, useRouter } from "next/router";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import UnsavedChangesPrompt from "../../components/UnsavedChangesPrompt";
@@ -31,45 +11,45 @@ const NewCollection: React.FC = () => {
   const intl: IntlShape = useIntl();
   const router: NextRouter = useRouter();
   const { user, authError } = useFirebaseAuth();
-  const localUrlPath: string | string[] | undefined = router.query.urlPath;
-  let localUrlPathAsString: string =
-    (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
+  // const localUrlPath: string | string[] | undefined = router.query.urlPath;
+  // let localUrlPathAsString: string =
+  //   (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
 
-  const collectionFailMsg: string = intl.formatMessage({
-    id: "COLLECTION_WAS_NOT_SAVED",
-  });
-  const collectionSaveMsg: string = intl.formatMessage({
-    id: "COLLECTION_SAVED_SUCCESSFULL",
-  });
+  // const collectionFailMsg: string = intl.formatMessage({
+  //   id: "COLLECTION_WAS_NOT_SAVED",
+  // });
+  // const collectionSaveMsg: string = intl.formatMessage({
+  //   id: "COLLECTION_SAVED_SUCCESSFULL",
+  // });
   // const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
   //   {}
   // );
-  const [individualQuestionFormValues, setIndividualQuestionFormValues] =
-    useState<{}>({});
-  const [eventQuestionFormValues, setEventQuestionFormValues] = useState<{}>(
-    {}
-  );
+  // const [individualQuestionFormValues, setIndividualQuestionFormValues] =
+  //   useState<{}>({});
+  // const [eventQuestionFormValues, setEventQuestionFormValues] = useState<{}>(
+  //   {}
+  // );
 
   // const [
   //   arevideoQuestionFormValuesInvalid,
   //   setArevideoQuestionFormValuesInvalid,
   // ] = useState<{}>({});
-  const [
-    areIndividualQuestionFormValuesInvalid,
-    setAreIndividualQuestionFormValuesInvalid,
-  ] = useState<{}>({});
-  const [
-    areEventQuestionFormValuesInvalid,
-    setAreEventQuestionFormValuesInvalid,
-  ] = useState<{}>({});
+  // const [
+  //   areIndividualQuestionFormValuesInvalid,
+  //   setAreIndividualQuestionFormValuesInvalid,
+  // ] = useState<{}>({});
+  // const [
+  //   areEventQuestionFormValuesInvalid,
+  //   setAreEventQuestionFormValuesInvalid,
+  // ] = useState<{}>({});
 
   const [collection, setCollection] = useState<Collection>();
   const [isCollectionDetailsInEditMode, setIsCollectionDetailsInEditMode] =
     useState<boolean>(false);
   // const [open, setOpen] = useState<boolean>(false);
-  const [saveSucess, setSaveSuccess] = useState<boolean>(false);
-  const [saveFail, setSaveFail] = useState<boolean>(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  // const [saveSucess, setSaveSuccess] = useState<boolean>(false);
+  // const [saveFail, setSaveFail] = useState<boolean>(false);
+  // const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
   // useEffect(() => {
   //   const initialCollection = { ...shamCollection };
