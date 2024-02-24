@@ -632,15 +632,15 @@ export const shamCollection: Collection = {
   eventIntakeQuestions: [
     moveNameQuestion,
     actorName,
-    // startingPositionOfActor,
-    // startingPositionOfSubject,
-    // endingPositionOfActor,
-    // endingPositionOfSubject,
-    // pointsScored,
-    // isSuccessful,
-    // isSubmission,
-    // moveRating,
-    // comment, // @TODO add start time and end time to this
+    startingPositionOfActor,
+    startingPositionOfSubject,
+    endingPositionOfActor,
+    endingPositionOfSubject,
+    pointsScored,
+    isSuccessful,
+    isSubmission,
+    moveRating,
+    comment, // @TODO add start time and end time to this
   ],
   excludeFromDetailList: excludeFromCollectionTableDisplay,
 };

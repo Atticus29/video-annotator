@@ -26,7 +26,7 @@ const NewIndividualIntakeQuestions: React.FC = () => {
           mode="create"
           postHook={usePostCollectionIndividualIntakeQuestions}
           updateHook={useUpdateCollectionIndividualIntakeQuestions}
-          intakeQuestionType={""}
+          intakeQuestionType="individual"
         />
       )}
     </>

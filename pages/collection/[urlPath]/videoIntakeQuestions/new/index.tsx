@@ -26,6 +26,7 @@ const NewVideoIntakeQuestions: React.FC = () => {
           postHook={usePostCollectionVideoIntakeQuestions}
           updateHook={useUpdateCollectionVideoIntakeQuestions}
           intakeQuestionType="video"
+          mode="create"
         />
       )}
     </>
