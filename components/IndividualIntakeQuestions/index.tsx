@@ -34,7 +34,7 @@ const IndividualIntakeQuestions: React.FC<{
   collectionUrl: string;
   mode?: string;
 }> = ({ collectionUrl, mode = "edit" }) => {
-  console.log("deleteMe IndividualIntakeQuestions rendered ");
+  // console.log("deleteMe IndividualIntakeQuestions rendered ");
   const {
     isLoading,
     isError,
@@ -59,7 +59,7 @@ const IndividualIntakeQuestions: React.FC<{
     setAreIndividualQuestionFormValuesInvalid,
   ] = useState<{}>({});
   const formFieldGroup: FormFieldGroup = useMemo(() => {
-    console.log("deleteMe useMemo e1 called");
+    // console.log("deleteMe useMemo e1 called");
     return {
       title: "IndividualFormFieldGroupForTheWholeCollection",
       setValues: setIndividualQuestionFormValues,
@@ -73,8 +73,8 @@ const IndividualIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    console.log("deleteMe useEffect a1 is called and actual values is now: ");
-    console.log(formFieldGroup.actualValues);
+    // console.log("deleteMe useEffect a1 is called and actual values is now: ");
+    // console.log(formFieldGroup.actualValues);
     if (
       mode === "create" && // @TODO maybe this is moot now
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -113,10 +113,10 @@ const IndividualIntakeQuestions: React.FC<{
   const [error, setError] = useState<string>("");
 
   const newQuestion: SingleFormField = useMemo(() => {
-    console.log(
-      "deleteMe useMemo b1 is called and formFieldGroup.actualValues are: "
-    );
-    console.log(formFieldGroup.actualValues);
+    // console.log(
+    //   "deleteMe useMemo b1 is called and formFieldGroup.actualValues are: "
+    // );
+    // console.log(formFieldGroup.actualValues);
     return {
       key:
         transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -253,7 +253,7 @@ const IndividualIntakeQuestions: React.FC<{
   };
 
   const intakeQuestionElements = useMemo(() => {
-    console.log("deleteMe useMemo c1 called");
+    // console.log("deleteMe useMemo c1 called");
     return map(
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
@@ -313,7 +313,7 @@ const IndividualIntakeQuestions: React.FC<{
   }, [formFieldGroup]);
 
   const individualIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
-    console.log("deleteMe useMemo d1 called");
+    // console.log("deleteMe useMemo d1 called");
     return Boolean(collection?.individualIntakeQuestions);
   }, [collection]);
 

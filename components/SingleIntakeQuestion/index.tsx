@@ -47,6 +47,10 @@ const SingleIntakeQuestion: React.FC<{
   isACoreQuestion = false,
   coreQuestionTranslationsValues,
 }) => {
+  console.log(
+    "deleteMe SingleIntakeQuestion rendered and formFieldGroup.actualValues is: "
+  );
+  console.log(formFieldGroup.actualValues);
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
@@ -80,12 +84,12 @@ const SingleIntakeQuestion: React.FC<{
   }, [formFieldGroup.actualValues, intakeQuestionIdx, intakeQuestionKey]);
 
   const intl: IntlShape = useIntl();
-  const [currentQuestionType, setCurrentQuestionType] =
-    useState<string>(intakeQuestionEl);
+  // const [currentQuestionType, setCurrentQuestionType] =
+  //   useState<string>(intakeQuestionEl);
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    setCurrentQuestionType(currentVal);
+    // setCurrentQuestionType(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
@@ -224,7 +228,11 @@ const SingleIntakeQuestion: React.FC<{
             <Select
               labelId={intakeQuestionKey + "-" + intakeQuestionEl}
               id={intakeQuestionKey + "-" + intakeQuestionEl + "-select"}
-              value={currentQuestionType}
+              value={
+                formFieldGroup.actualValues[
+                  intakeQuestionKey + "--" + intakeQuestionIdx
+                ]
+              } // currentQuestionType
               label="This should not be seen"
               onChange={handleQuestionChange} //this is currently assuming that the only dropdown is a question type change
               style={{ marginBottom: 10 }}
