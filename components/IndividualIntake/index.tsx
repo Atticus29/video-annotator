@@ -99,7 +99,7 @@ const IndividualIntake: React.FC<{
           localCollection?.individualIntakeQuestions && (
             <>
               <Grid item lg={12} sm={12}>
-                <ComposedFormSubmissionButton
+                <ComposedFormSubmissionButton // @TODO can probably use the new submission button
                   questionsOfConcern={
                     localCollection?.individualIntakeQuestions || []
                   }

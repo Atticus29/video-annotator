@@ -34,7 +34,7 @@ import useGetCollection from "../../hooks/useGetCollection";
 import { shamCollectionShell } from "../../dummy_data/dummyCollection";
 
 const CollectionDetailsEdit: React.FC<{
-  setIsCollectionDetailsInEditMode: (val: boolean) => void;
+  setIsCollectionDetailsInEditMode?: (val: boolean) => void;
   titleId?: string;
   mode?: string;
   collectionUrl?: string;
