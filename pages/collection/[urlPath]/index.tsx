@@ -248,7 +248,12 @@ const CollectionView: React.FC = () => {
                 id="YOUR_COLLECTION_IS_INCOMPLETE"
                 defaultMessage="Your collection isn't ready for primetime yet. You must create individual intake questions, video intake questions, and event intake questions in order for users of your collection to be able to create and annotate videos in your collection first."
                 values={{
-                  individualIntakeQuestions: (
+                  individualIntakeQuestions: get(
+                    collectionData,
+                    "individualIntakeQuestions"
+                  ) ? (
+                    ""
+                  ) : (
                     <Link
                       href={
                         "/collection/" +
@@ -259,7 +264,12 @@ const CollectionView: React.FC = () => {
                       Individual Intake Questions
                     </Link>
                   ),
-                  videoIntakeQuestions: (
+                  videoIntakeQuestions: get(
+                    collectionData,
+                    "videoIntakeQuestions"
+                  ) ? (
+                    ""
+                  ) : (
                     <Link
                       href={
                         "/collection/" +
@@ -270,7 +280,12 @@ const CollectionView: React.FC = () => {
                       Video Intake Questions
                     </Link>
                   ),
-                  eventIntakeQuestions: (
+                  eventIntakeQuestions: get(
+                    collectionData,
+                    "eventIntakeQuestions"
+                  ) ? (
+                    ""
+                  ) : (
                     <Link
                       href={
                         "/collection/" +

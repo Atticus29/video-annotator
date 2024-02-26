@@ -394,11 +394,23 @@ const GenericIntakeQuestions: React.FC<{
         !isPending &&
         !isPostCollectionGenericIntakeQuestionsError && (
           <>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                position: "sticky",
+                zIndex: 1000,
+                top: "22vh",
+              }}
+            >
               <Fab
                 onClick={handleNavigateClick}
                 variant="extended"
-                style={{ marginBottom: "1rem", marginTop: "1rem" }}
+                style={{
+                  marginBottom: "1rem",
+                  marginTop: "1rem",
+                  marginRight: "1rem",
+                }}
               >
                 <NavigationIcon sx={{ mr: 1 }} />
                 <FormattedMessage
