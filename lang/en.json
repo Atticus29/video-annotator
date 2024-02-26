@@ -155,5 +155,6 @@
   "UPDATE_AND_PREVIEW": "Update and Preview",
   "GENERIC_INTAKE_QUESTIONS": "{type} Intake Questions",
   "GENERIC_INTAKE_PREVIEW": "{type} Intake Preview",
-  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only it's label can be modified. We recommend using something like, {recommendation}."
+  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only it's label can be modified. We recommend using something like, {recommendation}.",
+  "BACK_TO_MAIN_COLLECTION_PAGE": "Back to main collection page"
 }

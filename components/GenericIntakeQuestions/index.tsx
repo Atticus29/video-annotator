@@ -9,9 +9,11 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
+  Fab,
   Grid,
   Typography,
 } from "@mui/material";
+import NavigationIcon from "@mui/icons-material/Navigation";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
@@ -28,6 +30,7 @@ import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidatio
 import GenericIntakePreview from "../GenericIntakePreview";
 import SingleIntakeQuestion from "../SingleIntakeQuestion";
 import { capitalizeEachWord } from "../../utilities/textUtils";
+import router from "next/router";
 
 const GenericIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -79,6 +82,11 @@ const GenericIntakeQuestions: React.FC<{
         return "videoIntakeQuestions";
     }
   })();
+
+  const handleNavigateClick: () => void = () => {
+    router.push("/collection/" + collectionUrl);
+  };
+
   const formFieldGroup: FormFieldGroup = useMemo(() => {
     // console.log("deleteMe useMemo e1 called");
     return {
@@ -385,88 +393,103 @@ const GenericIntakeQuestions: React.FC<{
         !isError &&
         !isPending &&
         !isPostCollectionGenericIntakeQuestionsError && (
-          <InfoPanel
-            titleDefault={intl.formatMessage(
-              { id: "GENERIC_INTAKE_QUESTIONS" },
-              { type: capitalizeEachWord(intakeQuestionType) }
-            )}
-            textOverrides={{ textAlign: "center" }}
-          >
-            <Grid container>
-              {transformActualValueObjIntoIntakeQuestions(
-                formFieldGroup.actualValues
-              ) && (
-                <Grid item lg={12} sm={12}>
-                  {intakeQuestionElements}
-                </Grid>
-              )}
-              <Grid item lg={12} sm={12}>
-                <Button
-                  style={{ marginBottom: 10 }}
-                  data-testid={"collection-details-submit-button"}
-                  variant="contained"
-                  onClick={createNewIntakeQuestion}
-                >
-                  <FormattedMessage
-                    id="ADD_ANOTHER_QUESTION"
-                    defaultMessage="Add another question"
-                  />
-                </Button>
-                {error && <CustomError errorMsg={error} />}
-              </Grid>
-            </Grid>
-            <Grid item lg={12} sm={12}>
-              {!isLoading && !isError && (
-                <SaveOrUpdateButtonWithValidation
-                  disabled={!Boolean(collection)}
-                  buttonTitle={buttonTitle}
-                  successMsg={intl.formatMessage({
-                    id: "COLLECTION_UPDATED_SUCCESSFULLY",
-                    defaultMessage: "Collection was updated successfully.",
-                  })}
-                  failMsg={intl.formatMessage(
-                    {
-                      id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
-                      defaultMessage:
-                        "Failed to update generic intake questions",
-                    },
-                    { type: intakeQuestionType }
-                  )}
-                  usePostOrUseUpdate={
-                    genericIntakeQuestionsAlreadyExist ? updateHook : postHook
-                  }
-                  mutationData={{
-                    collectionUrl: collectionUrl,
-                    ["collection" +
-                    capitalizeEachWord(intakeQuestionType) +
-                    "IntakeQuestions"]:
-                      transformActualValueObjIntoIntakeQuestions(
-                        formFieldGroup.actualValues
-                      ) || [],
-                  }}
-                  actualValues={formFieldGroup.actualValues}
-                  invalidValues={formFieldGroup.isInvalids}
-                  setParentStateOnSuccess={setShowPreview}
-                  queryKeysToInvalidate={[
-                    ["singleCollection", collection?.urlPath],
-                  ]}
-                />
-              )}
-              <Dialog
-                open={showPreview}
-                onClose={() => {
-                  setShowPreview(false);
-                }}
+          <>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Fab
+                onClick={handleNavigateClick}
+                variant="extended"
+                style={{ marginBottom: "1rem", marginTop: "1rem" }}
               >
-                <DialogContent>
-                  <GenericIntakePreview
-                    collectionUrl={collectionUrl}
-                    intakeQuestionType={intakeQuestionType}
+                <NavigationIcon sx={{ mr: 1 }} />
+                <FormattedMessage
+                  id="BACK_TO_MAIN_COLLECTION_PAGE"
+                  defaultMessage="Back to main collection page"
+                />
+              </Fab>
+            </div>
+            <InfoPanel
+              titleDefault={intl.formatMessage(
+                { id: "GENERIC_INTAKE_QUESTIONS" },
+                { type: capitalizeEachWord(intakeQuestionType) }
+              )}
+              textOverrides={{ textAlign: "center" }}
+            >
+              <Grid container>
+                {transformActualValueObjIntoIntakeQuestions(
+                  formFieldGroup.actualValues
+                ) && (
+                  <Grid item lg={12} sm={12}>
+                    {intakeQuestionElements}
+                  </Grid>
+                )}
+                <Grid item lg={12} sm={12}>
+                  <Button
+                    style={{ marginBottom: 10 }}
+                    data-testid={"collection-details-submit-button"}
+                    variant="contained"
+                    onClick={createNewIntakeQuestion}
+                  >
+                    <FormattedMessage
+                      id="ADD_ANOTHER_QUESTION"
+                      defaultMessage="Add another question"
+                    />
+                  </Button>
+                  {error && <CustomError errorMsg={error} />}
+                </Grid>
+              </Grid>
+              <Grid item lg={12} sm={12}>
+                {!isLoading && !isError && (
+                  <SaveOrUpdateButtonWithValidation
+                    disabled={!Boolean(collection)}
+                    buttonTitle={buttonTitle}
+                    successMsg={intl.formatMessage({
+                      id: "COLLECTION_UPDATED_SUCCESSFULLY",
+                      defaultMessage: "Collection was updated successfully.",
+                    })}
+                    failMsg={intl.formatMessage(
+                      {
+                        id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
+                        defaultMessage:
+                          "Failed to update generic intake questions",
+                      },
+                      { type: intakeQuestionType }
+                    )}
+                    usePostOrUseUpdate={
+                      genericIntakeQuestionsAlreadyExist ? updateHook : postHook
+                    }
+                    mutationData={{
+                      collectionUrl: collectionUrl,
+                      ["collection" +
+                      capitalizeEachWord(intakeQuestionType) +
+                      "IntakeQuestions"]:
+                        transformActualValueObjIntoIntakeQuestions(
+                          formFieldGroup.actualValues
+                        ) || [],
+                    }}
+                    actualValues={formFieldGroup.actualValues}
+                    invalidValues={formFieldGroup.isInvalids}
+                    setParentStateOnSuccess={setShowPreview}
+                    queryKeysToInvalidate={[
+                      ["singleCollection", collection?.urlPath],
+                    ]}
                   />
-                </DialogContent>
-              </Dialog>
-            </Grid>
-          </InfoPanel>
+                )}
+                <Dialog
+                  open={showPreview}
+                  onClose={() => {
+                    setShowPreview(false);
+                  }}
+                >
+                  <DialogContent>
+                    <GenericIntakePreview
+                      collectionUrl={collectionUrl}
+                      intakeQuestionType={intakeQuestionType}
+                    />
+                  </DialogContent>
+                </Dialog>
+              </Grid>
+            </InfoPanel>
+          </>
         )}
     </>
   );
