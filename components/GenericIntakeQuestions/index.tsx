@@ -13,7 +13,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import NavigationIcon from "@mui/icons-material/Navigation";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../CustomError";
 import InfoPanel from "../InfoPanel";
@@ -31,6 +30,7 @@ import GenericIntakePreview from "../GenericIntakePreview";
 import SingleIntakeQuestion from "../SingleIntakeQuestion";
 import { capitalizeEachWord } from "../../utilities/textUtils";
 import router from "next/router";
+import FloatingStickyButton from "../FloatingStickyButton";
 
 const GenericIntakeQuestions: React.FC<{
   collectionUrl: string;
@@ -45,7 +45,7 @@ const GenericIntakeQuestions: React.FC<{
   updateHook,
   intakeQuestionType,
 }) => {
-  // console.log("deleteMe GenericIntakeQuestions rendered ");
+  console.log("deleteMe GenericIntakeQuestions rendered ");
   const {
     isLoading,
     isError,
@@ -83,7 +83,10 @@ const GenericIntakeQuestions: React.FC<{
     }
   })();
 
+  const [backButtonLoading, setBackButtonLoading] = useState<boolean>(false);
+
   const handleNavigateClick: () => void = () => {
+    setBackButtonLoading(true);
     router.push("/collection/" + collectionUrl);
   };
 
@@ -102,26 +105,45 @@ const GenericIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    // console.log("deleteMe useEffect a1 is called and actual values is now: ");
-    // console.log(formFieldGroup.actualValues);
+    console.log("deleteMe useEffect a1 is called and actual values is now: ");
+    console.log(formFieldGroup.actualValues);
+    const formFieldGroupValueSetter: ((input: any) => void) | undefined =
+      formFieldGroup?.setValues;
     if (
       mode === "create" && // @TODO maybe this is moot now
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1 &&
       !hasAQuestionBeenDeleted &&
-      (get(shamCollection, intakeQuestionAccessor) || []).length > 0
+      (get(shamCollection, intakeQuestionAccessor) || []).length > 0 &&
+      !isLoading &&
+      !isError &&
+      (get(collection, intakeQuestionAccessor) || []).length < 1
     ) {
+      console.log("deleteMe this happens a");
       // add their values to the formFieldGroup
-      const transformedGenericIntakeQuestions =
+      const transformedGenericIntakeQuestions = // @TODO DRY this up
         transformIntakeQuestionsIntoActualValueObj(
           get(shamCollection, intakeQuestionAccessor) || []
         );
 
-      console.log("deleteMe transformedGenericIntakeQuestions is: ");
-      console.log(transformedGenericIntakeQuestions);
-
-      const formFieldGroupValueSetter: ((input: any) => void) | undefined =
-        formFieldGroup?.setValues;
+      if (formFieldGroupValueSetter) {
+        formFieldGroupValueSetter((prevState: any) => {
+          return {
+            ...prevState,
+            ...transformedGenericIntakeQuestions,
+          };
+        });
+      }
+    } else if (
+      (get(collection, intakeQuestionAccessor) || []).length > 0 &&
+      transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
+        .length < 1
+    ) {
+      console.log("deleteMe this happens b");
+      const transformedGenericIntakeQuestions = // @TODO DRY this up - it's the same as the stuff above
+        transformIntakeQuestionsIntoActualValueObj(
+          get(collection, intakeQuestionAccessor) || []
+        );
 
       if (formFieldGroupValueSetter) {
         formFieldGroupValueSetter((prevState: any) => {
@@ -133,11 +155,15 @@ const GenericIntakeQuestions: React.FC<{
       }
     }
   }, [
+    collection,
     formFieldGroup.actualValues,
     formFieldGroup?.setValues,
     hasAQuestionBeenDeleted,
     intakeQuestionAccessor,
+    isError,
+    isLoading,
     mode,
+    // nothingHasBeenEdited,
   ]);
 
   const [error, setError] = useState<string>("");
@@ -394,31 +420,10 @@ const GenericIntakeQuestions: React.FC<{
         !isPending &&
         !isPostCollectionGenericIntakeQuestionsError && (
           <>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                position: "sticky",
-                zIndex: 1000,
-                top: "22vh",
-              }}
-            >
-              <Fab
-                onClick={handleNavigateClick}
-                variant="extended"
-                style={{
-                  marginBottom: "1rem",
-                  marginTop: "1rem",
-                  marginRight: "1rem",
-                }}
-              >
-                <NavigationIcon sx={{ mr: 1 }} />
-                <FormattedMessage
-                  id="BACK_TO_MAIN_COLLECTION_PAGE"
-                  defaultMessage="Back to main collection page"
-                />
-              </Fab>
-            </div>
+            <FloatingStickyButton
+              handleNavigateClick={handleNavigateClick}
+              buttonLoading={backButtonLoading}
+            />
             <InfoPanel
               titleDefault={intl.formatMessage(
                 { id: "GENERIC_INTAKE_QUESTIONS" },

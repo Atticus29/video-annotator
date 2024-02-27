@@ -5,6 +5,7 @@ import useUpdateCollectionEventIntakeQuestions from "../../../../../hooks/useUpd
 import usePostCollectionEventIntakeQuestions from "../../../../../hooks/usePostCollectionEventIntakeQuestions";
 
 const NewEventIntakeQuestions: React.FC = () => {
+  console.log("deleteMe NewEventIntakeQuestions renders");
   const router = useRouter();
   const collectionUrlBlob: string | string[] | undefined =
     router?.query?.urlPath;

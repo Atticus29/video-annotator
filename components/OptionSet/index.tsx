@@ -30,6 +30,7 @@ const OptionSet: React.FC<{
   formFieldGroup,
   stringForAutocompleteOptions,
 }) => {
+  console.log("deleteMe OptionSet renders");
   const intl: IntlShape = useIntl();
   const checkBoxLabel: string = intl.formatMessage({
     id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",

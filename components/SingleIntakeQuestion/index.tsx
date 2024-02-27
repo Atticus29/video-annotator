@@ -28,7 +28,7 @@ import {
   transformIntakeQuestionsIntoActualValueObj,
   transformQuestion,
 } from "../../utilities/intakeQuestionUtils";
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import InfoIcon from "../InfoIcon";
 import { GridRow } from "@mui/x-data-grid";
 
@@ -47,9 +47,9 @@ const SingleIntakeQuestion: React.FC<{
   isACoreQuestion = false,
   coreQuestionTranslationsValues,
 }) => {
-  // console.log(
-  //   "deleteMe SingleIntakeQuestion rendered and formFieldGroup.actualValues is: "
-  // );
+  console.log(
+    "deleteMe SingleIntakeQuestion rendered " // and formFieldGroup.actualValues is:
+  );
   // console.log(formFieldGroup.actualValues);
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
