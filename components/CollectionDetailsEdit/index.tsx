@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import InfoIcon from "../InfoIcon";
 
 import {
@@ -38,11 +44,15 @@ const CollectionDetailsEdit: React.FC<{
   titleId?: string;
   mode?: string;
   collectionUrl?: string;
+  setParentSnackbarMessage?: Dispatch<SetStateAction<string>>;
+  setParentOpenSnackbar?: Dispatch<SetStateAction<boolean>>;
 }> = ({
   setIsCollectionDetailsInEditMode,
   titleId,
   mode = "edit",
   collectionUrl = "",
+  setParentSnackbarMessage,
+  setParentOpenSnackbar,
 }) => {
   const {
     data: collection,
@@ -136,8 +146,6 @@ const CollectionDetailsEdit: React.FC<{
   ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currentName: string = event?.currentTarget?.value;
     if (currentName.toLowerCase() !== "new") {
-      console.log("deleteMe setting current name to: ");
-      console.log(currentName);
       setName(currentName);
       setNameInvalid(!isValidName(currentName));
     } else {
@@ -292,6 +300,9 @@ const CollectionDetailsEdit: React.FC<{
       // setSaveSuccess(false);
       // setSaveFail(false);
       setSnackbarMessage("");
+      if (setParentSnackbarMessage) {
+        setParentSnackbarMessage("");
+      }
       setOpenSnackbar(false);
       return;
     }
@@ -300,12 +311,13 @@ const CollectionDetailsEdit: React.FC<{
     // setSaveSuccess(false);
     // setSaveFail(false);
     setSnackbarMessage("");
+    if (setParentSnackbarMessage) {
+      setParentSnackbarMessage("");
+    }
     setOpenSnackbar(false);
   };
 
   const handleSaveOrUpdate: () => void = async () => {
-    console.log("deleteMe name is: ");
-    console.log(name);
     if (uid) {
       const metadata: CollectionMetadata = {
         name,
@@ -328,9 +340,6 @@ const CollectionDetailsEdit: React.FC<{
         createdByEmail,
       };
 
-      console.log("deleteMe metadata before mutation is: ");
-      console.log(metadata);
-
       if (mode === "create") {
         createCollection(
           {
@@ -342,8 +351,6 @@ const CollectionDetailsEdit: React.FC<{
               updateSuccessCondition(responseData);
               const urlPathForRouter: string =
                 responseData?.data?.metadata?.urlPath || "";
-              console.log("deleteMe responseData is: ");
-              console.log(responseData);
               if (urlPathForRouter) {
                 router.push("/collection/" + urlPathForRouter);
               }
@@ -351,6 +358,9 @@ const CollectionDetailsEdit: React.FC<{
             onError: (error) => {
               // Handle error
               setSnackbarMessage(error.message);
+              if (setParentSnackbarMessage) {
+                setParentSnackbarMessage(error.message);
+              }
               console.error("Mutation error", error);
             },
           }
@@ -368,6 +378,9 @@ const CollectionDetailsEdit: React.FC<{
             onError: (error) => {
               // Handle error
               setSnackbarMessage(error.message);
+              if (setParentSnackbarMessage) {
+                setParentSnackbarMessage(error.message);
+              }
               console.error("Mutation error", error);
             },
           }
@@ -382,7 +395,11 @@ const CollectionDetailsEdit: React.FC<{
     });
     console.log("Mutation successful", responseData.message);
     setSnackbarMessage(responseData.message);
+    if (setParentSnackbarMessage) {
+      setParentSnackbarMessage(responseData.message);
+    }
     setOpenSnackbar(true);
+    if (setParentOpenSnackbar) setParentOpenSnackbar(true);
     if (setIsCollectionDetailsInEditMode) {
       setIsCollectionDetailsInEditMode(false);
     }
@@ -698,10 +715,17 @@ const CollectionDetailsEdit: React.FC<{
               disabled={!allRequiredValid || !uid}
               onClick={handleSaveOrUpdate}
             >
-              <FormattedMessage
-                id={mode === "create" ? "CREATE" : "UPDATE"}
-                defaultMessage={mode === "create" ? "Create" : "Update"}
-              />
+              <>
+                {(updatePending || createPending) && (
+                  <FormattedMessage id="SAVING" defaultMessage="Saving..." />
+                )}
+                {!updatePending && !createPending && (
+                  <FormattedMessage
+                    id={mode === "create" ? "CREATE" : "UPDATE"}
+                    defaultMessage={mode === "create" ? "Create" : "Update"}
+                  />
+                )}
+              </>
             </Button>
             {(isUpdateError || isCreateError) && (
               <CustomError errorMsg={createError ? createError : updateError} />

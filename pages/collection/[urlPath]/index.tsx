@@ -5,8 +5,11 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
+  IconButton,
   Link,
+  Snackbar,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -48,6 +51,23 @@ const CollectionView: React.FC = () => {
   } = useGetCollection(localUrlPathAsString.toLowerCase());
 
   const { isLoading, isError, data, error } = useGetUserRolesAsync(user?.uid);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const handleSnackbarClose = (
+    event: React.SyntheticEvent | Event | null,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      // in case you want this behavior to be different eventually
+      setSnackbarMessage("");
+      setOpenSnackbar(false);
+      return;
+    }
+
+    // the "finally" of it all
+    setSnackbarMessage("");
+    setOpenSnackbar(false);
+  };
   const isAdmin: boolean = true; // @TODO change
   const isOwner: boolean = useMemo(() => {
     if (user?.uid && collectionData?.metadata?.ownerId) {
@@ -211,8 +231,6 @@ const CollectionView: React.FC = () => {
       collectionData?.eventIntakeQuestions?.length < 1
     );
   }, [collectionData]);
-  // console.log("deleteMe shouldShowCollectionIncompleteAlert is: ");
-  // console.log(shouldShowCollectionIncompleteAlert);
 
   return (
     <>
@@ -232,6 +250,8 @@ const CollectionView: React.FC = () => {
               setIsCollectionDetailsInEditMode={
                 setIsCollectionDetailsInEditMode
               }
+              setParentSnackbarMessage={setSnackbarMessage}
+              setParentOpenSnackbar={setOpenSnackbar}
             />
           ) : (
             <CollectionDetailsView
@@ -386,6 +406,22 @@ const CollectionView: React.FC = () => {
           }
         />
       )}
+      <Snackbar
+        open={openSnackbar}
+        onClose={handleSnackbarClose}
+        autoHideDuration={6000}
+        message={snackbarMessage}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => handleSnackbarClose(null, "clickaway")}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </>
   );
 };
