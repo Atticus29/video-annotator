@@ -314,7 +314,9 @@ const CollectionView: React.FC = () => {
             </DialogContent>
           </Dialog>
           <DataTable
-            tableTitle={collectionData?.nameOfVideoPlural || videosFallback}
+            tableTitle={
+              collectionData?.metadata?.nameOfVideoPlural || videosFallback
+            }
             data={dataWithActions}
             colNamesToDisplay={colNamesToDisplayWithActions}
             actionButtonsToDisplay={{ view: "View" }}
@@ -334,7 +336,7 @@ const CollectionView: React.FC = () => {
             <FormattedMessage
               id="ADD_NEW_VIDEO_TO_COLLECTION"
               defaultMessage="Add New {videoName}"
-              values={{ videoName: collectionData?.nameOfVideo }}
+              values={{ videoName: collectionData?.metadata?.nameOfVideo }}
             />
           </Button>
 
@@ -359,14 +361,16 @@ const CollectionView: React.FC = () => {
           />
           <Button
             disabled={shouldShowCollectionIncompleteAlert}
-            data-testid={"new-video-add-button"}
+            data-testid={"new-individual-add-button"}
             variant="contained"
             onClick={handleNewIndividualClick}
           >
             <FormattedMessage
               id="ADD_NEW_INDIVIDUAL_TO_COLLECTION"
               defaultMessage="Add New {individualName}"
-              values={{ individualName: collectionData?.nameOfIndividual }}
+              values={{
+                individualName: collectionData?.metadata?.nameOfIndividual,
+              }}
             />
           </Button>
         </>
