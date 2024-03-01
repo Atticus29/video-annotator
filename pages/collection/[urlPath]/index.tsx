@@ -364,7 +364,7 @@ const CollectionView: React.FC = () => {
                     collectionData,
                     "eventIntakeQuestions"
                   ) ? (
-                    "" / update
+                    ""
                   ) : (
                     <Link
                       href={
@@ -433,7 +433,7 @@ const CollectionView: React.FC = () => {
           </Dialog>
           <IndividualsTableView
             collectionUrl={get(collectionData, ["metadata", "urlPath"])}
-            tableTitle={nameOfIndividualPlural}
+            tableTitle={collectionData?.metadata?.nameOfIndividualPlural}
             individualIntakeQuestions={get(
               collectionData,
               "individualIntakeQuestions"

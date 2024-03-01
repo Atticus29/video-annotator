@@ -162,6 +162,8 @@ const lastNameIndividualQuestion: SingleFormField = {
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
   validatorMethods: [isNonEmptyString],
   shouldBeCheckboxes: ["isRequired"],
+  isACoreQuestion: true,
+  recommendedLabel: "Last Name or Name or ID",
 };
 
 const firstNameIndividualQuestion: SingleFormField = {
