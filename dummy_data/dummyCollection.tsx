@@ -339,7 +339,7 @@ const moveNameQuestion: SingleFormField = {
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
   isACoreQuestion: true,
-  recommendedLabel: "Name of move",
+  recommendedLabel: "Name of event",
 };
 
 const startingPositionOfActor: SingleFormField = {

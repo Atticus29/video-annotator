@@ -71,6 +71,8 @@ const CollectionView: React.FC = () => {
   const isAdmin: boolean = true; // @TODO change
   const isOwner: boolean = useMemo(() => {
     if (user?.uid && collectionData?.metadata?.ownerId) {
+      const deleteMe: boolean = user?.uid === collectionData.metadata.ownerId;
+      console.log("deleteMe got here n1 and deleteMe is: " + deleteMe);
       return user?.uid === collectionData.metadata.ownerId;
     }
     return false;
@@ -261,6 +263,64 @@ const CollectionView: React.FC = () => {
                 setIsCollectionDetailsInEditMode
               }
             ></CollectionDetailsView>
+          )}
+          {canEdit && (
+            <Alert severity="info" style={{ marginBottom: "4vh" }}>
+              <FormattedMessage
+                id="EDIT_COLLECTION_INTAKE_QUESTIONS"
+                defaultMessage="You have edit access to this collection. Edit your individual intake questions, video intake questions, and event intake questions here:"
+                values={{
+                  individualIntakeQuestions: get(
+                    collectionData,
+                    "individualIntakeQuestions"
+                  ) ? (
+                    <Link
+                      href={
+                        "/collection/" +
+                        collectionData?.metadata?.urlPath +
+                        "/individualIntakeQuestions/new"
+                      }
+                    >
+                      Individual Intake Questions
+                    </Link>
+                  ) : (
+                    ""
+                  ),
+                  videoIntakeQuestions: get(
+                    collectionData,
+                    "videoIntakeQuestions"
+                  ) ? (
+                    <Link
+                      href={
+                        "/collection/" +
+                        collectionData?.metadata?.urlPath +
+                        "/videoIntakeQuestions/new"
+                      }
+                    >
+                      Video Intake Questions
+                    </Link>
+                  ) : (
+                    ""
+                  ),
+                  eventIntakeQuestions: get(
+                    collectionData,
+                    "eventIntakeQuestions"
+                  ) ? (
+                    <Link
+                      href={
+                        "/collection/" +
+                        collectionData?.metadata?.urlPath +
+                        "/eventIntakeQuestions/new"
+                      }
+                    >
+                      Event Intake Questions
+                    </Link>
+                  ) : (
+                    ""
+                  ),
+                }}
+              />
+            </Alert>
           )}
           {shouldShowCollectionIncompleteAlert && (
             <Alert severity="warning" style={{ marginBottom: "4vh" }}>
