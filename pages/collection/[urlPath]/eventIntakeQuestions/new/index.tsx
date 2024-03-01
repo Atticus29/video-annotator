@@ -4,7 +4,7 @@ import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuest
 import useUpdateCollectionEventIntakeQuestions from "../../../../../hooks/useUpdateCollectionEventIntakeQuestions";
 import usePostCollectionEventIntakeQuestions from "../../../../../hooks/usePostCollectionEventIntakeQuestions";
 
-const NewEventIntakeQuestions: React.FC = () => {
+const EditOrCreateEventIntakeQuestions: React.FC = () => {
   console.log("deleteMe NewEventIntakeQuestions renders");
   const router = useRouter();
   const collectionUrlBlob: string | string[] | undefined =
@@ -34,4 +34,4 @@ const NewEventIntakeQuestions: React.FC = () => {
   );
 };
 
-export default NewEventIntakeQuestions;
+export default EditOrCreateEventIntakeQuestions;

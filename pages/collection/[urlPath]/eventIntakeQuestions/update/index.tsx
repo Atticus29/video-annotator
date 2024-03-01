@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import { Backdrop, CircularProgress } from "@mui/material";
 import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuestions";
-import usePostCollectionIndividualIntakeQuestions from "../../../../../hooks/usePostCollectionIndividualIntakeQuestions";
-import useUpdateCollectionIndividualIntakeQuestions from "../../../../../hooks/useUpdateCollectionIndividualIntakeQuestions";
+import useUpdateCollectionEventIntakeQuestions from "../../../../../hooks/useUpdateCollectionEventIntakeQuestions";
+import usePostCollectionEventIntakeQuestions from "../../../../../hooks/usePostCollectionEventIntakeQuestions";
 
-const CreateOrUpdateIndividualIntakeQuestions: React.FC = () => {
+const EditOrCreateEventIntakeQuestions: React.FC = () => {
+  console.log("deleteMe NewEventIntakeQuestions renders");
   const router = useRouter();
   const collectionUrlBlob: string | string[] | undefined =
     router?.query?.urlPath;
@@ -23,13 +24,13 @@ const CreateOrUpdateIndividualIntakeQuestions: React.FC = () => {
       {Boolean(collectionUrl) && (
         <GenericIntakeQuestions
           collectionUrl={collectionUrl}
-          postHook={usePostCollectionIndividualIntakeQuestions}
-          updateHook={useUpdateCollectionIndividualIntakeQuestions}
-          intakeQuestionType="individual"
+          intakeQuestionType="event"
+          postHook={usePostCollectionEventIntakeQuestions}
+          updateHook={useUpdateCollectionEventIntakeQuestions}
         />
       )}
     </>
   );
 };
 
-export default CreateOrUpdateIndividualIntakeQuestions;
+export default EditOrCreateEventIntakeQuestions;

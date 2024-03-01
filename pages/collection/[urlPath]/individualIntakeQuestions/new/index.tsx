@@ -4,7 +4,7 @@ import GenericIntakeQuestions from "../../../../../components/GenericIntakeQuest
 import usePostCollectionIndividualIntakeQuestions from "../../../../../hooks/usePostCollectionIndividualIntakeQuestions";
 import useUpdateCollectionIndividualIntakeQuestions from "../../../../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
-const NewIndividualIntakeQuestions: React.FC = () => {
+const CreateOrUpdateIndividualIntakeQuestions: React.FC = () => {
   const router = useRouter();
   const collectionUrlBlob: string | string[] | undefined =
     router?.query?.urlPath;
@@ -33,4 +33,4 @@ const NewIndividualIntakeQuestions: React.FC = () => {
   );
 };
 
-export default NewIndividualIntakeQuestions;
+export default CreateOrUpdateIndividualIntakeQuestions;

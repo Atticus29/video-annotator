@@ -264,7 +264,7 @@ const CollectionView: React.FC = () => {
               }
             ></CollectionDetailsView>
           )}
-          {canEdit && (
+          {canEdit && !shouldShowCollectionIncompleteAlert && (
             <Alert severity="info" style={{ marginBottom: "4vh" }}>
               <FormattedMessage
                 id="EDIT_COLLECTION_INTAKE_QUESTIONS"
@@ -278,7 +278,7 @@ const CollectionView: React.FC = () => {
                       href={
                         "/collection/" +
                         collectionData?.metadata?.urlPath +
-                        "/individualIntakeQuestions/new"
+                        "/individualIntakeQuestions/update"
                       }
                     >
                       Individual Intake Questions
@@ -294,7 +294,7 @@ const CollectionView: React.FC = () => {
                       href={
                         "/collection/" +
                         collectionData?.metadata?.urlPath +
-                        "/videoIntakeQuestions/new"
+                        "/videoIntakeQuestions/update"
                       }
                     >
                       Video Intake Questions
@@ -310,7 +310,7 @@ const CollectionView: React.FC = () => {
                       href={
                         "/collection/" +
                         collectionData?.metadata?.urlPath +
-                        "/eventIntakeQuestions/new"
+                        "/eventIntakeQuestions/update"
                       }
                     >
                       Event Intake Questions
@@ -364,7 +364,7 @@ const CollectionView: React.FC = () => {
                     collectionData,
                     "eventIntakeQuestions"
                   ) ? (
-                    ""
+                    "" / update
                   ) : (
                     <Link
                       href={
