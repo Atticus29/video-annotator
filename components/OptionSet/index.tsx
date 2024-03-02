@@ -30,7 +30,6 @@ const OptionSet: React.FC<{
   formFieldGroup,
   stringForAutocompleteOptions,
 }) => {
-  console.log("deleteMe OptionSet renders");
   const intl: IntlShape = useIntl();
   const checkBoxLabel: string = intl.formatMessage({
     id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
@@ -80,8 +79,7 @@ const OptionSet: React.FC<{
     const canEndUserAddCustomOptionsVals =
       calculateWhetherCustomOptionValuesArePermitted(
         formFieldGroup,
-        questionIdx,
-        intl
+        questionIdx
       );
 
     updateIntakeQuestionFormField(
@@ -176,8 +174,11 @@ const OptionSet: React.FC<{
         }}
       >
         <Typography style={{ marginBottom: 10 }}>
-          Options for {question?.label}
-          {/* @TODO internationalize Options for */}
+          {intl.formatMessage({
+            id: "OPTIONS_FOR",
+            defaultMessage: "Options for",
+          })}{" "}
+          {question?.label}
         </Typography>
         {optionFormFields}
         <Button

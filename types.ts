@@ -71,9 +71,3 @@ export interface SingleFormField {
   isACoreQuestion?: boolean;
   recommendedLabel?: string;
 }
-
-// export interface QuestionValidity {
-//   label: boolean;
-//   type: boolean;
-//   language: boolean;
-// }

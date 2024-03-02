@@ -1,9 +1,5 @@
-import { FormFieldGroup, SingleFormField, Collection } from "../types";
-import {
-  isNonEmptyString,
-  isValidOption,
-  isValidUrl,
-} from "../utilities/validators";
+import { SingleFormField, Collection } from "../types";
+import { isNonEmptyString, isValidUrl } from "../utilities/validators";
 
 import moveNames from "./moveNames";
 import tournamentNames from "./tournamentNames";
@@ -34,7 +30,7 @@ export const individualsQuestion: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
-const firstQuestion: SingleFormField = {
+const urlQuestion: SingleFormField = {
   type: "URL",
   label: "URL",
   isRequired: true,
@@ -48,7 +44,7 @@ const firstQuestion: SingleFormField = {
   recommendedLabel: "URL",
 };
 
-const secondQuestion: SingleFormField = {
+const tournamentName: SingleFormField = {
   type: "Autocomplete",
   label: "Tournament Name",
   isRequired: false,
@@ -76,7 +72,7 @@ const locationName: SingleFormField = {
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
 };
 
-const thirdQuestion: SingleFormField = {
+const shouldBeGi: SingleFormField = {
   type: "Checkbox",
   label: "Gi?",
   isRequired: false,
@@ -87,7 +83,7 @@ const thirdQuestion: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
-const fourthQuestion: SingleFormField = {
+const dateOfMatch: SingleFormField = {
   type: "Date",
   label: "Date of match",
   language: "English",
@@ -97,26 +93,7 @@ const fourthQuestion: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
-// const fifthQuestion: SingleFormField = { // deprecated. Individuals are getting attached to each video directly as a separate step in video intake.
-//   label: "Name of Athlete on the Left",
-//   type: "Autocomplete",
-//   language: "English",
-//   isRequired: true,
-//   testId: "athleteLeftName",
-//   doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
-//   shouldBeCheckboxes: ["isRequired"],
-//   validatorMethods: [isNonEmptyString],
-//   invalidInputMessage: "INPUT_INVALID",
-//   autocompleteOptions: [
-//     "Fisher, Mark",
-//     "Deodara, Dirt",
-//     "Ziegler, Eddie",
-//     "Diggins, John",
-//   ],
-//   usersCanAddCustomOptions: true,
-// };
-
-const sixthQuestion: SingleFormField = {
+const ageQuestion: SingleFormField = {
   type: "Number",
   label: "Age",
   language: "English",
@@ -138,18 +115,6 @@ const numberReferees: SingleFormField = {
   validatorMethods: [],
   invalidInputMessage: "INPUT_INVALID",
   isRequired: false,
-};
-
-const seventhQuestion: SingleFormField = {
-  type: "Text",
-  label: "mystery string",
-  language: "English",
-  isRequired: false,
-  testId: "url",
-  doNotDisplay: defaultDoNotDisplays,
-  invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
-  validatorMethods: [isNonEmptyString],
-  shouldBeCheckboxes: ["isRequired"],
 };
 
 const lastNameIndividualQuestion: SingleFormField = {
@@ -607,20 +572,17 @@ export const shamCollection: Collection = {
   },
   videoIntakeQuestions: [
     // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
-    firstQuestion,
+    urlQuestion,
     natureOfTheMatch,
     typeOfRoundQuestion,
-    secondQuestion,
+    tournamentName,
     locationName,
-    thirdQuestion,
+    shouldBeGi,
     allRanks,
     weightClassIndividualQuestion,
-    fourthQuestion,
-    // fifthQuestion,
-    // sixthQuestion,
+    dateOfMatch,
     ageClassIndividualQuestion,
     numberReferees,
-    // seventhQuestion,
   ],
   individualIntakeQuestions: [
     lastNameIndividualQuestion,
@@ -663,18 +625,16 @@ export const shamCollection2: Collection = {
     language: "English",
   },
   videoIntakeQuestions: [
-    firstQuestion,
+    urlQuestion,
     natureOfTheMatch,
-    secondQuestion,
+    tournamentName,
     locationName,
-    thirdQuestion,
+    shouldBeGi,
     allRanks,
     weightClassIndividualQuestion,
-    fourthQuestion,
-    // fifthQuestion,
-    sixthQuestion,
+    dateOfMatch,
+    ageQuestion,
     numberReferees,
-    // seventhQuestion,
   ],
   individualIntakeQuestions: [
     lastNameIndividualQuestion,

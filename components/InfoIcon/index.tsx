@@ -8,12 +8,6 @@ const InfoIcon: React.FC<{
   defaultMessage?: string;
   values?: {};
 }> = ({ messageId, defaultMessage, values }) => {
-  if (values) {
-    // console.log("deleteMe values are: ");
-    // console.log(values);
-    // console.log("deleteMe messageId is: ");
-    // console.log(messageId);
-  }
   const intl: IntlShape = useIntl();
 
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -43,9 +37,8 @@ const InfoIcon: React.FC<{
           values
         )}
       >
-        <Avatar // @TODO extract this as its own component
+        <Avatar
           style={{
-            // border: "1px solid black",
             height: 25,
             width: 25,
             paddingRight: 0,

@@ -23,7 +23,6 @@ export function transformQuestion(
           return {
             type: "URL",
             ...baseQuestion,
-            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "MUST_BE_VALID_URL",
             validatorMethods: [isValidUrl],
@@ -32,7 +31,6 @@ export function transformQuestion(
           return {
             type: "Email",
             ...baseQuestion,
-            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "MUST_BE_VALID_EMAIL",
             validatorMethods: [isValidEmail],
@@ -41,7 +39,6 @@ export function transformQuestion(
           return {
             type: "Autocomplete",
             ...baseQuestion,
-            // isRequired: question.isRequired || false,
             autocompleteOptions: ["Option 1 - change me"],
             usersCanAddCustomOptions: true,
             doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
@@ -60,7 +57,6 @@ export function transformQuestion(
           return {
             type: "Date",
             ...baseQuestion,
-            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             validatorMethods: [],
           };
@@ -68,7 +64,6 @@ export function transformQuestion(
           return {
             type: "Number",
             ...baseQuestion,
-            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "INPUT_INVALID",
             validatorMethods: [],
@@ -77,7 +72,6 @@ export function transformQuestion(
           return {
             type: "Text",
             ...baseQuestion,
-            // isRequired: question.isRequired || false,
             doNotDisplay: defaultDoNotDisplays,
             invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
             validatorMethods: [isNonEmptyString],
@@ -95,11 +89,6 @@ export function transformQuestion(
 export function transformActualValueObjIntoIntakeQuestions(
   actualValueObj: any
 ) {
-  // console.log(
-  //   "deleteMe got here in transformActualValueObjIntoIntakeQuestions"
-  // );
-  // console.log("deleteMe actualValueObj is: ");
-  // console.log(actualValueObj);
   const returnVal: SingleFormField[] = [];
   const numberOfQuestions: number = filter(
     Object.keys(actualValueObj),
@@ -120,40 +109,6 @@ export function transformActualValueObjIntoIntakeQuestions(
     returnVal.push(currentQuestion);
   }
   return returnVal;
-
-  // return reduce(
-  //   actualValueObj,
-  //   (memo, attribute, attributeKey) => {
-  //     // console.log("deleteMe attribute is: ");
-  //     // console.log(attribute);
-  //     // console.log("attributeKey is: ");
-  //     // console.log(attributeKey);
-  //     const targetIntakeQuestionArrayIndex: number = Number(
-  //       attributeKey.split("--")[1]
-  //     );
-
-  //     // console.log(
-  //     //   "deleteMe targetIntakeQuestionArrayIndex is: " +
-  //     //     targetIntakeQuestionArrayIndex
-  //     // );
-  //     const newObj = ["test"];
-  //     // const objKeys: string[] = Object.keys(intakeQuestion);
-  //     // // const currentLabel: string = intakeQuestion.label;
-  //     // const newObj = reduce(
-  //     //   objKeys,
-  //     //   (memo, objKey) => {
-  //     //     const currentVal: any = get(intakeQuestion, [objKey]);
-  //     //     const newEntry: {} = {
-  //     //       [objKey + "--" + intakeQuestionIdx]: currentVal,
-  //     //     };
-  //     //     return { ...memo, ...newEntry };
-  //     //   },
-  //     //   []
-  //     // );
-  //     return [...memo, ...newObj];
-  //   },
-  //   [] as any[]
-  // );
 }
 
 export function transformIntakeQuestionsIntoActualValueObj(
@@ -164,7 +119,6 @@ export function transformIntakeQuestionsIntoActualValueObj(
     intakeQuestions,
     (memo, intakeQuestion, intakeQuestionIdx) => {
       const objKeys: string[] = Object.keys(intakeQuestion);
-      // const currentLabel: string = intakeQuestion.label;
       const newObj = reduce(
         objKeys,
         (memo, objKey) => {
@@ -261,49 +215,22 @@ export function calculateShouldBeCheckbox(
   question: SingleFormField,
   questionKey: string
 ) {
-  // console.log("deleteMe calculateShouldBeCheckbox entered and question is: ");
-  // console.log(question);
-
-  // console.log(
-  //   "deleteMe calculateShouldBeCheckbox and questionKey in calculateShouldBeCheckbox is: " +
-  //     questionKey
-  // );
-
   const onTheNoDisplayList: boolean = (question?.doNotDisplay || []).includes(
     questionKey
   );
-  // console.log(
-  //   "deleteMe calculateShouldBeCheckbox onTheNoDisplayList is: " +
-  //     onTheNoDisplayList
-  // );
-  // console.log(onTheNoDisplayList);
 
   const onCheckboxList: boolean = (question?.shouldBeCheckboxes || []).includes(
     questionKey
   );
-  // console.log(
-  //   "deleteMe calculateShouldBeCheckbox onCheckboxList is: " + onCheckboxList
-  // );
   const currentAttributesToDisplay =
     calculateCurrentAttributesToDisplay(question);
-  // console.log(
-  //   "deleteMe calculateShouldBeCheckbox currentAttributesToDisplay are: " +
-  //     currentAttributesToDisplay.toString()
-  // );
-  // console.log(currentAttributesToDisplay);
 
   const onTheDisplayListForThisQuestionType: boolean =
     currentAttributesToDisplay.includes(questionKey);
 
-  // console.log(
-  //   "deleteMe calculateShouldBeCheckbox onTheDisplayListForThisQuestionType is: " +
-  //     onTheDisplayListForThisQuestionType
-  // );
-
   const shouldBeTypeDropdown: boolean =
     questionKey === "type" && onTheDisplayListForThisQuestionType;
 
-  // console.log("deleteMe shouldBeTypeDropdown is: " + shouldBeTypeDropdown);
   return (
     !onTheNoDisplayList &&
     onCheckboxList &&

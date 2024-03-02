@@ -1,12 +1,13 @@
 import { Backdrop, CircularProgress, Grid } from "@mui/material";
 import { get, map } from "lodash-es";
-import { Collection, FormFieldGroup } from "../../types";
+import { FormFieldGroup } from "../../types";
 import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useGetCollection from "../../hooks/useGetCollection";
 import { useMemo, useState } from "react";
+import CustomError from "../CustomError";
 
 const GenericIntakePreview: React.FC<{
   collectionUrl: string;
@@ -110,6 +111,7 @@ const GenericIntakePreview: React.FC<{
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      {!isLoading && isError && <CustomError errorMsg={errorMsg} />}
       {!isLoading && !isError && (
         <Grid container>
           {map(
@@ -127,17 +129,6 @@ const GenericIntakePreview: React.FC<{
                 );
               }
             }
-          )}
-          {collection?.individualQuestionsFormFieldGroup && (
-            <Grid item lg={12} sm={12}>
-              <ComposedFormSubmissionButton // @TODO think about either removing or rendering impotent because preview mode. But right now, it's broken
-                questionsOfConcern={
-                  get(collection, intakeQuestionAccessor) || []
-                }
-                formFieldGroupOfConcern={formFieldGroup}
-                collection={collection}
-              />
-            </Grid>
           )}
         </Grid>
       )}

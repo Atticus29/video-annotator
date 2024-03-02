@@ -81,18 +81,8 @@ const VideoIntake: React.FC<{
         `VideoIntake Before Query with key ${queryKey} is NOT in the cache.`
       );
     }
-    // queryClient.invalidateQueries();
     queryClient.invalidateQueries({ queryKey: queryKey });
     queryState = queryCache.find({ queryKey: queryKey });
-    if (queryState) {
-      console.log(
-        `VideoIntake After Query with key ${queryKey} is in the cache.`
-      );
-    } else {
-      console.log(
-        `VideoIntake After Query with key ${queryKey} is NOT in the cache.`
-      );
-    }
   };
   const videoFallback: string = intl.formatMessage({ id: "VIDEO" });
   const individualFallback: string = intl.formatMessage({
@@ -196,7 +186,6 @@ const VideoIntake: React.FC<{
                 </Alert>
               )}
             </Grid>
-            {/* )} */}
             <Grid item lg={12} sm={12} key="individual-creation-button">
               <Button
                 data-testid={"new-video-add-button"}

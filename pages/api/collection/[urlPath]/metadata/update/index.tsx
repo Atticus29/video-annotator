@@ -39,33 +39,10 @@ const collectionMetadataUpdate = async (
         res
           .status(404)
           .json({ message: "Target collection was not found in the database" });
-        // const minimalCollection: CollectionData = {
-        //   excludeFromDetailList: [
-        //     "_id",
-        //     "id",
-        //     "videoIntakeQuestions",
-        //     "individualIntakeQuestions",
-        //     "eventIntakeQuestions",
-        //     "excludeFromDetailList",
-        //     "videoQuestionsFormFieldGroup",
-        //     "individualQuestionsFormFieldGroup",
-        //     "eventQuestionsFormFieldGroup",
-        //     "videos",
-        //     "individuals",
-        //   ],
-        //   metadata: { ...metadata, urlPath: metadata.urlPath?.toLowerCase() },
-        // };
-        // const creationResult = await coll.insertOne(minimalCollection);
-        // res.status(200).json({
-        //   message: "Collection with metadata created successfully",
-        //   data: minimalCollection,
-        //   result: creationResult,
-        // });
       } else {
         res.status(200).json({
           message: "Collection metadata updated successfully",
           data: metadata,
-          // result: result,
         });
       }
     }

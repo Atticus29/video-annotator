@@ -157,7 +157,8 @@ const CollectionEditor: React.FC = () => {
         ...rest,
       };
       const response = await axios.patch(
-        "/api/collection/update/" + get(updatedCollection, ["urlPath"]),
+        "/api/collection/update/" +
+          get(updatedCollection, ["metadata", "urlPath"]),
         {
           data: updatedCollection,
         }
@@ -170,7 +171,7 @@ const CollectionEditor: React.FC = () => {
       setSaveSuccess(true);
       setSaveFail(false);
       handleClose();
-      router.push("/collection/edit/" + data?.data?.urlPath);
+      router.push("/collection/edit/" + data?.data?.metadata?.urlPath);
     },
     onError: (error) => {
       setSnackbarMessage(
@@ -206,7 +207,7 @@ const CollectionEditor: React.FC = () => {
   };
 
   const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event | null,
+    _event: React.SyntheticEvent | Event | null,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -261,7 +262,7 @@ const CollectionEditor: React.FC = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
-        {collection?.metadata.name && (
+        {collection?.metadata?.name && (
           <>
             <Grid item sm={12} md={12}>
               {isCollectionDetailsInEditMode ? (

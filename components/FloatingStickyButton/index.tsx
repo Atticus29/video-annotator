@@ -1,11 +1,12 @@
-import { CircularProgress, Fab } from "@mui/material";
-import { FormattedMessage } from "react-intl";
-import NavigationIcon from "@mui/icons-material/Navigation";
+import { CircularProgress, Fab, Tooltip } from "@mui/material";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import HomeIcon from "@mui/icons-material/Home";
 
 const FloatingStickyButton: React.FC<{
   handleNavigateClick: () => void;
   buttonLoading: boolean;
 }> = ({ handleNavigateClick, buttonLoading }) => {
+  const intl: IntlShape = useIntl();
   return (
     <div
       style={{
@@ -27,13 +28,17 @@ const FloatingStickyButton: React.FC<{
       >
         {buttonLoading && <CircularProgress color="inherit" />}
         {!buttonLoading && (
-          <>
-            <NavigationIcon sx={{ mr: 1 }} />
-            <FormattedMessage
-              id="BACK_TO_MAIN_COLLECTION_PAGE"
-              defaultMessage="Back to main collection page"
-            />
-          </>
+          <Tooltip // @TODO this is not currently working
+            title={intl.formatMessage({
+              id: "BACK_TO_MAIN_COLLECTION_PAGE",
+              defaultMessage: "Back to main collection page",
+            })}
+          >
+            <>
+              <HomeIcon sx={{ mr: 1 }} />
+              <FormattedMessage id="BACK" defaultMessage="Back" />
+            </>
+          </Tooltip>
         )}
       </Fab>
     </div>

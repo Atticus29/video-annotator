@@ -135,8 +135,6 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
           (await userInfo?.user?.getIdToken()) || null;
         if (userToken) {
           const uid: string = userInfo?.user?.uid;
-          console.log("deleteMe got here a1 and uid is: ");
-          console.log(uid);
 
           mutate(
             // { uid: uid, roles: { isAdmin: true } },

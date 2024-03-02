@@ -36,6 +36,7 @@ export default function useGetUserRolesAsync(uid: string) {
     };
 
     // Call the fetchData function when uid changes
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useFetchData();
   }, [uid]); // useEffect dependency on uid
 

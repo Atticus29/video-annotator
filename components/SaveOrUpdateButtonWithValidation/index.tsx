@@ -22,8 +22,8 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   mutationData: {};
   actualValues: {};
   invalidValues: {};
-  setParentStateOnSuccess?: (input: boolean) => void; // to trigger dialogs in the parent component
-  setParentStateOnFailure?: (input: boolean) => void; // to trigger dialogs in the parent component
+  setParentStateOnSuccess?: (input: boolean) => void;
+  setParentStateOnFailure?: (input: boolean) => void;
   queryKeysToInvalidate?: string[][];
   disabled?: boolean;
 }> = ({

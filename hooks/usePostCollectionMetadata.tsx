@@ -1,9 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { CollectionMetadata, Collection as CollectionData } from "../types";
 import axios from "axios";
 
 export default function usePostCollectionMetadata() {
-  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (variables: {
       collectionUrl: string;
@@ -20,8 +19,6 @@ export default function usePostCollectionMetadata() {
         if (response.status === 200) {
           return response?.data;
         } else {
-          console.log("deleteMe failing response is: ");
-          console.log(response);
           throw new Error(
             "Invalid status code when updating collection metadata"
           );

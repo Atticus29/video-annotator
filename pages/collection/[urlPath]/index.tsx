@@ -54,7 +54,7 @@ const CollectionView: React.FC = () => {
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event | null,
+    _event: React.SyntheticEvent | Event | null,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -71,8 +71,6 @@ const CollectionView: React.FC = () => {
   const isAdmin: boolean = true; // @TODO change
   const isOwner: boolean = useMemo(() => {
     if (user?.uid && collectionData?.metadata?.ownerId) {
-      const deleteMe: boolean = user?.uid === collectionData.metadata.ownerId;
-      console.log("deleteMe got here n1 and deleteMe is: " + deleteMe);
       return user?.uid === collectionData.metadata.ownerId;
     }
     return false;
@@ -130,58 +128,14 @@ const CollectionView: React.FC = () => {
     // @TODO can combine this with handleCreateIndividualDialogClose
     setCreateVideoDialogOpen(false);
     const queryKey = ["singleCollection", localUrlPathAsString];
-    const queryCache = queryClient.getQueryCache();
-    let queryState = queryCache.find({ queryKey: queryKey });
-    if (queryState) {
-      console.log(
-        `CollectionView handleCreateVideoDialogClose Before Query with key ${queryKey} is in the cache.`
-      );
-    } else {
-      console.log(
-        `CollectionView handleCreateVideoDialogClose Before Query with key ${queryKey} is NOT in the cache.`
-      );
-    }
-    // queryClient.invalidateQueries();
     queryClient.invalidateQueries({ queryKey: queryKey });
-    queryState = queryCache.find({ queryKey: queryKey });
-    if (queryState) {
-      console.log(
-        `CollectionView handleCreateVideoDialogClose After Query with key ${queryKey} is in the cache.`
-      );
-    } else {
-      console.log(
-        `CollectionView handleCreateVideoDialogClose After Query with key ${queryKey} is NOT in the cache.`
-      );
-    }
   };
 
   const handleCreateIndividualDialogClose = () => {
     // @TODO can combine this with handleCreateVideoDialogClose
     setCreateIndividualDialogOpen(false);
     const queryKey = ["individualsFor", localUrlPathAsString];
-    const queryCache = queryClient.getQueryCache();
-    let queryState = queryCache.find({ queryKey: queryKey });
-    if (queryState) {
-      console.log(
-        `CollectionView handleCreateIndividualDialogClose Before Query with key ${queryKey} is in the cache.`
-      );
-    } else {
-      console.log(
-        `CollectionView handleCreateIndividualDialogClose Before Query with key ${queryKey} is NOT in the cache.`
-      );
-    }
-    // queryClient.invalidateQueries();
     queryClient.invalidateQueries({ queryKey: queryKey });
-    queryState = queryCache.find({ queryKey: queryKey });
-    if (queryState) {
-      console.log(
-        `CollectionView handleCreateIndividualDialogClose After Query with key ${queryKey} is in the cache.`
-      );
-    } else {
-      console.log(
-        `CollectionView handleCreateIndividualDialogClose After Query with key ${queryKey} is NOT in the cache.`
-      );
-    }
   };
 
   const colNamesToDisplay: {} = useMemo(() => {
@@ -210,19 +164,8 @@ const CollectionView: React.FC = () => {
   const individualsFallback: string = intl.formatMessage({
     id: "INDIVIDUALS_PLURAL",
   });
-  const nameOfIndividualPlural: string = get(
-    collectionData,
-    "nameOfIndividualPlural",
-    individualsFallback
-  );
 
   const shouldShowCollectionIncompleteAlert: boolean = useMemo(() => {
-    console.log("deleteMe collectionData is: ");
-    console.log(collectionData);
-    console.log(
-      "deleteMe collectionData?.individualIntakeQuestions?.length is: "
-    );
-    console.log(collectionData?.individualIntakeQuestions?.length);
     return (
       collectionData?.individualIntakeQuestions == undefined ||
       collectionData?.videoIntakeQuestions == undefined ||
@@ -381,7 +324,6 @@ const CollectionView: React.FC = () => {
             </Alert>
           )}
 
-          {/* Video creation */}
           <Dialog
             open={createVideoDialogOpen}
             onClose={handleCreateVideoDialogClose}
@@ -433,7 +375,10 @@ const CollectionView: React.FC = () => {
           </Dialog>
           <IndividualsTableView
             collectionUrl={get(collectionData, ["metadata", "urlPath"])}
-            tableTitle={collectionData?.metadata?.nameOfIndividualPlural}
+            tableTitle={
+              collectionData?.metadata?.nameOfIndividualPlural ||
+              individualsFallback
+            }
             individualIntakeQuestions={get(
               collectionData,
               "individualIntakeQuestions"

@@ -135,7 +135,6 @@ const CollectionDetailsEdit: React.FC<{
     mode,
   ]);
 
-  // const [error, setError] = useState<string>("");
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(false);
 
   // Collection name
@@ -297,8 +296,6 @@ const CollectionDetailsEdit: React.FC<{
   ) => {
     if (reason === "clickaway") {
       // in case you want this behavior to be different eventually
-      // setSaveSuccess(false);
-      // setSaveFail(false);
       setSnackbarMessage("");
       if (setParentSnackbarMessage) {
         setParentSnackbarMessage("");
@@ -308,8 +305,6 @@ const CollectionDetailsEdit: React.FC<{
     }
 
     // the "finally" of it all
-    // setSaveSuccess(false);
-    // setSaveFail(false);
     setSnackbarMessage("");
     if (setParentSnackbarMessage) {
       setParentSnackbarMessage("");
@@ -410,6 +405,36 @@ const CollectionDetailsEdit: React.FC<{
     defaultMessage: "Is the collection private?",
   });
 
+  const nameOfVideoI8n: string = intl.formatMessage({
+    id: "NAME_OF_VIDEO",
+    defaultMessage: "Name of video",
+  });
+
+  const nameOfVideoPluralI8n: string = intl.formatMessage({
+    id: "NAME_OF_VIDEO_PLURAL",
+    defaultMessage: "Name of video plural",
+  });
+
+  const nameOfEventI8n: string = intl.formatMessage({
+    id: "NAME_OF_EVENT",
+    defaultMessage: "Name of event",
+  });
+
+  const nameOfEventPluralI8n: string = intl.formatMessage({
+    id: "NAME_OF_EVENT_PLURAL",
+    defaultMessage: "Name of event plural",
+  });
+
+  const nameOfIndividualI8n: string = intl.formatMessage({
+    id: "NAME_OF_INDIVIDUAL",
+    defaultMessage: "Name of individual",
+  });
+
+  const nameOfIndividualPluralI8n: string = intl.formatMessage({
+    id: "NAME_OF_INDIVIDUAL_PLURAL",
+    defaultMessage: "Name of individual plural",
+  });
+
   return (
     // @TODO make this generic
     <>
@@ -468,7 +493,7 @@ const CollectionDetailsEdit: React.FC<{
                         id: "GENERIC_CANNOT_BE_BLANK",
                         defaultMessage: "Name of video cannot be blank",
                       },
-                      { name: "Name of video" } // @TODO internationalize this, too
+                      { name: nameOfVideoI8n }
                     )
                   : ""
               }
@@ -497,7 +522,7 @@ const CollectionDetailsEdit: React.FC<{
                         id: "GENERIC_CANNOT_BE_BLANK",
                         defaultMessage: "Name of video plural cannot be blank",
                       },
-                      { name: "Name of video plural" } // @TODO internationalize this, too
+                      { name: nameOfVideoPluralI8n }
                     )
                   : ""
               }
@@ -526,7 +551,7 @@ const CollectionDetailsEdit: React.FC<{
                         id: "GENERIC_CANNOT_BE_BLANK",
                         defaultMessage: "Name of event cannot be blank",
                       },
-                      { name: "Name of event" } // @TODO internationalize this, too
+                      { name: nameOfEventI8n }
                     )
                   : ""
               }
@@ -555,7 +580,7 @@ const CollectionDetailsEdit: React.FC<{
                         id: "GENERIC_CANNOT_BE_BLANK",
                         defaultMessage: "Name of event plural cannot be blank",
                       },
-                      { name: "Name of event plural" } // @TODO internationalize this, too
+                      { name: nameOfEventPluralI8n }
                     )
                   : ""
               }
@@ -584,7 +609,7 @@ const CollectionDetailsEdit: React.FC<{
                         id: "GENERIC_CANNOT_BE_BLANK",
                         defaultMessage: "Name of individual cannot be blank",
                       },
-                      { name: "Name of individual" } // @TODO internationalize this, too
+                      { name: nameOfIndividualI8n }
                     )
                   : ""
               }
@@ -614,7 +639,7 @@ const CollectionDetailsEdit: React.FC<{
                         defaultMessage:
                           "Name of individual plural cannot be blank",
                       },
-                      { name: "Name of individual plural" } // @TODO internationalize this, too
+                      { name: nameOfIndividualPluralI8n }
                     )
                   : ""
               }
@@ -640,7 +665,12 @@ const CollectionDetailsEdit: React.FC<{
                         id: "GENERIC_CANNOT_BE_BLANK",
                         defaultMessage: "Language cannot be blank",
                       },
-                      { name: "Language" } // @TODO internationalize this, too
+                      {
+                        name: intl.formatMessage({
+                          id: "LANGUAGE",
+                          defaultMessage: "Language",
+                        }),
+                      }
                     )
                   : ""
               }
@@ -659,8 +689,6 @@ const CollectionDetailsEdit: React.FC<{
                     onChange={handleIsPrivateChange}
                   />
                 }
-                // value={isPrivate}
-                // onChange={handleIsPrivateChange}
                 label={isPrivateCollectionLabel}
               />
               <InfoIcon
@@ -695,18 +723,6 @@ const CollectionDetailsEdit: React.FC<{
               value={createdByEmail}
             ></TextField>
           </Grid>
-          {/* <Grid item lg={12} sm={12}>
-          <Button
-            style={{ marginBottom: 10 }}
-            data-testid={"collection-details-submit-button"}
-            variant="contained"
-            disabled={!allRequiredValid}
-            onClick={handleCollectionDetailsSubmission}
-          >
-            <FormattedMessage id="DONE" defaultMessage="Done" />
-          </Button>
-          {error && <CustomError errorMsg={error} />}
-        </Grid> */}
           <Grid item lg={12} sm={12}>
             <Button
               style={{ marginBottom: 10 }}
@@ -731,11 +747,16 @@ const CollectionDetailsEdit: React.FC<{
               <CustomError errorMsg={createError ? createError : updateError} />
             )}
           </Grid>
+          {isCollectionError && (
+            <Grid item lg={12} sm={12}>
+              <CustomError errorMsg={collectionErrorMsg} />
+            </Grid>
+          )}
         </Grid>
       </InfoPanel>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={updatePending || createPending}
+        open={updatePending || createPending || isCollectionLoading}
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />

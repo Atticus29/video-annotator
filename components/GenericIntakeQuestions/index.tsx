@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
-  Fab,
   Grid,
   Typography,
 } from "@mui/material";
@@ -35,8 +34,8 @@ import FloatingStickyButton from "../FloatingStickyButton";
 const GenericIntakeQuestions: React.FC<{
   collectionUrl: string;
   mode?: string;
-  postHook: any; // @TODO type
-  updateHook: any; // @TODO type
+  postHook: any;
+  updateHook: any;
   intakeQuestionType: string;
 }> = ({
   collectionUrl,
@@ -45,7 +44,6 @@ const GenericIntakeQuestions: React.FC<{
   updateHook,
   intakeQuestionType,
 }) => {
-  console.log("deleteMe GenericIntakeQuestions rendered ");
   const {
     isLoading,
     isError,
@@ -55,13 +53,6 @@ const GenericIntakeQuestions: React.FC<{
 
   const intl: IntlShape = useIntl();
   const [showPreview, setShowPreview] = useState<boolean>(false);
-
-  const {
-    mutate: postCollectionGenericIntakeQuestions,
-    isPending,
-    isError: isPostCollectionGenericIntakeQuestionsError,
-    error: postCollectionGenericIntakeQuestionError,
-  } = postHook();
 
   const [genericQuestionFormValues, setGenericQuestionFormValues] =
     useState<{}>({});
@@ -91,7 +82,6 @@ const GenericIntakeQuestions: React.FC<{
   };
 
   const formFieldGroup: FormFieldGroup = useMemo(() => {
-    // console.log("deleteMe useMemo e1 called");
     return {
       title: "GenericFormFieldGroupForTheWholeCollection",
       setValues: setGenericQuestionFormValues,
@@ -105,12 +95,10 @@ const GenericIntakeQuestions: React.FC<{
     useState<boolean>(false);
 
   useEffect(() => {
-    console.log("deleteMe useEffect a1 is called and actual values is now: ");
-    console.log(formFieldGroup.actualValues);
     const formFieldGroupValueSetter: ((input: any) => void) | undefined =
       formFieldGroup?.setValues;
     if (
-      mode === "create" && // @TODO maybe this is moot now
+      mode === "create" &&
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1 &&
       !hasAQuestionBeenDeleted &&
@@ -119,7 +107,6 @@ const GenericIntakeQuestions: React.FC<{
       !isError &&
       (get(collection, intakeQuestionAccessor) || []).length < 1
     ) {
-      console.log("deleteMe this happens a");
       // add their values to the formFieldGroup
       const transformedGenericIntakeQuestions = // @TODO DRY this up
         transformIntakeQuestionsIntoActualValueObj(
@@ -139,7 +126,6 @@ const GenericIntakeQuestions: React.FC<{
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
         .length < 1
     ) {
-      console.log("deleteMe this happens b");
       const transformedGenericIntakeQuestions = // @TODO DRY this up - it's the same as the stuff above
         transformIntakeQuestionsIntoActualValueObj(
           get(collection, intakeQuestionAccessor) || []
@@ -163,16 +149,11 @@ const GenericIntakeQuestions: React.FC<{
     isError,
     isLoading,
     mode,
-    // nothingHasBeenEdited,
   ]);
 
   const [error, setError] = useState<string>("");
 
   const newQuestion: SingleFormField = useMemo(() => {
-    // console.log(
-    //   "deleteMe useMemo b1 is called and formFieldGroup.actualValues are: "
-    // );
-    // console.log(formFieldGroup.actualValues);
     return {
       key:
         transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)
@@ -309,7 +290,6 @@ const GenericIntakeQuestions: React.FC<{
   };
 
   const intakeQuestionElements = useMemo(() => {
-    // console.log("deleteMe useMemo c1 called");
     return map(
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues) ||
         [],
@@ -369,7 +349,6 @@ const GenericIntakeQuestions: React.FC<{
   }, [formFieldGroup]);
 
   const genericIntakeQuestionsAlreadyExist: boolean = useMemo(() => {
-    // console.log("deleteMe useMemo d1 called");
     return Boolean(get(collection, intakeQuestionAccessor));
   }, [collection, intakeQuestionAccessor]);
 
@@ -386,11 +365,11 @@ const GenericIntakeQuestions: React.FC<{
     <>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading || isPending}
+        open={isLoading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      {!isLoading && !isPending && isError && (
+      {!isLoading && isError && (
         <CustomError
           errorMsg={
             errorMsg ||
@@ -401,113 +380,96 @@ const GenericIntakeQuestions: React.FC<{
           }
         />
       )}
-      {!isPending && isPostCollectionGenericIntakeQuestionsError && (
-        <CustomError
-          errorMsg={
-            postCollectionGenericIntakeQuestionError?.message ||
-            intl.formatMessage(
-              {
-                id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
-                defaultMessage: "Failed to post generic intake questions",
-              },
-              { type: intakeQuestionType }
-            )
-          }
-        />
-      )}
-      {!isLoading &&
-        !isError &&
-        !isPending &&
-        !isPostCollectionGenericIntakeQuestionsError && (
-          <>
-            <FloatingStickyButton
-              handleNavigateClick={handleNavigateClick}
-              buttonLoading={backButtonLoading}
-            />
-            <InfoPanel
-              titleDefault={intl.formatMessage(
-                { id: "GENERIC_INTAKE_QUESTIONS" },
-                { type: capitalizeEachWord(intakeQuestionType) }
-              )}
-              textOverrides={{ textAlign: "center" }}
-            >
-              <Grid container>
-                {transformActualValueObjIntoIntakeQuestions(
-                  formFieldGroup.actualValues
-                ) && (
-                  <Grid item lg={12} sm={12}>
-                    {intakeQuestionElements}
-                  </Grid>
-                )}
+      {!isLoading && !isError && (
+        <>
+          <FloatingStickyButton
+            handleNavigateClick={handleNavigateClick}
+            buttonLoading={backButtonLoading}
+          />
+          <InfoPanel
+            titleDefault={intl.formatMessage(
+              { id: "GENERIC_INTAKE_QUESTIONS" },
+              { type: capitalizeEachWord(intakeQuestionType) }
+            )}
+            textOverrides={{ textAlign: "center" }}
+          >
+            <Grid container>
+              {transformActualValueObjIntoIntakeQuestions(
+                formFieldGroup.actualValues
+              ) && (
                 <Grid item lg={12} sm={12}>
-                  <Button
-                    style={{ marginBottom: 10 }}
-                    data-testid={"collection-details-submit-button"}
-                    variant="contained"
-                    onClick={createNewIntakeQuestion}
-                  >
-                    <FormattedMessage
-                      id="ADD_ANOTHER_QUESTION"
-                      defaultMessage="Add another question"
-                    />
-                  </Button>
-                  {error && <CustomError errorMsg={error} />}
+                  {intakeQuestionElements}
                 </Grid>
-              </Grid>
+              )}
               <Grid item lg={12} sm={12}>
-                {!isLoading && !isError && (
-                  <SaveOrUpdateButtonWithValidation
-                    disabled={!Boolean(collection)}
-                    buttonTitle={buttonTitle}
-                    successMsg={intl.formatMessage({
-                      id: "COLLECTION_UPDATED_SUCCESSFULLY",
-                      defaultMessage: "Collection was updated successfully.",
-                    })}
-                    failMsg={intl.formatMessage(
-                      {
-                        id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
-                        defaultMessage:
-                          "Failed to update generic intake questions",
-                      },
-                      { type: intakeQuestionType }
-                    )}
-                    usePostOrUseUpdate={
-                      genericIntakeQuestionsAlreadyExist ? updateHook : postHook
-                    }
-                    mutationData={{
-                      collectionUrl: collectionUrl,
-                      ["collection" +
-                      capitalizeEachWord(intakeQuestionType) +
-                      "IntakeQuestions"]:
-                        transformActualValueObjIntoIntakeQuestions(
-                          formFieldGroup.actualValues
-                        ) || [],
-                    }}
-                    actualValues={formFieldGroup.actualValues}
-                    invalidValues={formFieldGroup.isInvalids}
-                    setParentStateOnSuccess={setShowPreview}
-                    queryKeysToInvalidate={[
-                      ["singleCollection", collection?.urlPath],
-                    ]}
-                  />
-                )}
-                <Dialog
-                  open={showPreview}
-                  onClose={() => {
-                    setShowPreview(false);
-                  }}
+                <Button
+                  style={{ marginBottom: 10 }}
+                  data-testid={"collection-details-submit-button"}
+                  variant="contained"
+                  onClick={createNewIntakeQuestion}
                 >
-                  <DialogContent>
-                    <GenericIntakePreview
-                      collectionUrl={collectionUrl}
-                      intakeQuestionType={intakeQuestionType}
-                    />
-                  </DialogContent>
-                </Dialog>
+                  <FormattedMessage
+                    id="ADD_ANOTHER_QUESTION"
+                    defaultMessage="Add another question"
+                  />
+                </Button>
+                {error && <CustomError errorMsg={error} />}
               </Grid>
-            </InfoPanel>
-          </>
-        )}
+            </Grid>
+            <Grid item lg={12} sm={12}>
+              {!isLoading && !isError && (
+                <SaveOrUpdateButtonWithValidation
+                  disabled={!Boolean(collection)}
+                  buttonTitle={buttonTitle}
+                  successMsg={intl.formatMessage({
+                    id: "COLLECTION_UPDATED_SUCCESSFULLY",
+                    defaultMessage: "Collection was updated successfully.",
+                  })}
+                  failMsg={intl.formatMessage(
+                    {
+                      id: "GENERIC_INTAKE_QUESTION_POST_FAILED",
+                      defaultMessage:
+                        "Failed to update generic intake questions",
+                    },
+                    { type: intakeQuestionType }
+                  )}
+                  usePostOrUseUpdate={
+                    genericIntakeQuestionsAlreadyExist ? updateHook : postHook
+                  }
+                  mutationData={{
+                    collectionUrl: collectionUrl,
+                    ["collection" +
+                    capitalizeEachWord(intakeQuestionType) +
+                    "IntakeQuestions"]:
+                      transformActualValueObjIntoIntakeQuestions(
+                        formFieldGroup.actualValues
+                      ) || [],
+                  }}
+                  actualValues={formFieldGroup.actualValues}
+                  invalidValues={formFieldGroup.isInvalids}
+                  setParentStateOnSuccess={setShowPreview}
+                  queryKeysToInvalidate={[
+                    ["singleCollection", collection?.urlPath],
+                  ]}
+                />
+              )}
+              <Dialog
+                open={showPreview}
+                onClose={() => {
+                  setShowPreview(false);
+                }}
+              >
+                <DialogContent>
+                  <GenericIntakePreview
+                    collectionUrl={collectionUrl}
+                    intakeQuestionType={intakeQuestionType}
+                  />
+                </DialogContent>
+              </Dialog>
+            </Grid>
+          </InfoPanel>
+        </>
+      )}
     </>
   );
 };

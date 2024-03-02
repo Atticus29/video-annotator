@@ -157,5 +157,11 @@
   "GENERIC_INTAKE_PREVIEW": "{type} Intake Preview",
   "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only its label can be modified. We recommend using something like, {recommendation}.",
   "BACK_TO_MAIN_COLLECTION_PAGE": "Back to main collection page",
-  "EDIT_COLLECTION_INTAKE_QUESTIONS": "You have edit access to this collection. Edit your individual intake questions, video intake questions, and event intake questions here: {individualIntakeQuestions} | {videoIntakeQuestions} | {eventIntakeQuestions} "
+  "EDIT_COLLECTION_INTAKE_QUESTIONS": "You have edit access to this collection. Edit your individual intake questions, video intake questions, and event intake questions here: {individualIntakeQuestions} | {videoIntakeQuestions} | {eventIntakeQuestions} ",
+  "NAME_OF_VIDEO_PLURAL": "Name of video plural",
+  "NAME_OF_EVENT_PLURAL": "Name of event plural",
+  "NAME_OF_INDIVIDUAL": "Name of individual",
+  "NAME_OF_INDIVIDUAL_PLURAL": "Name of individual plural",
+  "BACK": "Back",
+  "OPTIONS_FOR": "Options for"
 }

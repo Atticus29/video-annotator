@@ -18,11 +18,11 @@ const collectionUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "PATCH") {
       let { data }: { data: CollectionData } = req.body;
       const existingDocument = await coll.findOne({
-        urlPath: get(data, ["urlPath"]),
+        urlPath: get(data, ["metadata", "urlPath"]),
       });
       if (existingDocument) {
         const result = await coll.replaceOne(
-          { urlPath: get(data, ["urlPath"]) },
+          { urlPath: get(data, ["metadata", "urlPath"]) },
           { ...data }
         );
         res

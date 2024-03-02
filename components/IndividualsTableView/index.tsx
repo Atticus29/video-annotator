@@ -1,5 +1,5 @@
 import { get, map, reduce } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import useGetIndividuals from "../../hooks/useGetIndividuals";
 import DataTable from "../DataTable";
 import { IntlShape, useIntl } from "react-intl";

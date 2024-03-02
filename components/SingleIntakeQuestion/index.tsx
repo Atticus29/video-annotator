@@ -47,10 +47,6 @@ const SingleIntakeQuestion: React.FC<{
   isACoreQuestion = false,
   coreQuestionTranslationsValues,
 }) => {
-  console.log(
-    "deleteMe SingleIntakeQuestion rendered " // and formFieldGroup.actualValues is:
-  );
-  // console.log(formFieldGroup.actualValues);
   const types: string[] =
     map(formFieldConfig, (configEntry) => configEntry?.type) || [];
 
@@ -84,12 +80,9 @@ const SingleIntakeQuestion: React.FC<{
   }, [formFieldGroup.actualValues, intakeQuestionIdx, intakeQuestionKey]);
 
   const intl: IntlShape = useIntl();
-  // const [currentQuestionType, setCurrentQuestionType] =
-  //   useState<string>(intakeQuestionEl);
 
   const handleQuestionChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
-    // setCurrentQuestionType(currentVal);
 
     const transformedQuestion: SingleFormField = transformQuestion(
       transformActualValueObjIntoIntakeQuestions(formFieldGroup.actualValues)[
@@ -116,10 +109,6 @@ const SingleIntakeQuestion: React.FC<{
   };
 
   const handleChange: (event: any) => void = (event: any) => {
-    // if the change is in the TYPE field, this should
-    // 1) automatically modify other parts of the SingleFormField
-    // 2) change what options are visible/available in the video intake questions section
-
     const currentVal: any = event?.currentTarget?.value || event?.target?.value;
 
     updateIntakeQuestionFormField(
@@ -232,9 +221,9 @@ const SingleIntakeQuestion: React.FC<{
                 formFieldGroup.actualValues[
                   intakeQuestionKey + "--" + intakeQuestionIdx
                 ]
-              } // currentQuestionType
+              }
               label="This should not be seen"
-              onChange={handleQuestionChange} //this is currently assuming that the only dropdown is a question type change
+              onChange={handleQuestionChange} //this is currently assuming that the only dropdown is a question type change @TODO is there a way to make that robust?
               style={{ marginBottom: 10 }}
             >
               {types && typeElements}

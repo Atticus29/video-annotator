@@ -25,12 +25,9 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
   questions: SingleFormField[],
   actualValues: {}
 ) {
-  // console.log("deleteMe questions are: ");
-  // console.log(questions);
   const questionLabels: string[] = reduce(
     questions,
     (memo: string[], question: SingleFormField, questionIdx: number) => {
-      const currentLabel: string = question.label;
       const currentKeys: string[] = Object.keys(question);
       const labelsForCurrentQuestion: string[] = map(
         currentKeys,
@@ -40,13 +37,6 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
     },
     []
   );
-  // console.log("deleteMe questionLabels are: ");
-  // console.log(questionLabels);
-
-  // const requiredQuestions: any[] =
-  //   filter(questions, (question) => {
-  //     return question?.isRequired;
-  //   }) || [];
   const requiredQuestionLabels: any[] =
     filter(
       questionLabels,
@@ -57,18 +47,12 @@ export function calculateAllRequiredIntakeQuestionsHaveValues(
         questionLabel.startsWith("isRequired--")
       // @TODO find the questions with type autocomplete and add in autocompleteOptions here somehow
     ) || [];
-  // console.log("deleteMe requiredQuestionLabels are: ");
-  // console.log(requiredQuestionLabels);
   const existingValues: string[] = actualValues
     ? Object.keys(actualValues)
     : [];
-  // console.log("deleteMe existingValues are: ");
-  // console.log(existingValues);
   const missingRequiredLabels: string[] = filter(
     requiredQuestionLabels,
     (requiredQuestionLabel) => !existingValues.includes(requiredQuestionLabel)
   );
-  // console.log("deleteMe missingRequiredLabels are: ");
-  // console.log(missingRequiredLabels);
   return missingRequiredLabels.length < 1;
 }

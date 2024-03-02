@@ -94,7 +94,6 @@ const IndividualIntake: React.FC<{
             }
           }
         )}
-        {/* @TODO add invidual addition */}
         {localCollection?.individualQuestionsFormFieldGroup &&
           localCollection?.individualIntakeQuestions && (
             <>

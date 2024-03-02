@@ -76,6 +76,6 @@ const CustomError: React.FC<{
         )}
     </>
   );
-}; // @TODO improve upon this
+};
 
 export default CustomError;

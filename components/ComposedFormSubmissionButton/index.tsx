@@ -15,6 +15,7 @@ import { calculateAllRequiredsHaveValues } from "../../utilities/composedFormSub
 import useGetCollection from "../../hooks/useGetCollection";
 
 const ComposedFormSubmissionButton: React.FC<{
+  // @TODO deprecate this in favor of SaveOrUpdateButtonWithValidation
   questionsOfConcern: SingleFormField[];
   formFieldGroupOfConcern: FormFieldGroup | undefined;
   collection?: Collection;
