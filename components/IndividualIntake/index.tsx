@@ -51,7 +51,10 @@ const IndividualIntake: React.FC<{
       id: "SUBMIT_NEW_INDIVIDUAL",
       defaultMessage: "Submit a New {individualName}",
     },
-    { individualName: collection?.nameOfIndividual || defaultIndividualName }
+    {
+      individualName:
+        collection.metadata.nameOfIndividual || defaultIndividualName,
+    }
   );
 
   const bodyId: string = intl.formatMessage(
@@ -61,8 +64,8 @@ const IndividualIntake: React.FC<{
         "To add a {individualName} to the {videoName}, fill out the form below.",
     },
     {
-      individualName: collection?.nameOfIndividual?.toLowerCase(),
-      videoName: collection?.nameOfVideo?.toLowerCase(),
+      individualName: collection.metadata.nameOfIndividual?.toLowerCase(),
+      videoName: collection.metadata.nameOfVideo?.toLowerCase(),
     }
   );
 
@@ -91,17 +94,16 @@ const IndividualIntake: React.FC<{
             }
           }
         )}
-        {/* @TODO add invidual addition */}
         {localCollection?.individualQuestionsFormFieldGroup &&
           localCollection?.individualIntakeQuestions && (
             <>
               <Grid item lg={12} sm={12}>
-                <ComposedFormSubmissionButton
+                <ComposedFormSubmissionButton // @TODO can probably use the new submission button
                   questionsOfConcern={
                     localCollection?.individualIntakeQuestions || []
                   }
                   formFieldGroupOfConcern={individualQuestionsFormFieldGroup}
-                  collectionPath={localCollection?.urlPath}
+                  collectionPath={localCollection.metadata.urlPath}
                   collectionPropToUpdate={"individuals"}
                   onCloseDialog={onCloseDialog}
                 />

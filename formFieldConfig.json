@@ -1,47 +1,47 @@
 [
   {
     "type": "URL",
-    "attributesToDisplay": ["label", "type", "language", "isRequired"],
+    "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isValidUrl"],
     "invalidInputMessage": "MUST_BE_VALID_URL"
   },
   {
     "type": "Text",
-    "attributesToDisplay": ["label", "type", "language", "isRequired"],
+    "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isNonEmptyString"],
     "invalidInputMessage": "FIELD_CANNOT_BE_BLANK"
   },
   {
     "type": "Email",
-    "attributesToDisplay": ["label", "type", "language", "isRequired"],
+    "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isValidEmail"],
     "invalidInputMessage": "MUST_BE_VALID_EMAIL"
   },
   {
     "type": "Checkbox",
-    "attributesToDisplay": ["label", "type", "language"]
+    "attributesToDisplay": ["type", "label", "language"]
   },
   {
     "type": "Date",
-    "attributesToDisplay": ["label", "type", "language", "isRequired"],
+    "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isNonFalsy"],
     "invalidInputMessage": "THIS_FIELD_IS_REQUIRED"
   },
   {
     "type": "Autocomplete",
     "attributesToDisplay": [
-      "label",
       "type",
-      "language",
+      "label",
+      "autocompleteOptions",
       "isRequired",
-      "autocompleteOptions"
+      "language"
     ],
     "validationMethods": ["isNonEmptyString"],
     "invalidInputMessage": "FIELD_CANNOT_BE_BLANK"
   },
   {
     "type": "Number",
-    "attributesToDisplay": ["label", "type", "language", "isRequired"],
+    "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isNumber"],
     "invalidInputMessage": "MUST_BE_VALID_NUMBER"
   }

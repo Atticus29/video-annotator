@@ -9,12 +9,13 @@ import { reduce, get } from "lodash-es";
 import axios from "axios";
 
 import { FormFieldGroup, SingleFormField, Collection } from "../../types";
-import CustomError from "../Error";
+import CustomError from "../CustomError";
 import CloseIcon from "@mui/icons-material/Close";
 import { calculateAllRequiredsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
 import useGetCollection from "../../hooks/useGetCollection";
 
 const ComposedFormSubmissionButton: React.FC<{
+  // @TODO deprecate this in favor of SaveOrUpdateButtonWithValidation
   questionsOfConcern: SingleFormField[];
   formFieldGroupOfConcern: FormFieldGroup | undefined;
   collection?: Collection;

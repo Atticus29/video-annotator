@@ -22,7 +22,7 @@ const IndividualsInCollection = async (
 
     if (req.method === "GET") {
       const collection = await coll.findOne({
-        urlPath: urlPath,
+        "metadata.urlPath": urlPath,
       });
       if (collection) {
         const individuals = get(collection, ["individuals"]);

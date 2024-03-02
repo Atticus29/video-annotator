@@ -1,13 +1,11 @@
 import React from "react";
 import { Fab, Grid, Paper, Typography } from "@mui/material";
-import { Tooltip } from "@mui/material";
-// import EditIcon from "@mui/icons-material/Edit";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 
 import { FormattedMessage } from "react-intl";
 
 const InfoPanel: React.FC<{
-  titleId: string;
+  titleId?: string;
   titleDefault: string;
   styleOverrides?: {};
   textOverrides?: {};
@@ -54,11 +52,6 @@ const InfoPanel: React.FC<{
             style={{ overflow: "auto" }}
           >
             <Grid item>
-              {/* <IconButton
-                color="primary"
-                aria-label="edit collection"
-                onClick={handleEditClick}
-              > */}
               <Fab
                 color="primary"
                 aria-label="edit collection"
@@ -66,7 +59,6 @@ const InfoPanel: React.FC<{
               >
                 <EditRoundedIcon />
               </Fab>
-              {/* </IconButton> */}
             </Grid>
           </Grid>
         )}
@@ -74,7 +66,10 @@ const InfoPanel: React.FC<{
           variant="h5"
           style={{ marginBottom: "2vh", ...textOverrides }}
         >
-          <FormattedMessage id={titleId} defaultMessage={titleDefault} />
+          {titleId && (
+            <FormattedMessage id={titleId} defaultMessage={titleDefault} />
+          )}
+          {!titleId && titleDefault}
         </Typography>
         <div style={{ ...styleOverrides }}>{children}</div>
       </>

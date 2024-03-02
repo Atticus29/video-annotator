@@ -22,6 +22,69 @@ export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
   return currentAttributesToDisplay;
 }
 
+export function replaceFormFieldValuesWith(
+  originalFormFieldGroup: FormFieldGroup,
+  replacementValues: {},
+  removeAllOld: boolean = true
+): {} {
+  if (removeAllOld) {
+    // get rid of all values with the same --num index, in case some are missing in the new
+    const currentIndex: number = Number(
+      get(Object.keys(replacementValues), [0])?.split("--")[1]
+    );
+    const originalWithOldRemoved: {} = reduce(
+      originalFormFieldGroup.actualValues,
+      (memo, value, valueKey) => {
+        if (valueKey.indexOf(String(currentIndex)) < 0) {
+          return { ...memo, [valueKey]: value };
+        } else {
+          return memo;
+        }
+      },
+      {}
+    );
+    return { ...originalWithOldRemoved, ...replacementValues };
+  } else {
+    return { ...originalFormFieldGroup.actualValues, ...replacementValues };
+  }
+}
+
+export function updateIntakeQuestionFormField(
+  currentVal: any,
+  intakeQuestionKey: string,
+  intakeQuestionIdx: number,
+  formFieldGroup: FormFieldGroup
+) {
+  const valueSetter: ((input: any) => void) | undefined = get(formFieldGroup, [
+    "setValues",
+  ]);
+  const invalidSetter: ((input: any) => void) | undefined = get(
+    formFieldGroup,
+    ["setIsInvalids"]
+  );
+  if (invalidSetter) {
+    const isInvalid: boolean =
+      intakeQuestionKey === "isRequired" ||
+      intakeQuestionKey === "usersCanAddCustomOptions"
+        ? false
+        : !isNonEmptyString(currentVal);
+    invalidSetter((prevState: {}) => {
+      return {
+        ...prevState,
+        [intakeQuestionKey + "--" + intakeQuestionIdx]: isInvalid,
+      };
+    });
+  }
+  if (valueSetter) {
+    valueSetter((prevState: {}) => {
+      return {
+        ...prevState,
+        [intakeQuestionKey + "--" + intakeQuestionIdx]: currentVal,
+      };
+    });
+  }
+}
+
 export function updateCollection(
   collection: Collection,
   questionIdx: number,
@@ -53,7 +116,6 @@ export function updateCollection(
 
 export function updateFormFieldStates(
   currentVal: any,
-  defaultValidValue: boolean = false,
   formFieldGroup: FormFieldGroup | undefined,
   question: SingleFormField
 ) {
@@ -151,262 +213,34 @@ export function clearAllOptionFields(
 
 export function updateOptionFormFieldGroupWithOptionList(
   options: string[],
-  optionFormFieldGroup: FormFieldGroup
+  setAutocompleteValues: (val: any) => void,
+  stringForAutocompleteOptions: string
 ) {
   //first, remove all existing options
   const cleanedActualVals: {} = clearAllOptionFields(
-    get(optionFormFieldGroup, ["actualValues"]),
-    "Option"
+    get(setAutocompleteValues, ["actualValues"]),
+    stringForAutocompleteOptions
   );
-  if (optionFormFieldGroup.setValues) {
-    optionFormFieldGroup.setValues(cleanedActualVals);
-  }
+  let newActualValues: {} = {};
   forEach(options, (option, optionIdx) => {
-    const newActualValue: {} = { ["Option " + (optionIdx + 1)]: option }; // @TODO somehow shunt part of this to en.json
-    if (optionFormFieldGroup.setValues) {
-      optionFormFieldGroup.setValues((prevState: {}) => {
-        const returnVal = { ...prevState, ...newActualValue };
-        return returnVal;
-      });
-    }
+    newActualValues = {
+      ...newActualValues,
+      [stringForAutocompleteOptions + " " + (optionIdx + 1)]: option,
+    };
   });
+  if (setAutocompleteValues) {
+    setAutocompleteValues({
+      ...cleanedActualVals,
+      ...newActualValues,
+    });
+  }
 }
 
 export function calculateWhetherCustomOptionValuesArePermitted(
-  optionFormFieldGroup: FormFieldGroup,
-  intl: IntlShape
-) {
-  const canEndUserAddCustomOptionsValsArr: string[] = filter(
-    optionFormFieldGroup?.actualValues || {},
-    (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
-      const targetString: string = intl.formatMessage({
-        id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
-        defaultMessage:
-          "Can video annotators in this collection add their own options?",
-      });
-      return optionFormFieldGroupKey.startsWith(targetString);
-    }
-  );
-  const canEndUserAddCustomOptionsVals = get(
-    canEndUserAddCustomOptionsValsArr,
-    [0],
-    true
-  );
-
-  return canEndUserAddCustomOptionsVals;
-}
-
-export function updateIsRequiredUnchecked(
   formFieldGroup: FormFieldGroup,
-  formFieldGroupString: string,
-  wholeQuestion: SingleFormField,
-  collection: Collection,
-  intakeQuestionIdx: number,
-  intakeQuestionKey: string,
-  intakeQuestionEl: any,
-  setCollection: (collection: any) => void,
-  whichIntakeQuestions: string
+  questionIdx: number
 ) {
-  updateCheckboxGeneral(
-    formFieldGroup,
-    formFieldGroupString,
-    wholeQuestion,
-    collection,
-    intakeQuestionIdx,
-    intakeQuestionKey,
-    intakeQuestionEl,
-    setCollection,
-    false,
-    isNonEmptyString,
-    whichIntakeQuestions
-  );
-}
-
-export function updateIsRequiredChecked(
-  formFieldGroup: FormFieldGroup,
-  formFieldGroupString: string,
-  wholeQuestion: SingleFormField,
-  collection: Collection,
-  intakeQuestionIdx: number,
-  intakeQuestionKey: string,
-  intakeQuestionEl: any,
-  setCollection: (collection: any) => void,
-  whichIntakeQuestions: string
-) {
-  updateCheckboxGeneral(
-    formFieldGroup,
-    formFieldGroupString,
-    wholeQuestion,
-    collection,
-    intakeQuestionIdx,
-    intakeQuestionKey,
-    intakeQuestionEl,
-    setCollection,
-    true,
-    isNonEmptyString,
-    whichIntakeQuestions
-  );
-}
-
-export function updateUsersCanAddCustomOptionsUnchecked(
-  formFieldGroup: FormFieldGroup,
-  formFieldGroupString: string,
-  wholeQuestion: SingleFormField,
-  collection: Collection,
-  intakeQuestionIdx: number,
-  intakeQuestionKey: string,
-  intakeQuestionEl: any,
-  setCollection: (collection: any) => void,
-  whichIntakeQuestions: string
-) {
-  updateCheckboxGeneral(
-    formFieldGroup,
-    formFieldGroupString,
-    wholeQuestion,
-    collection,
-    intakeQuestionIdx,
-    intakeQuestionKey,
-    intakeQuestionEl,
-    setCollection,
-    true,
-    isValidOption,
-    whichIntakeQuestions
-  );
-}
-
-export function updateUsersCanAddCustomOptionsChecked(
-  formFieldGroup: FormFieldGroup,
-  formFieldGroupString: string,
-  wholeQuestion: SingleFormField,
-  collection: Collection,
-  intakeQuestionIdx: number,
-  intakeQuestionKey: string,
-  intakeQuestionEl: any,
-  setCollection: (collection: any) => void,
-  whichIntakeQuestions: string
-) {
-  updateCheckboxGeneral(
-    formFieldGroup,
-    formFieldGroupString,
-    wholeQuestion,
-    collection,
-    intakeQuestionIdx,
-    intakeQuestionKey,
-    intakeQuestionEl,
-    setCollection,
-    false,
-    isValidOption,
-    whichIntakeQuestions
-  );
-}
-
-export function updateCheckboxGeneral(
-  formFieldGroup: FormFieldGroup,
-  formFieldGroupString: string,
-  wholeQuestion: SingleFormField,
-  collection: Collection,
-  intakeQuestionIdx: number,
-  intakeQuestionKey: string,
-  intakeQuestionEl: any,
-  setCollection: (collection: any) => void,
-  checkVal: boolean,
-  vaildatorMethodToFilter: (input: any, optionalInput?: any) => boolean,
-  whichIntakeQuestions: string
-) {
-  const currentValForAutocomplete: string = get(
-    collection,
-    [formFieldGroupString, "actualValues", wholeQuestion?.label],
-    ""
-  );
-
-  const isCustomOptionsUnchecked: boolean =
-    intakeQuestionKey === "usersCanAddCustomOptions" && checkVal; // checkVal is true when unchecked currently. Wut. I dunno.
-  const customOptValidityVal: boolean = isCustomOptionsUnchecked
-    ? vaildatorMethodToFilter(
-        currentValForAutocomplete,
-        wholeQuestion?.autocompleteOptions
-      )
-    : true;
-  let validityValue: boolean =
-    intakeQuestionKey === "isRequired" ? checkVal : customOptValidityVal;
-
-  const shouldReinstateValidator: boolean = checkVal === true;
-  if (
-    formFieldGroup &&
-    formFieldGroup.setIsInvalids &&
-    wholeQuestion &&
-    wholeQuestion.label
-  ) {
-    formFieldGroup.setIsInvalids({
-      ...formFieldGroup.isInvalids,
-      [wholeQuestion.label]: validityValue,
-    });
-  }
-
-  const targetQuestion: SingleFormField = get(
-    collection,
-    [whichIntakeQuestions, intakeQuestionIdx],
-    {}
-  );
-  const currentValidatorMethods: ((input: any) => boolean)[] = get(
-    targetQuestion,
-    ["validatorMethods"],
-    []
-  );
-
-  const filteredMethods = filter(
-    currentValidatorMethods,
-    (currentValidatorMethod) => {
-      return currentValidatorMethod !== vaildatorMethodToFilter;
-    }
-  );
-
-  const validatorMethodsWithFilteredMethodReinstated: ((
-    input: any,
-    options?: any
-  ) => boolean)[] = [...filteredMethods, vaildatorMethodToFilter];
-
-  const modifiedQuestion: any = {
-    ...targetQuestion,
-    [intakeQuestionKey]: !intakeQuestionEl,
-    validatorMethods: shouldReinstateValidator
-      ? validatorMethodsWithFilteredMethodReinstated
-      : filteredMethods,
-  };
-
-  const newIntakeQuestionSet: SingleFormField[] = get(
-    collection,
-    [whichIntakeQuestions],
-    []
-  );
-  newIntakeQuestionSet[intakeQuestionIdx] = modifiedQuestion;
-
-  setCollection((prevState: any) => {
-    let firstTimeIsCustomOptionsUncheckedInvalid = {};
-    if (
-      Object.keys(formFieldGroup?.isInvalids || {}).length === 0 &&
-      isCustomOptionsUnchecked
-    ) {
-      // this is such a hack and I hate that it seems necessary
-      firstTimeIsCustomOptionsUncheckedInvalid = {
-        [wholeQuestion?.label]: !validityValue,
-      };
-    }
-    const modifiedIsInvalids: any = {
-      ...get(collection, [formFieldGroupString, "isInvalids"]),
-      ...formFieldGroup?.isInvalids,
-      ...firstTimeIsCustomOptionsUncheckedInvalid,
-    };
-
-    const modifiedFormFieldGroup: any = {
-      ...get(collection, [formFieldGroupString]),
-      isInvalids: modifiedIsInvalids,
-    };
-
-    return {
-      ...prevState,
-      [whichIntakeQuestions]: newIntakeQuestionSet,
-      [formFieldGroupString]: modifiedFormFieldGroup,
-    };
-  });
+  const targetValue: boolean =
+    formFieldGroup.actualValues["usersCanAddCustomOptions--" + questionIdx];
+  return targetValue;
 }

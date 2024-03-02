@@ -6,7 +6,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InputAdornment from "@mui/material/InputAdornment";
 
 import { isValidEmail } from "../../utilities/validators";
-import CustomError from "../../components/Error/index";
+import CustomError from "../../components/CustomError/index";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import useOnEnter from "../../hooks/useOnEnter";
 import { User } from "firebase/auth";

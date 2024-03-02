@@ -15,7 +15,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import CustomError from "../../../../components/Error";
+import CustomError from "../../../../components/CustomError";
 import useGetVideo from "../../../../hooks/useGetVideo";
 
 const SingleVideoView: React.FC = () => {

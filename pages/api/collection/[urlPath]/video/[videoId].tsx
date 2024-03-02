@@ -21,7 +21,7 @@ const videoInCollection = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === "GET") {
       const collection = await coll.findOne({
-        urlPath: urlPath,
+        "metadata.urlPath": urlPath,
       });
       if (collection) {
         const videos = get(collection, ["videos"]);
