@@ -3,10 +3,11 @@ import { useState } from "react";
 import { IntlShape, useIntl } from "react-intl";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
-const InfoIcon: React.FC<{ messageId: string; defaultMessage: string }> = ({
-  messageId,
-  defaultMessage,
-}) => {
+const InfoIcon: React.FC<{
+  messageId: string;
+  defaultMessage?: string;
+  values?: {};
+}> = ({ messageId, defaultMessage, values }) => {
   const intl: IntlShape = useIntl();
 
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -28,14 +29,16 @@ const InfoIcon: React.FC<{ messageId: string; defaultMessage: string }> = ({
         disableFocusListener
         disableHoverListener
         disableTouchListener
-        title={intl.formatMessage({
-          id: messageId,
-          defaultMessage: defaultMessage,
-        })}
+        title={intl.formatMessage(
+          {
+            id: messageId,
+            defaultMessage: defaultMessage ? defaultMessage : "",
+          },
+          values
+        )}
       >
-        <Avatar // @TODO extract this as its own component
+        <Avatar
           style={{
-            // border: "1px solid black",
             height: 25,
             width: 25,
             paddingRight: 0,

@@ -4,7 +4,7 @@ import { get, map, reduce } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import DataTable from "../../components/DataTable";
-import CustomError from "../../components/Error";
+import CustomError from "../../components/CustomError";
 import ViewCollectionActionButton from "../../components/ViewCollectionActionButton";
 import { excludeFromCollectionTableDisplay } from "../../constants";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";

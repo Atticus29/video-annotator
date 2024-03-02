@@ -10,21 +10,9 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import CollectionDetailsEdit from "../../../components/CollectionDetailsEdit";
 import CollectionDetailsView from "../../../components/CollectionDetailsView";
-import VideoIntakePreview from "../../../components/VideoIntakePreview";
-import VideoIntakeQuestions from "../../../components/VideoIntakeQuestions";
 import { Collection, FormFieldGroup } from "../../../types";
-import { shamCollection } from "../../../dummy_data/dummyCollection";
-import IndividualIntakeQuestions from "../../../components/IndividualIntakeQuestions";
-import IndividualIntakePreview from "../../../components/IndividualIntakePreview";
 import { get } from "lodash-es";
-import EventIntakeQuestions from "../../../components/EventIntakeQuestions";
-import EventIntakePreview from "../../../components/EventIntakePreview";
-import {
-  QueryFunctionContext,
-  useMutation,
-  UseMutationResult,
-  useQuery,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios from "axios";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { sanitizeString } from "../../../utilities/textUtils";
@@ -32,7 +20,15 @@ import { NextRouter, useRouter } from "next/router";
 import dayjs from "dayjs";
 import useFirebaseAuth from "../../../hooks/useFirebaseAuth";
 import useGetCollection from "../../../hooks/useGetCollection";
-import CustomError from "../../../components/Error";
+import CustomError from "../../../components/CustomError";
+import GenericIntakeQuestions from "../../../components/GenericIntakeQuestions";
+import usePostCollectionEventIntakeQuestions from "../../../hooks/usePostCollectionEventIntakeQuestions";
+import useUpdateCollectionEventIntakeQuestions from "../../../hooks/useUpdateCollectionEventIntakeQuestions";
+import GenericIntakePreview from "../../../components/GenericIntakePreview";
+import usePostCollectionVideoIntakeQuestions from "../../../hooks/usePostCollectionVideoIntakeQuestions";
+import useUpdateCollectionVideoIntakeQuestions from "../../../hooks/useUpdateCollectionVideoIntakeQuestions";
+import usePostCollectionIndividualIntakeQuestions from "../../../hooks/usePostCollectionIndividualIntakeQuestions";
+import useUpdateCollectionIndividualIntakeQuestions from "../../../hooks/useUpdateCollectionIndividualIntakeQuestions";
 
 const CollectionEditor: React.FC = () => {
   const intl: IntlShape = useIntl();
@@ -161,7 +157,8 @@ const CollectionEditor: React.FC = () => {
         ...rest,
       };
       const response = await axios.patch(
-        "/api/collection/update/" + get(updatedCollection, ["urlPath"]),
+        "/api/collection/update/" +
+          get(updatedCollection, ["metadata", "urlPath"]),
         {
           data: updatedCollection,
         }
@@ -174,7 +171,7 @@ const CollectionEditor: React.FC = () => {
       setSaveSuccess(true);
       setSaveFail(false);
       handleClose();
-      router.push("/collection/edit/" + data?.data?.urlPath);
+      router.push("/collection/edit/" + data?.data?.metadata?.urlPath);
     },
     onError: (error) => {
       setSnackbarMessage(
@@ -193,13 +190,15 @@ const CollectionEditor: React.FC = () => {
   const handleSaveCollection = async () => {
     setOpen(true);
     const sanitizedCollectionName: string = sanitizeString(
-      collection?.name || String(Math.random() * 10)
+      collection?.metadata.name || String(Math.random() * 10)
     );
     const fleshedOutCollection: Collection | any = {
       // @TODO just having Collection as the type created issues that I don't have internet access to resolve
       ...collection,
       urlPath: sanitizeString(
-        collection?.name || localUrlPathAsString || String(Math.random() * 10)
+        collection?.metadata.name ||
+          localUrlPathAsString ||
+          String(Math.random() * 10)
       ),
       createdByEmail: user?.email || "public@example.com",
       dateCreated: dayjs(),
@@ -208,7 +207,7 @@ const CollectionEditor: React.FC = () => {
   };
 
   const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event | null,
+    _event: React.SyntheticEvent | Event | null,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -263,20 +262,19 @@ const CollectionEditor: React.FC = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Grid container spacing={2} style={{ marginTop: "1vh" }}>
-        {collection?.name && (
+        {collection?.metadata?.name && (
           <>
             <Grid item sm={12} md={12}>
               {isCollectionDetailsInEditMode ? (
                 <CollectionDetailsEdit
-                  collection={collection}
-                  setCollection={setCollection}
+                  collectionUrl={collection?.metadata?.urlPath}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
                   }
                 />
               ) : (
                 <CollectionDetailsView
-                  collection={collection}
+                  collectionUrl={collection.metadata.urlPath || ""}
                   showEditButton={true}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
@@ -285,45 +283,61 @@ const CollectionEditor: React.FC = () => {
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && individualQuestionsFormFieldGroup && (
-                <IndividualIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={individualQuestionsFormFieldGroup}
-                />
-              )}
+              {collection.metadata.name &&
+                individualQuestionsFormFieldGroup && (
+                  <GenericIntakeQuestions
+                    collectionUrl={localUrlPathAsString}
+                    mode="edit"
+                    postHook={usePostCollectionIndividualIntakeQuestions}
+                    updateHook={useUpdateCollectionIndividualIntakeQuestions}
+                    intakeQuestionType="invidual"
+                  />
+                )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
-                <IndividualIntakePreview collection={collection} />
+              {collection.metadata.name && (
+                <GenericIntakePreview
+                  collectionUrl={localUrlPathAsString}
+                  intakeQuestionType="individual"
+                />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && videoQuestionsFormFieldGroup && (
-                <VideoIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={videoQuestionsFormFieldGroup}
+              {collection.metadata.name && videoQuestionsFormFieldGroup && (
+                <GenericIntakeQuestions
+                  collectionUrl={collection?.metadata?.urlPath || ""}
+                  mode="edit"
+                  postHook={usePostCollectionVideoIntakeQuestions}
+                  updateHook={useUpdateCollectionVideoIntakeQuestions}
+                  intakeQuestionType="video"
                 />
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
-                <VideoIntakePreview collection={collection} />
+              {collection.metadata.name && (
+                <GenericIntakePreview
+                  collectionUrl={localUrlPathAsString}
+                  intakeQuestionType="video"
+                />
               )}
             </Grid>
             <Grid item sm={12} md={4} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && eventQuestionsFormFieldGroup && (
-                <EventIntakeQuestions
-                  collection={collection}
-                  setCollection={setCollection}
-                  formFieldGroup={eventQuestionsFormFieldGroup}
+              {collection.metadata.name && eventQuestionsFormFieldGroup && (
+                <GenericIntakeQuestions
+                  collectionUrl={localUrlPathAsString}
+                  mode="edit"
+                  postHook={usePostCollectionEventIntakeQuestions}
+                  updateHook={useUpdateCollectionEventIntakeQuestions}
+                  intakeQuestionType="event"
                 />
               )}
             </Grid>
             <Grid item sm={12} md={8} style={{ height: 700, overflow: "auto" }}>
-              {collection?.name && (
-                <EventIntakePreview collection={collection} />
+              {collection.metadata.name && (
+                <GenericIntakePreview
+                  collectionUrl={localUrlPathAsString}
+                  intakeQuestionType="event"
+                />
               )}
             </Grid>
           </>

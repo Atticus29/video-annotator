@@ -1,7 +1,7 @@
 import { useRouter, NextRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import CustomError from "../../components/Error";
+import CustomError from "../../components/CustomError";
 import { Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { useMutation } from "@tanstack/react-query";

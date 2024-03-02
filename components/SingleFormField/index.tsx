@@ -26,13 +26,13 @@ const SingleFormField: React.FC<{
   formFieldGroup: FormFieldGroup | undefined;
   areAutocompleteOptionsDeletable?: boolean;
   stringForAutocompleteOptions?: string;
-  parentCollection?: Collection | undefined;
+  setAutocompleteValues?: (val: any) => void;
 }> = ({
   question,
   formFieldGroup,
   areAutocompleteOptionsDeletable = false,
   stringForAutocompleteOptions = "Option",
-  parentCollection = undefined,
+  setAutocompleteValues,
 }) => {
   const intl: IntlShape = useIntl();
   const [localVal, setLocalVal] = useState<string | null>(null);
@@ -47,14 +47,14 @@ const SingleFormField: React.FC<{
       question?.type === "Checkbox" &&
       !get(formFieldGroup, ["actualValues", question?.label])
     ) {
-      updateFormFieldStates(false, false, formFieldGroup, question);
+      updateFormFieldStates(false, formFieldGroup, question);
     }
 
     if (
       question?.type === "Date" &&
       !get(formFieldGroup, ["actualValues", question?.label])
     ) {
-      updateFormFieldStates(dayjs(), false, formFieldGroup, question);
+      updateFormFieldStates(dayjs(), formFieldGroup, question);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,7 +65,7 @@ const SingleFormField: React.FC<{
     const currentVal: any = event?.currentTarget?.value;
     if (question) {
       setLocalVal(currentVal);
-      updateFormFieldStates(currentVal, false, formFieldGroup, question); // Note that this controlled stuff needs to be set AFTER the local useState. Otherwise, there are weird cursor placement issues. See https://dev.to/kwirke/solving-caret-jumping-in-react-inputs-36ic
+      updateFormFieldStates(currentVal, formFieldGroup, question); // Note that this controlled stuff needs to be set AFTER the local useState. Otherwise, there are weird cursor placement issues. See https://dev.to/kwirke/solving-caret-jumping-in-react-inputs-36ic. Update March 1, 2024 - after the refactor using tanStack query, I no longer am sure whether this is true. @TODO confirm.
     }
   };
 
@@ -75,9 +75,9 @@ const SingleFormField: React.FC<{
   ) => void = (_event: SyntheticEvent<Element, Event>, newValue: any) => {
     if (question) {
       if (newValue) {
-        updateFormFieldStates(newValue, false, formFieldGroup, question);
+        updateFormFieldStates(newValue, formFieldGroup, question);
       } else {
-        updateFormFieldStates("", false, formFieldGroup, question); // otherwise, there is an error
+        updateFormFieldStates("", formFieldGroup, question); // otherwise, there is an error
       }
     }
   };
@@ -85,13 +85,13 @@ const SingleFormField: React.FC<{
   const handleCheckChange: (event: any) => void = (event: any) => {
     const currentVal: any = event?.target?.checked;
     if (question) {
-      updateFormFieldStates(currentVal, false, formFieldGroup, question);
+      updateFormFieldStates(currentVal, formFieldGroup, question);
     }
   };
 
   const handleDateChange: (newValue: {}) => void = (newValue: {}) => {
     if (question) {
-      updateFormFieldStates(newValue, false, formFieldGroup, question);
+      updateFormFieldStates(newValue, formFieldGroup, question);
     }
   };
 
@@ -113,17 +113,18 @@ const SingleFormField: React.FC<{
     );
 
     // Now, we have to rename some of the labels, because, say, if Option 2 got removed, the old Option 3 should become the new Option 2.
-
     const autoCompleteVals: string[] = filter(
       filteredAcutalValues || {},
       (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
         return optionFormFieldGroupKey.startsWith(stringForAutocompleteOptions);
       }
     );
-    if (formFieldGroup) {
+
+    if (setAutocompleteValues) {
       updateOptionFormFieldGroupWithOptionList(
         autoCompleteVals,
-        formFieldGroup
+        setAutocompleteValues,
+        stringForAutocompleteOptions
       );
     }
   };

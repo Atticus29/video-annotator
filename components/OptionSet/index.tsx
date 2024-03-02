@@ -5,36 +5,30 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { filter, get, map } from "lodash-es";
+import { filter, get, map, reduce } from "lodash-es";
 import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { SingleFormField, Collection, FormFieldGroup } from "../../types";
+import { SingleFormField, FormFieldGroup } from "../../types";
 import {
   calculateWhetherCustomOptionValuesArePermitted,
-  updateCollection,
+  updateIntakeQuestionFormField,
   updateOptionFormFieldGroupWithOptionList,
-  updateUsersCanAddCustomOptionsChecked,
-  updateUsersCanAddCustomOptionsUnchecked,
 } from "../../utilities/singleFormFieldUtils";
 import { isNonEmptyString } from "../../utilities/validators";
 import InfoIcon from "../InfoIcon";
 import SingleFormFieldComponent from "../SingleFormField";
 
 const OptionSet: React.FC<{
-  formField: SingleFormField;
-  formFieldGroupString: string;
-  collection: Collection;
-  targetFormFieldIdx: number;
-  setCollection: (collection: Collection) => void;
-  whichIntakeQuestions: string;
+  question: SingleFormField;
+  questionIdx: number;
+  formFieldGroup: FormFieldGroup;
+  stringForAutocompleteOptions: string;
 }> = ({
-  formField,
-  formFieldGroupString,
-  collection,
-  targetFormFieldIdx,
-  setCollection,
-  whichIntakeQuestions,
+  question,
+  questionIdx,
+  formFieldGroup,
+  stringForAutocompleteOptions,
 }) => {
   const intl: IntlShape = useIntl();
   const checkBoxLabel: string = intl.formatMessage({
@@ -43,11 +37,20 @@ const OptionSet: React.FC<{
       "Can video annotators in this collection add their own options?",
   });
 
-  let options: string[] = get(formField, ["autocompleteOptions"], []);
+  let initialOptions: string[] = get(question, ["autocompleteOptions"], []);
 
-  const [canAddOptions, setCanAddOptions] = useState<boolean>(true);
+  const seedAutocompleteVals: {} = reduce(
+    initialOptions,
+    (memo, option, optionIdx) => ({
+      ...memo,
+      [stringForAutocompleteOptions + " " + String(optionIdx + 1)]: option,
+    }),
+    {}
+  );
 
-  const [autocompleteValues, setAutocompleteValues] = useState<{}>({});
+  const [autocompleteValues, setAutocompleteValues] = useState<{}>(
+    seedAutocompleteVals
+  );
   const [invalidOptions, setInvalidOptions] = useState<{}>({});
   const optionFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
@@ -60,73 +63,61 @@ const OptionSet: React.FC<{
   }, [invalidOptions, autocompleteValues]);
 
   useEffect(() => {
-    updateOptionFormFieldGroupWithOptionList(options, optionFormFieldGroup);
-
-    const newKey: string = intl.formatMessage({
-      id: "CAN_END_USER_ADD_CUSTOM_OPTIONS_SHORT",
-      defaultMessage:
-        "Can video annotators in this collection add their own options?",
-    });
-
-    const canEndUserAddCustomOptionsVals =
-      calculateWhetherCustomOptionValuesArePermitted(
-        optionFormFieldGroup,
-        intl
-      );
-
-    if (optionFormFieldGroup?.setValues) {
-      optionFormFieldGroup.setValues((prevState: {}) => {
-        return { ...prevState, [newKey]: canEndUserAddCustomOptionsVals };
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     const autoCompleteVals: string[] = filter(
       optionFormFieldGroup?.actualValues || {},
       (_optionFormFieldGroupValue, optionFormFieldGroupKey) => {
-        return optionFormFieldGroupKey.startsWith("Option"); // @TODO prevent the collection owner from making labels that start with Option??? Or at least test for wonky behavior
+        return optionFormFieldGroupKey.startsWith(stringForAutocompleteOptions); // @TODO prevent the collection owner from making labels that start with Option??? Or at least test for wonky behavior
       }
     );
-    updateCollection(
-      collection,
-      targetFormFieldIdx,
-      "autocompleteOptions",
+    updateIntakeQuestionFormField(
       autoCompleteVals,
-      setCollection,
-      whichIntakeQuestions
+      "autocompleteOptions",
+      questionIdx,
+      formFieldGroup
     );
 
     const canEndUserAddCustomOptionsVals =
       calculateWhetherCustomOptionValuesArePermitted(
-        optionFormFieldGroup,
-        intl
+        formFieldGroup,
+        questionIdx
       );
-    updateCollection(
-      collection,
-      targetFormFieldIdx,
-      "usersCanAddCustomOptions",
+
+    updateIntakeQuestionFormField(
       canEndUserAddCustomOptionsVals,
-      setCollection,
-      whichIntakeQuestions
+      "usersCanAddCustomOptions",
+      questionIdx,
+      formFieldGroup
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optionFormFieldGroup]);
+  }, [
+    // formFieldGroup, // this is a dependency for a useEffect in the {type}IntakeQuestions grandparent component already. If it's dependency here, too, it's just an insane amount of re-renders
+    intl,
+    optionFormFieldGroup,
+    questionIdx,
+    stringForAutocompleteOptions,
+  ]);
+
+  const onlyAutocompletes: {} = filter(
+    autocompleteValues,
+    (_autocompleteValue, autoCompleteValueKey) => {
+      return autoCompleteValueKey.startsWith(stringForAutocompleteOptions);
+    }
+  );
+  const mappableOpts: string[] = Object.values(onlyAutocompletes);
 
   const formFieldSet: SingleFormField[] = map(
-    options,
+    mappableOpts,
     (_option: string, optionIdx: number) => {
       const currentFormFieldForOption = {
-        label: "Option " + (optionIdx + 1),
+        label: stringForAutocompleteOptions + " " + (optionIdx + 1),
         type: "Text",
-        language: formField?.language,
+        language: question?.language,
         isRequired: true,
         shouldBeCheckboxes: [],
         invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
         validatorMethods: [isNonEmptyString],
       };
-      return currentFormFieldForOption; // @TODO fix... no longer sure what's wrong with this.
+      return currentFormFieldForOption;
     }
   );
 
@@ -137,52 +128,36 @@ const OptionSet: React.FC<{
         <SingleFormFieldComponent
           key={key}
           question={optionFormField}
-          areAutocompleteOptionsDeletable={true}
           formFieldGroup={optionFormFieldGroup}
-          stringForAutocompleteOptions={"Option"}
+          areAutocompleteOptionsDeletable={true}
+          setAutocompleteValues={optionFormFieldGroup.setValues}
+          stringForAutocompleteOptions={stringForAutocompleteOptions}
         />
       </>
     );
   });
 
   const handleAddAnotherOption: () => void = () => {
-    options.push("");
-    updateOptionFormFieldGroupWithOptionList(options, optionFormFieldGroup);
+    const currentOptions: string[] = Object.values(autocompleteValues) || [];
+    updateOptionFormFieldGroupWithOptionList(
+      [...currentOptions, ""],
+      optionFormFieldGroup.setValues,
+      stringForAutocompleteOptions
+    );
   };
 
-  const handleCheckChange: (event: any) => void = (_event: any) => {
-    const newActualValue: {} = { [checkBoxLabel]: !canAddOptions }; // !canAddOptions instead of canAddOptions because it hasn't re-rendered yet
-    setCanAddOptions((prev) => !prev);
-    if (optionFormFieldGroup?.setValues) {
-      optionFormFieldGroup.setValues((prevState: {}) => {
-        return { ...prevState, ...newActualValue };
-      });
-    }
-    if (!canAddOptions === true) {
-      updateUsersCanAddCustomOptionsChecked(
-        optionFormFieldGroup,
-        formFieldGroupString,
-        formField,
-        collection,
-        targetFormFieldIdx,
-        "usersCanAddCustomOptions",
-        !canAddOptions,
-        setCollection,
-        whichIntakeQuestions
-      );
-    } else if (!canAddOptions === false) {
-      updateUsersCanAddCustomOptionsUnchecked(
-        optionFormFieldGroup,
-        formFieldGroupString,
-        formField,
-        collection,
-        targetFormFieldIdx,
-        "usersCanAddCustomOptions",
-        !canAddOptions,
-        setCollection,
-        whichIntakeQuestions
-      );
-    }
+  const handleCheckChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateIntakeQuestionFormField(
+      event.target.checked,
+      checkBoxLabel ===
+        "Can video annotators in this collection add their own options?"
+        ? "usersCanAddCustomOptions"
+        : checkBoxLabel, // @TODO change this
+      questionIdx,
+      formFieldGroup
+    );
   };
 
   return (
@@ -198,7 +173,13 @@ const OptionSet: React.FC<{
           paddingRight: "3vw",
         }}
       >
-        <Typography style={{ marginBottom: 10 }}>{formField?.label}</Typography>
+        <Typography style={{ marginBottom: 10 }}>
+          {intl.formatMessage({
+            id: "OPTIONS_FOR",
+            defaultMessage: "Options for",
+          })}{" "}
+          {question?.label}
+        </Typography>
         {optionFormFields}
         <Button
           variant="contained"
@@ -217,13 +198,24 @@ const OptionSet: React.FC<{
         >
           <FormControlLabel
             style={{ marginRight: 10 }}
-            control={<Checkbox checked={canAddOptions} />}
-            value={get(
-              optionFormFieldGroup,
-              ["actualValues", checkBoxLabel],
-              true
-            )}
-            onChange={handleCheckChange}
+            control={
+              <Checkbox
+                checked={get(
+                  formFieldGroup,
+                  [
+                    "actualValues",
+                    (checkBoxLabel ===
+                    "Can video annotators in this collection add their own options?"
+                      ? "usersCanAddCustomOptions"
+                      : checkBoxLabel) +
+                      "--" +
+                      questionIdx,
+                  ],
+                  true
+                )}
+                onChange={handleCheckChange}
+              />
+            }
             label={checkBoxLabel}
           />
         </div>

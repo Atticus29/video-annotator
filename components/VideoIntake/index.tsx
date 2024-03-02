@@ -47,7 +47,7 @@ const VideoIntake: React.FC<{
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
-    { videoName: collection.nameOfVideo }
+    { videoName: collection.metadata.nameOfVideo }
   );
 
   const bodyId: string = intl.formatMessage(
@@ -56,7 +56,7 @@ const VideoIntake: React.FC<{
       defaultMessage:
         "To add a {videoName} to the collection, fill out the form below.",
     },
-    { videoName: collection?.nameOfVideo?.toLowerCase() }
+    { videoName: collection.metadata.nameOfVideo?.toLowerCase() }
   );
 
   const [showIndividualCreationDialog, setShowIndividualCreationDialog] =
@@ -69,7 +69,7 @@ const VideoIntake: React.FC<{
   const handleCreateVideoDialogClose = () => {
     // @TODO can combine this with handleCreateIndividualDialogClose
     setShowIndividualCreationDialog(false);
-    const queryKey = ["singleCollection", collection?.urlPath];
+    const queryKey = ["singleCollection", collection.metadata.urlPath];
     const queryCache = queryClient.getQueryCache();
     let queryState = queryCache.find({ queryKey: queryKey });
     if (queryState) {
@@ -81,18 +81,8 @@ const VideoIntake: React.FC<{
         `VideoIntake Before Query with key ${queryKey} is NOT in the cache.`
       );
     }
-    // queryClient.invalidateQueries();
     queryClient.invalidateQueries({ queryKey: queryKey });
     queryState = queryCache.find({ queryKey: queryKey });
-    if (queryState) {
-      console.log(
-        `VideoIntake After Query with key ${queryKey} is in the cache.`
-      );
-    } else {
-      console.log(
-        `VideoIntake After Query with key ${queryKey} is NOT in the cache.`
-      );
-    }
   };
   const videoFallback: string = intl.formatMessage({ id: "VIDEO" });
   const individualFallback: string = intl.formatMessage({
@@ -106,10 +96,11 @@ const VideoIntake: React.FC<{
     intl.formatMessage(
       { id: "ADD_INDIVIDUAL_TO_VIDEO" },
       {
-        individualName: collection?.nameOfIndividual || individualFallback,
+        individualName:
+          collection.metadata.nameOfIndividual || individualFallback,
         individualNamePlural:
-          collection?.nameOfIndividualPlural || individualsFallback,
-        videoName: collection?.nameOfVideo || videoFallback,
+          collection.metadata.nameOfIndividualPlural || individualsFallback,
+        videoName: collection.metadata.nameOfVideo || videoFallback,
       }
     ) + asteriskIfRequired;
 
@@ -170,7 +161,7 @@ const VideoIntake: React.FC<{
           <>
             <Grid item lg={12} sm={12} key="individual-table">
               <IndividualsTableView
-                collectionUrl={get(collection, "urlPath", "")}
+                collectionUrl={get(collection, ["metadata", "urlPath"], "")}
                 tableTitle={individualsTableText}
                 individualIntakeQuestions={get(
                   collection,
@@ -195,7 +186,6 @@ const VideoIntake: React.FC<{
                 </Alert>
               )}
             </Grid>
-            {/* )} */}
             <Grid item lg={12} sm={12} key="individual-creation-button">
               <Button
                 data-testid={"new-video-add-button"}
@@ -207,7 +197,7 @@ const VideoIntake: React.FC<{
                   id="SUBMIT_NEW_INDIVIDUAL"
                   defaultMessage="Create a New {individualName}"
                   values={{
-                    individualName: collection?.nameOfIndividual,
+                    individualName: collection.metadata.nameOfIndividual,
                   }}
                 />
               </Button>
@@ -226,30 +216,29 @@ const VideoIntake: React.FC<{
           </>
         )}
 
-        {collection?.videoQuestionsFormFieldGroup &&
-          collection?.videoIntakeQuestions && (
-            <>
-              <Grid item lg={12} sm={12}>
-                <ComposedFormSubmissionButton
-                  questionsOfConcern={
-                    [
-                      ...get(collection, ["videoIntakeQuestions"], []),
-                      individualsQuestion,
-                    ] || []
-                  }
-                  formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                  collectionPath={collection?.urlPath}
-                  collectionPropToUpdate={"videos"}
-                  onCloseDialog={onCloseDialog}
-                />
-              </Grid>
-              <Grid item lg={12} sm={12}>
-                <Button variant="contained" onClick={onCloseDialog}>
-                  <FormattedMessage id="CLOSE" defaultMessage="Close" />
-                </Button>
-              </Grid>
-            </>
-          )}
+        {videoQuestionsFormFieldGroup && collection?.videoIntakeQuestions && (
+          <>
+            <Grid item lg={12} sm={12}>
+              <ComposedFormSubmissionButton
+                questionsOfConcern={
+                  [
+                    ...get(collection, ["videoIntakeQuestions"], []),
+                    individualsQuestion,
+                  ] || []
+                }
+                formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
+                collectionPath={collection.metadata.urlPath}
+                collectionPropToUpdate={"videos"}
+                onCloseDialog={onCloseDialog}
+              />
+            </Grid>
+            <Grid item lg={12} sm={12}>
+              <Button variant="contained" onClick={onCloseDialog}>
+                <FormattedMessage id="CLOSE" defaultMessage="Close" />
+              </Button>
+            </Grid>
+          </>
+        )}
       </Grid>
     </InfoPanel>
   );

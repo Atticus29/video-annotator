@@ -1,31 +1,28 @@
-import { FormFieldGroup, SingleFormField, Collection } from "../types";
-import {
-  isNonEmptyString,
-  isValidOption,
-  isValidUrl,
-} from "../utilities/validators";
+import { SingleFormField, Collection } from "../types";
+import { isNonEmptyString, isValidUrl } from "../utilities/validators";
 
 import moveNames from "./moveNames";
 import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
+import { excludeFromCollectionTableDisplay } from "../constants";
 // import dayjs from "dayjs";
 
 export const defaultDoNotDisplays: string[] = [
   "_id",
+  "key",
   "testId",
   "doNotDisplay",
   "shouldBeCheckboxes",
-
   "invalidInputMessage",
   "validatorMethods",
   "shouldBeCheckboxes",
 ];
 
 export const individualsQuestion: SingleFormField = {
-  label: "Individuals",
   type: "text",
-  language: "English",
+  label: "Individuals",
   isRequired: true,
+  language: "English",
   testId: "individuals",
   doNotDisplay: defaultDoNotDisplays,
   invalidInputMessage: "MUST_SELECT_AT_LEAST_ONE_INDIVIDUAL",
@@ -33,61 +30,62 @@ export const individualsQuestion: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
-const firstQuestion: SingleFormField = {
-  label: "URL",
+const urlQuestion: SingleFormField = {
   type: "URL",
-  language: "English",
+  label: "URL",
   isRequired: true,
+  language: "English",
   testId: "url",
   doNotDisplay: defaultDoNotDisplays,
   invalidInputMessage: "MUST_BE_VALID_URL",
   validatorMethods: [isValidUrl],
   shouldBeCheckboxes: ["isRequired"],
   isACoreQuestion: true,
+  recommendedLabel: "URL",
 };
 
-const secondQuestion: SingleFormField = {
-  label: "Tournament Name",
+const tournamentName: SingleFormField = {
   type: "Autocomplete",
-  language: "English",
+  label: "Tournament Name",
   isRequired: false,
+  autocompleteOptions: [...tournamentNames],
+  usersCanAddCustomOptions: true,
+  language: "English",
   testId: "tournament",
   doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
   shouldBeCheckboxes: ["isRequired"],
   validatorMethods: [isNonEmptyString],
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
-  autocompleteOptions: [...tournamentNames],
-  usersCanAddCustomOptions: true,
 };
 
 const locationName: SingleFormField = {
-  label: "Location Name",
   type: "Autocomplete",
-  language: "English",
+  label: "Location Name",
   isRequired: false,
+  autocompleteOptions: [...locationNames],
+  usersCanAddCustomOptions: true,
+  language: "English",
   testId: "locationNames",
   doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
   shouldBeCheckboxes: ["isRequired"],
   validatorMethods: [isNonEmptyString],
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
-  autocompleteOptions: [...locationNames],
-  usersCanAddCustomOptions: true,
 };
 
-const thirdQuestion: SingleFormField = {
-  label: "Gi?",
+const shouldBeGi: SingleFormField = {
   type: "Checkbox",
-  language: "English",
+  label: "Gi?",
   isRequired: false,
+  language: "English",
   testId: "isGi",
   doNotDisplay: defaultDoNotDisplays,
   validatorMethods: [],
   shouldBeCheckboxes: ["isRequired"],
 };
 
-const fourthQuestion: SingleFormField = {
-  label: "Date of match",
+const dateOfMatch: SingleFormField = {
   type: "Date",
+  label: "Date of match",
   language: "English",
   testId: "matchDate",
   doNotDisplay: defaultDoNotDisplays,
@@ -95,28 +93,9 @@ const fourthQuestion: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
-// const fifthQuestion: SingleFormField = { // deprecated. Individuals are getting attached to each video directly as a separate step in video intake.
-//   label: "Name of Athlete on the Left",
-//   type: "Autocomplete",
-//   language: "English",
-//   isRequired: true,
-//   testId: "athleteLeftName",
-//   doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
-//   shouldBeCheckboxes: ["isRequired"],
-//   validatorMethods: [isNonEmptyString],
-//   invalidInputMessage: "INPUT_INVALID",
-//   autocompleteOptions: [
-//     "Fisher, Mark",
-//     "Deodara, Dirt",
-//     "Ziegler, Eddie",
-//     "Diggins, John",
-//   ],
-//   usersCanAddCustomOptions: true,
-// };
-
-const sixthQuestion: SingleFormField = {
-  label: "Age",
+const ageQuestion: SingleFormField = {
   type: "Number",
+  label: "Age",
   language: "English",
   testId: "age",
   doNotDisplay: defaultDoNotDisplays,
@@ -127,8 +106,8 @@ const sixthQuestion: SingleFormField = {
 };
 
 const numberReferees: SingleFormField = {
-  label: "Number of Referees",
   type: "Number",
+  label: "Number of Referees",
   language: "English",
   testId: "numberReferees",
   doNotDisplay: defaultDoNotDisplays,
@@ -138,21 +117,9 @@ const numberReferees: SingleFormField = {
   isRequired: false,
 };
 
-const seventhQuestion: SingleFormField = {
-  label: "mystery string",
-  type: "Text",
-  language: "English",
-  isRequired: false,
-  testId: "url",
-  doNotDisplay: defaultDoNotDisplays,
-  invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
-  validatorMethods: [isNonEmptyString],
-  shouldBeCheckboxes: ["isRequired"],
-};
-
 const lastNameIndividualQuestion: SingleFormField = {
-  label: "Last Name",
   type: "Text",
+  label: "Last Name",
   language: "English",
   isRequired: true,
   testId: "url",
@@ -160,11 +127,13 @@ const lastNameIndividualQuestion: SingleFormField = {
   invalidInputMessage: "FIELD_CANNOT_BE_BLANK",
   validatorMethods: [isNonEmptyString],
   shouldBeCheckboxes: ["isRequired"],
+  isACoreQuestion: true,
+  recommendedLabel: "Last Name or Name or ID",
 };
 
 const firstNameIndividualQuestion: SingleFormField = {
-  label: "First Name",
   type: "Text",
+  label: "First Name",
   language: "English",
   isRequired: true,
   testId: "url",
@@ -175,8 +144,8 @@ const firstNameIndividualQuestion: SingleFormField = {
 };
 
 const genderIndividualQuestion: SingleFormField = {
-  label: "Gender",
   type: "Autocomplete",
+  label: "Gender",
   language: "English",
   isRequired: false,
   testId: "gender",
@@ -195,8 +164,8 @@ const genderIndividualQuestion: SingleFormField = {
 };
 
 const giRankIndividualQuestion: SingleFormField = {
-  label: "Gi Rank",
   type: "Autocomplete",
+  label: "Gi Rank",
   language: "English",
   isRequired: false,
   testId: "giRank",
@@ -209,8 +178,8 @@ const giRankIndividualQuestion: SingleFormField = {
 };
 
 const noGiRankIndividualQuestion: SingleFormField = {
-  label: "No Gi Rank",
   type: "Autocomplete",
+  label: "No Gi Rank",
   language: "English",
   isRequired: false,
   testId: "noGiRank",
@@ -223,8 +192,8 @@ const noGiRankIndividualQuestion: SingleFormField = {
 };
 
 const allRanks: SingleFormField = {
-  label: "Rank",
   type: "Autocomplete",
+  label: "Rank",
   language: "English",
   isRequired: false,
   testId: "allRanks",
@@ -247,15 +216,9 @@ const allRanks: SingleFormField = {
 };
 
 const natureOfTheMatch: SingleFormField = {
-  label: "Nature of the Match",
   type: "Autocomplete",
-  language: "English",
+  label: "Nature of the Match",
   isRequired: true,
-  testId: "natureOfTheMatch",
-  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
-  shouldBeCheckboxes: ["isRequired"],
-  validatorMethods: [isNonEmptyString],
-  invalidInputMessage: "INPUT_INVALID",
   autocompleteOptions: [
     "Competition",
     "Practice/Training",
@@ -263,11 +226,17 @@ const natureOfTheMatch: SingleFormField = {
     "Instructional",
   ],
   usersCanAddCustomOptions: true,
+  language: "English",
+  testId: "natureOfTheMatch",
+  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
+  shouldBeCheckboxes: ["isRequired"],
+  validatorMethods: [isNonEmptyString],
+  invalidInputMessage: "INPUT_INVALID",
 };
 
 const weightClassIndividualQuestion: SingleFormField = {
-  label: "Weight Class",
   type: "Autocomplete",
+  label: "Weight Class",
   language: "English",
   isRequired: false,
   testId: "weightClass",
@@ -299,8 +268,8 @@ const weightClassIndividualQuestion: SingleFormField = {
 };
 
 const ageClassIndividualQuestion: SingleFormField = {
-  label: "Age Class",
   type: "Autocomplete",
+  label: "Age Class",
   language: "English",
   isRequired: false,
   testId: "ageClass",
@@ -325,8 +294,8 @@ const ageClassIndividualQuestion: SingleFormField = {
 };
 
 const moveNameQuestion: SingleFormField = {
-  label: "Name of move",
   type: "Autocomplete",
+  label: "Name of move",
   language: "English",
   isRequired: true,
   testId: "moveName",
@@ -337,11 +306,12 @@ const moveNameQuestion: SingleFormField = {
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
   isACoreQuestion: true,
+  recommendedLabel: "Name of event",
 };
 
 const startingPositionOfActor: SingleFormField = {
-  label: "Starting Position of Actor",
   type: "Autocomplete",
+  label: "Starting Position of Actor",
   language: "English",
   isRequired: true,
   testId: "startingPositionOfActor",
@@ -371,8 +341,8 @@ const startingPositionOfActor: SingleFormField = {
 };
 
 const startingPositionOfSubject: SingleFormField = {
-  label: "Starting Position of Subject/Target",
   type: "Autocomplete",
+  label: "Starting Position of Subject/Target",
   language: "English",
   isRequired: true,
   testId: "startingPositionOfSubject",
@@ -402,8 +372,8 @@ const startingPositionOfSubject: SingleFormField = {
 };
 
 const endingPositionOfActor: SingleFormField = {
-  label: "Ending Position of Actor",
   type: "Autocomplete",
+  label: "Ending Position of Actor",
   language: "English",
   isRequired: true,
   testId: "endingPositionOfActor",
@@ -433,8 +403,8 @@ const endingPositionOfActor: SingleFormField = {
 };
 
 const endingPositionOfSubject: SingleFormField = {
-  label: "Ending Position of Subject/Target",
   type: "Autocomplete",
+  label: "Ending Position of Subject/Target",
   language: "English",
   isRequired: true,
   testId: "endingPositionOfSubject",
@@ -464,8 +434,8 @@ const endingPositionOfSubject: SingleFormField = {
 };
 
 const actorName: SingleFormField = {
-  label: "Actor Name",
   type: "Autocomplete",
+  label: "Actor Name",
   language: "English",
   isRequired: true,
   testId: "actorName",
@@ -478,8 +448,8 @@ const actorName: SingleFormField = {
 };
 
 const pointsScored: SingleFormField = {
-  label: "Number of Points Scored, If Any",
   type: "Number",
+  label: "Number of Points Scored, If Any",
   language: "English",
   testId: "pointsScored",
   doNotDisplay: defaultDoNotDisplays,
@@ -490,8 +460,8 @@ const pointsScored: SingleFormField = {
 };
 
 const isSuccessful: SingleFormField = {
-  label: "Was the move successful?",
   type: "Checkbox",
+  label: "Was the move successful?",
   language: "English",
   isRequired: true,
   testId: "isSuccessful",
@@ -501,8 +471,8 @@ const isSuccessful: SingleFormField = {
 };
 
 const isSubmission: SingleFormField = {
-  label: "Was the move a successful submission?",
   type: "Checkbox",
+  label: "Was the move a successful submission?",
   language: "English",
   isRequired: true,
   testId: "isSubmission",
@@ -512,8 +482,8 @@ const isSubmission: SingleFormField = {
 };
 
 const isAdvantage: SingleFormField = {
-  label: "Did this move score an advantage?",
   type: "Checkbox",
+  label: "Did this move score an advantage?",
   language: "English",
   isRequired: true,
   testId: "isAdvantage",
@@ -523,8 +493,8 @@ const isAdvantage: SingleFormField = {
 };
 
 const moveRating: SingleFormField = {
-  label: "Rating of quality of this move, 1-10 with 10 being best",
   type: "Autocomplete",
+  label: "Rating of quality of this move, 1-10 with 10 being best",
   language: "English",
   isRequired: true,
   testId: "moveRating",
@@ -536,9 +506,28 @@ const moveRating: SingleFormField = {
   usersCanAddCustomOptions: false,
 };
 
+const typeOfRoundQuestion: SingleFormField = {
+  type: "Autocomplete",
+  label: "What type of round is this?",
+  language: "English",
+  isRequired: true,
+  testId: "typeOfRound",
+  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
+  shouldBeCheckboxes: ["isRequired"],
+  validatorMethods: [isNonEmptyString],
+  invalidInputMessage: "INPUT_INVALID",
+  autocompleteOptions: [
+    "Finals",
+    "Semi-finals",
+    "Quarter-finals",
+    "Not applicable",
+  ],
+  usersCanAddCustomOptions: true,
+};
+
 const comment: SingleFormField = {
-  label: "Comment - any information not captured by the other questions?",
   type: "Text",
+  label: "Comment - any information not captured by the other questions?",
   language: "English",
   isRequired: false,
   testId: "comment",
@@ -548,29 +537,52 @@ const comment: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
+export const shamCollectionShell: Collection = {
+  // _id: "test123",
+  metadata: {
+    name: "Example Collection",
+    createdByEmail: "public@example.com",
+    dateCreated: Date(),
+    nameOfVideo: "Match",
+    nameOfVideoPlural: "Matches",
+    nameOfEvent: "Move",
+    nameOfEventPlural: "Moves",
+    nameOfIndividual: "Athlete",
+    nameOfIndividualPlural: "Athletes",
+    isPrivate: false,
+    language: "English",
+  },
+  excludeFromDetailList: excludeFromCollectionTableDisplay,
+};
+
 export const shamCollection: Collection = {
   // _id: "test123",
-  name: "Example Collection",
-  nameOfVideo: "Match",
-  nameOfVideoPlural: "Matches",
-  nameOfEvent: "Move",
-  nameOfEventPlural: "Moves",
-  isPrivate: false,
-  language: "English",
+  metadata: {
+    name: "Example Collection",
+    createdByEmail: "public@example.com",
+    dateCreated: Date(),
+    nameOfVideo: "Match",
+    nameOfVideoPlural: "Matches",
+    nameOfEvent: "Move",
+    nameOfEventPlural: "Moves",
+    nameOfIndividual: "Athlete",
+    nameOfIndividualPlural: "Athletes",
+    isPrivate: false,
+    language: "English",
+  },
   videoIntakeQuestions: [
     // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
-    firstQuestion,
+    urlQuestion,
     natureOfTheMatch,
-    secondQuestion,
+    typeOfRoundQuestion,
+    tournamentName,
     locationName,
-    thirdQuestion,
+    shouldBeGi,
     allRanks,
     weightClassIndividualQuestion,
-    fourthQuestion,
-    // fifthQuestion,
-    sixthQuestion,
+    dateOfMatch,
+    ageClassIndividualQuestion,
     numberReferees,
-    // seventhQuestion,
   ],
   individualIntakeQuestions: [
     lastNameIndividualQuestion,
@@ -594,47 +606,35 @@ export const shamCollection: Collection = {
     moveRating,
     comment, // @TODO add start time and end time to this
   ],
-  excludeFromDetailList: [
-    "_id",
-    "id",
-    "videoIntakeQuestions",
-    "individualIntakeQuestions",
-    "eventIntakeQuestions",
-    "excludeFromDetailList",
-    "videoQuestionsFormFieldGroup",
-    "individualQuestionsFormFieldGroup",
-    "eventQuestionsFormFieldGroup",
-    "videos",
-    "individuals",
-  ],
-  createdByEmail: "public@example.com",
-  dateCreated: Date(),
-  nameOfIndividual: "Athlete",
-  nameOfIndividualPlural: "Athletes",
+  excludeFromDetailList: excludeFromCollectionTableDisplay,
 };
 
 export const shamCollection2: Collection = {
   // _id: "test123",
-  name: "Brazilian Jiu Jitsu",
-  nameOfVideo: "Match",
-  nameOfVideoPlural: "Matches",
-  nameOfEvent: "Move",
-  nameOfEventPlural: "Moves",
-  isPrivate: false,
-  language: "English",
+  metadata: {
+    name: "Brazilian Jiu Jitsu",
+    createdByEmail: "public@example.com",
+    dateCreated: Date(),
+    nameOfVideo: "Match",
+    nameOfVideoPlural: "Matches",
+    nameOfEvent: "Move",
+    nameOfEventPlural: "Moves",
+    nameOfIndividual: "Athlete",
+    nameOfIndividualPlural: "Athletes",
+    isPrivate: false,
+    language: "English",
+  },
   videoIntakeQuestions: [
-    firstQuestion,
+    urlQuestion,
     natureOfTheMatch,
-    secondQuestion,
+    tournamentName,
     locationName,
-    thirdQuestion,
+    shouldBeGi,
     allRanks,
     weightClassIndividualQuestion,
-    fourthQuestion,
-    // fifthQuestion,
-    sixthQuestion,
+    dateOfMatch,
+    ageQuestion,
     numberReferees,
-    // seventhQuestion,
   ],
   individualIntakeQuestions: [
     lastNameIndividualQuestion,
@@ -658,20 +658,5 @@ export const shamCollection2: Collection = {
     moveRating,
     comment,
   ],
-  excludeFromDetailList: [
-    "id",
-    "videoIntakeQuestions",
-    "individualIntakeQuestions",
-    "eventIntakeQuestions",
-    "excludeFromDetailList",
-    "videoQuestionsFormFieldGroup",
-    "individualQuestionsFormFieldGroup",
-    "eventQuestionsFormFieldGroup",
-    "videos",
-    "individuals",
-  ],
-  createdByEmail: "mfishe53@asu.edu",
-  dateCreated: Date(),
-  nameOfIndividual: "Athlete",
-  nameOfIndividualPlural: "Athletes",
+  excludeFromDetailList: excludeFromCollectionTableDisplay,
 };
