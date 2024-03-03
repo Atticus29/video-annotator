@@ -40,7 +40,7 @@ import useGetCollection from "../../hooks/useGetCollection";
 import { shamCollectionShell } from "../../dummy_data/dummyCollection";
 
 const CollectionDetailsEdit: React.FC<{
-  setIsCollectionDetailsInEditMode?: (val: boolean) => void;
+  setIsCollectionDetailsInEditMode?: Dispatch<SetStateAction<boolean>>;
   titleId?: string;
   mode?: string;
   collectionUrl?: string;
@@ -747,7 +747,7 @@ const CollectionDetailsEdit: React.FC<{
               <CustomError errorMsg={createError ? createError : updateError} />
             )}
           </Grid>
-          {isCollectionError && (
+          {isCollectionError && mode !== "create" && (
             <Grid item lg={12} sm={12}>
               <CustomError errorMsg={collectionErrorMsg} />
             </Grid>
@@ -756,7 +756,11 @@ const CollectionDetailsEdit: React.FC<{
       </InfoPanel>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={updatePending || createPending || isCollectionLoading}
+        open={
+          updatePending ||
+          createPending ||
+          (isCollectionLoading && mode !== "create")
+        }
         onClick={handleClose}
       >
         <CircularProgress color="inherit" />
