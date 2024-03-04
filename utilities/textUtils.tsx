@@ -21,7 +21,7 @@ export function convertCamelCaseToCapitalCase(str: string) {
 
 export function sanitizeString(inputString: string | undefined): string {
   // Remove special characters and whitespace
-  if (inputString) {
+  if (typeof inputString === "string") {
     return inputString.replace(/[^\w]+/gi, "")?.trim();
   } else {
     return "";

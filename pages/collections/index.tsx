@@ -23,6 +23,8 @@ const Collections: React.FC = () => {
   const { isLoading, isError, data, errorMsg } = useGetCollections(
     user?.email || "public@example.com"
   );
+  // console.log("deleteMe data is: ");
+  // console.log(data);
 
   const [open, setOpen] = useState<boolean>(isLoading);
 
@@ -47,14 +49,18 @@ const Collections: React.FC = () => {
   };
 
   const dataWithActions = useMemo(() => {
-    const dataWithActionsAppended = map(data, (datum) => {
+    const dataWithActionsAppended = map(data, (singleCollection) => {
+      console.log("deleteMe singleCollection is: ");
+      console.log(singleCollection);
       return {
-        ...datum,
+        ...singleCollection.metadata,
         actions: "stand in",
       };
     });
     return dataWithActionsAppended;
   }, [data]);
+  // console.log("deleteMe dataWithActions is: ");
+  // console.log(dataWithActions);
 
   const collectionDisplayKeys: string[] = Object.keys(
     get(dataWithActions, [0], {})
@@ -95,7 +101,7 @@ const Collections: React.FC = () => {
             actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
             targetColNameForAction={"urlPath"}
             modificationMethodForAction={sanitizeString}
-            targetColIdxForUrlPath={2} // 2 @TODO this is probably no longer needed?
+            targetColIdxForUrlPath={1} // 2 @TODO this is probably no longer needed?
           ></DataTable>
           <Button
             data-testid={"new-collection-add-button"}

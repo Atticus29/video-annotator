@@ -3,7 +3,6 @@ import axios from "axios";
 import { UserRoles, User } from "../types";
 
 export default function useMutateUserRoles() {
-  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (variables: {
       // urlPath: string,

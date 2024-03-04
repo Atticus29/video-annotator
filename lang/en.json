@@ -163,5 +163,7 @@
   "NAME_OF_INDIVIDUAL": "Name of individual",
   "NAME_OF_INDIVIDUAL_PLURAL": "Name of individual plural",
   "BACK": "Back",
-  "OPTIONS_FOR": "Options for"
+  "OPTIONS_FOR": "Options for",
+  "INDIVIDUAL_SUCCESSFULLY_CREATED": "Individual successfully created",
+  "INDIVIDUAL_CREATION_FAILED": "Individual creation failed"
 }
