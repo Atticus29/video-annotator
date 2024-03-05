@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import SingleFormField from "../../components/SingleFormField";
 import { FormFieldGroup, SingleFormField as SFFType } from "../../types";
-import { isValidEmail } from "../../utilities/validators";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import { isValidPassword } from "../../utilities/validators";
+import CustomError from "../../components/CustomError";
 import {
   Backdrop,
   Button,
@@ -11,12 +11,11 @@ import {
   Paper,
   Snackbar,
 } from "@mui/material";
-import { get } from "lodash-es";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import SingleFormField from "../../components/SingleFormField";
 import CloseIcon from "@mui/icons-material/Close";
-import CustomError from "../../components/CustomError";
+import { get } from "lodash-es";
 
-const ForgotPassword: React.FC = () => {
+const PasswordChange: React.FC = () => {
   const [actualValues, setActualValues] = useState<{}>({});
   const [isInvalids, setIsInvalids] = useState<{}>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,16 +27,20 @@ const ForgotPassword: React.FC = () => {
   const intl: IntlShape = useIntl();
 
   useEffect(() => {
-    const email: string = get(actualValues, ["Email Address"]);
-    if (isValidEmail(email)) {
+    const password: string = get(actualValues, ["Password"]);
+    const confirmPassword: string = get(actualValues, ["Confirm Password"]);
+    if (isValidPassword(password) && password === confirmPassword) {
       setAllRequiredValid(true);
     } else {
       setAllRequiredValid(false);
     }
   }, [actualValues]);
-
+  const handlePasswordChange = () => {
+    console.log("deleteMe handlePasswordChange entered");
+    setLoading(true);
+  };
   const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event | null,
+    _event: React.SyntheticEvent | Event | null,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -50,41 +53,29 @@ const ForgotPassword: React.FC = () => {
     setSnackbarMessage("");
     setOpenSnackbar(false);
   };
-
-  const handlePasswordReset: () => void = () => {
-    setLoading(true);
-    const email: string = get(actualValues, ["Email Address"]);
-    const auth = getAuth();
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        setLoading(false);
-        setSnackbarMessage("Password reset email sent!"); // @TODO i8n
-        setOpenSnackbar(true);
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        setErrorMessage(errorMessage);
-        setIsError(true);
-        setLoading(false);
-        setSnackbarMessage("Error resetting password: " + errorMessage); // @TODO i8n
-        setOpenSnackbar(true);
-        // ..
-      });
-  };
   const formFieldGroup: FormFieldGroup = {
-    title: "forgotpassword-form",
+    title: "password-change-form",
     setValues: setActualValues,
     actualValues: actualValues,
     isInvalids: isInvalids,
     setIsInvalids: setIsInvalids,
   };
-  const question: SFFType = {
-    type: "Email",
-    label: "Email Address",
+  const passwordQuestion: SFFType = {
+    type: "Text",
+    label: "Password",
     language: "English",
     isRequired: true,
-    invalidInputMessage: "MUST_BE_VALID_EMAIL",
-    validatorMethods: [isValidEmail],
+    invalidInputMessage: "PASSWORD_MUST_CONTAIN",
+    validatorMethods: [isValidPassword],
+    shouldBeCheckboxes: ["isRequired"],
+  };
+  const confirmPasswordQuestion: SFFType = {
+    type: "Text",
+    label: "Confirm Password",
+    language: "English",
+    isRequired: true,
+    invalidInputMessage: "PASSWORD_MUST_CONTAIN",
+    validatorMethods: [isValidPassword],
     shouldBeCheckboxes: ["isRequired"],
   };
   return (
@@ -131,7 +122,13 @@ const ForgotPassword: React.FC = () => {
         </h1>
         <div>
           <SingleFormField
-            question={question}
+            question={passwordQuestion}
+            formFieldGroup={formFieldGroup}
+          />
+        </div>
+        <div>
+          <SingleFormField
+            question={confirmPasswordQuestion}
             formFieldGroup={formFieldGroup}
           />
         </div>
@@ -140,7 +137,7 @@ const ForgotPassword: React.FC = () => {
           data-testid={"submit-button"}
           variant="contained"
           disabled={!allRequiredValid}
-          onClick={handlePasswordReset}
+          onClick={handlePasswordChange}
         >
           <FormattedMessage id="RESET" defaultMessage="Reset" />
         </Button>
@@ -160,4 +157,4 @@ const ForgotPassword: React.FC = () => {
   );
 };
 
-export default ForgotPassword;
+export default PasswordChange;
