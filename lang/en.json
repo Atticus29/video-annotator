@@ -79,7 +79,7 @@
   "GENERIC_CANNOT_BE_BLANK": "{name} cannot be blank",
   "NAME_OF_EVENT": "Name of event",
   "IS_COLLECTION_PRIVATE": "Is the collection private?",
-  "SOMETHING_WENT_WRONG_CONTACT_DEVELOPER": "Something went wrong. Alert a developer by <a href='/me'>leaving feedback</a>",
+  "SOMETHING_WENT_WRONG_CONTACT_DEVELOPER": "Something went wrong. Alert a developer by {leavingFeedback}",
   "IS_PRIVATE_DESCRIPTION": "If selected, other users will not be able to discover your collection, nor view and edit the videos within the collection as their privileges permit. In either case, they will not be able to edit the questions that appear during video, individual, or event intake.",
   "DONE": "Done",
   "UNKNOWN_LABEL": "Unknown Label",
@@ -165,5 +165,8 @@
   "BACK": "Back",
   "OPTIONS_FOR": "Options for",
   "INDIVIDUAL_SUCCESSFULLY_CREATED": "Individual successfully created",
-  "INDIVIDUAL_CREATION_FAILED": "Individual creation failed"
+  "INDIVIDUAL_CREATION_FAILED": "Individual creation failed",
+  "LEAVING_FEEDBACK": "leaving feedback",
+  "RESET_YOUR_PASSWORD": "Reset your password",
+  "RESET": "Reset"
 }
