@@ -109,7 +109,7 @@ const IndividualIntake: React.FC<{
                   collectionPropToUpdate={"individuals"}
                   onCloseDialog={onCloseDialog}
                 /> */}
-                <SaveOrUpdateButtonWithValidation
+                {/* <SaveOrUpdateButtonWithValidation
                   disabled={!Boolean(collection)}
                   buttonTitle="CREATE"
                   successMsg={intl.formatMessage({
@@ -138,7 +138,7 @@ const IndividualIntake: React.FC<{
                   queryKeysToInvalidate={[
                     ["singleCollection", collection?.urlPath],
                   ]}
-                />
+                /> */}
               </Grid>
               <Grid item lg={12} sm={12}>
                 <Button variant="contained" onClick={onCloseDialog}>

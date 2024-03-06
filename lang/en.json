@@ -168,5 +168,7 @@
   "INDIVIDUAL_CREATION_FAILED": "Individual creation failed",
   "LEAVING_FEEDBACK": "leaving feedback",
   "RESET_YOUR_PASSWORD": "Reset your password",
-  "RESET": "Reset"
+  "RESET": "Reset",
+  "PASSWORD_RESET_EMAIL_SENT": "Password reset email sent!",
+  "ERROR_RESETTING_PASSWORD": "Error resetting password"
 }

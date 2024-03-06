@@ -50,6 +50,15 @@ const ForgotPassword: React.FC = () => {
     setSnackbarMessage("");
     setOpenSnackbar(false);
   };
+  const passwordResetMessage: string = intl.formatMessage({
+    id: "PASSWORD_RESET_EMAIL_SENT",
+    defaultMessage: "Password reset email sent!",
+  });
+
+  const errorResettingPasswordMessage: string = intl.formatMessage({
+    id: "ERROR_RESETTING_PASSWORD",
+    defaultMessage: "Error resetting password",
+  });
 
   const handlePasswordReset: () => void = () => {
     setLoading(true);
@@ -58,7 +67,7 @@ const ForgotPassword: React.FC = () => {
     sendPasswordResetEmail(auth, email)
       .then(() => {
         setLoading(false);
-        setSnackbarMessage("Password reset email sent!"); // @TODO i8n
+        setSnackbarMessage(passwordResetMessage);
         setOpenSnackbar(true);
       })
       .catch((error) => {
@@ -66,7 +75,7 @@ const ForgotPassword: React.FC = () => {
         setErrorMessage(errorMessage);
         setIsError(true);
         setLoading(false);
-        setSnackbarMessage("Error resetting password: " + errorMessage); // @TODO i8n
+        setSnackbarMessage(errorResettingPasswordMessage + ": " + errorMessage);
         setOpenSnackbar(true);
         // ..
       });
