@@ -9,8 +9,7 @@ const EmailVerification: React.FC = () => {
   const handleVerificationEmailSendoff = async () => {
     if (user) {
       const result = await sendEmailVerification(user);
-      console.log("deleteMe result is: ");
-      console.log(result);
+      // @TODO flesh out more
     }
   };
 

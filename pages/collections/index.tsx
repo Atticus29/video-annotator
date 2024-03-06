@@ -23,8 +23,6 @@ const Collections: React.FC = () => {
   const { isLoading, isError, data, errorMsg } = useGetCollections(
     user?.email || "public@example.com"
   );
-  // console.log("deleteMe data is: ");
-  // console.log(data);
 
   const [open, setOpen] = useState<boolean>(isLoading);
 
@@ -50,8 +48,6 @@ const Collections: React.FC = () => {
 
   const dataWithActions = useMemo(() => {
     const dataWithActionsAppended = map(data, (singleCollection) => {
-      console.log("deleteMe singleCollection is: ");
-      console.log(singleCollection);
       return {
         ...singleCollection.metadata,
         actions: "stand in",
@@ -59,8 +55,6 @@ const Collections: React.FC = () => {
     });
     return dataWithActionsAppended;
   }, [data]);
-  // console.log("deleteMe dataWithActions is: ");
-  // console.log(dataWithActions);
 
   const collectionDisplayKeys: string[] = Object.keys(
     get(dataWithActions, [0], {})
