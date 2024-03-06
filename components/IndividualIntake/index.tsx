@@ -10,6 +10,8 @@ import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
+import { capitalizeEachWord } from "../../utilities/textUtils";
 
 const IndividualIntake: React.FC<{
   collection: Collection;
@@ -98,7 +100,7 @@ const IndividualIntake: React.FC<{
           localCollection?.individualIntakeQuestions && (
             <>
               <Grid item lg={12} sm={12}>
-                <ComposedFormSubmissionButton // @TODO can probably use the new submission button
+                {/* <ComposedFormSubmissionButton // @TODO can probably use the new submission button
                   questionsOfConcern={
                     localCollection?.individualIntakeQuestions || []
                   }
@@ -106,7 +108,37 @@ const IndividualIntake: React.FC<{
                   collectionPath={localCollection.metadata.urlPath}
                   collectionPropToUpdate={"individuals"}
                   onCloseDialog={onCloseDialog}
-                />
+                /> */}
+                {/* <SaveOrUpdateButtonWithValidation
+                  disabled={!Boolean(collection)}
+                  buttonTitle="CREATE"
+                  successMsg={intl.formatMessage({
+                    id: "INDIVIDUAL_SUCCESSFULLY_CREATED",
+                    defaultMessage: "Individual successfully created",
+                  })}
+                  failMsg={intl.formatMessage({
+                    id: "INDIVIDUAL_CREATION_FAILED",
+                    defaultMessage: "Individual creation failed",
+                  })}
+                  usePostOrUseUpdate={
+                    genericIntakeQuestionsAlreadyExist ? updateHook : postHook
+                  }
+                  mutationData={{
+                    collectionUrl: collectionUrl,
+                    ["collection" +
+                    capitalizeEachWord(intakeQuestionType) +
+                    "IntakeQuestions"]:
+                      transformActualValueObjIntoIntakeQuestions(
+                        formFieldGroup.actualValues
+                      ) || [],
+                  }}
+                  actualValues={individualQuestionsFormFieldGroup.actualValues}
+                  invalidValues={individualQuestionsFormFieldGroup.isInvalids}
+                  setParentStateOnSuccess={setShowPreview}
+                  queryKeysToInvalidate={[
+                    ["singleCollection", collection?.urlPath],
+                  ]}
+                /> */}
               </Grid>
               <Grid item lg={12} sm={12}>
                 <Button variant="contained" onClick={onCloseDialog}>
