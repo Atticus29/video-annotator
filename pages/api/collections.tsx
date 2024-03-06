@@ -21,9 +21,9 @@ const collections = async (req: NextApiRequest, res: NextApiResponse) => {
       const targetDocuments = await coll
         .find({
           $or: [
-            { createdByEmail: email },
-            { createdByEmail: "public@example.com" },
-            { isPrivate: false },
+            { "metadata.createdByEmail": email },
+            { "metadata.createdByEmail": "public@example.com" },
+            { "metadata.isPrivate": false },
           ],
         })
         .toArray(); // @TODO filter by current user or public

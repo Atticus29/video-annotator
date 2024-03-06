@@ -267,10 +267,10 @@ const CollectionEditor: React.FC = () => {
             <Grid item sm={12} md={12}>
               {isCollectionDetailsInEditMode ? (
                 <CollectionDetailsEdit
-                  collectionUrl={collection?.metadata?.urlPath}
                   setIsCollectionDetailsInEditMode={
                     setIsCollectionDetailsInEditMode
                   }
+                  collectionUrl={collection?.metadata?.urlPath}
                 />
               ) : (
                 <CollectionDetailsView

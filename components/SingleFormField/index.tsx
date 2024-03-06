@@ -6,6 +6,7 @@ import {
   AutocompleteRenderInputParams,
   Checkbox,
   FormControlLabel,
+  Link,
   TextField,
   Tooltip,
   Typography,
@@ -128,6 +129,15 @@ const SingleFormField: React.FC<{
       );
     }
   };
+
+  const leavingFeedbackLink = (
+    <Link href="/me">
+      <FormattedMessage
+        id="LEAVING_FEEDBACK"
+        defaultMessage="leaving feedback"
+      />
+    </Link>
+  );
 
   switch (question?.type) {
     case "URL":
@@ -308,6 +318,7 @@ const SingleFormField: React.FC<{
           <FormattedMessage
             id="SOMETHING_WENT_WRONG_CONTACT_DEVELOPER"
             defaultMessage="Something went wrong. Alert a developer by leaving feedback"
+            values={{ leavingFeedback: leavingFeedbackLink }}
           />
         </Typography>
       );

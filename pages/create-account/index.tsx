@@ -144,12 +144,14 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
                 hasPaid: false,
                 hasAnnotatedEnough: false,
                 isModerator: false,
+                isVerified: false,
               },
             },
             {
               onSuccess: (responseData) => {
                 console.log("deleteMe got here and responseData is: ");
                 console.log(responseData);
+                router.push("email-verification");
               },
               onError: (error) => {
                 console.log("Mutation error: ", error);
@@ -159,7 +161,6 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
           // mutate(auth.uid, {  });
           // @TODO handle the fact that the user gets redirected to the scenario wherein they can't be in account creation without being logged out
           // await sendEmailVerification(user);
-          // router.push("email-verification"); // @TODO comment back in
         } else {
           router.push("error");
         }

@@ -2,6 +2,7 @@ import { SingleFormField, Collection } from "../types";
 import { isNonEmptyString, isValidUrl } from "../utilities/validators";
 
 import moveNames from "./moveNames";
+import moveNamesPortuguese from "./moveNamesPortuguese";
 import tournamentNames from "./tournamentNames";
 import locationNames from "./locationNames";
 import { excludeFromCollectionTableDisplay } from "../constants";
@@ -306,7 +307,46 @@ const moveNameQuestion: SingleFormField = {
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
   isACoreQuestion: true,
-  recommendedLabel: "Name of event",
+  recommendedLabel: "Name of event (English)",
+};
+
+const moveNamePortugueseQuestion: SingleFormField = {
+  type: "Autocomplete",
+  label: "Name of move in Portuguese",
+  language: "Portuguese",
+  isRequired: false,
+  testId: "moveNamePortuguese",
+  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
+  shouldBeCheckboxes: ["isRequired"],
+  validatorMethods: [isNonEmptyString],
+  invalidInputMessage: "INPUT_INVALID",
+  autocompleteOptions: [...moveNamesPortuguese],
+  usersCanAddCustomOptions: true,
+  isACoreQuestion: true,
+  recommendedLabel: "Name of event (Portuguese)",
+};
+
+const moveCategory: SingleFormField = {
+  type: "Autocomplete",
+  label: "Move Category",
+  language: "English",
+  isRequired: false,
+  testId: "moveCategory",
+  doNotDisplay: [...defaultDoNotDisplays, "autocompleteOptions"],
+  shouldBeCheckboxes: ["isRequired"],
+  validatorMethods: [isNonEmptyString],
+  invalidInputMessage: "INPUT_INVALID",
+  autocompleteOptions: [
+    "Advantage",
+    "Disciplinary Action",
+    "Event Logistics",
+    "Guard Pass or Attempt",
+    "Positional Change That Scores Points in Most Rule Sets",
+    "Positions with Names That Don't Score Points in Most Rule Sets",
+    "Submissions or Attempts",
+    "Takedowns or Attempts",
+  ],
+  usersCanAddCustomOptions: true,
 };
 
 const startingPositionOfActor: SingleFormField = {
@@ -595,6 +635,8 @@ export const shamCollection: Collection = {
   ],
   eventIntakeQuestions: [
     moveNameQuestion,
+    moveNamePortugueseQuestion,
+    moveCategory,
     actorName,
     startingPositionOfActor,
     startingPositionOfSubject,
@@ -602,7 +644,7 @@ export const shamCollection: Collection = {
     endingPositionOfSubject,
     pointsScored,
     isSuccessful,
-    isSubmission,
+    // isSubmission,
     moveRating,
     comment, // @TODO add start time and end time to this
   ],

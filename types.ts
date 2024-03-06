@@ -13,6 +13,7 @@ export interface UserRoles {
   hasPaid: boolean;
   hasAnnotatedEnough: boolean;
   isModerator: boolean;
+  isVerified: boolean;
 }
 
 export interface Collection {

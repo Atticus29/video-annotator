@@ -10,6 +10,7 @@ import {
 import useGetCollection from "../../hooks/useGetCollection";
 import CustomError from "../CustomError";
 import { IntlShape, useIntl } from "react-intl";
+import { useMemo } from "react";
 
 const CollectionDetailsView: React.FC<{
   collectionUrl: string;
@@ -23,7 +24,9 @@ const CollectionDetailsView: React.FC<{
     isLoading,
     errorMsg,
   } = useGetCollection(collectionUrl);
-  const excludeFromDetailsList: string[] = collection.excludeFromDetailList;
+  const excludeFromDetailsList: string[] = useMemo(() => {
+    return collection?.excludeFromDetailList;
+  }, [collection]);
 
   return (
     <InfoPanel

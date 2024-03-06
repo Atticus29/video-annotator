@@ -26,6 +26,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     await signOut(); // TODO decide whether I also need to trigger a re-render here to get the correct behavior of protecting this url
+    router.push("/login");
   };
   return (
     <AppBar position="sticky" color="primary">

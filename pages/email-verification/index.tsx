@@ -8,7 +8,8 @@ const EmailVerification: React.FC = () => {
 
   const handleVerificationEmailSendoff = async () => {
     if (user) {
-      await sendEmailVerification(user);
+      const result = await sendEmailVerification(user);
+      // @TODO flesh out more
     }
   };
 

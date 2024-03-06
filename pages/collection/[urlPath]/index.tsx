@@ -191,10 +191,10 @@ const CollectionView: React.FC = () => {
         <>
           {isCollectionDetailsInEditMode ? (
             <CollectionDetailsEdit
-              collectionUrl={collectionData?.metadata?.urlPath}
               setIsCollectionDetailsInEditMode={
                 setIsCollectionDetailsInEditMode
               }
+              collectionUrl={collectionData?.metadata?.urlPath}
               setParentSnackbarMessage={setSnackbarMessage}
               setParentOpenSnackbar={setOpenSnackbar}
             />

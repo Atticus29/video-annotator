@@ -15,7 +15,6 @@ const userRolesUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
     const coll: Collection<User> = db.collection("users");
     console.log("deleteMe got here b1");
     if (req.method === "PATCH") {
-      console.log("deleteMe got here b2");
       let { uid, roles }: { uid: string; roles: UserRoles } = req.body;
       const newUser: User = { uid: uid, roles: roles };
       console.log("deleteMe newUser is: ");
