@@ -14,6 +14,7 @@ import {
 import SingleFormField from "../../components/SingleFormField";
 import CloseIcon from "@mui/icons-material/Close";
 import { get } from "lodash-es";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const PasswordChange: React.FC = () => {
   const [actualValues, setActualValues] = useState<{}>({});
@@ -25,6 +26,8 @@ const PasswordChange: React.FC = () => {
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [allRequiredValid, setAllRequiredValid] = useState<boolean>(false);
   const intl: IntlShape = useIntl();
+  const { auth, verifyPasswordResetCode, confirmPasswordReset } =
+    useFirebaseAuth();
 
   useEffect(() => {
     const password: string = get(actualValues, ["Password"]);
@@ -35,9 +38,38 @@ const PasswordChange: React.FC = () => {
       setAllRequiredValid(false);
     }
   }, [actualValues]);
-  const handlePasswordChange = () => {
-    console.log("deleteMe handlePasswordChange entered");
+  const handlePasswordChange = async () => {
     setLoading(true);
+    const newPassword: string = get(actualValues, ["Password"]);
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode: string = urlParams.get("mode") || "";
+    const oobCode: string = urlParams.get("oobCode") || "";
+    if (mode === "resetPassword" && newPassword) {
+      try {
+        const result = await verifyPasswordResetCode(auth, oobCode);
+        if (result) {
+          try {
+            await confirmPasswordReset(auth, oobCode, newPassword);
+            setSnackbarMessage("Password successfully reset"); // @TODO i8n
+            setOpenSnackbar(true);
+            setLoading(false);
+          } catch (error: any) {
+            setErrorMessage(error.message);
+            setIsError(true);
+            setSnackbarMessage(error.message);
+            setOpenSnackbar(true);
+            setLoading(false);
+          }
+        }
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setIsError(true);
+        setSnackbarMessage(error.message);
+        setOpenSnackbar(true);
+        setLoading(false);
+      }
+    }
+    setLoading(false);
   };
   const handleSnackbarClose = (
     _event: React.SyntheticEvent | Event | null,

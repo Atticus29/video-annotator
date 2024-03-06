@@ -5,6 +5,8 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   applyActionCode,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
   User,
 } from "firebase/auth";
 import { AuthContext } from "../contexts/authContext";
@@ -75,5 +77,7 @@ export default function useFirebaseAuth() {
     emailVerified,
     verifyEmail,
     setAuthError,
+    verifyPasswordResetCode,
+    confirmPasswordReset,
   };
 }
