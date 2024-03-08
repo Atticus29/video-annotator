@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { useMutation } from "@tanstack/react-query";
 import { useIntl, IntlShape } from "react-intl";
-import useMutateUserRoles from "../../hooks/useMutateUserRoles";
+import useMutateUserRoles from "../../hooks/useUpdateUserRoles";
 
 const VerifyEmailAddress: React.FC = () => {
   const { verifyEmail, authError, user, emailVerified } = useFirebaseAuth();
@@ -33,29 +33,30 @@ const VerifyEmailAddress: React.FC = () => {
         const result = await verifyEmail(oobCode);
         console.log("deleteMe result for verifyEmail is: ");
         console.log(result);
-        setVerifyCalled(true);
-        // mutate(
-        //   // { uid: uid, roles: { isAdmin: true } },
-        //   {
-        //     uid: uid,
-        //     roles: {
-        //       hasPaid: false,
-        //       hasAnnotatedEnough: false,
-        //       isModerator: false,
-        //       isVerified: false,
-        //     },
-        //   },
-        //   {
-        //     onSuccess: (responseData) => {
-        //       console.log("deleteMe got here and responseData is: ");
-        //       console.log(responseData);
-        //       router.push("email-verification");
-        //     },
-        //     onError: (error) => {
-        //       console.log("Mutation error: ", error);
-        //     },
-        //   }
-        // ); // @TODO deleteMe
+
+        mutate(
+          // { uid: uid, roles: { isAdmin: true } },
+          {
+            uid: uid,
+            roles: {
+              hasPaid: false,
+              hasAnnotatedEnough: false,
+              isModerator: false,
+              isVerified: false,
+            },
+          },
+          {
+            onSuccess: (responseData) => {
+              console.log("deleteMe got here and responseData is: ");
+              console.log(responseData);
+              setVerifyCalled(true);
+              // router.push("email-verification");
+            },
+            onError: (error) => {
+              console.log("Mutation error: ", error);
+            },
+          }
+        ); // @TODO deleteMe
       }
     };
     runAsyncVerifyEmail(oobCode, emailVerified); // @TODO decide whether this is even necessary

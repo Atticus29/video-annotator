@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { UserRoles, User } from "../types";
+import { UserRoles } from "../types";
 
-export default function useMutateUserRoles() {
+export default function useUpdateUserRoles() {
   const mutation = useMutation({
     mutationFn: async (variables: {
       // urlPath: string,

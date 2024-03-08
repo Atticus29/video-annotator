@@ -18,7 +18,7 @@ import {
   isValidPassword,
   isValidUsername,
 } from "../../utilities/validators";
-import useMutateUserRoles from "../../hooks/useMutateUserRoles";
+import useMutateUserRoles from "../../hooks/useUpdateUserRoles";
 import { UserRoles } from "../../types";
 
 const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
