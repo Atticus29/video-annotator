@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { UserRoles } from "../types";
+import { UserRole } from "../types";
 
 export default function useUpdateUserRoles() {
   const mutation = useMutation({
     mutationFn: async (variables: {
       // urlPath: string,
       uid: string;
-      roles: UserRoles;
+      roles: UserRole[];
     }) => {
       try {
         // const user: User = {

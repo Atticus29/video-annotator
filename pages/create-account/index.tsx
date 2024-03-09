@@ -19,7 +19,7 @@ import {
   isValidUsername,
 } from "../../utilities/validators";
 import useMutateUserRoles from "../../hooks/useUpdateUserRoles";
-import { UserRoles } from "../../types";
+import { defaultRoles } from "../../constants";
 
 const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
   //User is an optional prop only because it makes testing easier... it's optional because I can't feed props to Next.js route components.
@@ -140,12 +140,7 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
             // { uid: uid, roles: { isAdmin: true } },
             {
               uid: uid,
-              roles: {
-                hasPaid: false,
-                hasAnnotatedEnough: false,
-                isModerator: false,
-                isVerified: false,
-              },
+              roles: defaultRoles,
             },
             {
               onSuccess: (responseData) => {

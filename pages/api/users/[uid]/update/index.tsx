@@ -1,7 +1,7 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../../middleware/mongodb";
-import { UserRoles, User } from "../../../../../types";
+import { User, UserRole } from "../../../../../types";
 
 const userRolesUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
   const allowedMethods: string[] = ["PATCH"];
@@ -15,7 +15,7 @@ const userRolesUpdate = async (req: NextApiRequest, res: NextApiResponse) => {
     const coll: Collection<User> = db.collection("users");
     console.log("deleteMe got here b1");
     if (req.method === "PATCH") {
-      let { uid, roles }: { uid: string; roles: UserRoles } = req.body;
+      let { uid, roles }: { uid: string; roles: UserRole[] } = req.body;
       const newUser: User = { uid: uid, roles: roles };
       console.log("deleteMe newUser is: ");
       console.log(newUser);
