@@ -51,10 +51,13 @@ const DataTable: React.FC<{
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
   }, [actionButtonsToDisplay]);
+  // console.log("deleteMe actionButtonsKeys is: ");
+  // console.log(actionButtonsKeys);
 
   const shouldAddActionButtons: boolean = useMemo(() => {
     return actionButtonsKeys.length > 0;
   }, [actionButtonsKeys]);
+  // console.log("deleteMe shouldAddActionButtons is: " + shouldAddActionButtons);
 
   const colNamesToDisplayDoesNotHaveActions: boolean = useMemo(() => {
     const result: boolean =
@@ -64,6 +67,8 @@ const DataTable: React.FC<{
         : true;
     return result;
   }, [colNamesToDisplay]);
+  // console.log("deleteMe colNamesToDisplayDoesNotHaveActions is: ");
+  // console.log(colNamesToDisplayDoesNotHaveActions);
 
   const colNamesToDisplayActionsRetrofit: { [key: string]: any } =
     useMemo(() => {
@@ -71,6 +76,7 @@ const DataTable: React.FC<{
         colNamesToDisplayDoesNotHaveActions &&
         Object.keys(actionButtonsKeys).length > 0
       ) {
+        console.log("deleteMe this happens a5");
         return { ...colNamesToDisplay, actions: "actions" };
       } else {
         return colNamesToDisplay;
@@ -80,8 +86,10 @@ const DataTable: React.FC<{
       colNamesToDisplay,
       colNamesToDisplayDoesNotHaveActions,
     ]);
+  // console.log("deleteMe colNamesToDisplayActionsRetrofit is: ");
+  // console.log(colNamesToDisplayActionsRetrofit);
 
-  // end handle actioButto logic
+  // end handle actioButton logic
 
   const colNamesToDisplayKeys: string[] = useMemo(() => {
     const returnVal: string[] = colNamesToDisplayActionsRetrofit
@@ -90,10 +98,13 @@ const DataTable: React.FC<{
 
     return returnVal;
   }, [colNamesToDisplayActionsRetrofit]);
+  console.log("deleteMe colNamesToDisplayKeys is: ");
+  console.log(colNamesToDisplayKeys);
 
   const shouldFilter: boolean = useMemo(() => {
     return colNamesToDisplayKeys.length > 0;
   }, [colNamesToDisplayKeys]);
+  console.log("deleteMe shouldFilter is: " + shouldFilter);
 
   const columns: GridColDef<{
     [key: string | number]: any;
@@ -126,14 +137,24 @@ const DataTable: React.FC<{
     let prototypeRowWithOnlyDesiredColsAndActions = {
       ...prototypeRowWithOnlyDesiredCols,
     };
+    console.log("deleteMe prototypeRowWithOnlyDesiredColsAndActions is: ");
+    console.log(prototypeRowWithOnlyDesiredColsAndActions);
     let tracker: number = 0;
     return map(prototypeRowWithOnlyDesiredColsAndActions, (el, elKey) => {
       tracker++; // tracker seems needed because I can't get both the keys and the indexes in lodash map(obj)
       const cleanHeader: string = elKey.trim().toLowerCase(); // @TODO use capitalizeEachWord utili here instead of the cleanHeader.slice(1) below??
+      console.log("deleteMe cleanHeader is: ");
+      console.log(cleanHeader);
+      console.log("deleteMe elKey is: ");
+      console.log(elKey);
+      console.log("deleteMe colNamesToDisplayActionsRetrofit is: ");
+      console.log(colNamesToDisplayActionsRetrofit);
 
       const headerName: string =
         colNamesToDisplayActionsRetrofit[elKey] ||
         cleanHeader.charAt(0).toUpperCase() + cleanHeader.slice(1);
+      console.log("deleteMe headerName is: ");
+      console.log(headerName);
 
       const returnVal: GridColDef<{
         [key: string | number]: any | null;

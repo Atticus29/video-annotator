@@ -22,7 +22,8 @@ const CollectionsPanel: React.FC<{
     const returnVal = map(data, (singleCollection) => {
       return {
         ...singleCollection.metadata,
-        collectionName: singleCollection.metadata.name,
+        collectionName: singleCollection.metadata.name, // because Collection Name is in colNamesToDisplay but there is no key matching the camel case version of the that in the collectiond data, we have to create one
+        actions: "stand in",
       };
     });
 
@@ -31,10 +32,10 @@ const CollectionsPanel: React.FC<{
 
   const tableData: {}[] =
     collectionData?.length > 0 ? collectionData : collectionsMetadata;
-  console.log("deleteMe tableData is: ");
-  console.log(tableData);
-  console.log("deleteMe colNamesToDisplay is: ");
-  console.log(colNamesToDisplay);
+  // console.log("deleteMe tableData is: ");
+  // console.log(tableData);
+  // console.log("deleteMe colNamesToDisplay is: ");
+  // console.log(colNamesToDisplay);
 
   return (
     <>
@@ -44,15 +45,15 @@ const CollectionsPanel: React.FC<{
       )}
       {!isLoading && !isError && !authError && collectionsMetadata && (
         <DataTable
+          key={titleId}
           tableTitleId={titleId}
           tableTitle={tableTitle}
-          key={titleId}
+          data={tableData}
+          colNamesToDisplay={colNamesToDisplay}
+          actionButtonsToDisplay={{ view: "View" }}
           targetColNameForAction={"urlPath"}
           modificationMethodForAction={sanitizeString}
           targetColIdxForUrlPath={1} // 2 @TODO this is probably no longer needed?
-          actionButtonsToDisplay={{ view: "View", edit: "Edit" }}
-          data={tableData}
-          colNamesToDisplay={colNamesToDisplay}
         />
       )}
     </>

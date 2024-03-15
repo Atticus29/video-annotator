@@ -1,11 +1,8 @@
 import { Backdrop, Button, CircularProgress } from "@mui/material";
-import axios from "axios";
 import { get, map, reduce } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/CustomError";
-import ViewCollectionActionButton from "../../components/ViewCollectionActionButton";
 import { excludeFromCollectionTableDisplay } from "../../constants";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import {
@@ -18,27 +15,10 @@ import router from "next/router";
 
 const Collections: React.FC = () => {
   const intl: IntlShape = useIntl();
-  const [localError, setLocalError] = useState<string>("");
   const { user, authError } = useFirebaseAuth();
   const { isLoading, isError, data, errorMsg } = useGetCollections(
     user?.email || "public@example.com"
   );
-
-  const [open, setOpen] = useState<boolean>(isLoading);
-
-  useEffect(() => {
-    setOpen(isLoading);
-  }, [isLoading]);
-
-  useEffect(() => {
-    console.log("Error is: ");
-    console.log(errorMsg);
-  }, [errorMsg]);
-
-  useEffect(() => {
-    console.log("isError is: "); // @TODO do something with this? Or de-duplicate the error useEffect
-    console.log(isError);
-  }, [isError]);
 
   const defaultDisplayCols: {} = {
     name: "Collection name",
@@ -93,7 +73,7 @@ const Collections: React.FC = () => {
 
   return (
     <>
-      {!isLoading && !isError && !localError! && (
+      {!isLoading && !isError && (
         <>
           <DataTable
             tableTitle={tableTitle}
@@ -117,7 +97,8 @@ const Collections: React.FC = () => {
           </Button>
         </>
       )}
-      {(isError || localError) && <CustomError errorMsg={localError} />}
+      {isError && <CustomError errorMsg={errorMsg} />}
+      {authError && <CustomError errorMsg={authError} />}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}

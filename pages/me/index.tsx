@@ -175,9 +175,6 @@ const Me: React.FC = () => {
           {/* <MyActivityLogPanel myActivityLogData={shamMyActivityLogData} /> */}
         </Grid>
         <Grid item sm={12} md={6}>
-          {/* <FeedbackPanel styleOverrides={{ maxHeight: 1000 }} /> */}
-        </Grid>
-        <Grid item sm={12} md={12}>
           <CollectionsPanel
             // @TODO provide collection (meta)data here and filter it by ownerid
             key={"COLLECTIONS"}
@@ -189,6 +186,7 @@ const Me: React.FC = () => {
               name: "Collection Name",
               // urlPath: "URL",
               dateCreated: "Date Created",
+              actions: "Actions",
             }}
           />
           <Button variant="contained" onClick={handleNewCollectionClick}>
@@ -197,6 +195,9 @@ const Me: React.FC = () => {
               defaultMessage="Create New Collection"
             />
           </Button>
+        </Grid>
+        <Grid item sm={12} md={6}>
+          {/* <FeedbackPanel styleOverrides={{ maxHeight: 1000 }} /> */}
         </Grid>
         <Grid item sm={12} md={6}>
           {/* <CollectionsPanel
