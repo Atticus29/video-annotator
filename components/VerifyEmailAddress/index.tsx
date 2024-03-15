@@ -11,7 +11,8 @@ import usePostUserRole from "../../hooks/usePostUserRole";
 import { Audit } from "../../types";
 
 const VerifyEmailAddress: React.FC = () => {
-  const { verifyEmail, authError, user, emailVerified } = useFirebaseAuth();
+  const { verifyEmail, authError, user, emailVerified, loading } =
+    useFirebaseAuth();
   const intl: IntlShape = useIntl();
   const router: NextRouter = useRouter();
   const oobCode: string = router?.query?.oobCode?.toString() || "";
@@ -90,8 +91,10 @@ const VerifyEmailAddress: React.FC = () => {
           />
         </Typography>
       )}
-      {verifyCalled && !emailVerified && <CustomError errorMsg={authError} />}
-      {!user && (
+      {verifyCalled && !emailVerified && !loading && (
+        <CustomError errorMsg={authError} />
+      )}
+      {!user && !loading && (
         <CustomError
           errorMsg={intl.formatMessage({
             id: "USER_NOT_LOGGED_IN",
