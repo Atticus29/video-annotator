@@ -75,6 +75,8 @@ const Collections: React.FC = () => {
     },
     {}
   );
+  console.log("deleteMe collectionDisplayCols are: ");
+  console.log(collectionDisplayCols);
 
   const handleNewCollectionClick: () => void = () => {
     router.push("/collection/new");
@@ -111,14 +113,12 @@ const Collections: React.FC = () => {
         </>
       )}
       {(isError || localError) && <CustomError errorMsg={localError} />}
-      {isLoading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

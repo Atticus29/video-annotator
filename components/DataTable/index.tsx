@@ -43,6 +43,10 @@ const DataTable: React.FC<{
   dataGridOptions = {},
   errorMsg,
 }) => {
+  console.log("deleteMe colNamesToDisplay are: ");
+  console.log(colNamesToDisplay);
+  console.log("deleteMe data is: ");
+  console.log(data);
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -193,6 +197,11 @@ const DataTable: React.FC<{
     data,
     shouldAddActionButtons,
   ]);
+
+  console.log("deleteMe rows is: ");
+  console.log(rows);
+  console.log("deleteMe columns is: ");
+  console.log(columns);
 
   return (
     <>

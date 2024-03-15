@@ -1,5 +1,5 @@
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
-import { Button, Grid } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Grid } from "@mui/material";
 import { useIntl, IntlShape, FormattedMessage } from "react-intl";
 
 import UserDetailPanel from "../../components/UserDetailPanel";
@@ -151,50 +151,63 @@ const Me: React.FC = () => {
     });
   const displayName: string = user?.providerData[0]?.displayName;
   return (
-    <Grid container spacing={2} style={{ marginTop: 10 }}>
-      <Grid item sm={12} md={6}>
-        <UserDetailPanel
-          displayName={displayName}
-          email={email}
-        ></UserDetailPanel>
-      </Grid>
-      <Grid item sm={12} md={6}>
-        <MySubScriptionPanel />
-      </Grid>
-      <Grid item sm={12} md={6}>
-        <MyAnnotationsPanel myAnnotationData={shamMyAnnotationData} />
-      </Grid>
-      <Grid item sm={12} md={6}>
-        <MyActivityLogPanel myActivityLogData={shamMyActivityLogData} />
-      </Grid>
-      <Grid item sm={12} md={6}>
-        <FeedbackPanel styleOverrides={{ maxHeight: 1000 }} />
-      </Grid>
-      <Grid item sm={12} md={6}>
-        <CollectionsPanel
-          key={"COLLECTIONS"}
-          titleId={"MY_COLLECTIONS"}
-          titleDefault={"My Collections"}
-          collectionData={shamMyCollectionData}
-          colNamesToDisplay={{ name: "Name" }}
-        />
-        <Button variant="contained" onClick={handleNewCollectionClick}>
-          <FormattedMessage
-            id="CREATE_NEW_COLLECTION"
-            defaultMessage="Create New Collection"
+    <>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={!user}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Grid container spacing={2} style={{ marginTop: 10 }}>
+        <Grid item sm={12} md={6}>
+          <UserDetailPanel
+            displayName={displayName}
+            email={email}
+          ></UserDetailPanel>
+        </Grid>
+        <Grid item sm={12} md={6}>
+          <MySubScriptionPanel />
+        </Grid>
+        <Grid item sm={12} md={6}>
+          {/* <MyAnnotationsPanel myAnnotationData={shamMyAnnotationData} /> */}
+        </Grid>
+        <Grid item sm={12} md={6}>
+          {/* <MyActivityLogPanel myActivityLogData={shamMyActivityLogData} /> */}
+        </Grid>
+        <Grid item sm={12} md={6}>
+          {/* <FeedbackPanel styleOverrides={{ maxHeight: 1000 }} /> */}
+        </Grid>
+        <Grid item sm={12} md={12}>
+          <CollectionsPanel
+            // @TODO provide collection (meta)data here and filter it by ownerid
+            key={"COLLECTIONS"}
+            titleId={"MY_COLLECTIONS"}
+            tableTitle={"My Collections"}
+            // collectionData={shamMyCollectionData}
+            colNamesToDisplay={{
+              name: "Collection name",
+              // urlPath: "URL",
+              dateCreated: "Date Created",
+            }}
           />
-        </Button>
-      </Grid>
-      <Grid item sm={12} md={6}>
-        <CollectionsPanel
+          <Button variant="contained" onClick={handleNewCollectionClick}>
+            <FormattedMessage
+              id="CREATE_NEW_COLLECTION"
+              defaultMessage="Create New Collection"
+            />
+          </Button>
+        </Grid>
+        <Grid item sm={12} md={6}>
+          {/* <CollectionsPanel
           key={"PUBLIC_COLLECTIONS"}
           titleId={"PUBLIC_COLLECTIONS"}
-          titleDefault={"Publi Collections"}
+          tableTitle={"Public Collections"}
           collectionData={shamPublicCollectionData}
           colNamesToDisplay={{ name: "Name" }}
-        />
+        /> */}
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

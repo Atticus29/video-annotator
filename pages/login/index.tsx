@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, NextRouter } from "next/router";
-import { Paper, TextField, Button, Link } from "@mui/material";
+import {
+  Paper,
+  TextField,
+  Button,
+  Link,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { FormattedMessage, useIntl, IntlShape } from "react-intl";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -27,7 +34,8 @@ const Login: React.FC<{
   const [passwordFieldType, setPasswordFieldType] =
     useState<string>("password");
 
-  const { user: userFromHook, login, authError } = useFirebaseAuth();
+  const { user: userFromHook, login, authError, loading } = useFirebaseAuth();
+  const [localLoading, setLocalLoading] = useState<boolean>(false);
   loginMethod = loginMethod ? loginMethod : login;
   user = user ? user : userFromHook; // again, the only time a user prop should be provided to this component is in the tests
 
@@ -43,17 +51,21 @@ const Login: React.FC<{
   };
 
   const handleLogin = async () => {
+    setLocalLoading(true);
     try {
       if (!user && loginMethod) {
         await loginMethod(email, password);
+        setLocalLoading(false);
       }
     } catch (error: any) {
       setError(error?.message);
+      setLocalLoading(false);
     }
   };
 
   useOnEnter(() => {
     if (allRequiredValid) {
+      setLocalLoading(true);
       handleLogin();
     }
   });
@@ -66,7 +78,8 @@ const Login: React.FC<{
   };
 
   useEffect(() => {
-    if (user) router.replace("/me");
+    if (user && user?.emailVerified) router.replace("/me");
+    if (user && !user?.emailVerified) router.replace("/email-verification");
   }, [user, router]);
 
   useEffect(() => {
@@ -78,105 +91,126 @@ const Login: React.FC<{
   }, [emailInvalid, email, password]);
 
   return (
-    <Paper
-      elevation={8}
-      style={{
-        margin: "auto",
-        marginTop: "10vh",
-        paddingBottom: "10vh",
-        paddingTop: "3vh",
-        paddingLeft: "3vw",
-        paddingRight: "3vw",
-        maxWidth: 400,
-      }}
-    >
-      <h1 data-testid="login-h1">
-        <FormattedMessage id="LOGIN" defaultMessage="Login" />
-      </h1>
-      <div>
-        <TextField
-          fullWidth
-          data-testid={"emailInput"}
-          error={emailInvalid}
-          variant="filled"
-          label={
-            <FormattedMessage
-              id="EMAIL_ADDRESS"
-              defaultMessage="Email Address"
-            />
-          }
-          required
-          helperText={
-            emailInvalid
-              ? intl.formatMessage({
-                  id: "MUST_BE_VALID_EMAIL",
-                  defaultMessage: "Must be a valid email address",
-                })
-              : ""
-          }
-          style={{ marginBottom: 10, maxWidth: 400 }}
-          onChange={handleEmailChange}
-          value={email}
-        ></TextField>
-      </div>
-      <div>
-        <TextField
-          type={passwordFieldType}
-          fullWidth
-          data-testid={"passwordInput"}
-          variant="filled"
-          label={<FormattedMessage id="PASSWORD" defaultMessage="Password" />}
-          required
-          onChange={handlePasswordChange}
-          style={{ marginBottom: 10, maxWidth: 400 }}
-          value={password}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end" onClick={handlePasswordVisibility}>
-                <RemoveRedEyeIcon />
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
-      </div>
-      <Button
-        style={{ marginBottom: 10 }}
-        data-testid={"submit-button"}
-        variant="contained"
-        disabled={!allRequiredValid}
-        onClick={handleLogin}
+    <>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
       >
-        <FormattedMessage id="LOGIN" defaultMessage="Login" />
-      </Button>
-      <div style={{ marginBottom: 10 }}>
-        <Link href="/forgot-password">
-          <FormattedMessage
-            id="FORGOT_PASSWORD"
-            defaultMessage="Forgot Password?"
-          />
-        </Link>
-      </div>
-      <div>
-        <Button variant="contained" href="/create-account">
-          <FormattedMessage
-            id="CREATE_ACCOUNT"
-            defaultMessage="Create Account"
-          ></FormattedMessage>
-        </Button>
-      </div>
-      {(error || authError) && (
-        <CustomError
-          errorMsg={
-            error ||
-            authError ||
-            intl.formatMessage({
-              id: "GENERIC_ERROR",
-              defaultMessage: "Unknown Error",
-            })
-          }
-        />
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {!loading && !user && (
+        <Paper
+          elevation={8}
+          style={{
+            margin: "auto",
+            marginTop: "10vh",
+            paddingBottom: "10vh",
+            paddingTop: "3vh",
+            paddingLeft: "3vw",
+            paddingRight: "3vw",
+            maxWidth: 400,
+          }}
+        >
+          <h1 data-testid="login-h1">
+            <FormattedMessage id="LOGIN" defaultMessage="Login" />
+          </h1>
+          <div>
+            <TextField
+              fullWidth
+              data-testid={"emailInput"}
+              error={emailInvalid}
+              variant="filled"
+              label={
+                <FormattedMessage
+                  id="EMAIL_ADDRESS"
+                  defaultMessage="Email Address"
+                />
+              }
+              required
+              helperText={
+                emailInvalid
+                  ? intl.formatMessage({
+                      id: "MUST_BE_VALID_EMAIL",
+                      defaultMessage: "Must be a valid email address",
+                    })
+                  : ""
+              }
+              style={{ marginBottom: 10, maxWidth: 400 }}
+              onChange={handleEmailChange}
+              value={email}
+            ></TextField>
+          </div>
+          <div>
+            <TextField
+              type={passwordFieldType}
+              fullWidth
+              data-testid={"passwordInput"}
+              variant="filled"
+              label={
+                <FormattedMessage id="PASSWORD" defaultMessage="Password" />
+              }
+              required
+              onChange={handlePasswordChange}
+              style={{ marginBottom: 10, maxWidth: 400 }}
+              value={password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    onClick={handlePasswordVisibility}
+                  >
+                    <RemoveRedEyeIcon />
+                  </InputAdornment>
+                ),
+              }}
+            ></TextField>
+          </div>
+          <Button
+            style={{ marginBottom: 10 }}
+            data-testid={"submit-button"}
+            variant="contained"
+            disabled={!allRequiredValid}
+            onClick={handleLogin}
+          >
+            {(loading || localLoading) && (
+              // <FormattedMessage id="LOADING" defaultMessage="Login" />
+              <CircularProgress color="inherit" />
+            )}
+            {!loading && !localLoading && (
+              <FormattedMessage id="LOGIN" defaultMessage="Login" />
+            )}
+          </Button>
+          <div style={{ marginBottom: 10 }}>
+            <Link href="/forgot-password">
+              <FormattedMessage
+                id="FORGOT_PASSWORD"
+                defaultMessage="Forgot Password?"
+              />
+            </Link>
+          </div>
+          <div>
+            <Button variant="contained" href="/create-account">
+              <FormattedMessage
+                id="CREATE_ACCOUNT"
+                defaultMessage="Create Account"
+              ></FormattedMessage>
+            </Button>
+          </div>
+          {(error || authError) && (
+            <CustomError
+              errorMsg={
+                error ||
+                authError ||
+                intl.formatMessage({
+                  id: "GENERIC_ERROR",
+                  defaultMessage: "Unknown Error",
+                })
+              }
+            />
+          )}
+        </Paper>
       )}
-    </Paper>
+    </>
   );
 };
 
