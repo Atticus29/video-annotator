@@ -185,7 +185,8 @@ const Me: React.FC = () => {
             tableTitle={"My Collections"}
             // collectionData={shamMyCollectionData}
             colNamesToDisplay={{
-              name: "Collection name",
+              // name: "Name",
+              name: "Collection Name",
               // urlPath: "URL",
               dateCreated: "Date Created",
             }}

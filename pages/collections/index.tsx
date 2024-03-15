@@ -86,6 +86,11 @@ const Collections: React.FC = () => {
     defaultMessage: "Collections",
   });
 
+  console.log("deleteMe dataWithActions is: ");
+  console.log(dataWithActions);
+  console.log("deleteMe collectionDisplayCols are: ");
+  console.log(collectionDisplayCols);
+
   return (
     <>
       {!isLoading && !isError && !localError! && (

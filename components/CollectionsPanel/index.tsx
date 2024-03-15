@@ -19,13 +19,22 @@ const CollectionsPanel: React.FC<{
   );
 
   const collectionsMetadata: {}[] = useMemo(() => {
-    const returnVal = map(
-      data,
-      (singleCollection) => singleCollection.metadata
-    );
-    console.log("deleteMe returnVal is: ");
-    return map(data, (singleCollection) => singleCollection.metadata);
+    const returnVal = map(data, (singleCollection) => {
+      return {
+        ...singleCollection.metadata,
+        collectionName: singleCollection.metadata.name,
+      };
+    });
+
+    return returnVal;
   }, [data]);
+
+  const tableData: {}[] =
+    collectionData?.length > 0 ? collectionData : collectionsMetadata;
+  console.log("deleteMe tableData is: ");
+  console.log(tableData);
+  console.log("deleteMe colNamesToDisplay is: ");
+  console.log(colNamesToDisplay);
 
   return (
     <>
@@ -42,9 +51,7 @@ const CollectionsPanel: React.FC<{
           modificationMethodForAction={sanitizeString}
           targetColIdxForUrlPath={1} // 2 @TODO this is probably no longer needed?
           actionButtonsToDisplay={{ view: "View", edit: "Edit" }}
-          data={
-            collectionData?.length > 0 ? collectionData : collectionsMetadata
-          }
+          data={tableData}
           colNamesToDisplay={colNamesToDisplay}
         />
       )}
