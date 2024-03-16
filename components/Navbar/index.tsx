@@ -7,7 +7,6 @@ import { useRouter, NextRouter } from "next/router";
 import { pathsToHideLoginBtnFrom } from "../../utilities/doNotShowLoginBtn";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { FormattedMessage } from "react-intl";
-// import Logo from "../Logo";
 
 const Navbar: React.FC = () => {
   const [showLogin, setShowLogin] = useState<boolean>(false);

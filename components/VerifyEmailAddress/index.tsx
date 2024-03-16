@@ -2,11 +2,9 @@ import { useRouter, NextRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import CustomError from "../../components/CustomError";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
-import { useMutation } from "@tanstack/react-query";
 import { useIntl, IntlShape } from "react-intl";
-import useMutateUserRoles from "../../hooks/useUpdateUserRoles";
 import usePostUserRole from "../../hooks/usePostUserRole";
 import { Audit } from "../../types";
 
@@ -27,19 +25,12 @@ const VerifyEmailAddress: React.FC = () => {
   console.log(user);
 
   useEffect(() => {
-    const runAsyncVerifyEmail = async (
-      oobCode: string,
-      emailVerfied: boolean
-    ) => {
+    const runAsyncVerifyEmail = async (oobCode: string) => {
       if (verifyCalled) {
-        router.reload(); //email verification with firebase auth for some crazy reason seems to need a page reload.
+        router.reload(); //email verification with firebase auth for some crazy reason seems to need a page reload. @TODO test this
       }
       if (user && !emailVerified && oobCode) {
-        console.log("deleteMe user is: ");
-        console.log(user);
-        const result = await verifyEmail(oobCode);
-        console.log("deleteMe result for verifyEmail is: ");
-        console.log(result);
+        await verifyEmail(oobCode);
         const newAuditEntry: Audit = {
           previousState: "none",
           newState: "true",
@@ -47,7 +38,6 @@ const VerifyEmailAddress: React.FC = () => {
         };
 
         mutate(
-          // { uid: uid, roles: { isAdmin: true } },
           {
             uid: user?.uid,
             role: {
@@ -57,30 +47,28 @@ const VerifyEmailAddress: React.FC = () => {
             },
           },
           {
-            onSuccess: (responseData) => {
-              console.log("deleteMe got here and responseData is: ");
-              console.log(responseData);
+            onSuccess: (_responseData) => {
               setVerifyCalled(true);
-              // router.push("email-verification");
             },
             onError: (error) => {
               console.log("Mutation error: ", error);
             },
           }
-        ); // @TODO deleteMe
+        );
       }
     };
-    runAsyncVerifyEmail(oobCode, emailVerified); // @TODO decide whether this is even necessary
+    runAsyncVerifyEmail(oobCode); // @TODO decide whether this is even necessary
   }, [emailVerified, oobCode, user, verifyEmail, router, verifyCalled, mutate]); // @TODO decide how best to handle the asynchronicity having to do with getting the user
 
   return (
     <>
-      {!emailVerified && (
+      {(!emailVerified || loading || isPending) && (
         <Typography variant="h6" style={{ marginTop: 30 }}>
           <FormattedMessage
             id="EMAIL_VERIFYING"
             defaultMessage="Attempting to verify your email address..."
           />
+          <CircularProgress color="inherit" />
         </Typography>
       )}
       {emailVerified && (
@@ -103,6 +91,7 @@ const VerifyEmailAddress: React.FC = () => {
           })}
         />
       )}
+      {isError && <CustomError errorMsg={postRoleError} />}
     </>
   );
 };
