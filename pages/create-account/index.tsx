@@ -7,7 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import useOnEnter from "../../hooks/useOnEnter";
 import { User } from "firebase/auth";
 
-import { TextField, Paper, Button } from "@mui/material";
+import { TextField, Paper, Button, CircularProgress } from "@mui/material";
 import { FormattedMessage, useIntl, IntlShape } from "react-intl";
 import { sendEmailVerification } from "firebase/auth";
 import Typography from "@mui/material/Typography";
@@ -18,15 +18,15 @@ import {
   isValidPassword,
   isValidUsername,
 } from "../../utilities/validators";
-import useMutateUserRoles from "../../hooks/useMutateUserRoles";
-import { UserRoles } from "../../types";
+import useMutateUserRoles from "../../hooks/useUpdateUserRoles";
+import { defaultRoles } from "../../constants";
 
 const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
   //User is an optional prop only because it makes testing easier... it's optional because I can't feed props to Next.js route components.
   const intl: IntlShape = useIntl();
   const router: NextRouter = useRouter();
 
-  const { auth, user: userFromHook } = useFirebaseAuth();
+  const { auth, user: userFromHook, loading } = useFirebaseAuth();
   user = user ? user : userFromHook; // again, the only time a user prop should be provided to this component is in the tests
 
   const { createUser, authError } = useFirebaseAuth();
@@ -45,6 +45,7 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
     useState<string>("password");
   const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
     useState<string>("password");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     mutate,
@@ -124,6 +125,7 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
   };
 
   const handleAccountCreation = async () => {
+    setIsLoading(true);
     try {
       if (auth) {
         const userInfo: UserCredential = await createUser(
@@ -140,21 +142,16 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
             // { uid: uid, roles: { isAdmin: true } },
             {
               uid: uid,
-              roles: {
-                hasPaid: false,
-                hasAnnotatedEnough: false,
-                isModerator: false,
-                isVerified: false,
-              },
+              roles: defaultRoles,
             },
             {
               onSuccess: (responseData) => {
-                console.log("deleteMe got here and responseData is: ");
-                console.log(responseData);
+                setIsLoading(false);
                 router.push("email-verification");
               },
               onError: (error) => {
                 console.log("Mutation error: ", error);
+                setIsLoading(false);
               },
             }
           ); // @TODO deleteMe
@@ -186,10 +183,13 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
       }}
     >
       <h1>
-        <FormattedMessage
-          id={user ? "MUST_LOG_OUT_FIRST" : "CREATE_AN_ACCOUNT"}
-          defaultMessage="Create an Account"
-        />
+        {!loading && (
+          <FormattedMessage
+            id={user ? "MUST_LOG_OUT_FIRST" : "CREATE_AN_ACCOUNT"}
+            defaultMessage="Create an Account"
+          />
+        )}
+        {loading && <CircularProgress color="inherit" />}
       </h1>
       {!user && (
         <div>
@@ -320,17 +320,20 @@ const CreateAccount: React.FC<{ user?: User }> = ({ user = null }) => {
             disabled={!allRequiredValid}
             onClick={handleAccountCreation}
           >
-            <FormattedMessage
-              id="CREATE_ACCOUNT"
-              defaultMessage="Create Account"
-            />
+            {(isLoading || isPending) && <CircularProgress color="inherit" />}
+            {!isLoading && !isPending && (
+              <FormattedMessage
+                id="CREATE_ACCOUNT"
+                defaultMessage="Create Account"
+              />
+            )}
           </Button>
           {(error || authError) && (
             <CustomError errorMsg={error || authError} />
           )}
         </div>
       )}
-      {user && (
+      {user && !loading && (
         <Typography>
           <FormattedMessage
             id="CANNOTE_CREATE_ACCOUNT_WHILE_LOGGED_IN"

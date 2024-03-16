@@ -3,17 +3,21 @@ import { Interface } from "readline/promises";
 export interface User {
   uid: string;
   alternateIds?: string[];
-  roles: UserRoles;
+  roles: UserRole[];
   collectionIds?: string[];
   videoIds?: string[];
 }
 
-export interface UserRoles {
-  isAdmin?: boolean;
-  hasPaid: boolean;
-  hasAnnotatedEnough: boolean;
-  isModerator: boolean;
-  isVerified: boolean;
+export interface UserRole {
+  roleName: string;
+  status: boolean;
+  auditTrail: Audit[];
+}
+
+export interface Audit {
+  previousState: string;
+  newState: string;
+  dateOfChange: string;
 }
 
 export interface Collection {

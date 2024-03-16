@@ -31,11 +31,13 @@ const MySubScriptionPanel: React.FC = () => {
         {/* @TODO make dymamic */}
       </InfoPanelBody>
       {/* @TODO make the activate button disable if subscription is active */}
-      <Button variant="contained" style={{ marginRight: "2vw" }}>
+      <Button disabled variant="contained" style={{ marginRight: "2vw" }}>
+        {/* @TODO implement this */}
         <FormattedMessage id="ACTIVATE" defaultMessage="Activate" />
       </Button>
       {/* @TODO make the cancel button disable if subscription is inactive */}
-      <Button variant="contained">
+      <Button disabled variant="contained">
+        {/* @TODO implement this */}
         <FormattedMessage id="CANCEL" defaultMessage="Cancel" />
       </Button>
     </InfoPanel>
