@@ -80,7 +80,6 @@ const Collections: React.FC = () => {
             data={dataWithActions}
             colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
             actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
-            targetColNameForAction={"urlPath"}
             modificationMethodForAction={sanitizeString}
             targetColIdxForUrlPath={1} // 2 @TODO this is probably no longer needed?
           ></DataTable>
