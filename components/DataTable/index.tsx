@@ -19,7 +19,6 @@ const DataTable: React.FC<{
   colNamesToDisplay: { [key: string]: any }; // @TODO make optional and have a way of deriving them from data as a fallback
   actionButtonsToDisplay?: { [key: string]: any };
   styleOverrides?: {};
-  targetColNameForAction?: string;
   modificationMethodForAction?: (target: string) => string;
   targetColIdxForUrlPath?: number;
   loading?: boolean;
@@ -34,7 +33,6 @@ const DataTable: React.FC<{
   colNamesToDisplay = {},
   actionButtonsToDisplay = {},
   styleOverrides = {},
-  targetColNameForAction,
   modificationMethodForAction,
   targetColIdxForUrlPath,
   loading = false,
@@ -76,8 +74,7 @@ const DataTable: React.FC<{
       colNamesToDisplay,
       colNamesToDisplayDoesNotHaveActions,
     ]);
-
-  // end handle actioButto logic
+  // end handle actioButton logic
 
   const colNamesToDisplayKeys: string[] = useMemo(() => {
     const returnVal: string[] = colNamesToDisplayActionsRetrofit

@@ -170,5 +170,7 @@
   "RESET_YOUR_PASSWORD": "Reset your password",
   "RESET": "Reset",
   "PASSWORD_RESET_EMAIL_SENT": "Password reset email sent!",
-  "ERROR_RESETTING_PASSWORD": "Error resetting password"
+  "ERROR_RESETTING_PASSWORD": "Error resetting password",
+  "LOADING": "Loading",
+  "HOME": "Home"
 }
