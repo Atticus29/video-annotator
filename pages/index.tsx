@@ -14,15 +14,12 @@ export default function Home() {
   console.log("deleteMe user is: ");
   console.log(user);
   if (user?.uid && user?.emailVerified) {
-    console.log("deleteMe got here a");
-    // router.push("/me");
+    router.push("/me");
   }
   if (user?.uid && !user?.emailVerified) {
-    console.log("deleteMe got here b");
-    // router.push("/verify/auth");
+    router.push("/verify/auth");
   }
   return (
-    // @TODO redirect if not email verified
     <>
       <Head>
         <title>Video Annotator</title>

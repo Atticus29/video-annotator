@@ -17,7 +17,6 @@ export function populateWithActionButtons(
     linkIds?: string[];
   }
 ) {
-  console.log("deleteMe populateWithActionButtons entered");
   const targetColIdxForUrlPath: number | undefined = get(
     options,
     "targetColIdxForUrlPath"

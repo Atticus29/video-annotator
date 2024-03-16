@@ -172,10 +172,7 @@ const Login: React.FC<{
             disabled={!allRequiredValid}
             onClick={handleLogin}
           >
-            {(loading || localLoading) && (
-              // <FormattedMessage id="LOADING" defaultMessage="Login" />
-              <CircularProgress color="inherit" />
-            )}
+            {(loading || localLoading) && <CircularProgress color="inherit" />}
             {!loading && !localLoading && (
               <FormattedMessage id="LOGIN" defaultMessage="Login" />
             )}

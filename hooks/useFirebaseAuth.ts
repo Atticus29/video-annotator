@@ -33,7 +33,6 @@ export default function useFirebaseAuth() {
 
   const clear = () => {
     setUser(null);
-    // setLoading(true);
   };
 
   const login = async (email: string, password: string) => {
@@ -86,7 +85,6 @@ export default function useFirebaseAuth() {
   return {
     auth,
     user,
-    // loading,
     login,
     createUser,
     signOut,

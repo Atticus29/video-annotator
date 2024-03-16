@@ -8,7 +8,6 @@ const VerifyEndpoint: React.FC = () => {
   return (
     <>
       {mode === "resetPassword" && <PasswordChange />}
-      {/* @TODO fix */}
       {mode === "verifyEmail" && <VerifyEmailAddress />}
     </>
   );

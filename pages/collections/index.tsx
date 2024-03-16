@@ -1,6 +1,6 @@
 import { Backdrop, Button, CircularProgress } from "@mui/material";
 import { get, map, reduce } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import DataTable from "../../components/DataTable";
 import CustomError from "../../components/CustomError";
 import { excludeFromCollectionTableDisplay } from "../../constants";
@@ -55,8 +55,6 @@ const Collections: React.FC = () => {
     },
     {}
   );
-  console.log("deleteMe collectionDisplayCols are: ");
-  console.log(collectionDisplayCols);
 
   const handleNewCollectionClick: () => void = () => {
     router.push("/collection/new");
@@ -65,11 +63,6 @@ const Collections: React.FC = () => {
     id: "COLLECTIONS",
     defaultMessage: "Collections",
   });
-
-  console.log("deleteMe dataWithActions is: ");
-  console.log(dataWithActions);
-  console.log("deleteMe collectionDisplayCols are: ");
-  console.log(collectionDisplayCols);
 
   return (
     <>
