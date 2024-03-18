@@ -12,6 +12,7 @@ import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import { capitalizeEachWord } from "../../utilities/textUtils";
+import usePostIndividual from "../../hooks/usePostIndividual";
 
 const IndividualIntake: React.FC<{
   collection: Collection;
@@ -22,6 +23,7 @@ const IndividualIntake: React.FC<{
     id: "INDIVIDUAL",
   });
   const { user, authError } = useFirebaseAuth();
+
   const [localCollection, setLocalCollection] = useState<Collection>();
   const [individualQuestionFormValues, setIndividualQuestionFormValues] =
     useState<{}>({});
@@ -109,7 +111,7 @@ const IndividualIntake: React.FC<{
                   collectionPropToUpdate={"individuals"}
                   onCloseDialog={onCloseDialog}
                 /> */}
-                {/* <SaveOrUpdateButtonWithValidation
+                <SaveOrUpdateButtonWithValidation
                   disabled={!Boolean(collection)}
                   buttonTitle="CREATE"
                   successMsg={intl.formatMessage({
@@ -120,25 +122,19 @@ const IndividualIntake: React.FC<{
                     id: "INDIVIDUAL_CREATION_FAILED",
                     defaultMessage: "Individual creation failed",
                   })}
-                  usePostOrUseUpdate={
-                    genericIntakeQuestionsAlreadyExist ? updateHook : postHook
-                  }
+                  usePostOrUseUpdate={usePostIndividual}
                   mutationData={{
-                    collectionUrl: collectionUrl,
-                    ["collection" +
-                    capitalizeEachWord(intakeQuestionType) +
-                    "IntakeQuestions"]:
-                      transformActualValueObjIntoIntakeQuestions(
-                        formFieldGroup.actualValues
-                      ) || [],
+                    collectionUrl: collection?.metadata?.urlPath,
+                    individualData:
+                      individualQuestionsFormFieldGroup?.actualValues || [],
                   }}
                   actualValues={individualQuestionsFormFieldGroup.actualValues}
                   invalidValues={individualQuestionsFormFieldGroup.isInvalids}
-                  setParentStateOnSuccess={setShowPreview}
+                  // setParentStateOnSuccess={setShowPreview}
                   queryKeysToInvalidate={[
-                    ["singleCollection", collection?.urlPath],
+                    ["singleCollection", collection?.metadata?.urlPath || ""],
                   ]}
-                /> */}
+                />
               </Grid>
               <Grid item lg={12} sm={12}>
                 <Button variant="contained" onClick={onCloseDialog}>
