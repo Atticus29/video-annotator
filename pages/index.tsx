@@ -17,7 +17,7 @@ export default function Home() {
     router.push("/me");
   }
   if (user?.uid && !user?.emailVerified) {
-    router.push("/verify/auth");
+    router.push("/email-verification");
   }
   return (
     <>
