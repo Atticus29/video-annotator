@@ -13,6 +13,7 @@ import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import { capitalizeEachWord } from "../../utilities/textUtils";
 import usePostIndividual from "../../hooks/usePostIndividual";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
 const IndividualIntake: React.FC<{
   collection: Collection;
@@ -31,6 +32,16 @@ const IndividualIntake: React.FC<{
     areIndividualQuestionFormValuesInvalid,
     setAreIndividualQuestionFormValuesInvalid,
   ] = useState<{}>({});
+  const [individualCreated, setIndividualCreated] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (individualCreated) {
+      queryClient.invalidateQueries({
+        queryKey: ["individualsFor", collection?.metadata?.urlPath],
+      });
+    }
+  }, [collection?.metadata?.urlPath, individualCreated, queryClient]);
 
   const individualQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
@@ -130,7 +141,7 @@ const IndividualIntake: React.FC<{
                   }}
                   actualValues={individualQuestionsFormFieldGroup.actualValues}
                   invalidValues={individualQuestionsFormFieldGroup.isInvalids}
-                  // setParentStateOnSuccess={setShowPreview}
+                  setParentStateOnSuccess={setIndividualCreated}
                   queryKeysToInvalidate={[
                     ["singleCollection", collection?.metadata?.urlPath || ""],
                   ]}
