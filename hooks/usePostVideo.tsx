@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 export default function usePostVideo() {
   const mutation = useMutation({
@@ -12,7 +13,7 @@ export default function usePostVideo() {
           `/api/collection/${variables.collectionUrl}/videos/create`,
           {
             collectionUrl: variables.collectionUrl,
-            videoData: variables.videoData,
+            videoData: { ...variables.videoData, id: uuidv4() },
           }
         );
         if (response.status === 200) {
