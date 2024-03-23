@@ -4,17 +4,14 @@ import { Button, Grid } from "@mui/material";
 import { map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
-import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
-import { capitalizeEachWord } from "../../utilities/textUtils";
 import usePostIndividual from "../../hooks/usePostIndividual";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import useOnEnter from "../../hooks/useOnEnter";
+import { useQueryClient } from "@tanstack/react-query";
 
 const IndividualIntake: React.FC<{
   collection: Collection;
