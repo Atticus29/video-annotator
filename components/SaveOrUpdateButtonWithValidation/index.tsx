@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import CloseIcon from "@mui/icons-material/Close";
 import { reduce } from "lodash-es";
-import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
+import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/saveOrUpdateButtonWithValidationUtils";
 import { transformActualValueObjIntoIntakeQuestions } from "../../utilities/intakeQuestionUtils";
+import useOnEnter from "../../hooks/useOnEnter";
 
 const SaveOrUpdateButtonWithValidation: React.FC<{
   buttonTitle: string;
@@ -51,6 +52,12 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   const handleCloseErrorDialog: () => void = () => {
     setShowErrorDialog(false);
   };
+
+  useOnEnter(() => {
+    if (allRequiredValid) {
+      handleFormSubmission();
+    }
+  });
 
   useEffect(() => {
     if (isError) {

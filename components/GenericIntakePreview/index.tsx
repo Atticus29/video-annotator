@@ -1,7 +1,6 @@
 import { Backdrop, CircularProgress, Grid } from "@mui/material";
 import { get, map } from "lodash-es";
 import { FormFieldGroup } from "../../types";
-import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";

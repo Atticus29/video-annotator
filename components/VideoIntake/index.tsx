@@ -1,10 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Alert, Button, Dialog, DialogContent, Grid } from "@mui/material";
 import { get, map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
-import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
@@ -15,6 +14,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
 import IndividualsTableView from "../IndividualsTableView";
+import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
+import usePostVideo from "../../hooks/usePostVideo";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -22,6 +23,7 @@ const VideoIntake: React.FC<{
 }> = ({ collection, onCloseDialog }) => {
   const intl: IntlShape = useIntl();
   const { user, authError } = useFirebaseAuth();
+  const [videoCreated, setVideoCreated] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
   const [localIsIndividualsInvalid, setLocalIsIndividualsInvalid] =
@@ -31,19 +33,25 @@ const VideoIntake: React.FC<{
     {}
   );
   const [
-    arevideoQuestionFormValuesInvalid,
-    setArevideoQuestionFormValuesInvalid,
+    areVideoQuestionFormValuesInvalid,
+    setAreVideoQuestionFormValuesInvalid,
   ] = useState<{}>({});
+
+  useEffect(() => {
+    if (videoCreated) {
+      // @TODO invalidate get videos query
+    }
+  }, [videoCreated]);
 
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
       title: "VideoFormFieldGroupForTheLocalCollection",
       setValues: setVideoQuestionFormValues,
       actualValues: videoQuestionFormValues,
-      isInvalids: arevideoQuestionFormValuesInvalid,
-      setIsInvalids: setArevideoQuestionFormValuesInvalid,
+      isInvalids: areVideoQuestionFormValuesInvalid,
+      setIsInvalids: setAreVideoQuestionFormValuesInvalid,
     };
-  }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
+  }, [areVideoQuestionFormValuesInvalid, videoQuestionFormValues]);
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
@@ -219,17 +227,28 @@ const VideoIntake: React.FC<{
         {videoQuestionsFormFieldGroup && collection?.videoIntakeQuestions && (
           <>
             <Grid item lg={12} sm={12}>
-              <ComposedFormSubmissionButton
-                questionsOfConcern={
-                  [
-                    ...get(collection, ["videoIntakeQuestions"], []),
-                    individualsQuestion,
-                  ] || []
-                }
-                formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                collectionPath={collection.metadata.urlPath}
-                collectionPropToUpdate={"videos"}
-                onCloseDialog={onCloseDialog}
+              <SaveOrUpdateButtonWithValidation
+                disabled={!Boolean(collection)}
+                buttonTitle="CREATE"
+                successMsg={intl.formatMessage({
+                  id: "VIDEO_SUCCESSFULLY_ADDED",
+                  defaultMessage: "Video successfully added",
+                })}
+                failMsg={intl.formatMessage({
+                  id: "VIDEO_UNSUCCESSFULLY_ADDED",
+                  defaultMessage: "Unable to add video",
+                })}
+                usePostOrUseUpdate={usePostVideo}
+                mutationData={{
+                  collectionUrl: collection?.metadata?.urlPath,
+                  videoData: videoQuestionsFormFieldGroup?.actualValues || [],
+                }}
+                actualValues={videoQuestionFormValues}
+                invalidValues={areVideoQuestionFormValuesInvalid}
+                setParentStateOnSuccess={setVideoCreated}
+                queryKeysToInvalidate={[
+                  ["singleCollection", collection?.metadata?.urlPath || ""],
+                ]}
               />
             </Grid>
             <Grid item lg={12} sm={12}>

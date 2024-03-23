@@ -172,5 +172,7 @@
   "PASSWORD_RESET_EMAIL_SENT": "Password reset email sent!",
   "ERROR_RESETTING_PASSWORD": "Error resetting password",
   "LOADING": "Loading",
-  "HOME": "Home"
+  "HOME": "Home",
+  "VIDEO_SUCCESSFULLY_ADDED": "Video successfully added",
+  "VIDEO_UNSUCCESSFULLY_ADDED": "Unable to add video"
 }
