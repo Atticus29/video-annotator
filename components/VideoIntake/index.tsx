@@ -16,6 +16,7 @@ import { GridCallbackDetails, GridRowSelectionModel } from "@mui/x-data-grid";
 import { individualsQuestion } from "../../dummy_data/dummyCollection";
 import IndividualsTableView from "../IndividualsTableView";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
+import usePostVideo from "../../hooks/usePostVideo";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -33,8 +34,8 @@ const VideoIntake: React.FC<{
     {}
   );
   const [
-    arevideoQuestionFormValuesInvalid,
-    setArevideoQuestionFormValuesInvalid,
+    areVideoQuestionFormValuesInvalid,
+    setAreVideoQuestionFormValuesInvalid,
   ] = useState<{}>({});
 
   useEffect(() => {
@@ -48,10 +49,10 @@ const VideoIntake: React.FC<{
       title: "VideoFormFieldGroupForTheLocalCollection",
       setValues: setVideoQuestionFormValues,
       actualValues: videoQuestionFormValues,
-      isInvalids: arevideoQuestionFormValuesInvalid,
-      setIsInvalids: setArevideoQuestionFormValuesInvalid,
+      isInvalids: areVideoQuestionFormValuesInvalid,
+      setIsInvalids: setAreVideoQuestionFormValuesInvalid,
     };
-  }, [arevideoQuestionFormValuesInvalid, videoQuestionFormValues]);
+  }, [areVideoQuestionFormValuesInvalid, videoQuestionFormValues]);
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
@@ -116,9 +117,17 @@ const VideoIntake: React.FC<{
     rowSelectionModel: GridRowSelectionModel,
     details: GridCallbackDetails
   ) => void = (rowSelectionModel, _) => {
+    console.log("deleteMe got here localOnRowSelectionModelChange");
     const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
+      console.log("deleteMe selectedRow is: ");
+      console.log(selectedRow);
+      console.log("deleteMe and collection is: ");
+      console.log(collection);
+      // @TODO LEFT OFF HERE
       return get(collection, ["individuals", Number(selectedRow) - 1, "id"]);
     });
+    console.log("deleteMe selectedIds is: ");
+    console.log(selectedIds);
     setVideoQuestionFormValues({
       ...videoQuestionFormValues,
       Individuals: selectedIds,
@@ -243,8 +252,8 @@ const VideoIntake: React.FC<{
                   collectionUrl: collection?.metadata?.urlPath,
                   videoData: videoQuestionsFormFieldGroup?.actualValues || [],
                 }}
-                actualValues={videoQuestionsFormFieldGroup.actualValues}
-                invalidValues={videoQuestionsFormFieldGroup.isInvalids}
+                actualValues={videoQuestionFormValues}
+                invalidValues={areVideoQuestionFormValuesInvalid}
                 setParentStateOnSuccess={setVideoCreated}
                 queryKeysToInvalidate={[
                   ["singleCollection", collection?.metadata?.urlPath || ""],

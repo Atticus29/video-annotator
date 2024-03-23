@@ -14,6 +14,7 @@ import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidatio
 import { capitalizeEachWord } from "../../utilities/textUtils";
 import usePostIndividual from "../../hooks/usePostIndividual";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import useOnEnter from "../../hooks/useOnEnter";
 
 const IndividualIntake: React.FC<{
   collection: Collection;
