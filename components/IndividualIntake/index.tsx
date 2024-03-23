@@ -114,15 +114,6 @@ const IndividualIntake: React.FC<{
           localCollection?.individualIntakeQuestions && (
             <>
               <Grid item lg={12} sm={12}>
-                {/* <ComposedFormSubmissionButton // @TODO can probably use the new submission button
-                  questionsOfConcern={
-                    localCollection?.individualIntakeQuestions || []
-                  }
-                  formFieldGroupOfConcern={individualQuestionsFormFieldGroup}
-                  collectionPath={localCollection.metadata.urlPath}
-                  collectionPropToUpdate={"individuals"}
-                  onCloseDialog={onCloseDialog}
-                /> */}
                 <SaveOrUpdateButtonWithValidation
                   disabled={!Boolean(collection)}
                   buttonTitle="CREATE"

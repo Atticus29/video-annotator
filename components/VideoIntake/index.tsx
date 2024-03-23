@@ -4,7 +4,6 @@ import { Alert, Button, Dialog, DialogContent, Grid } from "@mui/material";
 import { get, map } from "lodash-es";
 
 import { Collection, FormFieldGroup } from "../../types";
-import ComposedFormSubmissionButton from "../ComposedFormSubmissionButton";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
@@ -117,17 +116,9 @@ const VideoIntake: React.FC<{
     rowSelectionModel: GridRowSelectionModel,
     details: GridCallbackDetails
   ) => void = (rowSelectionModel, _) => {
-    console.log("deleteMe got here localOnRowSelectionModelChange");
     const selectedIds: string[] = map(rowSelectionModel, (selectedRow) => {
-      console.log("deleteMe selectedRow is: ");
-      console.log(selectedRow);
-      console.log("deleteMe and collection is: ");
-      console.log(collection);
-      // @TODO LEFT OFF HERE
       return get(collection, ["individuals", Number(selectedRow) - 1, "id"]);
     });
-    console.log("deleteMe selectedIds is: ");
-    console.log(selectedIds);
     setVideoQuestionFormValues({
       ...videoQuestionFormValues,
       Individuals: selectedIds,
@@ -259,18 +250,6 @@ const VideoIntake: React.FC<{
                   ["singleCollection", collection?.metadata?.urlPath || ""],
                 ]}
               />
-              {/* <ComposedFormSubmissionButton
-                questionsOfConcern={
-                  [
-                    ...get(collection, ["videoIntakeQuestions"], []),
-                    individualsQuestion,
-                  ] || []
-                }
-                formFieldGroupOfConcern={videoQuestionsFormFieldGroup}
-                collectionPath={collection.metadata.urlPath}
-                collectionPropToUpdate={"videos"}
-                onCloseDialog={onCloseDialog}
-              /> */}
             </Grid>
             <Grid item lg={12} sm={12}>
               <Button variant="contained" onClick={onCloseDialog}>

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import CloseIcon from "@mui/icons-material/Close";
 import { reduce } from "lodash-es";
-import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/composedFormSubmissionButtonUtils";
+import { calculateAllRequiredIntakeQuestionsHaveValues } from "../../utilities/saveOrUpdateButtonWithValidationUtils";
 import { transformActualValueObjIntoIntakeQuestions } from "../../utilities/intakeQuestionUtils";
 import useOnEnter from "../../hooks/useOnEnter";
 
