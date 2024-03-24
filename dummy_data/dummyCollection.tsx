@@ -46,7 +46,7 @@ const youTubeUrlQuestion: SingleFormField = {
   validatorMethods: [isValidYouTubeUrl],
   shouldBeCheckboxes: ["isRequired"],
   isACoreQuestion: true,
-  recommendedLabel: "YouTube URL",
+  recommendedLabel: "YouTube URL, but it must end in, 'URL'",
 };
 
 const tournamentName: SingleFormField = {

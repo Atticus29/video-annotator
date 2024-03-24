@@ -155,7 +155,7 @@
   "UPDATE_AND_PREVIEW": "Update and Preview",
   "GENERIC_INTAKE_QUESTIONS": "{type} Intake Questions",
   "GENERIC_INTAKE_PREVIEW": "{type} Intake Preview",
-  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only its label can be modified, but it must end in, 'URL'. We recommend using something like, {recommendation}.",
+  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only its label can be modified. We recommend using something like, {recommendation}.",
   "BACK_TO_MAIN_COLLECTION_PAGE": "Back to main collection page",
   "EDIT_COLLECTION_INTAKE_QUESTIONS": "You have edit access to this collection. Edit your individual intake questions, video intake questions, and event intake questions here: {individualIntakeQuestions} | {videoIntakeQuestions} | {eventIntakeQuestions} ",
   "NAME_OF_VIDEO_PLURAL": "Name of video plural",
@@ -175,5 +175,10 @@
   "HOME": "Home",
   "VIDEO_SUCCESSFULLY_ADDED": "Video successfully added",
   "VIDEO_UNSUCCESSFULLY_ADDED": "Unable to add video",
-  "MUST_BE_VALID_YOUTUBE_URL": "Must be a valid YouTube URL"
+  "MUST_BE_VALID_YOUTUBE_URL": "Must be a valid YouTube URL",
+  "GENERIC_CANNOT_BE_BLANK_OR_INVALID": "{name} cannot be blank or invalid",
+  "SUBMIT_NEW_EVENT": "Create a New {eventName}",
+  "EVENT_INTAKE_DETAILS": "To add a {eventName} to the {videoName}, fill out the form below.",
+  "EVENT_SUCCESSFULLY_CREATED": "Event successfully created",
+  "EVENT_CREATION_FAILED": "Event creation failed"
 }

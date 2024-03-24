@@ -8,6 +8,7 @@ import {
   isValidUrl,
   isValidOption,
   isValidYouTubeUrl,
+  endsInUrl,
 } from "./validators";
 
 export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
@@ -56,6 +57,12 @@ export function updateIntakeQuestionFormField(
   intakeQuestionIdx: number,
   formFieldGroup: FormFieldGroup
 ) {
+  // console.log("deleteMe intakeQuestionKey is: ");
+  // console.log(intakeQuestionKey);
+  // console.log("deleteMe formFieldGroup is: ");
+  // console.log(formFieldGroup);
+  // console.log("deleteMe intakeQuestionIdx is: " + intakeQuestionIdx);
+
   const valueSetter: ((input: any) => void) | undefined = get(formFieldGroup, [
     "setValues",
   ]);
@@ -64,11 +71,29 @@ export function updateIntakeQuestionFormField(
     ["setIsInvalids"]
   );
   if (invalidSetter) {
-    const isInvalid: boolean =
+    let isInvalid: boolean =
       intakeQuestionKey === "isRequired" ||
       intakeQuestionKey === "usersCanAddCustomOptions"
         ? false
         : !isNonEmptyString(currentVal);
+
+    // Check for the special URL label
+    const isCoreQuestion = get(formFieldGroup, [
+      "actualValues",
+      "isACoreQuestion--" + intakeQuestionIdx,
+    ]);
+    const isLabel = intakeQuestionKey === "label";
+    const isYoutubeUrlType =
+      get(formFieldGroup, ["actualValues", "type--" + intakeQuestionIdx]) ===
+      "YouTubeUrl";
+    if (isLabel && isYoutubeUrlType && isCoreQuestion) {
+      console.log("deleteMe got here a12");
+      console.log("deleteMe endsInUrl(currentVal) is: ");
+      console.log(endsInUrl(currentVal));
+      isInvalid = !isNonEmptyString(currentVal) || !endsInUrl(currentVal);
+    }
+    console.log("deleteMe isInvalid is: " + isInvalid);
+    // End check for the special URL label
     invalidSetter((prevState: {}) => {
       return {
         ...prevState,

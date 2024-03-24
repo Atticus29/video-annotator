@@ -183,8 +183,8 @@ const SingleIntakeQuestion: React.FC<{
                   ] || false
                     ? intl.formatMessage(
                         {
-                          id: "GENERIC_CANNOT_BE_BLANK",
-                          defaultMessage: "Field cannot be blank",
+                          id: "GENERIC_CANNOT_BE_BLANK_OR_INVALID",
+                          defaultMessage: "Field cannot be blank or invalid",
                         },
                         { name: capitalizeEachWord(intakeQuestionKey) }
                       )

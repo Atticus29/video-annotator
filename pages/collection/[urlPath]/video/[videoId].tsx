@@ -12,6 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../../../../components/CustomError";
 import useGetVideo from "../../../../hooks/useGetVideo";
+import YouTubePlayer from "../../../../components/YouTubePlayer";
 
 const SingleVideoView: React.FC = () => {
   const router: NextRouter = useRouter();
@@ -27,8 +28,8 @@ const SingleVideoView: React.FC = () => {
     localUrlPathAsString,
     localVideoIdAsString
   );
-  console.log("deleteMe data is: ");
-  console.log(data);
+  // console.log("deleteMe data is: ");
+  // console.log(data);
   const [open, setOpen] = useState<boolean>(true);
 
   useEffect(() => {
@@ -40,6 +41,18 @@ const SingleVideoView: React.FC = () => {
     }
   }, [isLoading, data]);
 
+  const urlTargetKey: string = useMemo(() => {
+    if (data) {
+      return (
+        Object.keys(data).find(
+          (key) => key.endsWith("url") || key.endsWith("URL")
+        ) || ""
+      );
+    } else {
+      return "";
+    }
+  }, [data]);
+
   return (
     <>
       {isLoading && (
@@ -50,7 +63,21 @@ const SingleVideoView: React.FC = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {showVideo && <p>Got here hi TODO fill me in</p>}
+      {showVideo && (
+        <div
+          style={{
+            marginTop: "2rem",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <YouTubePlayer
+            collectionUrl={localUrlPathAsString}
+            videoUrl={data[urlTargetKey]}
+            videoData={data}
+          />
+        </div>
+      )}
       {!isLoading && !showVideo && isError && (
         <CustomError
           errorMsg={
