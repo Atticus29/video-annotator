@@ -21,7 +21,8 @@ const EventIntake: React.FC<{
   collection: Collection;
   videoId: string;
   onCloseDialog?: () => void;
-}> = ({ collection, videoId, onCloseDialog }) => {
+  eventMetadata: EventMetadata;
+}> = ({ collection, videoId, onCloseDialog, eventMetadata }) => {
   const intl: IntlShape = useIntl();
   const defaultEventName: string = intl.formatMessage({
     id: "EVENT",
@@ -147,6 +148,7 @@ const EventIntake: React.FC<{
                     collectionUrl: collection?.metadata?.urlPath,
                     videoId: videoId,
                     eventData: eventQuestionsFormFieldGroup?.actualValues || [],
+                    eventMetadata: eventMetadata,
                   }}
                   actualValues={eventQuestionsFormFieldGroup.actualValues}
                   invalidValues={eventQuestionsFormFieldGroup.isInvalids}

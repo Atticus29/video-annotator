@@ -34,6 +34,15 @@ export interface Collection {
   individuals?: {}[];
 }
 
+export interface EventMetadata {
+  annotatorId: string;
+  startTime: number; // @TODO ?
+  endTime: number;
+  upvotes: number;
+  downvotes: number;
+  flaggedVotes: number;
+}
+
 export interface CollectionMetadata {
   name: string;
   urlPath?: string;

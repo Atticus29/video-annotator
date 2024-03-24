@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { EventMetadata } from "../types";
 
 export default function usePostEvent() {
   const mutation = useMutation({
@@ -8,6 +9,7 @@ export default function usePostEvent() {
       collectionUrl: string;
       videoId: string;
       eventData: any;
+      eventMetadata: EventMetadata;
     }) => {
       try {
         const response = await axios.post(
@@ -15,7 +17,11 @@ export default function usePostEvent() {
           {
             collectionUrl: variables.collectionUrl,
             videoId: variables.videoId,
-            eventData: { ...variables.eventData, id: uuidv4() },
+            eventData: {
+              ...variables.eventData,
+              id: uuidv4(),
+              ...variables.eventMetadata,
+            },
           }
         );
         if (response.status === 200) {

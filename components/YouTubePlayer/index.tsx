@@ -5,12 +5,13 @@ import {
   Dialog,
   DialogContent,
 } from "@mui/material";
-import { dataTagSymbol } from "@tanstack/react-query";
 import React, { useState } from "react";
 import YouTube from "react-youtube";
 import useGetCollection from "../../hooks/useGetCollection";
 import CustomError from "../CustomError";
 import EventIntake from "../EventIntake";
+import { EventMetadata } from "../../types";
+import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 
 const YouTubePlayer: React.FC<{
   videoUrl?: string;
@@ -18,6 +19,7 @@ const YouTubePlayer: React.FC<{
   videoData: any;
   collectionUrl: string;
 }> = ({ videoUrl, videoId, videoData, collectionUrl }) => {
+  const { user } = useFirebaseAuth();
   const {
     data: collection,
     isLoading: isCollectionLoading, //@TODO implement
@@ -28,7 +30,24 @@ const YouTubePlayer: React.FC<{
   const [showAnnotationDialog, setShowAnnotationDialog] =
     useState<boolean>(false);
 
+  const [eventMetadata, setEventMetadata] = useState<EventMetadata>({
+    annotatorId: user?.id || "no_user",
+    startTime: 0,
+    endTime: 0,
+    upvotes: 0,
+    downvotes: 0,
+    flaggedVotes: 0,
+  });
+
   const openAnnotationDialog: () => void = () => {
+    setEventMetadata({
+      annotatorId: user?.id || "no_user",
+      startTime: player.getCurrentTime(),
+      endTime: player.getCurrentTime() + 30, // @TODO a reasonable default?
+      upvotes: 0,
+      downvotes: 0,
+      flaggedVotes: 0,
+    });
     setShowAnnotationDialog(true);
   };
 
@@ -145,6 +164,7 @@ const YouTubePlayer: React.FC<{
             collection={collection}
             onCloseDialog={handleCreateAnnotationDialogClose}
             videoId={videoData?.id}
+            eventMetadata={eventMetadata}
           ></EventIntake>
         </DialogContent>
       </Dialog>
