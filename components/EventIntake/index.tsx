@@ -5,6 +5,7 @@ import { filter, get, map, reduce } from "lodash-es";
 
 import {
   Collection,
+  EventMetadata,
   FormFieldGroup,
   SingleFormField as SingleFormFieldType,
 } from "../../types";
@@ -20,9 +21,16 @@ import { useQueryClient } from "@tanstack/react-query";
 const EventIntake: React.FC<{
   collection: Collection;
   videoId: string;
-  onCloseDialog?: () => void;
+  onCloseDialogSuccess?: () => void;
+  onCloseDialogReset?: () => void;
   eventMetadata: EventMetadata;
-}> = ({ collection, videoId, onCloseDialog, eventMetadata }) => {
+}> = ({
+  collection,
+  videoId,
+  onCloseDialogSuccess,
+  onCloseDialogReset,
+  eventMetadata,
+}) => {
   const intl: IntlShape = useIntl();
   const defaultEventName: string = intl.formatMessage({
     id: "EVENT",
@@ -59,9 +67,14 @@ const EventIntake: React.FC<{
       queryClient.invalidateQueries({
         queryKey: ["eventsFor", collection?.metadata?.urlPath],
       });
-      if (onCloseDialog) onCloseDialog();
+      if (onCloseDialogSuccess) onCloseDialogSuccess();
     }
-  }, [collection?.metadata?.urlPath, eventCreated, onCloseDialog, queryClient]);
+  }, [
+    collection?.metadata?.urlPath,
+    eventCreated,
+    onCloseDialogSuccess,
+    queryClient,
+  ]);
 
   const eventQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
@@ -159,7 +172,7 @@ const EventIntake: React.FC<{
                 />
               </Grid>
               <Grid item lg={12} sm={12}>
-                <Button variant="contained" onClick={onCloseDialog}>
+                <Button variant="contained" onClick={onCloseDialogReset}>
                   <FormattedMessage id="CLOSE" defaultMessage="Close" />
                 </Button>
               </Grid>

@@ -40,6 +40,8 @@ const YouTubePlayer: React.FC<{
   });
 
   const openAnnotationDialog: () => void = () => {
+    onPauseVideo();
+    setAnnotationBegun(true);
     setEventMetadata({
       annotatorId: user?.id || "no_user",
       startTime: player.getCurrentTime(),
@@ -51,8 +53,20 @@ const YouTubePlayer: React.FC<{
     setShowAnnotationDialog(true);
   };
 
+  const [annotationBegun, setAnnotationBegun] = useState<boolean>(false);
+
   const handleCreateAnnotationDialogClose: () => void = () => {
     setShowAnnotationDialog(false);
+  };
+
+  const handleCreateAnnotationManualDialogClose: () => void = () => {
+    setAnnotationBegun(false);
+    setShowAnnotationDialog(false);
+  };
+
+  const handleEndOfEvent: () => void = () => {
+    // @TODO update the event
+    setAnnotationBegun(false);
   };
 
   const [player, setPlayer] = useState<any>(null);
@@ -126,6 +140,13 @@ const YouTubePlayer: React.FC<{
             <Button
               style={{ marginRight: "1rem" }}
               variant="contained"
+              onClick={onPauseVideo}
+            >
+              Pause
+            </Button>
+            <Button
+              style={{ marginRight: "1rem" }}
+              variant="contained"
               onClick={() => rewindVideo(3)}
             >
               Rewind 3 Seconds
@@ -137,17 +158,23 @@ const YouTubePlayer: React.FC<{
             >
               Fastforward 3 Seconds
             </Button>
-            <Button variant="contained" onClick={onPauseVideo}>
-              Pause
-            </Button>
           </section>
           <section id="annotation-panel" style={{ marginTop: "1rem" }}>
             <Button
+              disabled={annotationBegun}
               style={{ marginRight: "1rem" }}
               variant="contained"
               onClick={openAnnotationDialog}
             >
               Begin {collection?.metadata?.nameOfEvent}
+            </Button>
+            <Button
+              disabled={!annotationBegun}
+              style={{ marginRight: "1rem" }}
+              variant="contained"
+              onClick={handleEndOfEvent}
+            >
+              End {collection?.metadata?.nameOfEvent}
             </Button>
           </section>
         </div>
@@ -157,12 +184,13 @@ const YouTubePlayer: React.FC<{
       )}
       <Dialog
         open={showAnnotationDialog}
-        onClose={handleCreateAnnotationDialogClose}
+        onClose={handleCreateAnnotationManualDialogClose}
       >
         <DialogContent>
           <EventIntake
             collection={collection}
-            onCloseDialog={handleCreateAnnotationDialogClose}
+            onCloseDialogSuccess={handleCreateAnnotationDialogClose}
+            onCloseDialogReset={handleCreateAnnotationManualDialogClose}
             videoId={videoData?.id}
             eventMetadata={eventMetadata}
           ></EventIntake>
