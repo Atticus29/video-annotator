@@ -10,16 +10,10 @@ import { get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import {
-  QueryFunctionContext,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
 import CustomError from "../../../../components/CustomError";
 import useGetVideo from "../../../../hooks/useGetVideo";
 
 const SingleVideoView: React.FC = () => {
-  const queryClient = useQueryClient();
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
   const localVideoId: string | string[] = router.query.videoId || "";
@@ -33,6 +27,8 @@ const SingleVideoView: React.FC = () => {
     localUrlPathAsString,
     localVideoIdAsString
   );
+  console.log("deleteMe data is: ");
+  console.log(data);
   const [open, setOpen] = useState<boolean>(true);
 
   useEffect(() => {
@@ -55,12 +51,16 @@ const SingleVideoView: React.FC = () => {
         </Backdrop>
       )}
       {showVideo && <p>Got here hi TODO fill me in</p>}
-      {!isLoading && !showVideo && (
+      {!isLoading && !showVideo && isError && (
         <CustomError
-          errorMsg={intl.formatMessage({
-            id: "VIDEO_NOT_FOUND",
-            defaultMessage: "Video not found",
-          })}
+          errorMsg={
+            intl.formatMessage({
+              id: "VIDEO_NOT_FOUND",
+              defaultMessage: "Video not found",
+            }) +
+            ": " +
+            error
+          }
         />
       )}
     </>

@@ -1,5 +1,9 @@
 import { SingleFormField, Collection } from "../types";
-import { isNonEmptyString, isValidUrl } from "../utilities/validators";
+import {
+  isNonEmptyString,
+  isValidUrl,
+  isValidYouTubeUrl,
+} from "../utilities/validators";
 
 import moveNames from "./moveNames";
 import moveNamesPortuguese from "./moveNamesPortuguese";
@@ -31,18 +35,18 @@ export const individualsQuestion: SingleFormField = {
   shouldBeCheckboxes: ["isRequired"],
 };
 
-const urlQuestion: SingleFormField = {
-  type: "URL",
-  label: "URL",
+const youTubeUrlQuestion: SingleFormField = {
+  type: "YouTubeUrl",
+  label: "YouTube URL",
   isRequired: true,
   language: "English",
   testId: "url",
   doNotDisplay: defaultDoNotDisplays,
-  invalidInputMessage: "MUST_BE_VALID_URL",
-  validatorMethods: [isValidUrl],
+  invalidInputMessage: "MUST_BE_VALID_YOUTUBE_URL",
+  validatorMethods: [isValidYouTubeUrl],
   shouldBeCheckboxes: ["isRequired"],
   isACoreQuestion: true,
-  recommendedLabel: "URL",
+  recommendedLabel: "YouTube URL",
 };
 
 const tournamentName: SingleFormField = {
@@ -612,7 +616,7 @@ export const shamCollection: Collection = {
   },
   videoIntakeQuestions: [
     // there MUST be a URL question in this list. Even if this shamCollection is deprecated by something else, that thing should also have a URL question.
-    urlQuestion,
+    youTubeUrlQuestion,
     // natureOfTheMatch,
     // typeOfRoundQuestion,
     // tournamentName,
@@ -666,7 +670,7 @@ export const shamCollection2: Collection = {
     language: "English",
   },
   videoIntakeQuestions: [
-    urlQuestion,
+    youTubeUrlQuestion,
     natureOfTheMatch,
     tournamentName,
     locationName,

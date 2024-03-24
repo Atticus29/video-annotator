@@ -9,7 +9,7 @@ export default function useGetVideo(collectionUrl: string, videoId: string) {
         const response = await axios.get(
           "/api/collection/" + collectionUrl + "/video/" + videoId
         );
-        return response?.data;
+        return response?.data?.video;
       } catch (e: any) {
         console.log("Error in getting a single video from a collection");
         console.log(e);

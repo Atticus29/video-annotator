@@ -140,6 +140,28 @@ const SingleFormField: React.FC<{
   );
 
   switch (question?.type) {
+    case "YouTubeUrl":
+      return (
+        <TextField
+          required={question?.isRequired}
+          fullWidth
+          data-testid={question?.testId}
+          error={currentIsInvalid}
+          variant="filled"
+          label={question?.label}
+          helperText={
+            currentIsInvalid
+              ? intl.formatMessage({
+                  id: question?.invalidInputMessage || "FIELD_CANNOT_BE_BLANK",
+                  defaultMessage: "Cannot be blank",
+                })
+              : ""
+          }
+          style={{ marginBottom: 10, maxWidth: 400 }}
+          onChange={handleTextChange}
+          value={localVal}
+        ></TextField>
+      );
     case "URL":
       return (
         <TextField

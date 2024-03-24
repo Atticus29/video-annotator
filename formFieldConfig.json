@@ -1,5 +1,11 @@
 [
   {
+    "type": "YouTubeUrl",
+    "attributesToDisplay": ["type", "label", "isRequired", "language"],
+    "validationMethods": ["isValidYouTubeUrl"],
+    "invalidInputMessage": "MUST_BE_VALID_YOUTUBE_URL"
+  },
+  {
     "type": "URL",
     "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isValidUrl"],

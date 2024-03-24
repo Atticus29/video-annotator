@@ -155,7 +155,7 @@
   "UPDATE_AND_PREVIEW": "Update and Preview",
   "GENERIC_INTAKE_QUESTIONS": "{type} Intake Questions",
   "GENERIC_INTAKE_PREVIEW": "{type} Intake Preview",
-  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only its label can be modified. We recommend using something like, {recommendation}.",
+  "CORE_QUESTION_EXPLANATION": "This question is required for your users. Only its label can be modified, but it must end in, 'URL'. We recommend using something like, {recommendation}.",
   "BACK_TO_MAIN_COLLECTION_PAGE": "Back to main collection page",
   "EDIT_COLLECTION_INTAKE_QUESTIONS": "You have edit access to this collection. Edit your individual intake questions, video intake questions, and event intake questions here: {individualIntakeQuestions} | {videoIntakeQuestions} | {eventIntakeQuestions} ",
   "NAME_OF_VIDEO_PLURAL": "Name of video plural",
@@ -174,5 +174,6 @@
   "LOADING": "Loading",
   "HOME": "Home",
   "VIDEO_SUCCESSFULLY_ADDED": "Video successfully added",
-  "VIDEO_UNSUCCESSFULLY_ADDED": "Unable to add video"
+  "VIDEO_UNSUCCESSFULLY_ADDED": "Unable to add video",
+  "MUST_BE_VALID_YOUTUBE_URL": "Must be a valid YouTube URL"
 }

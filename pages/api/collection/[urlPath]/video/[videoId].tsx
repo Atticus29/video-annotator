@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../../../middleware/mongodb";
 
 import { Collection as CollectionData } from "../../../../../types";
+import { sanitizeString } from "../../../../../utilities/textUtils";
 
 const videoInCollection = async (req: NextApiRequest, res: NextApiResponse) => {
   const allowedMethods: string[] = ["GET"];
@@ -14,18 +15,22 @@ const videoInCollection = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const { urlPath, videoId } = req.query;
+
+    let urlPathAsString: string =
+      (Array.isArray(urlPath)
+        ? sanitizeString(urlPath.join())
+        : sanitizeString(urlPath)) || "";
     const client: MongoClient = await clientPromise;
     const db: Db = client.db("videoAnnotator1");
-    const coll: Collection<Collection> =
-      db.collection<Collection>("collections");
+    const coll: Collection<CollectionData> = db.collection("collections");
 
-    if (req.method === "GET") {
+    if (req.method === "GET" && urlPathAsString && videoId) {
       const collection = await coll.findOne({
-        "metadata.urlPath": urlPath,
+        "metadata.urlPath": urlPathAsString.toLowerCase(),
       });
       if (collection) {
         const videos = get(collection, ["videos"]);
-        const video = find(videos, (vid) => vid.id === videoId);
+        const video = find(videos, (vid) => get(vid, ["id"]) === videoId);
         if (video) {
           return res.status(200).json({ video });
         } else {

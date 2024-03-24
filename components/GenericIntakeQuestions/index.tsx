@@ -113,6 +113,9 @@ const GenericIntakeQuestions: React.FC<{
           get(shamCollection, intakeQuestionAccessor) || []
         );
 
+      console.log("deleteMe transformedGenericIntakeQuestions are: ");
+      console.log(transformedGenericIntakeQuestions);
+
       if (formFieldGroupValueSetter) {
         formFieldGroupValueSetter((prevState: any) => {
           return {

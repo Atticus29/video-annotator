@@ -7,6 +7,7 @@ import {
   isValidEmail,
   isValidUrl,
   isValidOption,
+  isValidYouTubeUrl,
 } from "./validators";
 
 export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
@@ -156,6 +157,13 @@ export function updateFormFieldStates(
     !currentValidatorMethods.includes(isValidUrl)
   ) {
     currentValidatorMethods?.push(isValidUrl);
+  }
+
+  if (
+    question?.type === "YouTubeUrl" &&
+    !currentValidatorMethods.includes(isValidYouTubeUrl)
+  ) {
+    currentValidatorMethods?.push(isValidYouTubeUrl);
   }
 
   if (
