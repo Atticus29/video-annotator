@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Alert, Button, Dialog, DialogContent, Grid } from "@mui/material";
-import { get, map } from "lodash-es";
+import { filter, get, map, reduce } from "lodash-es";
 
-import { Collection, FormFieldGroup } from "../../types";
+import {
+  Collection,
+  FormFieldGroup,
+  SingleFormField as SingleFormFieldType,
+} from "../../types";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
@@ -16,6 +20,7 @@ import { individualsQuestion } from "../../dummy_data/dummyCollection";
 import IndividualsTableView from "../IndividualsTableView";
 import SaveOrUpdateButtonWithValidation from "../SaveOrUpdateButtonWithValidation";
 import usePostVideo from "../../hooks/usePostVideo";
+import { transformIntakeQuestionsIntoActualValueObj } from "../../utilities/intakeQuestionUtils";
 
 const VideoIntake: React.FC<{
   collection: Collection;
@@ -27,7 +32,21 @@ const VideoIntake: React.FC<{
 
   const queryClient = useQueryClient();
   const [localIsIndividualsInvalid, setLocalIsIndividualsInvalid] =
-    useState<boolean>(false);
+    useState<boolean>(true);
+
+  const requiredQuestions: any[] =
+    filter(
+      get(collection, ["videoIntakeQuestions"], []),
+      (question: SingleFormFieldType) => question.isRequired
+    ) || [];
+
+  const requiredInvalidVals: {} = reduce(
+    requiredQuestions,
+    (memo, question) => {
+      return { ...memo, [question.label]: true };
+    },
+    {}
+  );
 
   const [videoQuestionFormValues, setVideoQuestionFormValues] = useState<{}>(
     {}
@@ -35,13 +54,14 @@ const VideoIntake: React.FC<{
   const [
     areVideoQuestionFormValuesInvalid,
     setAreVideoQuestionFormValuesInvalid,
-  ] = useState<{}>({});
+  ] = useState<{}>({ ...requiredInvalidVals, Individuals: true });
 
   useEffect(() => {
     if (videoCreated) {
-      // @TODO invalidate get videos query
+      // @TODO invalidate get videos query... do not seem needed currently
+      if (onCloseDialog) onCloseDialog();
     }
-  }, [videoCreated]);
+  }, [onCloseDialog, videoCreated]);
 
   const videoQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {
@@ -52,6 +72,11 @@ const VideoIntake: React.FC<{
       setIsInvalids: setAreVideoQuestionFormValuesInvalid,
     };
   }, [areVideoQuestionFormValuesInvalid, videoQuestionFormValues]);
+
+  useEffect(() => {
+    console.log("deleteMe videoQuestionsFormFieldGroup changed and is now: ");
+    console.log(videoQuestionsFormFieldGroup);
+  }, [videoQuestionsFormFieldGroup]);
 
   const titleId: string = intl.formatMessage(
     { id: "SUBMIT_NEW_VIDEO", defaultMessage: "Submit new {videoName}" },
@@ -181,6 +206,7 @@ const VideoIntake: React.FC<{
                   disableRowSelectionOnClick: true,
                   onRowSelectionModelChange: localOnRowSelectionModelChange,
                 }}
+                tableOnly={true}
               />
               {localIsIndividualsInvalid && (
                 <Alert
@@ -195,20 +221,22 @@ const VideoIntake: React.FC<{
               )}
             </Grid>
             <Grid item lg={12} sm={12} key="individual-creation-button">
-              <Button
-                data-testid={"new-video-add-button"}
-                variant="contained"
-                onClick={handleNewIndividualClick}
-                style={{ marginBottom: "1rem" }}
-              >
-                <FormattedMessage
-                  id="SUBMIT_NEW_INDIVIDUAL"
-                  defaultMessage="Create a New {individualName}"
-                  values={{
-                    individualName: collection.metadata.nameOfIndividual,
-                  }}
-                />
-              </Button>
+              <div style={{ display: "flex", justifyContent: "end" }}>
+                <Button
+                  data-testid={"new-video-add-button"}
+                  variant="contained"
+                  onClick={handleNewIndividualClick}
+                  style={{ marginBottom: "1rem", justifyContent: "right" }}
+                >
+                  <FormattedMessage
+                    id="SUBMIT_NEW_INDIVIDUAL"
+                    defaultMessage="Create a New {individualName}"
+                    values={{
+                      individualName: collection.metadata.nameOfIndividual,
+                    }}
+                  />
+                </Button>
+              </div>
             </Grid>
             <Dialog
               open={showIndividualCreationDialog}
@@ -243,8 +271,8 @@ const VideoIntake: React.FC<{
                   collectionUrl: collection?.metadata?.urlPath,
                   videoData: videoQuestionsFormFieldGroup?.actualValues || [],
                 }}
-                actualValues={videoQuestionFormValues}
-                invalidValues={areVideoQuestionFormValuesInvalid}
+                actualValues={videoQuestionsFormFieldGroup.actualValues}
+                invalidValues={videoQuestionsFormFieldGroup.isInvalids}
                 setParentStateOnSuccess={setVideoCreated}
                 queryKeysToInvalidate={[
                   ["singleCollection", collection?.metadata?.urlPath || ""],

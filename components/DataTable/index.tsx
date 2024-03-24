@@ -26,6 +26,7 @@ const DataTable: React.FC<{
   linkIds?: string[];
   dataGridOptions?: {};
   errorMsg?: string;
+  tableOnly?: boolean;
 }> = ({
   tableTitle = "Untitled",
   tableTitleId = tableTitle,
@@ -40,6 +41,7 @@ const DataTable: React.FC<{
   linkIds = [],
   dataGridOptions = {},
   errorMsg,
+  tableOnly = false,
 }) => {
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
@@ -193,7 +195,40 @@ const DataTable: React.FC<{
 
   return (
     <>
-      {data && data.length > 0 && (
+      {tableOnly && data && data.length > 0 && (
+        <>
+          <Typography variant="h5" style={{ marginBottom: "2vh" }}>
+            {tableTitleId && (
+              <FormattedMessage id={tableTitleId} defaultMessage={tableTitle} />
+            )}
+            {!tableTitleId && tableTitle}
+          </Typography>
+          <DataGrid
+            key={tableTitleId}
+            rows={rows}
+            rowHeight={40}
+            columns={columns}
+            autoHeight={true}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 5 } },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            style={{
+              marginBottom: "2vh",
+              ...styleOverrides,
+            }}
+            loading={loading}
+            checkboxSelection={get(dataGridOptions, ["checkboxSelection"])}
+            disableRowSelectionOnClick={get(dataGridOptions, [
+              "disableRowSelectionOnClick",
+            ])}
+            onRowSelectionModelChange={get(dataGridOptions, [
+              "onRowSelectionModelChange",
+            ])}
+          />
+        </>
+      )}
+      {!tableOnly && data && data.length > 0 && (
         <>
           <InfoPanel titleId={tableTitleId} titleDefault={tableTitle}>
             <InfoPanelBody>

@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Button, Grid } from "@mui/material";
-import { map } from "lodash-es";
+import { filter, get, map, reduce } from "lodash-es";
 
-import { Collection, FormFieldGroup } from "../../types";
+import {
+  Collection,
+  FormFieldGroup,
+  SingleFormField as SingleFormFieldType,
+} from "../../types";
 import InfoPanel from "../InfoPanel";
 import InfoPanelBody from "../InfoPanel/InfoPanelBody";
 import SingleFormField from "../SingleFormField";
@@ -23,13 +27,27 @@ const IndividualIntake: React.FC<{
   });
   const { user, authError } = useFirebaseAuth();
 
+  const requiredQuestions: any[] =
+    filter(
+      get(collection, ["individualIntakeQuestions"], []),
+      (question: SingleFormFieldType) => question.isRequired
+    ) || [];
+
+  const requiredInvalidVals: {} = reduce(
+    requiredQuestions,
+    (memo, question) => {
+      return { ...memo, [question.label]: true };
+    },
+    {}
+  );
+
   const [localCollection, setLocalCollection] = useState<Collection>();
   const [individualQuestionFormValues, setIndividualQuestionFormValues] =
     useState<{}>({});
   const [
     areIndividualQuestionFormValuesInvalid,
     setAreIndividualQuestionFormValuesInvalid,
-  ] = useState<{}>({});
+  ] = useState<{}>(requiredInvalidVals);
   const [individualCreated, setIndividualCreated] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
@@ -38,8 +56,14 @@ const IndividualIntake: React.FC<{
       queryClient.invalidateQueries({
         queryKey: ["individualsFor", collection?.metadata?.urlPath],
       });
+      if (onCloseDialog) onCloseDialog();
     }
-  }, [collection?.metadata?.urlPath, individualCreated, queryClient]);
+  }, [
+    collection?.metadata?.urlPath,
+    individualCreated,
+    onCloseDialog,
+    queryClient,
+  ]);
 
   const individualQuestionsFormFieldGroup: FormFieldGroup = useMemo(() => {
     return {

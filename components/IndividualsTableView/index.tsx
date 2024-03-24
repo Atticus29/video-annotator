@@ -11,11 +11,13 @@ const IndividualsTableView: React.FC<{
   tableTitle: string;
   individualIntakeQuestions: any[];
   dataGridOptions?: {};
+  tableOnly?: boolean;
 }> = ({
   collectionUrl,
   tableTitle,
   individualIntakeQuestions,
   dataGridOptions,
+  tableOnly = false,
 }) => {
   const intl: IntlShape = useIntl();
 
@@ -85,6 +87,7 @@ const IndividualsTableView: React.FC<{
           linkIds={individualLinkIds}
           dataGridOptions={dataGridOptions}
           errorMsg={errorMsgIndividuals}
+          tableOnly={tableOnly}
         ></DataTable>
       )}
       {isLoadingIndividuals && (
