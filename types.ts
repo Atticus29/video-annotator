@@ -37,7 +37,7 @@ export interface Collection {
 export interface EventMetadata {
   annotatorId: string;
   startTime: number; // @TODO ?
-  endTime: number;
+  endTime?: number;
   upvotes: number;
   downvotes: number;
   flaggedVotes: number;

@@ -24,12 +24,14 @@ const EventIntake: React.FC<{
   onCloseDialogSuccess?: () => void;
   onCloseDialogReset?: () => void;
   eventMetadata: EventMetadata;
+  setResponseData?: (input: boolean) => void;
 }> = ({
   collection,
   videoId,
   onCloseDialogSuccess,
   onCloseDialogReset,
   eventMetadata,
+  setResponseData,
 }) => {
   const intl: IntlShape = useIntl();
   const defaultEventName: string = intl.formatMessage({
@@ -166,6 +168,7 @@ const EventIntake: React.FC<{
                   actualValues={eventQuestionsFormFieldGroup.actualValues}
                   invalidValues={eventQuestionsFormFieldGroup.isInvalids}
                   setParentStateOnSuccess={setEventCreated}
+                  setResponseData={setResponseData}
                   queryKeysToInvalidate={[
                     ["singleCollection", collection?.metadata?.urlPath || ""],
                   ]}

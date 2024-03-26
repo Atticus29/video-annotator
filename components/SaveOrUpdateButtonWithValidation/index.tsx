@@ -25,6 +25,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   invalidValues: {};
   setParentStateOnSuccess?: (input: boolean) => void;
   setParentStateOnFailure?: (input: boolean) => void;
+  setResponseData?: (input: boolean) => void;
   queryKeysToInvalidate?: string[][];
   disabled?: boolean;
 }> = ({
@@ -37,6 +38,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
   invalidValues,
   setParentStateOnSuccess,
   setParentStateOnFailure,
+  setResponseData,
   queryKeysToInvalidate,
   disabled = false,
 }) => {
@@ -100,6 +102,7 @@ const SaveOrUpdateButtonWithValidation: React.FC<{
         setSaveOrUpdateSuccessful(true);
         setSnackbarMessage(successMsg);
         if (setParentStateOnSuccess) setParentStateOnSuccess(true);
+        if (setResponseData) setResponseData(responseData);
       },
       onError: (error: any) => {
         console.error("Mutation error", error);

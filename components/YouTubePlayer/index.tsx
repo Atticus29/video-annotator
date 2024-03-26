@@ -4,7 +4,10 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
+  IconButton,
+  Snackbar,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import YouTube from "react-youtube";
 import useGetCollection from "../../hooks/useGetCollection";
@@ -12,6 +15,9 @@ import CustomError from "../CustomError";
 import EventIntake from "../EventIntake";
 import { EventMetadata } from "../../types";
 import useFirebaseAuth from "../../hooks/useFirebaseAuth";
+import useUpdateEvent from "../../hooks/useUpdateEvent";
+import { get } from "lodash-es";
+import { IntlShape, useIntl } from "react-intl";
 
 const YouTubePlayer: React.FC<{
   videoUrl?: string;
@@ -20,12 +26,38 @@ const YouTubePlayer: React.FC<{
   collectionUrl: string;
 }> = ({ videoUrl, videoId, videoData, collectionUrl }) => {
   const { user } = useFirebaseAuth();
+  const intl: IntlShape = useIntl();
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [eventCreationResponseData, setEventCreationResponseData] =
+    useState<{}>({});
   const {
     data: collection,
     isLoading: isCollectionLoading, //@TODO implement
     isError: isCollectionError,
     errorMsg: collectionErrorMsg,
   } = useGetCollection(collectionUrl);
+
+  const [updateSuccessful, setUpdateSuccessful] = useState<boolean>(false);
+  const [updateUnsuccessful, setUpdateUnsuccessful] = useState<boolean>(false);
+
+  const handleSnackbarClose = (
+    _event: React.SyntheticEvent | Event | null,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      // in case you want this behavior to be different eventually
+      setSnackbarMessage("");
+      setUpdateSuccessful(false);
+      setUpdateUnsuccessful(false);
+      return;
+    }
+
+    setSnackbarMessage("");
+    setUpdateSuccessful(false);
+    setUpdateUnsuccessful(false);
+  };
+
+  const { mutate, isPending, error: postRoleError, isError } = useUpdateEvent();
 
   const [showAnnotationDialog, setShowAnnotationDialog] =
     useState<boolean>(false);
@@ -45,7 +77,6 @@ const YouTubePlayer: React.FC<{
     setEventMetadata({
       annotatorId: user?.id || "no_user",
       startTime: player.getCurrentTime(),
-      endTime: player.getCurrentTime() + 30, // @TODO a reasonable default?
       upvotes: 0,
       downvotes: 0,
       flaggedVotes: 0,
@@ -65,7 +96,38 @@ const YouTubePlayer: React.FC<{
   };
 
   const handleEndOfEvent: () => void = () => {
-    // @TODO update the event
+    mutate(
+      {
+        collectionUrl: collectionUrl,
+        videoId: videoData.id,
+        eventId: get(eventCreationResponseData, ["data", "id"]),
+        updatedEventData: {},
+        updatedEventMetadata: { endTime: player.getCurrentTime() },
+      },
+      {
+        onSuccess: (responseData: any) => {
+          // @TODO invalidate query keys
+          console.log("Mutation successful: ", responseData);
+          setUpdateSuccessful(true);
+          setSnackbarMessage(
+            intl.formatMessage({
+              id: "ANNOTATION_RECORDED",
+              defaultMessage: "Annotation recorded",
+            })
+          );
+        },
+        onError: (error: any) => {
+          console.error("Mutation error", error);
+          setUpdateUnsuccessful(true);
+          setSnackbarMessage(
+            intl.formatMessage({
+              id: "ANNOTATION_NOT_RECORDED",
+              defaultMessage: "Failed to record annotation",
+            })
+          );
+        },
+      }
+    );
     setAnnotationBegun(false);
   };
 
@@ -193,9 +255,26 @@ const YouTubePlayer: React.FC<{
             onCloseDialogReset={handleCreateAnnotationManualDialogClose}
             videoId={videoData?.id}
             eventMetadata={eventMetadata}
+            setResponseData={setEventCreationResponseData}
           ></EventIntake>
         </DialogContent>
       </Dialog>
+      <Snackbar
+        open={updateSuccessful || updateUnsuccessful}
+        onClose={handleSnackbarClose}
+        autoHideDuration={6000}
+        message={snackbarMessage}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => handleSnackbarClose(null, "clickaway")}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </>
   );
 };
