@@ -33,23 +33,26 @@ const collectionEventUpdate = async (
       const result = await coll.updateOne(
         {
           "metadata.urlPath": collectionUrl,
-          videos: { $elemMatch: { id: videoId, "events.id": eventId } },
+          "videos.id": videoId,
+          "videos.events.id": eventId,
         },
         {
-          $set: { "videos.$[video].events.$[event]": updatedEventData },
+          $set: {
+            "videos.$[video].events.$[event]": {
+              $mergeObjects: [{ ...updatedEventData }, { ...updatedEventData }],
+            },
+          },
         },
         {
           arrayFilters: [{ "video.id": videoId }, { "event.id": eventId }],
         }
       );
 
-      res
-        .status(200)
-        .json({
-          message: "Event data successfully updated",
-          data: updatedEventData,
-          result: result,
-        });
+      res.status(200).json({
+        message: "Event data successfully updated",
+        data: updatedEventData,
+        result: result,
+      });
     }
   } catch (error: any) {
     console.log(error);
