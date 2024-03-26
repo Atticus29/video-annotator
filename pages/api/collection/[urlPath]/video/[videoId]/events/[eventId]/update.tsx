@@ -18,7 +18,6 @@ const collectionEventUpdate = async (
     const db: Db = client.db("videoAnnotator1");
     const coll: Collection<CollectionData> = db.collection("collections");
     if (req.method === "PATCH") {
-      //   let { updatedEventData } = req.body;
       const {
         collectionUrl,
         videoId,
@@ -38,9 +37,7 @@ const collectionEventUpdate = async (
         },
         {
           $set: {
-            "videos.$[video].events.$[event]": {
-              $mergeObjects: [{ ...updatedEventData }, { ...updatedEventData }],
-            },
+            "videos.$[video].events.$[event]": updatedEventData,
           },
         },
         {

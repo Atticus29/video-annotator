@@ -102,7 +102,10 @@ const YouTubePlayer: React.FC<{
         videoId: videoData.id,
         eventId: get(eventCreationResponseData, ["data", "id"]),
         updatedEventData: {},
-        updatedEventMetadata: { endTime: player.getCurrentTime() },
+        updatedEventMetadata: {
+          ...get(eventCreationResponseData, ["data"]),
+          endTime: player.getCurrentTime(),
+        },
       },
       {
         onSuccess: (responseData: any) => {
