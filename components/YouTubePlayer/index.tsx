@@ -18,6 +18,8 @@ import useFirebaseAuth from "../../hooks/useFirebaseAuth";
 import useUpdateEvent from "../../hooks/useUpdateEvent";
 import { get } from "lodash-es";
 import { IntlShape, useIntl } from "react-intl";
+import DataTable from "../DataTable";
+import useGetEvents from "../../hooks/useGetEvents";
 
 const YouTubePlayer: React.FC<{
   videoUrl?: string;
@@ -36,6 +38,16 @@ const YouTubePlayer: React.FC<{
     isError: isCollectionError,
     errorMsg: collectionErrorMsg,
   } = useGetCollection(collectionUrl);
+
+  const {
+    data: events,
+    isLoading: isLoadingEvents, //@TODO implement
+    isError: isErrorEvents,
+    error: eventsError,
+  } = useGetEvents(collectionUrl, videoData.id);
+
+  console.log("deleteMe events are: ");
+  console.log(events);
 
   const [updateSuccessful, setUpdateSuccessful] = useState<boolean>(false);
   const [updateUnsuccessful, setUpdateUnsuccessful] = useState<boolean>(false);
@@ -189,60 +201,71 @@ const YouTubePlayer: React.FC<{
         <CircularProgress color="inherit" />
       </Backdrop>
       {!isCollectionLoading && !isCollectionError && (
-        <div>
-          <YouTube
-            videoId={videoId || extractId(videoUrl || "")}
-            onReady={onReady}
-          />
-          <section style={{ marginTop: "1rem" }} id="button-panel">
-            <Button
-              style={{ marginRight: "1rem" }}
-              variant="contained"
-              onClick={onPlayVideo}
-            >
-              Play
-            </Button>
-            <Button
-              style={{ marginRight: "1rem" }}
-              variant="contained"
-              onClick={onPauseVideo}
-            >
-              Pause
-            </Button>
-            <Button
-              style={{ marginRight: "1rem" }}
-              variant="contained"
-              onClick={() => rewindVideo(3)}
-            >
-              Rewind 3 Seconds
-            </Button>
-            <Button
-              style={{ marginRight: "1rem" }}
-              variant="contained"
-              onClick={() => fastForwardVideo(3)}
-            >
-              Fastforward 3 Seconds
-            </Button>
+        <>
+          <div>
+            <YouTube
+              videoId={videoId || extractId(videoUrl || "")}
+              onReady={onReady}
+            />
+            <section style={{ marginTop: "1rem" }} id="button-panel">
+              <Button
+                style={{ marginRight: "1rem" }}
+                variant="contained"
+                onClick={onPlayVideo}
+              >
+                Play
+              </Button>
+              <Button
+                style={{ marginRight: "1rem" }}
+                variant="contained"
+                onClick={onPauseVideo}
+              >
+                Pause
+              </Button>
+              <Button
+                style={{ marginRight: "1rem" }}
+                variant="contained"
+                onClick={() => rewindVideo(3)}
+              >
+                Rewind 3 Seconds
+              </Button>
+              <Button
+                style={{ marginRight: "1rem" }}
+                variant="contained"
+                onClick={() => fastForwardVideo(3)}
+              >
+                Fastforward 3 Seconds
+              </Button>
+            </section>
+            <section id="annotation-panel" style={{ marginTop: "1rem" }}>
+              <Button
+                disabled={annotationBegun}
+                style={{ marginRight: "1rem" }}
+                variant="contained"
+                onClick={openAnnotationDialog}
+              >
+                Begin {collection?.metadata?.nameOfEvent}
+              </Button>
+              <Button
+                disabled={!annotationBegun}
+                style={{ marginRight: "1rem" }}
+                variant="contained"
+                onClick={handleEndOfEvent}
+              >
+                End {collection?.metadata?.nameOfEvent}
+              </Button>
+            </section>
+          </div>
+          <section style={{ marginLeft: "1rem" }}>
+            <DataTable
+              tableTitle={collection?.metadata?.nameOfEventPlural}
+              data={events}
+              loading={isLoadingEvents}
+              errorMsg={eventsError?.message}
+              colNamesToDisplay={{}}
+            />
           </section>
-          <section id="annotation-panel" style={{ marginTop: "1rem" }}>
-            <Button
-              disabled={annotationBegun}
-              style={{ marginRight: "1rem" }}
-              variant="contained"
-              onClick={openAnnotationDialog}
-            >
-              Begin {collection?.metadata?.nameOfEvent}
-            </Button>
-            <Button
-              disabled={!annotationBegun}
-              style={{ marginRight: "1rem" }}
-              variant="contained"
-              onClick={handleEndOfEvent}
-            >
-              End {collection?.metadata?.nameOfEvent}
-            </Button>
-          </section>
-        </div>
+        </>
       )}
       {!isCollectionLoading && isCollectionError && (
         <CustomError errorMsg={collectionErrorMsg} />
