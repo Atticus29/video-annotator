@@ -39,16 +39,6 @@ const YouTubePlayer: React.FC<{
     errorMsg: collectionErrorMsg,
   } = useGetCollection(collectionUrl);
 
-  const {
-    data: events,
-    isLoading: isLoadingEvents, //@TODO implement
-    isError: isErrorEvents,
-    error: eventsError,
-  } = useGetEvents(collectionUrl, videoData.id);
-
-  console.log("deleteMe events are: ");
-  console.log(events);
-
   const [updateSuccessful, setUpdateSuccessful] = useState<boolean>(false);
   const [updateUnsuccessful, setUpdateUnsuccessful] = useState<boolean>(false);
 
@@ -256,15 +246,6 @@ const YouTubePlayer: React.FC<{
               </Button>
             </section>
           </div>
-          <section style={{ marginLeft: "1rem" }}>
-            <DataTable
-              tableTitle={collection?.metadata?.nameOfEventPlural}
-              data={events}
-              loading={isLoadingEvents}
-              errorMsg={eventsError?.message}
-              colNamesToDisplay={{}}
-            />
-          </section>
         </>
       )}
       {!isCollectionLoading && isCollectionError && (

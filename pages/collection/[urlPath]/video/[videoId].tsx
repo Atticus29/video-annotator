@@ -13,20 +13,24 @@ import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import CustomError from "../../../../components/CustomError";
 import useGetVideo from "../../../../hooks/useGetVideo";
 import YouTubePlayer from "../../../../components/YouTubePlayer";
+import EventTableView from "../../../../components/EventTableView";
 
 const SingleVideoView: React.FC = () => {
   const router: NextRouter = useRouter();
   const intl: IntlShape = useIntl();
-  const localVideoId: string | string[] = router.query.videoId || "";
-  let localVideoIdAsString: string =
-    (Array.isArray(localVideoId) ? localVideoId.join() : localVideoId) || "";
-  const localUrlPath: string | string[] | undefined = router.query.urlPath;
-  let localUrlPathAsString: string =
-    (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
+  // console.log("deleteMe router.query is; ");
+  // console.log(router.query);
+  const { urlPath, videoId } = router.query;
+  // const localVideoId: string | string[] = router.query.videoId || "";
+  // let localVideoIdAsString: string =
+  //   (Array.isArray(localVideoId) ? localVideoId.join() : localVideoId) || "";
+  // const localUrlPath: string | string[] | undefined = router.query.urlPath;
+  // let localUrlPathAsString: string =
+  //   (Array.isArray(localUrlPath) ? localUrlPath.join() : localUrlPath) || "";
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const { isLoading, isError, data, error } = useGetVideo(
-    localUrlPathAsString,
-    localVideoIdAsString
+    typeof urlPath === "string" ? urlPath : "",
+    typeof videoId === "string" ? videoId : ""
   );
   // console.log("deleteMe data is: ");
   // console.log(data);
@@ -72,9 +76,13 @@ const SingleVideoView: React.FC = () => {
           }}
         >
           <YouTubePlayer
-            collectionUrl={localUrlPathAsString}
+            collectionUrl={typeof urlPath === "string" ? urlPath : ""}
             videoUrl={data[urlTargetKey]}
             videoData={data}
+          />
+          <EventTableView
+            videoData={data}
+            collectionUrl={typeof urlPath === "string" ? urlPath : ""}
           />
         </div>
       )}
