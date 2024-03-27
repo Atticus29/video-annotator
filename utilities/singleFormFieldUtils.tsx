@@ -9,6 +9,7 @@ import {
   isValidOption,
   isValidYouTubeUrl,
   endsInUrl,
+  endsInName,
 } from "./validators";
 
 export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
@@ -87,11 +88,18 @@ export function updateIntakeQuestionFormField(
       get(formFieldGroup, ["actualValues", "type--" + intakeQuestionIdx]) ===
       "YouTubeUrl";
     if (isLabel && isYoutubeUrlType && isCoreQuestion) {
-      console.log("deleteMe got here a12");
-      console.log("deleteMe endsInUrl(currentVal) is: ");
-      console.log(endsInUrl(currentVal));
       isInvalid = !isNonEmptyString(currentVal) || !endsInUrl(currentVal);
     }
+    const isPrimaryAutocompleteType =
+      get(formFieldGroup, ["actualValues", "type--" + intakeQuestionIdx]) ===
+      "PrimaryAutocomplete";
+    if (isLabel && isPrimaryAutocompleteType && isCoreQuestion) {
+      console.log("deleteMe got here a12");
+      console.log("deleteMe endsInName(currentVal) is: ");
+      console.log(endsInName(currentVal));
+      isInvalid = !isNonEmptyString(currentVal) || !endsInName(currentVal);
+    }
+
     console.log("deleteMe isInvalid is: " + isInvalid);
     // End check for the special URL label
     invalidSetter((prevState: {}) => {
@@ -172,6 +180,14 @@ export function updateFormFieldStates(
   if (
     !usersCanAddCustomOptions &&
     question?.type === "Autocomplete" &&
+    !currentValidatorMethods.includes(isValidOption)
+  ) {
+    currentValidatorMethods?.push(isValidOption);
+  }
+
+  if (
+    !usersCanAddCustomOptions &&
+    question?.type === "PrimaryAutocomplete" &&
     !currentValidatorMethods.includes(isValidOption)
   ) {
     currentValidatorMethods?.push(isValidOption);

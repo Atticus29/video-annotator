@@ -46,6 +46,18 @@
     "invalidInputMessage": "FIELD_CANNOT_BE_BLANK"
   },
   {
+    "type": "PrimaryAutocomplete",
+    "attributesToDisplay": [
+      "type",
+      "label",
+      "autocompleteOptions",
+      "isRequired",
+      "language"
+    ],
+    "validationMethods": ["isNonEmptyString"],
+    "invalidInputMessage": "FIELD_CANNOT_BE_BLANK"
+  },
+  {
     "type": "Number",
     "attributesToDisplay": ["type", "label", "isRequired", "language"],
     "validationMethods": ["isNumber"],

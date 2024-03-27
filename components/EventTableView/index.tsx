@@ -8,7 +8,8 @@ import { CircularProgress } from "@mui/material";
 const EventTableView: React.FC<{
   videoData: any;
   collectionUrl: string;
-}> = ({ collectionUrl, videoData }) => {
+  styleOverrides?: {};
+}> = ({ collectionUrl, videoData, styleOverrides }) => {
   const {
     data: events,
     isLoading: isLoadingEvents,
@@ -56,6 +57,7 @@ const EventTableView: React.FC<{
             loading={isLoadingEvents}
             errorMsg={eventsError?.message}
             colNamesToDisplay={colNamesToDisplayWithActions}
+            styleOverrides={styleOverrides}
           />
         </section>
       )}

@@ -85,6 +85,7 @@ const SingleVideoView: React.FC = () => {
             <EventTableView
               videoData={data}
               collectionUrl={typeof urlPath === "string" ? urlPath : ""}
+              styleOverrides={{ maxWidth: 500 }}
             />
           </div>
         </>

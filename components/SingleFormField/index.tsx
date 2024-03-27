@@ -310,6 +310,46 @@ const SingleFormField: React.FC<{
           onInputChange={handleAutocompleteChange}
         ></Autocomplete>
       );
+    case "PrimaryAutocomplete":
+      return (
+        <Autocomplete
+          renderInput={function (
+            params: AutocompleteRenderInputParams
+          ): ReactNode {
+            return (
+              <TextField
+                {...params}
+                required={question?.isRequired}
+                label={question?.label}
+                error={currentIsInvalid}
+                helperText={
+                  currentIsInvalid
+                    ? intl.formatMessage({
+                        id:
+                          question?.invalidInputMessage ||
+                          "FIELD_CANNOT_BE_BLANK",
+                        defaultMessage: "Cannot be blank",
+                      })
+                    : ""
+                }
+              />
+            );
+          }}
+          options={question?.autocompleteOptions || []}
+          data-testid={question?.testId}
+          style={{ marginBottom: 10, maxWidth: 400 }}
+          value={get(formFieldGroup, ["actualValues", question?.label], "")}
+          onChange={handleAutocompleteChange}
+          freeSolo={question?.usersCanAddCustomOptions}
+          {...autocompleteExtras}
+          inputValue={get(
+            formFieldGroup,
+            ["actualValues", question?.label],
+            ""
+          )}
+          onInputChange={handleAutocompleteChange}
+        ></Autocomplete>
+      );
 
     case "Number":
       return (

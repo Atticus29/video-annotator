@@ -299,8 +299,8 @@ const ageClassIndividualQuestion: SingleFormField = {
 };
 
 const moveNameQuestion: SingleFormField = {
-  type: "Autocomplete",
-  label: "Name of move",
+  type: "PrimaryAutocomplete",
+  label: "Move name",
   language: "English",
   isRequired: true,
   testId: "moveName",
@@ -311,7 +311,7 @@ const moveNameQuestion: SingleFormField = {
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
   isACoreQuestion: true,
-  recommendedLabel: "Name of event (English)",
+  recommendedLabel: "(English) Event Name, but it must end in, 'Name'",
 };
 
 const moveNamePortugueseQuestion: SingleFormField = {
@@ -380,6 +380,9 @@ const startingPositionOfActor: SingleFormField = {
     "Half Guard Top",
     "Back Mount Top",
     "Back Mount Bottom",
+    "Standing",
+    "Side Control/Side Mount Bottom",
+    "Side Control/Side Mount Top",
   ],
   usersCanAddCustomOptions: true,
 };

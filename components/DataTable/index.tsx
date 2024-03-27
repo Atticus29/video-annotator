@@ -27,6 +27,7 @@ const DataTable: React.FC<{
   dataGridOptions?: {};
   errorMsg?: string;
   tableOnly?: boolean;
+  initialStateOverrides?: {};
 }> = ({
   tableTitle = "Untitled",
   tableTitleId = tableTitle,
@@ -42,7 +43,10 @@ const DataTable: React.FC<{
   dataGridOptions = {},
   errorMsg,
   tableOnly = false,
+  initialStateOverrides = {},
 }) => {
+  console.log("deleteMe data is: ");
+  console.log(data);
   // Handle actionButton logic
   const actionButtonsKeys: string[] = useMemo(() => {
     return Object.keys(actionButtonsToDisplay) || [];
@@ -211,6 +215,7 @@ const DataTable: React.FC<{
             autoHeight={true}
             initialState={{
               pagination: { paginationModel: { pageSize: 5 } },
+              ...initialStateOverrides,
             }}
             pageSizeOptions={[5, 10, 25]}
             style={{
@@ -240,6 +245,7 @@ const DataTable: React.FC<{
                 autoHeight={true}
                 initialState={{
                   pagination: { paginationModel: { pageSize: 5 } },
+                  ...initialStateOverrides,
                 }}
                 pageSizeOptions={[5, 10, 25]}
                 style={{

@@ -69,6 +69,11 @@ export function endsInUrl(str: string): boolean {
   return trimmedStr.toLowerCase().endsWith("url");
 }
 
+export function endsInName(str: string): boolean {
+  const trimmedStr = str.trim(); // Trim whitespace from the input string
+  return trimmedStr.toLowerCase().endsWith("name");
+}
+
 export function isValidYouTubeUrl(url: string): boolean {
   console.log("deleteMe got here m1");
   const somethingHasBeenTyped = Boolean(url);

@@ -89,15 +89,18 @@ const CollectionView: React.FC = () => {
   const dataWithActions = useMemo(() => {
     let dataWithActionsAppended = [];
     if (collectionData && collectionData?.videos) {
-      dataWithActionsAppended = map(collectionData.videos, (datum) => {
+      dataWithActionsAppended = map(collectionData.videos, (video) => {
         return {
-          ...datum,
+          ...video,
           actions: "stand in",
         };
       });
     }
+    // @TODO add events in here?
     return dataWithActionsAppended;
   }, [collectionData]);
+  console.log("deleteMe c1 dataWithActions is: ");
+  console.log(dataWithActions);
 
   const linkIds = useMemo(() => {
     if (collectionData && collectionData?.videos) {
@@ -159,6 +162,7 @@ const CollectionView: React.FC = () => {
 
   const colNamesToDisplayWithActions = {
     ...colNamesToDisplay,
+    events: collectionData?.metadata?.nameOfEventPlural,
     actions: "Actions",
   };
 
