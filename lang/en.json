@@ -182,5 +182,6 @@
   "EVENT_SUCCESSFULLY_CREATED": "Event successfully created",
   "EVENT_CREATION_FAILED": "Event creation failed",
   "ANNOTATION_RECORDED": "Annotation recorded",
-  "ANNOTATION_NOT_RECORDED": "Failed to record annotation"
+  "ANNOTATION_NOT_RECORDED": "Failed to record annotation",
+  "EVENT": "Event"
 }

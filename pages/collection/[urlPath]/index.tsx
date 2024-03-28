@@ -10,7 +10,7 @@ import {
   Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { get, map, reduce } from "lodash-es";
+import { filter, forEach, get, map, reduce } from "lodash-es";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
@@ -29,6 +29,7 @@ import useGetUserRoles from "../../../hooks/useGetUserRoles";
 import CollectionDetailsEdit from "../../../components/CollectionDetailsEdit";
 import CollectionAlertsInfo from "../../../components/CollectionAlertsInfo";
 import CollectionAlertsWarning from "../../../components/CollectionAlertsWarning";
+import { endsInNameStar } from "../../../utilities/validators";
 
 const CollectionView: React.FC = () => {
   const queryClient = useQueryClient();
@@ -70,7 +71,7 @@ const CollectionView: React.FC = () => {
     setSnackbarMessage("");
     setOpenSnackbar(false);
   };
-  const isAdmin: boolean = true; // @TODO change
+  const isAdmin: boolean = true; // @TODO change!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const isOwner: boolean = useMemo(() => {
     if (user?.uid && collectionData?.metadata?.ownerId) {
       return user?.uid === collectionData.metadata.ownerId;
@@ -86,21 +87,40 @@ const CollectionView: React.FC = () => {
   const [createIndividualDialogOpen, setCreateIndividualDialogOpen] =
     useState<boolean>(false);
 
+  const flattenAndStringifyVideoEvents: (events: {}[]) => string = (
+    events: {}[]
+  ) => {
+    const returnVals = forEach(events, (event) => {
+      const targetKey: string = filter(Object.keys(event), (key) =>
+        endsInNameStar(key)
+      )[0];
+      console.log("deleteMe targetKey is: ");
+      console.log(targetKey); //@TODO LEFT OFF HERE
+      return event[targetKey];
+    });
+    console.log("deleteMe returnVals is: ");
+    console.log(returnVals);
+    return "test";
+  };
+
   const dataWithActions = useMemo(() => {
     let dataWithActionsAppended = [];
     if (collectionData && collectionData?.videos) {
       dataWithActionsAppended = map(collectionData.videos, (video) => {
+        console.log("deleteMe v1 video is: ");
+        console.log(video);
         return {
           actions: "stand in",
           ...video,
+          events: flattenAndStringifyVideoEvents(video.events),
         };
       });
     }
     // @TODO add events in here?
     return dataWithActionsAppended;
   }, [collectionData]);
-  console.log("deleteMe c1 dataWithActions is: ");
-  console.log(dataWithActions);
+  // console.log("deleteMe c1 dataWithActions is: ");
+  // console.log(dataWithActions);
 
   const linkIds = useMemo(() => {
     if (collectionData && collectionData?.videos) {
@@ -161,9 +181,9 @@ const CollectionView: React.FC = () => {
   }, [collectionData, dataWithActions]);
 
   const colNamesToDisplayWithActions = {
+    actions: "Actions",
     ...colNamesToDisplay,
     events: collectionData?.metadata?.nameOfEventPlural,
-    actions: "Actions",
   };
 
   const videosFallback: string = intl.formatMessage({ id: "VIDEOS" });

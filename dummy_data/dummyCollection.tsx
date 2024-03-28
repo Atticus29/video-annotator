@@ -311,7 +311,7 @@ const moveNameQuestion: SingleFormField = {
   autocompleteOptions: [...moveNames],
   usersCanAddCustomOptions: true,
   isACoreQuestion: true,
-  recommendedLabel: "(English) Event Name, but it must end in, 'Name'",
+  recommendedLabel: "(English) Event Name, but it must end in, 'Name*'",
 };
 
 const moveNamePortugueseQuestion: SingleFormField = {

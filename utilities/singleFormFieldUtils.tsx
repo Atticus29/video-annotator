@@ -9,7 +9,7 @@ import {
   isValidOption,
   isValidYouTubeUrl,
   endsInUrl,
-  endsInName,
+  endsInNameStar,
 } from "./validators";
 
 export function calculateCurrentAttributesToDisplay(question: SingleFormField) {
@@ -95,9 +95,9 @@ export function updateIntakeQuestionFormField(
       "PrimaryAutocomplete";
     if (isLabel && isPrimaryAutocompleteType && isCoreQuestion) {
       console.log("deleteMe got here a12");
-      console.log("deleteMe endsInName(currentVal) is: ");
-      console.log(endsInName(currentVal));
-      isInvalid = !isNonEmptyString(currentVal) || !endsInName(currentVal);
+      console.log("deleteMe endsInNameStar(currentVal) is: ");
+      console.log(endsInNameStar(currentVal));
+      isInvalid = !isNonEmptyString(currentVal) || !endsInNameStar(currentVal);
     }
 
     console.log("deleteMe isInvalid is: " + isInvalid);
