@@ -91,8 +91,8 @@ const CollectionView: React.FC = () => {
     if (collectionData && collectionData?.videos) {
       dataWithActionsAppended = map(collectionData.videos, (video) => {
         return {
-          ...video,
           actions: "stand in",
+          ...video,
         };
       });
     }

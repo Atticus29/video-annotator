@@ -29,8 +29,8 @@ const Collections: React.FC = () => {
   const dataWithActions = useMemo(() => {
     const dataWithActionsAppended = map(data, (singleCollection) => {
       return {
-        ...singleCollection.metadata,
         actions: "stand in",
+        ...singleCollection.metadata,
       };
     });
     return dataWithActionsAppended;
@@ -72,9 +72,9 @@ const Collections: React.FC = () => {
             tableTitle={tableTitle}
             data={dataWithActions}
             colNamesToDisplay={collectionDisplayCols || defaultDisplayCols}
-            actionButtonsToDisplay={{ edit: "Edit", view: "View" }}
+            actionButtonsToDisplay={{ view: "View" }}
             modificationMethodForAction={sanitizeString}
-            targetColIdxForUrlPath={1} // 2 @TODO this is probably no longer needed?
+            targetColIdxForUrlPath={2} // this is brittle. If bug, this could be 1 as well.
           ></DataTable>
           <Button
             data-testid={"new-collection-add-button"}

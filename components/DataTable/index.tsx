@@ -71,7 +71,7 @@ const DataTable: React.FC<{
         colNamesToDisplayDoesNotHaveActions &&
         Object.keys(actionButtonsKeys).length > 0
       ) {
-        return { ...colNamesToDisplay, actions: "actions" };
+        return { actions: "actions", ...colNamesToDisplay };
       } else {
         return colNamesToDisplay;
       }

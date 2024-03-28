@@ -41,8 +41,8 @@ const IndividualsTableView: React.FC<{
     if (individualsData) {
       individualDataWithActionsAppended = map(individualsData, (datum: {}) => {
         return {
-          ...datum,
           actions: "stand in",
+          ...datum,
         };
       });
     }
